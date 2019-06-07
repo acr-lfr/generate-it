@@ -1,5 +1,5 @@
-# Swagger Nodegen
-Swagger Nodegen is a tool which will you generate an ES6 NodeJS Express Server based on the OpenAPI (YML) file that you provide it. 
+# OpenAPI Nodegen
+OpenAPI Nodegen is a tool which will you generate an ES6 NodeJS Express Server based on the OpenAPI (YML) file that you provide it. 
 
 In addition to the server, you can also stub the domain layer with auto mock generators to get moving fast, use the `--mocked` option.
 
@@ -91,17 +91,3 @@ securityDefinitions:
     in: header
     name: 'Authorization'
 ```
-
-## Example
-Included in the library are a bunch of different swagger files from different projects.
-We'll generate a NodeJS Express server for the CDC Authentication microservice.
-It's fairly simple, just run the following command:
-
-```shell
-npm run start -- yml/cdc_authentication.yml -o authentication
-```
-
-Once it's finished, you will see that a new folder named `authentication` was created.
-The generated folder structure should look similar to this:
-
-![screenshot](http://i.imgur.com/54qNl5E.png)
