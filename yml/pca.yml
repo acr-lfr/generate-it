@@ -1,0 +1,1394 @@
+swagger: '2.0'
+info:
+  description: Swagger API for BMW Package Configurator Application
+  version: 0.0.1
+  title: PCA
+  contact:
+    email: info@acrontum.de
+schemes:
+  - http
+  - https
+host: 'localhost:8000'
+basePath: /api/v1
+tags:
+  - name: auth
+    description: Authentication
+  - name: user
+    description: User
+  - name: users
+    description: Users
+  - name: packages
+    description: Packages
+  - name: markets
+    description: Markets
+  - name: sheet
+    description: Sheet
+  - name: logs
+    description: Logs
+securityDefinitions:
+  userToken:
+    type: apiKey
+    in: header
+    name: Authorization
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Authenticates a user against provided credentials
+      description: ''
+      operationId: authLogin
+      parameters:
+        - in: body
+          name: user
+          description: The users email
+          schema:
+            $ref: '#/definitions/AuthLogin'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AuthTokenUser'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /auth/logout:
+    get:
+      tags:
+        - auth
+      summary: Logs a user out
+      description: ''
+      operationId: authLogout
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /auth/reset-password:
+    post:
+      tags:
+        - auth
+      summary: Sends an email with a link to change the user's password
+      description: ''
+      operationId: authResetPassword
+      parameters:
+        - in: body
+          name: credentials
+          description: The new credentials
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+  /auth/change-password:
+    post:
+      tags:
+        - auth
+      summary: Changes the user's password
+      description: ''
+      operationId: authChangePassword
+      parameters:
+        - in: body
+          name: credentials
+          description: The new credentials
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /user/:
+    post:
+      tags:
+        - user
+      summary: Creates a user with provided fields
+      description: ''
+      operationId: userCreate
+      parameters:
+        - in: body
+          name: user
+          description: The fields to create the user with
+          schema:
+            $ref: '#/definitions/UserUpsert'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  '/user/{userId}/':
+    put:
+      tags:
+        - user
+      summary: Updates a user with provided fields
+      description: ''
+      operationId: userUpdate
+      parameters:
+        - in: path
+          name: userId
+          type: number
+          required: true
+        - in: body
+          name: user
+          description: The fields to update the user with
+          schema:
+            $ref: '#/definitions/UserUpsert'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/users/:
+    get:
+      tags:
+        - users
+      summary: Lists all PCA users
+      description: ''
+      operationId: pcaUsersList
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/users:
+    get:
+      tags:
+        - users
+      summary: Lists all SKD users
+      description: ''
+      operationId: skdUsersList
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/sheet/import/:
+    post:
+      tags:
+        - sheet
+      summary: Parses the uploaded file and imports into database
+      description: ''
+      operationId: sheetPcaImport
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: sheetFile
+          type: file
+          description: The spreadsheet to upload
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              packages:
+                type: number
+              saCodes:
+                type: number
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/sheet/import/:
+    post:
+      tags:
+        - sheet
+      summary: Parses the uploaded file and imports into database
+      description: ''
+      operationId: sheetSkdImport
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: sheetFile
+          type: file
+          description: The spreadsheet to upload
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              packages:
+                type: number
+              saCodes:
+                type: number
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/:
+    get:
+      tags:
+        - packages
+      summary: >-
+        Searches / aggregates fields based on given paramters and returns unique
+        fields
+      description: ''
+      operationId: searchPackages
+      parameters:
+        - in: query
+          name: distinct
+          description: Should show only distinct results
+          type: boolean
+          default: false
+          required: false
+        - in: query
+          name: limit
+          description: Number of results per field
+          type: number
+          required: false
+        - in: query
+          name: select
+          description: Selected fields
+          type: string
+          required: false
+        - in: query
+          name: modelSeries
+          description: Model series filter
+          type: string
+          required: false
+        - in: query
+          name: version
+          description: Version filter
+          type: string
+          required: false
+        - in: query
+          name: steeringPositions
+          description: Steering positions filter
+          type: string
+          required: false
+        - in: query
+          name: salesNames
+          description: Sales names filter
+          type: string
+          required: false
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              paks:
+                type: array
+                items:
+                  type: string
+              code:
+                type: array
+                items:
+                  type: string
+              modelSeries:
+                type: array
+                items:
+                  type: string
+              version:
+                type: array
+                items:
+                  type: string
+              salesNames:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+    put:
+      tags:
+        - packages
+      summary: Update a group of packages
+      description: ''
+      operationId: updatePackages
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              packages:
+                type: array
+                items:
+                  $ref: '#/definitions/PackageUpsert'
+              deletedPackagesIds:
+                type: array
+                items:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Package'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/pak-matrix/:
+    get:
+      tags:
+        - packages
+      summary: >-
+        Returns the PAK matrix containing markets and packages that are merged
+        if they share the same package code
+      description: ''
+      operationId: getPakMatrix
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                markets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      pak:
+                        type: string
+                      name:
+                        type: string
+                packages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      paks:
+                        type: array
+                        items:
+                          type: string
+                      initialPaks:
+                        type: array
+                        items:
+                          type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+    put:
+      tags:
+        - packages
+      summary: Will update the PAK matrix
+      description: ''
+      operationId: updatePakMatrix
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/PakMatrixUpdate'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                markets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      pak:
+                        type: string
+                      code:
+                        type: string
+                packages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      paks:
+                        type: array
+                        items:
+                          type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/pak-matrix/export:
+    get:
+      tags:
+        - packages
+      summary: >-
+        Returns the PAK matrix containing markets and packages that are merged
+        if they share the same package code
+      description: ''
+      operationId: exportPakMatrix
+      produces:
+        - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+        - in: query
+          name: type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/pak-matrix/reset:
+    get:
+      tags:
+        - packages
+      summary: Will reset the current pak matrix
+      description: ''
+      operationId: resetPakMatrix
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/discounts/export:
+    get:
+      tags:
+        - packages
+      summary: Returns an excel sheet containing a table of discounts
+      description: ''
+      operationId: exportDiscounts
+      produces:
+        - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+        - in: query
+          name: type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/discounts/reset:
+    get:
+      tags:
+        - packages
+      summary: Will reset all packages' discounts
+      description: ''
+      operationId: resetDiscounts
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/overview/export:
+    get:
+      tags:
+        - packages
+      summary: Returns an excel sheet containing an overview of all packages
+      description: ''
+      operationId: exportPackagesOverview
+      produces:
+        - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+        - in: query
+          name: type
+          required: true
+          type: string
+        - in: query
+          name: paks
+          description: Selected paks (seperated by a comma)
+          type: string
+          required: true
+        - in: query
+          name: modelSeries
+          description: Selected model series (seperated by a comma)
+          type: string
+          required: true
+        - in: query
+          name: codes
+          description: Selected package codes (seperated by a comma)
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/packages/original/export:
+    get:
+      tags:
+        - packages
+      summary: Returns an excel sheet containing an overview of all packages
+      description: ''
+      operationId: exportOriginalSheet
+      produces:
+        - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+        - in: query
+          name: type
+          required: true
+          type: string
+        - in: query
+          name: modelSeries
+          description: Selected model series (seperated by a comma)
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/profiles/:
+    get:
+      tags:
+        - profiles
+      summary: >-
+        Searches / aggregates fields based on given paramters and returns unique
+        fields
+      description: ''
+      operationId: searchProfiles
+      parameters:
+        - in: query
+          name: distinct
+          description: Should show only distinct results
+          type: boolean
+          default: false
+          required: false
+        - in: query
+          name: limit
+          description: Number of results per field
+          type: number
+          required: false
+        - in: query
+          name: select
+          description: Selected fields
+          type: string
+          required: false
+        - in: query
+          name: modelSeries
+          description: Model series filter
+          type: string
+          required: false
+        - in: query
+          name: pnw2ModelCode
+          description: PNW2 model code filter
+          type: string
+          required: false
+        - in: query
+          name: basicModelCode
+          description: PNW2 model code filter
+          type: string
+          required: false
+        - in: query
+          name: steeringPosition
+          description: Steering position filter
+          type: string
+          required: false
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Profile'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+    put:
+      tags:
+        - profiles
+      summary: Update a group of profiles
+      description: ''
+      operationId: updateProfiles
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              profiles:
+                type: array
+                items:
+                  $ref: '#/definitions/ProfileUpsert'
+              deletedProfilesIds:
+                type: array
+                items:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Profile'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  '/skd/profiles/{profileId}/toggle-lock':
+    put:
+      tags:
+        - profiles
+      summary: Will lock / unlock a profile
+      description: ''
+      operationId: toggleProfileLock
+      parameters:
+        - in: path
+          name: profileId
+          type: number
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/markets/:
+    get:
+      tags:
+        - markets
+      summary: >-
+        Searchs / aggregates fields based on given paramters and returns unique
+        fields
+      description: ''
+      operationId: searchPcaMarkets
+      parameters:
+        - in: query
+          name: distinct
+          description: Should show only distinct results
+          type: boolean
+          default: false
+          required: false
+        - in: query
+          name: limit
+          description: Number of results per field
+          type: number
+          required: false
+        - in: query
+          name: select
+          description: Selected fields
+          type: string
+          required: false
+        - in: query
+          name: pak
+          description: PAK number filter
+          type: string
+          required: false
+        - in: query
+          name: code
+          description: Package code filter
+          type: string
+          required: false
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              paks:
+                type: array
+                items:
+                  type: string
+              name:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+    put:
+      tags:
+        - markets
+      summary: Update a group of markets
+      description: ''
+      operationId: updatePcaMarkets
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              markets:
+                type: array
+                items:
+                  $ref: '#/definitions/PcaMarketUpsert'
+              deletedMarketsIds:
+                type: array
+                items:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PcaMarket'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/markets/:
+    get:
+      tags:
+        - markets
+      summary: >-
+        Searchs / aggregates fields based on given paramters and returns unique
+        fields
+      description: ''
+      operationId: searchSkdMarkets
+      parameters:
+        - in: query
+          name: distinct
+          description: Should show only distinct results
+          type: boolean
+          default: false
+          required: false
+        - in: query
+          name: limit
+          description: Number of results per field
+          type: number
+          required: false
+        - in: query
+          name: select
+          description: Selected fields
+          type: string
+          required: false
+        - in: query
+          name: bu
+          description: Business unit filter
+          type: string
+          required: false
+        - in: query
+          name: code
+          description: Package code filter
+          type: string
+          required: false
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              bu:
+                type: array
+                items:
+                  type: string
+              name:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+    put:
+      tags:
+        - markets
+      summary: Update a group of markets
+      description: ''
+      operationId: updateSkdMarkets
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              markets:
+                type: array
+                items:
+                  $ref: '#/definitions/SkdMarketUpsert'
+              deletedMarketsIds:
+                type: array
+                items:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SkdMarket'
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/logs/:
+    get:
+      tags:
+        - logs
+      summary: Get all logs
+      description: ''
+      operationId: getPcaLogs
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                who:
+                  type: string
+                what:
+                  type: string
+                where:
+                  type: string
+                createdAt:
+                  type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /pca/logs/reset:
+    get:
+      tags:
+        - logs
+      summary: Will reset all logs
+      description: ''
+      operationId: resetPcaLogs
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/logs/:
+    get:
+      tags:
+        - logs
+      summary: Get all skd logs
+      description: ''
+      operationId: getSkdLogs
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                who:
+                  type: string
+                what:
+                  type: string
+                where:
+                  type: string
+                createdAt:
+                  type: string
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+  /skd/logs/reset:
+    get:
+      tags:
+        - logs
+      summary: Will reset all skd logs
+      description: ''
+      operationId: resetSkdLogs
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - userToken: []
+definitions:
+  AuthLogin:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  AuthTokenUser: &ref_0
+    type: object
+    properties:
+      id:
+        type: number
+      pak:
+        type: string
+      bu:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      isPca:
+        type: boolean
+      isSkd:
+        type: boolean
+      roles:
+        type: array
+        items:
+          type: string
+      active:
+        type: boolean
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+  User: *ref_0
+  UserUpsert:
+    type: object
+    properties:
+      pak:
+        type: string
+      bu:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      isPca:
+        type: boolean
+      isSkd:
+        type: boolean
+      roles:
+        type: array
+        items:
+          type: string
+      active:
+        type: boolean
+  Package:
+    type: object
+    properties:
+      id:
+        type: number
+      paks:
+        type: array
+        items:
+          type: string
+      code:
+        type: string
+      discount:
+        type: number
+      modelSeries:
+        type: string
+      version:
+        type: string
+      steeringPositions:
+        type: array
+        items:
+          type: string
+      salesNames:
+        type: array
+        items:
+          type: string
+      typeCodes:
+        type: array
+        items:
+          type: string
+      initialBu:
+        type: array
+        items:
+          type: string
+      initialDiscount:
+        type: number
+      saCodes:
+        type: array
+        items:
+          type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            articleNum:
+              type: string
+            alternatives:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  name:
+                    type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+  PackageUpsert:
+    type: object
+    properties:
+      id:
+        type: number
+      paks:
+        type: array
+        items:
+          type: string
+      code:
+        type: string
+      discount:
+        type: number
+      modelSeries:
+        type: string
+      version:
+        type: string
+      steeringPositions:
+        type: array
+        items:
+          type: string
+      salesNames:
+        type: array
+        items:
+          type: string
+      typeCodes:
+        type: array
+        items:
+          type: string
+      saCodes:
+        type: array
+        items:
+          type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            articleNum:
+              type: string
+            alternatives:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  name:
+                    type: string
+  PakMatrixUpdate:
+    type: object
+    properties:
+      packages:
+        type: array
+        items:
+          type: object
+          properties:
+            code:
+              type: string
+            paks:
+              type: array
+              items:
+                type: string
+  SaCode:
+    type: object
+    properties:
+      id:
+        type: number
+      pak:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
+      articleNum:
+        type: string
+      priceHistory:
+        type: array
+        items:
+          type: object
+          properties:
+            price:
+              type: number
+            createdAt:
+              type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+  PcaMarket:
+    type: object
+    properties:
+      id:
+        type: number
+      pak:
+        type: string
+      name:
+        type: string
+  PcaMarketUpsert:
+    type: object
+    properties:
+      id:
+        type: number
+      pak:
+        type: string
+      name:
+        type: string
+  SkdMarket:
+    type: object
+    properties:
+      id:
+        type: number
+      bu:
+        type: string
+      name:
+        type: string
+      requiredSaCodes:
+        type: array
+        items:
+          type: string
+      blockedSaCodes:
+        type: array
+        items:
+          type: string
+      active:
+        type: boolean
+  SkdMarketUpsert:
+    type: object
+    properties:
+      id:
+        type: number
+      bu:
+        type: string
+      name:
+        type: string
+      requiredSaCodes:
+        type: array
+        items:
+          type: string
+      blockedSaCodes:
+        type: array
+        items:
+          type: string
+      active:
+        type: boolean
+  Profile:
+    type: object
+    properties:
+      id:
+        type: number
+      isLocked:
+        type: boolean
+      pak:
+        type: string
+      bu:
+        type: string
+      exportTo:
+        type: string
+      model:
+        type: string
+      modelSeries:
+        type: string
+      transmission:
+        type: string
+      pnw2ModelCode:
+        type: string
+      pnw2Version:
+        type: string
+      lack:
+        type: string
+      productArt:
+        type: string
+      basicModelCode:
+        type: string
+      engine:
+        type: string
+      steeringPosition:
+        type: string
+      trimStyle:
+        type: string
+      dueDate:
+        type: string
+      technicalStatus:
+        type: string
+      technicalStatus2:
+        type: string
+      generalInfos:
+        type: array
+        items: &ref_1
+          type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+      trimCodes:
+        type: array
+        items: &ref_2
+          type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            origin:
+              type: string
+            isDeleted:
+              type: boolean
+      saCodes:
+        type: array
+        items: &ref_3
+          type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+            isDeleted:
+              type: boolean
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+  ProfileUpsert:
+    type: object
+    properties:
+      pak:
+        type: string
+      bu:
+        type: string
+      exportTo:
+        type: string
+      model:
+        type: string
+      modelSeries:
+        type: string
+      transmission:
+        type: string
+      pnw2ModelCode:
+        type: string
+      pnw2Version:
+        type: string
+      lack:
+        type: string
+      productArt:
+        type: string
+      basicModelCode:
+        type: string
+      engine:
+        type: string
+      steeringPosition:
+        type: string
+      trimStyle:
+        type: string
+      dueDate:
+        type: string
+      technicalStatus:
+        type: string
+      technicalStatus2:
+        type: string
+      generalInfos:
+        type: array
+        items: *ref_1
+      trimCodes:
+        type: array
+        items: *ref_2
+      saCodes:
+        type: array
+        items: *ref_3

@@ -1,0 +1,16 @@
+{{mockDomainImportGenerators(mockServer, operation_name)}}
+
+class {{capitaLetter(operation_name)}}Domain {
+  {% for op in operations -%}
+    {% for key, path in op.path -%}
+      {% if validMethod(key) %}
+  // {{ path.operationId }}
+  async {{path.operationId}} ({{pathParamsToDomainParams(path)}}) {
+    {{ mockDomainOutput( mockServer, operation_name, path.operationId) }}
+  }
+      {% endif %}
+    {%- endfor %}
+  {%- endfor %}
+}
+
+export default new {{capitaLetter(operation_name)}}Domain()

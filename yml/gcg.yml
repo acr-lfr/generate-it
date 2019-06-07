@@ -1,0 +1,2418 @@
+swagger: '2.0'
+info:
+  description: GamblerCrowd API
+  version: 1.0.0
+  title: GCGGCP API
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: gcg-gcp-pardon.acrontum07.serverportal1.de
+basePath: /api/v1/
+tags:
+  - name: auth
+    description: All authorization specific operations
+  - name: common
+    description: All public available operations
+  - name: internal
+    description: All internal available operations
+  - name: TODO
+    description: All routes that still need building / fixing
+securityDefinitions:
+  api_token:
+    type: apiKey
+    name: api_token
+    in: header
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+        - common
+      summary: Authenticate a user against API
+      operationId: postAuthLogin
+      description: |
+        By passing in the appropriate options, you can authenticated
+        a user against the underlying database
+      parameters:
+        - &ref_0
+          in: query
+          name: include
+          description: User
+          required: false
+          type: string
+        - in: body
+          name: auth
+          description: The user credentials for login
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                description: User email address
+              password:
+                type: string
+                description: User password
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/AuthToken'
+        '422':
+          description: Unprocessable entity
+  /auth/register/free:
+    post:
+      tags:
+        - auth
+        - common
+      summary: Register a new user against API
+      operationId: postAuthRegisterFree
+      description: |
+        By passing in the appropriate options, you can signup
+        a new user against the underlying database
+      parameters:
+        - *ref_0
+        - in: body
+          name: auth
+          description: The user credentials for login
+          schema:
+            type: object
+            required:
+              - nickname
+              - email
+              - password
+              - password_confirmation
+              - account_type
+              - opt_in_marketing
+              - opt_in_analysis
+            properties:
+              user_id:
+                type: string
+              checksum:
+                type: string
+              nickname:
+                type: string
+              firstname:
+                type: string
+              lastname:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+              password_confirmation:
+                type: string
+              account_type:
+                type: string
+                enum:
+                  - free
+                  - cash
+              opt_in_marketing:
+                type: boolean
+              opt_in_analysis:
+                type: boolean
+              referral:
+                type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/AuthToken'
+        '422':
+          description: Unprocessable entity
+  /auth/register/cash:
+    post:
+      tags:
+        - auth
+        - common
+      summary: Register a new user against API for the payed account type
+      operationId: postAuthRegisterCash
+      description: |
+        By passing in the appropriate options, you can signup
+        a new user against the underlying database
+      consumes:
+        - multipart/form-data
+      parameters:
+        - *ref_0
+        - in: formData
+          name: user_id
+          description: User id
+          type: string
+        - in: formData
+          name: checksum
+          description: OAuth checksum
+          type: string
+        - in: formData
+          name: nickname
+          description: A unique name identifying the user against other users
+          required: true
+          type: string
+        - in: formData
+          name: firstname
+          description: The first name of a user
+          required: true
+          type: string
+        - in: formData
+          name: lastname
+          description: The last name of a user
+          required: true
+          type: string
+        - in: formData
+          name: address_line1
+          description: E.g. Street 12
+          required: true
+          type: string
+        - in: formData
+          name: address_line2
+          required: false
+          type: string
+        - in: formData
+          name: address_line3
+          required: false
+          type: string
+        - in: formData
+          name: postcode
+          description: '81373'
+          required: true
+          type: string
+        - in: formData
+          name: city
+          description: Munich
+          required: true
+          type: string
+        - in: formData
+          name: country_code
+          description: Three letter code of the selected country
+          required: true
+          type: string
+          enum:
+            - DEU
+            - AUT
+        - in: formData
+          name: full_aged
+          description: A flag which indicates that the user is more than 18 years old
+          required: true
+          type: boolean
+        - in: formData
+          name: email
+          description: The users email address - unique within the database
+          required: true
+          type: string
+        - in: formData
+          name: password
+          description: A hopefully safe password for the user
+          required: true
+          type: string
+        - in: formData
+          name: password_confirmation
+          description: confirmation of entered password
+          required: true
+          type: string
+        - in: formData
+          name: account_type
+          description: >-
+            Indicates if the newly created account should be of type free or
+            cash
+          required: true
+          type: string
+          enum:
+            - cash
+            - free
+        - in: formData
+          name: picture1
+          description: E.g. first page of passport
+          required: true
+          schema:
+            type: string
+            format: binary
+        - in: formData
+          name: picture2
+          description: E.g. second page of passport
+          required: true
+          schema:
+            type: string
+            format: binary
+        - in: formData
+          name: passport_id
+          description: The combined passport id (combination of 4 number fields)
+          required: true
+          type: string
+        - in: formData
+          name: opt_in_marketing
+          descrioption: Indicates if user allows to use his data for marketing purposes
+          required: true
+          type: boolean
+        - in: formData
+          name: opt_in_analysis
+          descrioption: Indicates if user allows to use his data for analysis purposes
+          required: true
+          type: boolean
+        - in: formData
+          name: referral
+          description: Indicates if the user was referred from an other page
+          required: false
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/AuthToken'
+        '422':
+          description: Unprocessable entity
+  /password/send-reset:
+    post:
+      tags:
+        - internal
+      summary: Send reset password email
+      operationId: postSendResetPasswordMail
+      description: |
+        Sends a mail to given email address with a link to reset the password
+      parameters:
+        - in: body
+          name: forgotPassword
+          description: Forgot password form content
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: The user name
+      responses:
+        '200':
+          description: Created
+        '422':
+          description: Unprocessible entity
+      security:
+        - bearer: []
+  /password/reset:
+    post:
+      tags:
+        - internal
+      summary: Reset password
+      operationId: postResetPassword
+      description: |
+        Resets a users password
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: body
+          name: resetPassword
+          description: Forgot password form content
+          schema:
+            type: object
+            required:
+              - token
+              - password
+              - password_confirmation
+              - email
+            properties:
+              token:
+                type: string
+                description: The user token
+              password:
+                type: string
+                description: The user new password
+              password_confirmation:
+                type: string
+                description: The password confirmation
+              email:
+                type: string
+                description: Email
+      responses:
+        '200':
+          description: Created
+        '422':
+          description: Unprocessible entity
+      security:
+        - bearer: []
+  '/user/{id}':
+    get:
+      tags:
+        - internal
+      summary: Show a user bit its id
+      operationId: getUser
+      description: |
+        Get information about a user
+      parameters:
+        - &ref_1
+          in: query
+          name: include
+          description: 'Wager,Bet'
+          required: false
+          type: string
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+    put:
+      tags:
+        - internal
+      summary: Update user information
+      operationId: putUser
+      description: |
+        Update user information
+      parameters:
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: nickname
+          description: Nickname
+          required: true
+          type: string
+        - in: body
+          name: firstname
+          description: Last name
+          required: true
+          type: string
+        - in: body
+          name: lastname
+          description: Last name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The updated user object
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/opt-analysis':
+    post:
+      tags:
+        - opt_in
+      summary: Change analysis permission
+      operationId: postUserAnalysis
+      description: |
+        Change permission to use analysis data of user
+      parameters:
+        - in: path
+          name: id
+          description: User that requests permission change
+          required: true
+          type: string
+      responses:
+        '200':
+          description: userResource
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/opt-marketing':
+    post:
+      tags:
+        - opt_in
+      summary: Change marketing permission
+      operationId: postUserMarketing
+      description: |
+        Change permission to use data of user for marketing
+      parameters:
+        - in: path
+          name: id
+          description: User that requests permission change
+          required: true
+          type: string
+      responses:
+        '200':
+          description: userResource
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/email':
+    put:
+      tags:
+        - internal
+      summary: Update email of user
+      operationId: updateEmail
+      description: |
+        Update email of user
+      parameters:
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: email
+          description: Email
+          required: true
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/password':
+    put:
+      tags:
+        - internal
+      summary: Update password of user
+      operationId: updatePassword
+      description: |
+        Update password of user
+      parameters:
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: password_old
+          description: Old password
+          required: true
+          type: string
+        - in: body
+          name: password
+          description: New password must be at least 8 characters long
+          required: true
+          type: string
+        - in: body
+          name: password_confirmation
+          description: New password confirmation
+          required: true
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+      security:
+        - bearer: []
+  '/user/{id}/wallet/transactions':
+    get:
+      tags:
+        - internal
+      summary: Get users transcation history
+      operationId: getUserTransactionHistory
+      description: |
+        Get users transcation history
+      parameters:
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/wallet/balance':
+    get:
+      tags:
+        - internal
+      summary: Get information about a user wallet
+      operationId: getUserBalance
+      description: |
+        Get information about a user wallet
+      parameters:
+        - *ref_1
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/wallet/pay-in':
+    post:
+      tags:
+        - internal
+      summary: Pay in to wallet
+      operationId: postPayInToWallet
+      description: |
+        Pay amount into wallet
+      parameters:
+        - *ref_1
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: amount
+          description: Amount to payin to wallet
+          required: true
+          type: string
+        - in: body
+          name: transactionProvider
+          description: The transaction provider.
+          required: true
+          type: string
+        - in: body
+          name: transactionReference
+          description: The transaction reference.
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{id}/wager/{hash}/pay-with-wallet':
+    post:
+      tags:
+        - internal
+      summary: Pay with  wallet
+      operationId: postPayWagerWithWallet
+      description: |
+        Pay a wager using the wallet - called after wager / bet was created
+      parameters:
+        - *ref_1
+        - in: path
+          name: id
+          description: User id
+          required: true
+          type: string
+        - in: path
+          name: hash
+          description: Wager hash
+          required: true
+          type: string
+        - in: body
+          name: amount
+          description: Amount to payin to wallet
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/address/{address}':
+    get:
+      tags:
+        - internal
+      summary: Show a users address
+      operationId: getAddress
+      description: |
+        Get a file
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: path
+          name: address
+          description: Address id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Address matching criteria
+          schema:
+            $ref: '#/definitions/Address'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+    put:
+      tags:
+        - internal
+      summary: Update a users address
+      operationId: updateAddress
+      description: |
+        Get a file
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: path
+          name: address
+          description: Address id
+          required: true
+          type: string
+        - in: body
+          name: address_line1
+          description: Address line 1
+          required: true
+          type: string
+        - in: body
+          name: address_line2
+          description: Address line 2
+          required: false
+          type: string
+        - in: body
+          name: address_line3
+          description: Address line 3
+          required: false
+          type: string
+        - in: body
+          name: city
+          description: city
+          required: true
+          type: string
+        - in: body
+          name: country_code
+          description: Country Code
+          required: true
+          type: string
+        - in: body
+          name: postcode
+          description: Postcode
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Address updated
+          schema:
+            $ref: '#/definitions/Address'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/addresses':
+    get:
+      tags:
+        - internal
+      summary: Show all users addresses
+      operationId: getAddresses
+      description: |
+        Show all users addresses
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Addresses
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/address':
+    post:
+      tags:
+        - internal
+      summary: Create a users address
+      operationId: createAddress
+      description: |
+        Get a file
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: address_line1
+          description: Address line 1
+          required: true
+          type: string
+        - in: body
+          name: address_line2
+          description: Address line 2
+          required: false
+          type: string
+        - in: body
+          name: address_line3
+          description: Address line 3
+          required: false
+          type: string
+        - in: body
+          name: city
+          description: city
+          required: true
+          type: string
+        - in: body
+          name: country_code
+          description: Country Code
+          required: true
+          type: string
+        - in: body
+          name: postcode
+          description: Postcode
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Address created
+          schema:
+            $ref: '#/definitions/Address'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/upcoming':
+    get:
+      tags:
+        - internal
+      summary: Show upcoming
+      operationId: getUserWagerUpcoming
+      description: |
+        Upcoming wagers for provided user
+      parameters:
+        - &ref_2
+          in: query
+          name: include
+          description: 'User,Bet'
+          required: false
+          type: string
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Upcoming wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/current':
+    get:
+      tags:
+        - internal
+      summary: Show current
+      operationId: getUserWagerCurrent
+      description: |
+        Currently running wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Currently running wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/not-finalized':
+    get:
+      tags:
+        - internal
+      summary: Show current
+      operationId: getUserWagerNotFinalized
+      description: |
+        Not finalized wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Not finalized wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/finalized':
+    get:
+      tags:
+        - internal
+      summary: Show finalized wagers
+      operationId: getUserWagerFinalized
+      description: |
+        Finalized wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Finalized wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/rejected':
+    get:
+      tags:
+        - internal
+      summary: Show rejected wagers
+      operationId: getUserWagerRejected
+      description: |
+        Rejected wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Rejected wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/ended':
+    get:
+      tags:
+        - internal
+      summary: Show ended
+      operationId: getUserWagerEnded
+      description: |
+        Already ended wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Already ended wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/reported':
+    get:
+      tags:
+        - internal
+      summary: Show reported
+      operationId: getUserWagerReported
+      description: |
+        Reported wagers for provided user
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Reported wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/not-part-of':
+    get:
+      tags:
+        - internal
+      summary: Show gambles the user is not part of
+      operationId: getUserWagerNotPartOf
+      description: >
+        Shows all existing gambles that the provided user is not part of and
+        have not created
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Show gambles the user is not part of
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/not-paid':
+    get:
+      tags:
+        - wager_scope
+      summary: Show not paid
+      operationId: getUserWagerNotPaid
+      description: |
+        show wagers where creator has not paid yet.
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 4cash wagers where creator has not paid/joined yet
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager':
+    get:
+      tags:
+        - internal
+        - TODO
+      summary: Show complained
+      operationId: getUserWagerComplained
+      description: >
+        Wagers for provided user which are in the complaint phase (Status
+        check).
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Reported wagers for provided user
+          schema:
+            $ref: '#/definitions/Wager'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/paid':
+    get:
+      tags:
+        - internal
+        - TODO
+      summary: >-
+        Wagers for provided user which has status paid (4Cash) or equal (4Free,
+        4Chash) or approved (4Free).
+      operationId: getUserWagerPaid
+      description: >
+        Wagers for provided user which has status paid (4Cash) or equal (4Free,
+        4Chash) or approved (4Free).
+      parameters:
+        - *ref_2
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/wager/{wager_hash}/betting-ledger':
+    get:
+      tags:
+        - internal
+      summary: Get a wager betting ledger.
+      operationId: getWagerBettingLedger
+      description: |
+        Get a pdf with the betting ledger.
+      parameters:
+        - in: path
+          name: user_id
+          description: User_id
+          required: true
+          type: string
+        - in: path
+          name: wager_hash
+          description: Wager hash
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+    post:
+      tags:
+        - internal
+      summary: Sends a wager betting ledger by email.
+      operationId: postWagerBettingLedger
+      description: |
+        Sends a pdf with the betting ledger by email.
+      parameters:
+        - in: path
+          name: user_id
+          description: User_id
+          required: true
+          type: string
+        - in: path
+          name: wager_hash
+          description: Wager hash
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/file/updateAvatar':
+    post:
+      tags:
+        - internal
+      summary: Update an avatar image
+      operationId: postFile
+      description: |
+        Update an avatar
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: formData
+          name: avatar_image
+          description: Avatar image
+          required: true
+          type: file
+        - in: formData
+          name: avatar_description
+          description: Avatar description
+          required: false
+          type: string
+      responses:
+        '200':
+          description: File matching criteria
+          schema:
+            $ref: '#/definitions/File'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/file':
+    get:
+      tags:
+        - internal
+      summary: Show a users files
+      operationId: getFiles
+      description: |
+        Get all files for a user
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: query
+          name: type
+          description: The file type to get
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Files for the given user and type
+          schema:
+            $ref: '#/definitions/File'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/file/{file}':
+    get:
+      tags:
+        - internal
+      summary: Show a users file
+      operationId: getFile
+      description: |
+        Get a file
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: path
+          name: file
+          description: File name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: File matching criteria
+          schema:
+            $ref: '#/definitions/File'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/file/uploadPassport':
+    post:
+      tags:
+        - internal
+      summary: Upload a passport image
+      operationId: postPassportImage
+      description: |
+        Upload a passport image
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+        - in: formData
+          name: image1
+          description: Passport image1
+          required: false
+          type: file
+        - in: formData
+          name: image2
+          description: Passport image1
+          required: false
+          type: file
+        - in: formData
+          name: passport_id
+          description: Passport ID
+          required: true
+          type: string
+        - in: formData
+          name: full_aged
+          description: Is the user full aged
+          required: false
+          type: bool
+      responses:
+        '200':
+          description: File matching criteria
+          schema:
+            $ref: '#/definitions/File'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user_id}/draft':
+    get:
+      tags:
+        - internal
+      summary: Gets users drafts
+      operationId: getUserDrafts
+      description: |
+        Gets drafts for provided user
+      parameters:
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Gets drafts for provided user
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+    post:
+      tags:
+        - internal
+      summary: Creates a draf for provided user
+      operationId: postUserDraft
+      description: |
+        Creates a draf for provided user
+      parameters:
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+        - in: body
+          name: data
+          description: The user draft
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                description: The user draft
+      responses:
+        '200':
+          description: Creates a draf for provided user
+        '422':
+          description: Unprocessable entity
+  '/user/{user_id}/draft/{draft_id}':
+    delete:
+      tags:
+        - internal
+      summary: Deletes a draf for provided user
+      operationId: deleteUserDraft
+      description: Deletes a draf for provided user
+      parameters:
+        - in: path
+          name: user_id
+          description: User id
+          required: true
+          type: string
+        - in: path
+          name: draft_id
+          description: draft_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Deletes a draf for provided user
+        '422':
+          description: Unprocessable entity
+  '/user/{user}/limitation':
+    post:
+      tags:
+        - internal
+      summary: Create a user limitation
+      operationId: postUserLimitation
+      description: |
+        Create a user limitation starting from now
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Limitation created
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/limitation/deactivate':
+    post:
+      tags:
+        - internal
+      summary: Deactivate a users limitation from now on
+      operationId: postUserLimitationDeactivate
+      description: |
+        Deactivate a users limitation from now on
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Limitation deactivated
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/user/{user}/limitation/monthly-max-amount':
+    get:
+      tags:
+        - internal
+      summary: Get the maximum amount a user can gamble for a month
+      operationId: getMaxMonthlyAmount
+      description: |
+        Get the maximum amount a user can gamble for a month
+      parameters:
+        - in: path
+          name: user
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /wager:
+    get:
+      tags:
+        - internal
+      summary: Get a list of available public wagers - paginated
+      operationId: getWagersPublic
+      description: |
+        Get a list of available public wagers - paginated
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+    post:
+      tags:
+        - internal
+      summary: Create a new wager
+      operationId: postWagerCreate
+      description: |
+        A new wager gets created and
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: 'wager[wager_type]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[title]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[description]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[cover_picture]'
+          required: true
+          description: An image used for the wager on widgets
+          schema:
+            type: string
+            format: binary
+        - in: formData
+          name: 'wager[bet_deadline_at]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[wager_end_at]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[minimum_bet_amount]'
+          required: true
+          description: Its the amount in Cent (€). E.g. 100 for 1€
+          type: integer
+        - in: formData
+          name: 'wager[payout_method]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[win_mode]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[privacy]'
+          required: true
+          type: string
+        - in: formData
+          name: 'wager[max_participants]'
+          required: false
+          type: integer
+        - in: formData
+          name: 'wager_result[team1]'
+          type: string
+        - in: formData
+          name: 'wager_result[team2]'
+          type: string
+        - in: formData
+          name: 'wager_result[team1_value]'
+          type: string
+        - in: formData
+          name: 'wager_result[team2_value]'
+          type: string
+        - in: formData
+          name: 'wager_result[regular_playtime]'
+          type: string
+        - in: formData
+          name: 'wager_result[after_extra_time]'
+          type: string
+        - in: formData
+          name: 'additional_question[0][question]'
+          type: string
+        - in: formData
+          name: 'additional_question[0][answer][0]'
+          type: string
+        - in: formData
+          name: 'additional_question[0][correct][0]'
+          type: boolean
+        - in: formData
+          name: 'additional_question[0][answer][1]'
+          type: string
+        - in: formData
+          name: 'additional_question[0][correct]'
+          type: integer
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessible entity
+      security:
+        - bearer: []
+  '/wager/{wager_id}':
+    get:
+      tags:
+        - internal
+      summary: Get a list of available public wagers - paginated
+      operationId: getWager
+      description: |
+        Get a list of available public wagers - paginated
+      parameters:
+        - *ref_2
+        - in: path
+          name: wager_id
+          description: Wager id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/wager/{wager_id}/report':
+    post:
+      tags:
+        - internal
+      summary: Report wager by it's id
+      operationId: postWagerReport
+      description: |
+        Report wager by it's id
+      parameters:
+        - in: path
+          name: wager_id
+          description: The wager id to be reported
+          required: true
+          type: string
+        - in: body
+          name: wager
+          description: The wager to report
+          schema:
+            type: object
+            required:
+              - user_id
+              - reason
+            properties:
+              user_id:
+                type: string
+                description: The user id of reporting the wager
+              reason:
+                type: string
+                description: Reason category for the report
+                enum:
+                  - general
+                  - spam
+                  - sexual
+                  - offensive
+                  - violation
+                  - others
+              description:
+                type: string
+                description: >-
+                  A description from reporting user describing why he reports
+                  the wager
+      responses:
+        '202':
+          description: Reported successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/wager/{wager_id}/complain':
+    post:
+      tags:
+        - internal
+      summary: Complain wager by it's id
+      operationId: postWagerComplain
+      description: |
+        Complain about a wagers results by it's id
+      parameters:
+        - in: path
+          name: wager_id
+          description: The wager id to be complained
+          required: true
+          type: string
+        - in: body
+          name: wager
+          description: The wager to be complained
+          schema:
+            type: object
+            required:
+              - complainReason
+              - description
+            properties:
+              complainReason:
+                type: string
+                description: Reason category for the complaint
+                enum:
+                  - resultWrong
+                  - others
+              description:
+                type: string
+                description: >-
+                  A description from complaining user describing why he
+                  complains
+      responses:
+        '202':
+          description: Complained successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/wager/{wager_id}/statistics':
+    get:
+      tags:
+        - internal
+      summary: Get a wager with the statistics.
+      operationId: getWagerStatistics
+      description: |
+        Get a wager with the statistics.
+      parameters:
+        - *ref_2
+        - in: path
+          name: wager_id
+          description: Wager hash
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/wager/{hash}/share':
+    post:
+      tags:
+        - internal
+      summary: Shares the wager.
+      operationId: postWagerShareForm
+      description: |
+        Shares the wager.
+      parameters:
+        - in: path
+          name: hash
+          description: Wager hash
+          required: true
+          type: string
+        - in: body
+          name: contact
+          description: Share form content
+          schema:
+            type: object
+            required:
+              - email
+              - subject
+            properties:
+              email:
+                type: string
+                description: The email to share the gamble with.
+              subject:
+                type: string
+                description: The subject
+              message:
+                type: string
+                description: The users message
+      responses:
+        '202':
+          description: Sends the share form
+        '422':
+          description: Unprocessable entity
+  /wager/system-locks:
+    get:
+      tags:
+        - internal
+      summary: Get an array of all System lock states
+      operationId: getSystemLocks
+      description: |
+        Get an array of all System lock states
+      responses:
+        '200':
+          description: Returns system locks
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /public/wager:
+    get:
+      tags:
+        - internal
+      summary: Get a list of available public wagers - paginated
+      operationId: getPublicWagers
+      description: |
+        Get a list of available wagers - paginated
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /public/wager/filtered:
+    get:
+      tags:
+        - internal
+      summary: Get a list of filtered available wagers - paginated
+      operationId: getPublicWagerFiltered
+      description: |
+        Get a list of available public wagers - paginated
+      parameters:
+        - in: query
+          name: search
+          description: Filter keyword for gambles
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  '/public/wager/{wager_id}':
+    get:
+      tags:
+        - internal
+      summary: Get a list of available wagers - paginated
+      operationId: getPublicWager
+      description: |
+        Get a list of available public wagers - paginated
+      parameters:
+        - *ref_2
+        - in: path
+          name: wager_id
+          description: Wager id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /manual/payout:
+    post:
+      tags:
+        - internal
+      summary: Pay out
+      operationId: postManualPayOut
+      description: |
+        Ask to pay out given amount using the last transaction method
+      parameters:
+        - in: body
+          name: amount
+          description: Amount to payout from wallet
+          required: true
+          type: numeric
+        - in: body
+          name: IBAN
+          description: IBAN of user Bank he wants his money to be transfered
+          reguired: true
+          type: string
+        - in: body
+          name: BIC
+          description: BIC of user Bank he wants his money to be transfered
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+  /braintree/token:
+    get:
+      tags:
+        - common
+      summary: Retrieve a payment token from braintree
+      operationId: getBraintreeToken
+      description: |
+        Retrieve a payment token from braintree
+      responses:
+        '200':
+          description: The braintree token response
+          schema:
+            $ref: '#/definitions/BraintreeToken'
+      security:
+        - bearer: []
+  /braintree/pay:
+    post:
+      tags:
+        - common
+      summary: Payment nonce
+      operationId: postBraintreeNonce
+      description: Sends the payment nonce
+      parameters:
+        - in: body
+          name: pay
+          description: The payment information
+          schema:
+            type: object
+            required:
+              - amount
+              - nonce
+              - product
+              - product_id
+            properties:
+              amount:
+                type: number
+              nonce:
+                type: string
+              product:
+                type: string
+              product_id:
+                type: integer
+      responses:
+        '200':
+          description: The braintree payment response
+      security:
+        - bearer: []
+  '/payment/transaction/{transaction_id}':
+    get:
+      tags:
+        - internal
+      summary: Get a transaction
+      operationId: getPaymentTransaction
+      description: |
+        Get a transaction
+      parameters:
+        - in: path
+          name: transaction_id
+          description: Transaction id
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/payment-provider-schema:
+    get:
+      tags:
+        - internal
+      summary: Get payment providers schema
+      operationId: getPaymentProviderSchema
+      description: |
+        Gets the schema for all possible payment providers
+      responses:
+        '200':
+          description: Json including all possible payment providers and their fees
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/skrill/token:
+    post:
+      tags:
+        - common
+      summary: Retrieve a payment token from skrill
+      operationId: postSkrillToken
+      description: The skrill token response
+      parameters:
+        - in: body
+          name: data
+          description: The payment information.
+          schema:
+            type: object
+            required:
+              - amount
+              - provider
+            properties:
+              amount:
+                type: string
+                description: Amount to pay
+              wager_id:
+                type: string
+                description: Id of the wager to pay
+              provider:
+                type: string
+                description: >-
+                  Payment provider to generate the Iframe for - Either 'WLT'
+                  (Skrill) or 'OBT' (Rapid)
+              mobile:
+                type: boolean
+                description: Return mobile redirect url
+      responses:
+        '202':
+          description: Token sent successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/skrill/payout:
+    post:
+      tags:
+        - internal
+      summary: Pay out
+      operationId: postPayOut
+      description: |
+        Ask to pay out given amount using the last transaction method
+      parameters:
+        - in: body
+          name: amount
+          description: Amount to payout from wallet
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofort/token:
+    post:
+      tags:
+        - common
+      summary: Retrieve a payment token from sofort
+      operationId: postSofortToken
+      description: The sofort token response
+      parameters:
+        - in: body
+          name: data
+          description: The payment information.
+          schema:
+            type: object
+            required:
+              - amount
+              - provider
+            properties:
+              amount:
+                type: string
+                description: Amount to pay
+              wager_id:
+                type: string
+                description: Id of the wager to pay
+              provider:
+                type: string
+                description: Payment provider to generate the Iframe for Sofort
+      responses:
+        '202':
+          description: Token sent successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofort/payment-provider-schema-sofort:
+    get:
+      tags:
+        - internal
+      summary: Get payment providers schema
+      operationId: getPaymentProviderSchemaSofort
+      description: |
+        Gets the schema for Sofort payment provider
+      responses:
+        '200':
+          description: Json including Sofort payment provider and its fees
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofort/payment-result:
+    post:
+      tags:
+        - common
+      summary: Retrieve a payment result from sofort
+      operationId: postTransactionIdForPaymentResultSofort
+      description: The sofort result response
+      parameters:
+        - in: body
+          name: data
+          description: The payment information.
+          schema:
+            type: object
+            required:
+              - transactionId
+            properties:
+              transactionId:
+                type: string
+                description: The TransactionId from payment
+      responses:
+        '202':
+          description: TransactionId sent successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofortpay/payment-result:
+    post:
+      tags:
+        - common
+      summary: Retrieve a payment result from sofortpay
+      operationId: postTransactionIdForPaymentResultSofortPay
+      description: The sofortpay result response
+      parameters:
+        - in: body
+          name: data
+          description: The payment information.
+          schema:
+            type: object
+            required:
+              - transactionId
+            properties:
+              transactionId:
+                type: string
+                description: The TransactionId from payment
+      responses:
+        '202':
+          description: TransactionId sent successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofortpay/token:
+    post:
+      tags:
+        - common
+      summary: Retrieve a payment token from sofortpay
+      operationId: postSofortPayToken
+      description: The sofortpay token response
+      parameters:
+        - in: body
+          name: data
+          description: The payment information.
+          schema:
+            type: object
+            required:
+              - amount
+              - provider
+            properties:
+              amount:
+                type: string
+                description: Amount to pay
+              wager_id:
+                type: string
+                description: Id of the wager to pay
+              provider:
+                type: string
+                description: Payment provider to generate the Iframe for SofortPay
+      responses:
+        '202':
+          description: Token sent successfully
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /providers/sofortpay/payment-provider-schema-sofortpay:
+    get:
+      tags:
+        - internal
+      summary: Get payment providers schema
+      operationId: getPaymentProviderSchemaSofortPay
+      description: |
+        Gets the schema for SofortPay payment provider
+      responses:
+        '200':
+          description: Json including SofortPay payment provider and its fees
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /contact/submit:
+    post:
+      tags:
+        - public
+      summary: Sends the contact form
+      operationId: postContactForm
+      description: |
+        Sends the contact form
+      parameters:
+        - in: body
+          name: contact
+          description: Contact form content
+          schema:
+            type: object
+            required:
+              - name
+              - subject
+              - message
+              - email
+            properties:
+              name:
+                type: string
+                description: The user name
+              subject:
+                type: string
+                description: The subject
+              message:
+                type: string
+                description: The users message
+              email:
+                type: string
+                description: The users message
+              account_type:
+                type: string
+                description: the requested account type
+                enum:
+                  - cash
+                  - free
+              user_id:
+                type: string
+                description: the requested user id (required with acount_type)
+      responses:
+        '202':
+          description: Sends the contact form
+        '422':
+          description: Unprocessable entity
+definitions:
+  AuthToken:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          title: AuthToken
+          type: object
+          description: >-
+            Contains a JWT token which can be used by the client script to
+            authenticate the user against API requests.
+          properties:
+            type:
+              type: string
+              example: AuthToken
+            id:
+              type: string
+            attributes:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: >-
+                    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9nY2cuc2VydmVycG9ydGFsMS5kZSIsImF1ZCI6Imh0dHA6XC9cL2djZy5zZXJ2ZXJwb3J0YWwxLmRlIiwiaWF0IjoxNTE3NDk0NzI0LCJuYmYiOjE1MTc0OTQ3MjQsImV4cCI6MTUxNzUyMzUyNCwic3ViIjoxMX0.7tsxzHCjJFiFqi7QeOd2RMPcOH94EFbJZkl4dQqWw50
+                  description: JWT Token for authentication
+            relationships:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/definitions/UserIdentifier'
+      included:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/UserIncluded'
+  User:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          title: User
+          type: object
+          description: Contains information about the user object
+          properties:
+            type:
+              type: string
+              example: User
+            id:
+              type: string
+              example: 1
+            attributes: &ref_3
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: Max
+                lastName:
+                  type: string
+                  example: Mustermann
+                nickname:
+                  type: string
+                  example: myNick82
+                accountType:
+                  type: string
+                  example: free
+                email:
+                  type: string
+                  example: max.mustermann@email.lan
+                createdAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                updatedAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                confirmedAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                avatar_image:
+                  type: string
+                  example: blubb.jpg
+                full_aged:
+                  type: number
+                  example: 1
+                balance:
+                  type: number
+                  example: 500
+                roles:
+                  type: array
+                  items:
+                    type: string
+                    example: participant
+            relationships:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/definitions/WagerIdentifier'
+                  - $ref: '#/definitions/BetIdentifier'
+      included:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/WagerIncluded'
+            - $ref: '#/definitions/BetIncluded'
+  UserIncluded:
+    type: object
+    properties:
+      type:
+        type: string
+        example: User
+      id:
+        type: string
+        example: 1
+      attributes: *ref_3
+      relationships:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/WagerIdentifier'
+            - $ref: '#/definitions/BetIdentifier'
+  UserIdentifier:
+    type: object
+    properties:
+      UserIdentifier:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              type:
+                type: string
+                example: User
+              id:
+                type: string
+                example: 1
+  Wager:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          title: Wager
+          type: object
+          description: Contains information about a wager
+          properties:
+            type:
+              type: string
+              example: Wager
+            id:
+              type: string
+              example: 1
+            attributes: &ref_4
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Best wager of all
+                description:
+                  type: string
+                  example: Description of wager could go here
+                status:
+                  type: string
+                  example: The wager status based on different requirements
+                betDeadlineAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                wagerStartAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                wagerEndAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                winMode:
+                  type: string
+                  example: honor
+                  enum:
+                    - honor
+                    - credit
+                payoutMethod:
+                  type: string
+                  example: paypal
+                  enum:
+                    - none
+                    - credit
+                    - paypal
+                type:
+                  type: string
+                  example: public
+                  enum:
+                    - private
+                    - public
+                minimumBetAmount:
+                  type: integer
+                  example: 25
+                createdAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                updatedAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+            relationships:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/definitions/UserIdentifier'
+      included:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/UserIncluded'
+  WagerIncluded:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Wager
+      id:
+        type: string
+        example: 1
+      attributes: *ref_4
+      relationships:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/UserIdentifier'
+  WagerIdentifier:
+    type: object
+    properties:
+      WagerIdentifier:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              type:
+                type: string
+                example: Wager
+              id:
+                type: string
+                example: 1
+  Bet:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          title: Bet
+          type: object
+          description: Contains information about a bet
+          properties:
+            type:
+              type: string
+              example: Bet
+            id:
+              type: string
+              example: 1
+            attributes: &ref_5
+              type: object
+              properties:
+                createdAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+                updatedAt:
+                  type: string
+                  example: 2018-02-01T12:00:00.000Z
+            relationships:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/definitions/UserIdentifier'
+      included:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/UserIncluded'
+  BetIncluded:
+    type: object
+    properties:
+      title: Bet
+      type: object
+      description: Contains base user information
+      properties:
+        type:
+          type: string
+          example: Bet
+        id:
+          type: string
+          example: 1
+        attributes: *ref_5
+        relationships:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/definitions/UserIdentifier'
+  BetIdentifier:
+    type: object
+    properties:
+      BetIdentifier:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              type:
+                type: string
+                example: Bet
+              id:
+                type: string
+                example: 1
+  BraintreeToken:
+    type: object
+    properties:
+      data:
+        title: BraintreeToken
+        type: object
+        description: Contains information about the user object
+        properties:
+          token:
+            type: string
+            example: base64string==
+  Address:
+    type: object
+    properties:
+      data:
+        title: BraintreeToken
+        type: object
+        description: Contains information about the user object
+        properties:
+          token:
+            type: string
+            example: base64string==

@@ -1,0 +1,46 @@
+{
+  "name": "{{package.name}}",
+  "description": "{{inline swagger.info.description}}",
+  "version": "{{swagger.info.version}}",
+  "scripts": {
+    "build:ts": "tsc",
+    "watch:ts": "tsc -w",
+    "start:dev": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "fs-extra": "^7.0.1",
+    "command-line-args": "^5.0.2",
+    "express": "^4.16.2",
+    "express-validation": "^1.0.2",
+    "express-form-data": "^2.0.1",
+    "express-auth-middle": "^1.0.4",
+    "swagger-ui-express": "^4.0.1",
+    "body-parser": "^1.18.3",
+    "morgan": "^1.9.0",
+    "winston": "^3.1.0",
+    "cors": "^2.8.4",
+    "node-json-transform": "^1.0.17",
+    "recursive-readdir-sync": "^1.0.6",
+    "yamljs": "^0.3.0",
+    "joi": "^9.2.0",
+    "jsonwebtoken": "^8.4.0",
+    "dotenv": "^6.2.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/async": "^2.0.50",
+    "@types/command-line-args": "^5.0.0",
+    "@types/express": "^4.16.0",
+    "@types/swagger-ui-express": "^3.0.0",
+    "@types/body-parser": "^1.17.0",
+    "@types/morgan": "^1.7.35",
+    "@types/cors": "^2.8.4",
+    "@types/yamljs": "^0.2.30",
+    "@types/joi": "^14.0.1",
+    "@types/jsonwebtoken": "^8.3.0",
+    "@types/dotenv": "^6.1.0",
+    "@types/lodash": "^4.14.119",
+    "@types/fs-extra": "^5.0.4"
+  }
+}

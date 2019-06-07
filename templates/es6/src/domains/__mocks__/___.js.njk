@@ -1,0 +1,15 @@
+import { mockItGenerator } from '../../generators'
+
+class {{ capitaLetter(operation_name)}}DomainMock {
+  {% for op in operations -%}
+    {% for key, path in op.path -%}
+      {% if validMethod(key) %}
+  // {{ path.operationId }}
+  async {{ path.operationId }} ({{ pathParamsToDomainParams(path) }}) {
+    {{mockOutput( path, mockServer )}}
+  }
+      {% endif %}
+    {%- endfor %}
+  {%- endfor %}
+}
+export default new {{capitaLetter(operation_name)}}DomainMock()

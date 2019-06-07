@@ -1,0 +1,133 @@
+swagger: '2.0'
+info:
+  description: CDC Notes Microservice API
+  version: 1.0.0
+  title: AMCDCNOTES API
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: 127.0.0.1
+basePath: /api/v1
+tags:
+  - name: note
+    description: Everything about a note
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /note:
+    post:
+      tags:
+        - note
+      summary: Add a new note
+      operationId: addNote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Note
+          description: The note object
+          required: true
+          schema:
+            $ref: '#/definitions/NoteCreate'
+      responses:
+        '200':
+          description: The created note object
+          schema:
+            $ref: '#/definitions/Note'
+        '405':
+          description: Invalid input
+    get:
+      tags:
+        - note
+      summary: Get all notes that fit the given search criteria
+      operationId: getNotes
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: vin
+          description: The vin to search notes for
+          required: true
+          type: string
+        - in: query
+          name: creator_qnumber
+          type: string
+          description: The creators qnumber to search for
+        - in: query
+          name: text
+          type: string
+          description: The text to search for
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Note'
+        '405':
+          description: Invalid input
+definitions:
+  Note:
+    type: object
+    properties:
+      text:
+        type: string
+        example: Some example text
+      creator_name:
+        type: string
+        example: John Doe
+      creator_id:
+        type: number
+        example: 1
+      creator_qnumber:
+        type: string
+        example: qxj1234
+      vin:
+        type: string
+        example: WBAAKKSN12893
+      createdAt:
+        type: string
+        example: 2018-02-01T12:00:00.000Z
+      updatedAt:
+        type: string
+        example: 2018-02-01T12:00:00.000Z
+  NoteCreate:
+    type: object
+    required:
+      - text
+      - creator_name
+      - creator_id
+      - creator_qnumber
+      - vin
+    properties:
+      text:
+        type: string
+        example: Some example text
+      creator_name:
+        type: string
+        example: John Doe
+      creator_id:
+        type: number
+        example: 1
+      creator_qnumber:
+        type: string
+        example: qxj1234
+      vin:
+        type: string
+        example: WBAAKKSN12893

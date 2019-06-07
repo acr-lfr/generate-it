@@ -1,0 +1,208 @@
+swagger: '2.0'
+info:
+  description: CDC SalesForce Microservice API
+  version: 1.0.0
+  title: AMCDCSF API
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: 127.0.0.1
+basePath: /api/v1
+tags:
+  - name: case
+    description: Case data
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /case:
+    post:
+      tags:
+        - case
+      summary: Create a new case entry
+      operationId: addCase
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Case
+          description: The case object
+          required: true
+          schema:
+            $ref: '#/definitions/CaseCreate'
+      responses:
+        '200':
+          description: The created case object
+          schema:
+            $ref: '#/definitions/Case'
+        '422':
+          description: Invalid input
+  '/case/{id}':
+    get:
+      tags:
+        - case
+      summary: Create a new case entry
+      operationId: getCase
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Doc id of the case
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The case object
+          schema:
+            $ref: '#/definitions/Case'
+        '422':
+          description: Invalid input
+    put:
+      tags:
+        - case
+      summary: Updates a new case entry
+      operationId: updateCase
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Doc id of the case
+          required: true
+          type: string
+        - in: body
+          name: Case
+          description: The case update object to merge
+          schema:
+            $ref: '#/definitions/CaseUpdate'
+      responses:
+        '200':
+          description: The case object
+          schema:
+            $ref: '#/definitions/Case'
+        '422':
+          description: Invalid input
+  '/case/{id}/complete':
+    put:
+      tags:
+        - case
+      summary: >-
+        Marks a case as completed, in turn this will trigger the case to be sent
+        to SF
+      operationId: completedCase
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Doc id of the case
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The case object
+          schema:
+            $ref: '#/definitions/Case'
+        '422':
+          description: Invalid input
+definitions:
+  Case:
+    type: object
+    properties:
+      id:
+        type: string
+        example: 987ijhjf76jh
+      q_number:
+        type: string
+        example: qx111111
+      referer_case_id:
+        type: string
+        example: Vg6hd8j
+      internal_case_id:
+        type: string
+        example: '3251'
+      reference_system:
+        type: string
+        example: Sales
+      data: &ref_0
+        type: object
+        properties:
+          itsm_tickets_created:
+            type: array
+            items:
+              type: object
+              properties: &ref_1
+                cdc_ticketnumber:
+                  type: string
+                  example: Internal CDC ticketnumber
+                ssq_template:
+                  type: string
+                  example: Name of SSQ template
+          known_issues_clicked:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: KIName
+                name:
+                  type: string
+                  example: KiID
+          q_number:
+            type: string
+            example: VIN45678912345678
+          vin:
+            type: string
+            example: VIN45678912345678
+  CaseCreate:
+    type: object
+    required:
+      - q_number
+      - referer_case_id
+      - internal_case_id
+      - reference_system
+      - data
+    properties:
+      q_number:
+        type: string
+        example: qx111111
+      referer_case_id:
+        type: string
+        example: Vg6hd8j
+      internal_case_id:
+        type: string
+        example: '3251'
+      reference_system:
+        type: string
+        example: Sales
+      data: *ref_0
+  CaseUpdate:
+    type: object
+    properties:
+      itsm_tickets_created:
+        type: object
+        properties: *ref_1
+      known_issues_clicked:
+        type: object
+        properties: *ref_1

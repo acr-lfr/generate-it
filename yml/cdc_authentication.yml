@@ -1,0 +1,185 @@
+swagger: '2.0'
+info:
+  description: AM CDC Authentication
+  version: 1.0.0
+  title: AMCDCAuthentication API
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: 'localhost:8000'
+basePath: /
+tags:
+  - name: auth
+    description: All authorization specific operations
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /auth/authenticate:
+    post:
+      tags:
+        - auth
+      summary: Authenticate user
+      operationId: postAuthenticate
+      description: |
+        Authenticates a user
+      parameters:
+        - in: body
+          name: auth
+          description: The user credentials for login
+          schema:
+            type: object
+            required:
+              - user
+              - password
+            properties:
+              user:
+                type: string
+                description: User qNumber
+              password:
+                type: string
+                description: User password
+      responses:
+        '200':
+          description: User tokens
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+              renewalToken:
+                type: string
+        '404':
+          description: Not found
+  /auth/public-keys:
+    get:
+      tags:
+        - auth
+      summary: Get public keys
+      operationId: getPublicKeys
+      description: |
+        Get public keys
+      responses:
+        '200':
+          description: Public keys
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                kid:
+                  type: string
+                key:
+                  type: string
+        '404':
+          description: Not found
+  '/auth/public-keys/{kid}':
+    get:
+      tags:
+        - auth
+      summary: Get public key
+      operationId: getPublicKey
+      description: |
+        Get public key
+      parameters:
+        - in: path
+          name: kid
+          description: Public key id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Public key
+          schema:
+            type: object
+            properties:
+              publicKey:
+                type: string
+        '404':
+          description: Not found
+  /auth/revoke:
+    post:
+      tags:
+        - auth
+      summary: Revoke a user token
+      operationId: postRvokeToken
+      description: |
+        Revoke a user token
+      responses:
+        '200':
+          description: Token revoked
+        '404':
+          description: Not found
+      security:
+        - bearer: []
+  /auth/renew:
+    post:
+      tags:
+        - auth
+      summary: Renew a user token
+      operationId: postRenewToken
+      description: |
+        Renew a user token
+      parameters:
+        - in: body
+          name: auth
+          description: The user renewal token
+          schema:
+            type: object
+            required:
+              - token
+            properties:
+              token:
+                type: string
+                description: Renewal token
+      responses:
+        '200':
+          description: User access token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+        '404':
+          description: Not found
+  /auth/cancel:
+    post:
+      tags:
+        - auth
+      summary: Canel a user token
+      operationId: postCancel
+      description: |
+        Cancel a user token
+      parameters:
+        - in: body
+          name: auth
+          description: The user renewal token
+          schema:
+            type: object
+            required:
+              - token
+            properties:
+              token:
+                type: string
+                description: Renewal token
+      responses:
+        '200':
+          description: User access token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+        '404':
+          description: Not found

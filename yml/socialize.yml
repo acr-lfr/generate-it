@@ -1,0 +1,571 @@
+swagger: '2.0'
+info:
+  description: This is the swagger definition for a made up application
+  version: 1.1.1
+  title: Example
+  contact:
+    email: john-carmichael@email.it
+schemes:
+  - http
+  - https
+host: 'localhost:8000'
+basePath: /api/v1
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  AttachmentModel: &ref_0
+    type: object
+    properties:
+      fileType:
+        type: string
+        enum:
+          - png
+          - jpg
+          - jpeg
+          - gif
+          - pdf
+      name:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+      size:
+        type: number
+  AuthLoginPost: &ref_1
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        example: john@john.com
+      password:
+        type: string
+        example: securepassword
+  AuthRegisterPost: &ref_3
+    type: object
+    required:
+      - first_name
+      - last_name
+      - email
+      - password
+    properties:
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Smith
+      email:
+        type: string
+        example: john@john.com
+      password:
+        type: string
+        example: securepassword
+  QuestionModel:
+    type: object
+    properties:
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+      byUserId:
+        type: string
+      question:
+        type: string
+      categories:
+        type: array
+        items:
+          type: string
+      conversation:
+        type: array
+        items:
+          $ref: '#/definitions/QuestionConversationModel'
+      answer:
+        $ref: '#/definitions/QuestionAnswerModel'
+  QuestionPost:
+    type: object
+    required:
+      - question
+      - categories
+    properties:
+      question:
+        type: string
+      categories:
+        type: array
+        items:
+          type: string
+  QuestionPut:
+    type: object
+    properties:
+      question:
+        type: string
+      categories:
+        type: array
+        items:
+          type: string
+  QuestionConversationModel:
+    type: object
+    properties:
+      id:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+      text:
+        type: string
+      attachements:
+        type: array
+        items:
+          $ref: '#/definitions/AttachmentModel'
+      userId:
+        type: string
+  QuestionConversationPost:
+    type: object
+    required:
+      - text
+    properties:
+      text:
+        type: string
+      attachements:
+        type: array
+        items: *ref_0
+  QuestionConversationPut:
+    type: object
+    properties:
+      text:
+        type: string
+      attachements:
+        type: array
+        items:
+          $ref: '#/definitions/AttachmentModel'
+  QuestionAnswerModel:
+    type: object
+    properties:
+      text:
+        type: string
+      attachments:
+        type: array
+        items:
+          $ref: '#/definitions/AttachmentModel'
+  QuestionAnswerPost:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  QuestionAnswerPut:
+    type: object
+    properties:
+      text:
+        type: string
+  UserModel: &ref_2
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      email:
+        type: string
+  UserPut:
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login
+      description: Log a user into the system
+      operationId: v1AuthLoginPost
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: login
+          description: Login data
+          schema: *ref_1
+      responses:
+        '200':
+          description: successful operation
+          schema: *ref_2
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+  /auth/logout:
+    get:
+      tags:
+        - auth
+      summary: Logout
+      description: Logs a user out
+      operationId: v1AuthLogoutGet
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid Identifier supplied
+        '404':
+          description: Event not found
+      security:
+        - api_key: []
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register
+      description: Creates a new user account
+      operationId: v1AuthRegisterPost
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: register
+          description: Register data
+          schema: *ref_3
+      responses:
+        '200':
+          description: successful operation
+          schema: *ref_2
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+  /question:
+    post:
+      tags:
+        - question
+      summary: Ask a new question
+      description: Posts a new question for a concierge to answer
+      operationId: v1QuestionPost
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: question
+          schema:
+            $ref: '#/definitions/QuestionPost'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+  '/question/{qId}':
+    get:
+      tags:
+        - question
+      summary: Get a specific question
+      description: Gets a full question model
+      operationId: v1QuestionQidGet
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: qId
+          required: true
+          type: string
+          description: The ID of the question
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionModel'
+        '404':
+          description: Not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - question
+      summary: Update a specific question
+      description: >-
+        Post an update to a question, this does not include conversation or
+        answers
+      operationId: v1QuestionQidPut
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: qId
+          required: true
+          type: string
+          description: The ID of the question
+        - in: body
+          name: question
+          description: Fields to update
+          schema:
+            $ref: '#/definitions/QuestionPut'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionModel'
+        '400':
+          description: Invalid Identifier supplied
+        '404':
+          description: Event not found
+      security:
+        - api_key: []
+  '/question/{qId}/conversation':
+    post:
+      tags:
+        - conversation
+      summary: Add a new conversation item to a question
+      description: Creates a conversation item appended to a given question
+      operationId: v1QuestionQidConversationPost
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: qId
+          required: true
+          description: The question id
+          type: string
+        - in: body
+          name: questionConversation
+          schema:
+            $ref: '#/definitions/QuestionConversationPost'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionConversationModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+  '/question/{qId}/conversation/{cId}':
+    get:
+      tags:
+        - conversation
+      summary: Get a specific conversation item
+      description: Requires the question and conversation id
+      operationId: v1QuestionQidConversationCidGet
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          description: ID of the question item
+          name: qId
+          required: true
+          type: string
+        - in: path
+          description: ID of the conversation item
+          name: cId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionConversationModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+    put:
+      tags:
+        - conversation
+      summary: Update a specific conversation item
+      description: Requires the question and conversation id
+      operationId: v1QuestionQidConversationCidPut
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          description: ID of the question item
+          name: qId
+          required: true
+          type: string
+        - in: path
+          description: ID of the conversation item
+          name: cId
+          required: true
+          type: string
+        - in: body
+          name: questionConversation
+          schema:
+            $ref: '#/definitions/QuestionConversationPut'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionConversationModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+  '/question/{qId}/answer':
+    post:
+      tags:
+        - answer
+      summary: Provide an answer to a question
+      description: Creates a new answer object saved against a question
+      operationId: v1QuestionQidAnswerPost
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: qId
+          required: true
+          description: The question id
+          type: string
+        - in: body
+          name: questionConversation
+          schema:
+            $ref: '#/definitions/QuestionAnswerPost'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionAnswerModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+  '/question/{qId}/answer/{aId}':
+    get:
+      tags:
+        - answer
+      summary: Get a specific answer item
+      description: Requires the question and answer id
+      operationId: v1QuestionQidAnswerAidGet
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          description: ID of the question item
+          name: qId
+          required: true
+          type: string
+        - in: path
+          description: ID of the answer item
+          name: aId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionAnswerModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+    put:
+      tags:
+        - answer
+      summary: Update a specific answer item
+      description: Requires the question and answer id
+      operationId: v1QuestionQidAnswerAidPut
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          description: ID of the question item
+          name: qId
+          required: true
+          type: string
+        - in: path
+          description: ID of the conversation item
+          name: aId
+          required: true
+          type: string
+        - in: body
+          name: questionConversation
+          schema:
+            $ref: '#/definitions/QuestionAnswerPut'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QuestionAnswerModel'
+        '401':
+          description: unauthorised access
+        '422':
+          description: invalid data sent
+      security:
+        - api_key: []
+  /user:
+    get:
+      tags:
+        - user
+      summary: Get logged in user
+      description: Gets a full user model of the currently logged in user
+      operationId: v1UserGet
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/UserModel'
+        '404':
+          description: Not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - user
+      summary: Update a logged in user
+      description: Update the currently logged in user
+      operationId: v1UserUpdate
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          description: The ID of the user
+        - in: body
+          name: user
+          description: Fields to update
+          schema:
+            $ref: '#/definitions/UserPut'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/UserModel'
+        '404':
+          description: Not found
+      security:
+        - api_key: []

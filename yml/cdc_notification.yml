@@ -1,0 +1,231 @@
+swagger: '2.0'
+info:
+  description: CDC API
+  version: 1.0.0
+  title: CDC API
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: bmw-am-cdc-eicken.acs-thor.lan
+basePath: /api/v1/
+tags:
+  - name: Salesforce
+    description: All routes relating to salesforce
+securityDefinitions:
+  accessToken:
+    type: apiKey
+    in: header
+    name: Authorization
+paths:
+  /salesforce/cache/delete:
+    delete:
+      tags:
+        - salesforce
+      summary: Delete the salesforce cache
+      description: ''
+      operationId: apiV1SalesforceCacheDelete
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - accessToken: []
+  /salesforce/cache/update:
+    put:
+      tags:
+        - salesforce
+      summary: Update the salesforce cache
+      description: ''
+      operationId: apiV1SalesforceCachePut
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: Unauthenticated request
+      security:
+        - accessToken: []
+  /salesforce/rate:
+    post:
+      tags:
+        - salesforce
+      summary: Rate a salesforce entity
+      description: Post a new rating for a sf entry
+      operationId: apiV1SalesforceRatePost
+      parameters:
+        - in: body
+          name: user
+          description: Post body required for rating
+          schema:
+            $ref: '#/definitions/SalesforceRatingPost'
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/SalesforceRatingModel'
+        '404':
+          description: Not found
+      security:
+        - accessToken: []
+  /salesforce/search:
+    post:
+      tags:
+        - salesforce
+      summary: Search salesforce entryies
+      description: Accepts an array of search parameters
+      operationId: apiV1SalesforceSearchPost
+      parameters:
+        - in: body
+          name: search
+          description: Post body requires searhcing
+          schema:
+            $ref: '#/definitions/SalesforceSearchPost'
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SalesforceModel'
+        '404':
+          description: Not found
+      security:
+        - accessToken: []
+definitions:
+  SalesforceModel:
+    type: object
+    properties:
+      SolutionID:
+        type: string
+      ArticleNumber:
+        type: string
+      ArticleTotalViewCount:
+        type: string
+      Brand__c:
+        type: string
+      Canonical_URL__c:
+        type: string
+      Category_Feature_Coding_Stufe_2__c:
+        type: string
+      Document_Typ__c:
+        type: string
+      End_Date__c:
+        type: string
+      FAQ_Answer__c:
+        type: string
+      FAQ_Question__c:
+        type: string
+      Focus_Keywords__c:
+        type: string
+      HMI_Type__c:
+        type: string
+      HU_Type__c:
+        type: string
+      How_to_Guide_Steps__c:
+        type: string
+      Information__c:
+        type: string
+      Internal_Description__c:
+        type: string
+      IsDeleted:
+        type: string
+      IsLatestVersion:
+        type: string
+      IsMasterLanguage:
+        type: string
+      KnowledgeArticleId:
+        type: string
+      Language:
+        type: string
+      Language__c:
+        type: string
+      Market__c:
+        type: string
+      Meta_Description__c:
+        type: string
+      Meta_Keywords__c:
+        type: string
+      Meta_Title__c:
+        type: string
+      Model_Type__c:
+        type: string
+      Model_Year__c:
+        type: string
+      Note_to_Agent__c:
+        type: string
+      Option_Code__c:
+        type: string
+      Quote_available_Channels__c:
+        type: string
+      Quote_to_Customer__c:
+        type: string
+      Search_Words__c:
+        type: string
+      Service_Cluster_Coding_Stufe_1__c:
+        type: string
+      Start_Date__c:
+        type: string
+      Summary:
+        type: string
+      Target_Group__c:
+        type: string
+      Title:
+        type: string
+      UrlName:
+        type: string
+      ValidationStatus:
+        type: string
+      Web_Category__c:
+        type: string
+      usu_id__c:
+        type: string
+      LastModifiedDate:
+        type: string
+      PublishStatus:
+        type: string
+      articleRecordType:
+        type: string
+  SalesforceSearchPost:
+    type: object
+    properties:
+      query:
+        type: string
+      language:
+        type: string
+      docType:
+        type: string
+  SalesforceRatingModel:
+    type: object
+    properties:
+      userId:
+        type: string
+      like:
+        type: boolean
+      articleId:
+        type: string
+      createdAt:
+        type: string
+  SalesforceRatingPost:
+    type: object
+    required:
+      - rating
+    properties:
+      userId:
+        type: string
+      like:
+        type: boolean
+      articleId:
+        type: string
