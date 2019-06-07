@@ -1,17 +1,20 @@
 import * as generators from './index'
 import { randomNumber } from './numberGenerator'
 
-const walker = (schema) => {
-  if(!schema.type && schema.properties){
+const walker = (schema, schemaName) => {
+  if (!schema.type && schema.properties) {
     schema.type = 'object'
+  }
+  if (schema.example) {
+    return schema.example
   }
   switch (schema.type) {
     case 'string':
-      return generators.stringGenerator(schema)
+      return generators.stringGenerator(schema, schemaName)
     case 'number':
-      return generators.numberGenerator(schema)
+      return generators.numberGenerator(schema, schemaName)
     case 'integer':
-      return generators.integerGenerator(schema)
+      return generators.integerGenerator(schema, schemaName)
     case 'boolean':
       return generators.booleanGenerator(schema)
     case 'array':
@@ -30,14 +33,14 @@ const walker = (schema) => {
     case 'object':
       let obj = {}
       Object.keys(schema.properties).forEach((key) => {
-        obj[key] = walker(schema.properties[key])
+        obj[key] = walker(schema.properties[key], key)
       })
       return obj
   }
 }
 
 export const mockItGenerator = (schema) => {
-  if(Object.keys(schema).length === 0) {
+  if (Object.keys(schema).length === 0) {
     return {}
   }
   if (!schema.type) {

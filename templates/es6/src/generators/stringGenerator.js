@@ -1,9 +1,20 @@
 import { randomNumber } from './numberGenerator'
+import { fakerGenerator } from './fakerGenerator'
 
 const uuidv1 = require('uuid/v1')
-
 const btoa = require('btoa')
-export const stringGenerator = (schemaPart) => {
+
+export const stringGenerator = (schemaPart, schemaName) => {
+  // use schemaName to fake with faker
+  if (schemaPart['x-faker']) {
+    const randomVal = fakerGenerator(schemaPart['x-faker'])
+    if (randomVal) return randomVal
+  }
+  if (schemaName) {
+    const randomVal = fakerGenerator(schemaName)
+    if (randomVal) return randomVal
+  }
+
   const randomString = (length) => {
     let result = ''
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -70,8 +81,8 @@ export const stringGenerator = (schemaPart) => {
     }
   }
 
-  if(schemaPart.enum){
-    return schemaPart.enum[randomNumber(0, schemaPart.enum.length -1)]
+  if (schemaPart.enum) {
+    return schemaPart.enum[randomNumber(0, schemaPart.enum.length - 1)]
   }
 
   const minLength = schemaPart.minLength || 0
