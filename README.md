@@ -1,11 +1,11 @@
 # OpenAPI Nodegen
-OpenAPI Nodegen is a tool which will you generate an ES6 NodeJS Express Server based on the OpenAPI (YML) file that you provide it. 
+OpenAPI Nodegen generates a NodeJS REST API with ExpressJS based on the OpenAPI file that you provide it. Please [see the templates](https://github.com/acrontum/openapi-nodegen/tree/master/templates/es6) for the structure it will use.
 
-In addition to the server, you can also stub the domain layer with auto mock generators to get moving fast, use the `--mocked` option.
+By default the domain layer is generated as stub methods awaiting your input, passing the `--mocked` option will generate `domain/__mocks_/<domain mock>` files and referenced in the domain methods, meaning you are capable of generating a mock server based on your OpenAPI file in seconds and then gradually replace the mocked output with real business logic.
 
-The server is generated using the [Nunjucks Template](https://www.npmjs.com/package/nunjucks) engine (an engine which is a port of [jinja2](http://jinja.pocoo.org))
+OpenAPI Nodegen uses the [Nunjucks Template](https://www.npmjs.com/package/nunjucks) engine (an engine which is a port of [jinja2](http://jinja.pocoo.org))
 
-It is heavily advised to use [boats](https://www.npmjs.com/package/boats) to automatically standardise openapi file architecture and operation ids.
+It is heavily advised to use [boats](https://www.npmjs.com/package/boats) to standardise your OpenAPI file architecture and operation ids.
 ___
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -24,10 +24,10 @@ ___
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Roadmap
-- Add docker ability to both es6 and ts templates.
-- Make the mock generators more intelligent, instead of "dumb" random text responses return "testable" content.
 - Ensure this package can be used for oa3 files, currently the block is on the generation of the celebrate validation layer, not a big issue to resolve but in oa3 everything is pretty much in a schema block in the request parameters which is a breaking change from oa2. 
+- Add docker ability to both es6 and ts templates.
 - Update the Typescript templates to use Nunjucks over moustache. They are currently 100% broken awaiting the port over.
+- Make the mock generators more intelligent, instead of "dumb" random text responses return "testable" content.
 - Convert the mock generators to the typescript tpl.
 - Optionally add in socket connections via vli args.
 - Optionally add in mongoose via cli args.
