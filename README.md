@@ -3,6 +3,8 @@ OpenAPI Nodegen generates a NodeJS REST API with ExpressJS based on the OpenAPI 
 
 By default the domain layer is generated as stub methods awaiting your input, passing the `--mocked` option will generate `domain/__mocks_/<domain mock>` files and referenced in the domain methods, meaning you are capable of generating a mock server based on your OpenAPI file in seconds and then gradually replace the mocked output with real business logic.
 
+After initial generation, the domain layer is not touched should the respective file already exist.
+
 OpenAPI Nodegen uses the [Nunjucks Template](https://www.npmjs.com/package/nunjucks) engine (an engine which is a port of [jinja2](http://jinja.pocoo.org))
 
 It is heavily advised to use [boats](https://www.npmjs.com/package/boats) to standardise your OpenAPI file architecture and operation ids.
