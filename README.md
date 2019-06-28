@@ -58,7 +58,7 @@ Example use from a package json file:
 Install as a local devDependency:
 ```
   "devDependencies": {
-    "openapi-nodegen": "git+ssh://git@repos.acrontum.de:1024/acrontum/ddd/openapi-nodegen.git#<enter desired version, aka tag here eg '2.1.4'>",
+    "openapi-nodegen": "^2.1.7",
 ```
 
 
