@@ -1,4 +1,6 @@
 # OpenAPI Nodegen
+[![Build Status](https://travis-ci.org/acrontum/openapi-nodegen.svg?branch=master)](https://travis-ci.org/acrontum/openapi-nodegen)
+
 OpenAPI Nodegen is a tool which will generate a NodeJS Express Server based on the provided OpenAPI (YML) file.
 
 In addition to creating a server, you can also stub the domain layer with auto mock generators by using use the `--mocked` option.
