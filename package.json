@@ -11,7 +11,8 @@
     "install:githooks": "cp ./githooks/* .git/hooks",
     "start": "node cli.js",
     "test": "jest",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "prepublish": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
