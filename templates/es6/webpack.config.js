@@ -1,11 +1,11 @@
 'use strict'
 const path = require('path')
 const packageJson = require('./package.json')
-const fs = require('fs')
 const nodeModules = {}
 
 // UNCOMENT THIS IF YOUR BUILT SERVER IS NOT WORKING AND THE WORLD IS ON FIRE.
 // BUT.. LINK YOUR NODE_MODULES INTO YOUR DOCKER FILE IF YOU DO.
+// const fs = require('fs')
 // fs.readdirSync('node_modules').filter(function (x) {
 //   return ['.bin'].indexOf(x) === -1
 // }).forEach(function (mod) {
@@ -16,11 +16,6 @@ const excludeModules = ['swagger-ui-express']
 excludeModules.forEach((mod) => {
   nodeModules[mod] = 'commonjs ' + mod
 })
-
-let PATHS = {
-  app: path.join(__dirname, '/src'),
-  built: path.join(__dirname, '/build'),
-}
 
 let plugins = []
 
@@ -50,7 +45,7 @@ module.exports = {
   devtool: 'source-map',
   target: 'node',
   output: {
-    path: PATHS.built,
+    path: path.join(__dirname, '/build'),
     filename: 'server.js',
     library: 'server',
     libraryTarget: 'umd',
