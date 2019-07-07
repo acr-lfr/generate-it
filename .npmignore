@@ -1,2 +1,10 @@
+.project
+.settings
+.babelrc
+.eslintrc
 .idea/
 .git
+.git*
+.git/*
+__tests__/
+githooks/
