@@ -24,6 +24,10 @@ export default {
   basicAuthPword: ConfigHelper.withDefault('BASIC_AUTH_PWORD', 'pw'),
   basicAuthPword_docs: ['BASIC_AUTH_PWORD', false, 'http basic auth is used to gain access to the swagger-ui route. The password defaults to ves54ekjyg'],
 
+  // JWT
+  jwtSecret: ConfigHelper.required('JWT_SECRET'),
+  jwtSecret_docs: ['JWT_SECRET', true, 'is the secret string used to encrypt the signature of the JWT token, please read up on JWT tokens if this does not mean anything to you'],
+
   // Api key
   apiKey: ConfigHelper.withDefault('API_KEY', false),
 }

@@ -14,6 +14,7 @@
             "check-open-brace",
             "check-whitespace"
         ],
+        "no-var-requires": false,
         "no-var-keyword": true,
         "quotemark": [
             true,
