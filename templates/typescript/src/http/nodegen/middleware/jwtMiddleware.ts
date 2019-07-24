@@ -1,17 +1,24 @@
 import Jwt from '../../../services/Jwt'
+import express = require('express')
 
-export default (headerName) => {
-  return (req, res, next) => {
-    const deny = (e, msg = 'Invalid auth token provided', tokenProvided = '') => {
+interface Request extends express.Request {
+  jwtData: string;
+  originalToken: string;
+}
+
+
+export default (headerName: string) => {
+  return (req: Request, res: express.Response, next: express.NextFunction) => {
+    const deny = (e: any, msg = 'Invalid auth token provided', tokenProvided = '') => {
       console.error(e)
       res.status(401).json({
         message: msg,
         token: tokenProvided,
       })
     }
-    let tokenRaw = req.headers[headerName.toLowerCase()] || req.headers[headerName] || false
+    let tokenRaw = String(req.headers[headerName.toLowerCase()] || req.headers[headerName] || '')
     let token = ''
-    if (tokenRaw) {
+    if (tokenRaw.length > 0) {
       let tokenParts = tokenRaw.split('Bearer ')
       if (tokenParts.length > 0) {
         token = tokenParts[1]
@@ -21,8 +28,8 @@ export default (headerName) => {
     }
 
     // Please apply here your own token verification logic
-    Jwt.verifyAccessJWT(token)
-      .then(decodedToken => {
+    Jwt.verifyJWTToken(token)
+      .then((decodedToken: any) => {
         req.jwtData = decodedToken.data
         req.originalToken = token
         next()

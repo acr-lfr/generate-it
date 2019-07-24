@@ -1,5 +1,7 @@
+import express = require('express')
+
 export default () => {
-  return (req, res) => {
+  return (req: express.Request, res: express.Response) => {
     res.status(404)
 
     // respond with json
