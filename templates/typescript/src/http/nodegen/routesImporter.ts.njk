@@ -1,4 +1,5 @@
 import express = require('express')
+import config from '@/config'
 {% for endpoint in swagger.endpoints -%}
 {% if(endsWith(swagger.basePath, '/')) -%}
 
