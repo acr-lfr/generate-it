@@ -6,7 +6,6 @@ interface Request extends express.Request {
   originalToken: string;
 }
 
-
 export default (headerName: string) => {
   return (req: Request, res: express.Response, next: express.NextFunction) => {
     const deny = (e: any, msg = 'Invalid auth token provided', tokenProvided = '') => {

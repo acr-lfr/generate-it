@@ -18,9 +18,12 @@ export default function (app: express.Application) {
   app.use('{{swagger.basePath}}/{{endpoint}}', {{prettifyRouteName(endpoint)}}Routes())
     {% endif %}
   {%- endfor %}
-  {% if(endsWith(swagger.basePath, '/')) %}
-  app.use('{{swagger.basePath}}swagger', swaggerRoutes())
-  {% else %}
-  app.use('{{swagger.basePath}}/swagger', swaggerRoutes())
-  {% endif %}
+
+  if (config.env === 'develop') {
+    {% if(endsWith(swagger.basePath, '/')) %}
+    app.use('{{ swagger.basePath }}swagger', swaggerRoutes())
+    {% else %}
+    app.use('{{ swagger.basePath }}/swagger', swaggerRoutes())
+    {% endif %}
+  }
 }

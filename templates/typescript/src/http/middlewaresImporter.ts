@@ -1,17 +1,18 @@
+import express from 'express'
 import bodyParser from 'body-parser'
-import expressFormData from 'express-form-data'
 import corsMiddleware from './nodegen/middleware/corsMiddleware'
 import headersCaching from './nodegen/middleware/headersCaching'
 import morgan from 'morgan'
 import requestIp from 'request-ip'
 import packageJson from '../../package.json'
+const expressFormData = require('express-form-data')
 
-const responseHeaders = app => {
+const responseHeaders = (app: express.Application) => {
   app.use(corsMiddleware())
   app.use(headersCaching())
 }
 
-const requestParser = app => {
+const requestParser = (app: express.Application) => {
   // parse data with connect-multiparty
   app.use(expressFormData.parse({
     autoFiles: true,
@@ -33,7 +34,7 @@ const requestParser = app => {
   app.use(requestIp.mw())
 }
 
-const accessLogger = app => {
+const accessLogger = (app: express.Application) => {
   // Log all requests
   app.use(morgan(`[${packageJson.name}] :remote-addr [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]`))
 }
@@ -42,7 +43,7 @@ const accessLogger = app => {
  * Injects routes into the passed express app
  * @param app
  */
-export default app => {
+export default (app: express.Application) => {
   accessLogger(app)
   requestParser(app)
   responseHeaders(app)
