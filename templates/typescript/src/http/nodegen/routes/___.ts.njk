@@ -1,3 +1,4 @@
+import express from 'express'
 import Router from 'express-promise-router'
 import objectReduceByMap from 'object-reduce-by-map'
 {{ celebrateImport(operations) }}
@@ -16,7 +17,7 @@ export default function() {
   router.{{key}}(
     '{{op.subresource}}',
     {{getSecDefMiddleware(path, swagger)}} {{celebrateRoute(operation_name, path.parameters, path.operationId)}}
-    async (req, res) => {
+    async (req: express.Request, res: express.Response) => {
       return res.json(
         objectReduceByMap(
           await {{camelCase(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(path, false, true)}}),
