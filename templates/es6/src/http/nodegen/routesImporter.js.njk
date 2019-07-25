@@ -1,3 +1,4 @@
+import config from '../../config'
 {% for endpoint in swagger.endpoints -%}
 {% if(endsWith(swagger.basePath, '/')) -%}
 
@@ -17,9 +18,11 @@ export default function (app) {
   app.use('{{swagger.basePath}}/{{endpoint}}', {{prettifyRouteName(endpoint)}}Routes())
     {% endif %}
   {%- endfor %}
-  {% if(endsWith(swagger.basePath, '/')) %}
-  app.use('{{swagger.basePath}}swagger', swaggerRoutes())
-  {% else %}
-  app.use('{{swagger.basePath}}/swagger', swaggerRoutes())
-  {% endif %}
+  if(config.env === 'develop') {
+    {% if(endsWith(swagger.basePath, '/')) %}
+    app.use('{{ swagger.basePath }}swagger', swaggerRoutes())
+    {% else %}
+    app.use('{{ swagger.basePath }}/swagger', swaggerRoutes())
+    {% endif %}
+  }
 }
