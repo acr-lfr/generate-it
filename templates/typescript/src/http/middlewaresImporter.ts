@@ -3,9 +3,9 @@ import bodyParser from 'body-parser'
 import corsMiddleware from './nodegen/middleware/corsMiddleware'
 import headersCaching from './nodegen/middleware/headersCaching'
 import morgan from 'morgan'
-import requestIp from 'request-ip'
 import packageJson from '../../package.json'
 const expressFormData = require('express-form-data')
+const requestIp = require('request-ip')
 
 const responseHeaders = (app: express.Application) => {
   app.use(corsMiddleware())

@@ -5,7 +5,7 @@ class {{ capitaLetter(operation_name)}}DomainMock {
     {% for key, path in op.path -%}
       {% if validMethod(key) %}
   // {{ path.operationId }}
-  async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true) }}) {
+  async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true, false, true) }}) {
     {{mockOutput( path, mockServer )}}
   }
       {% endif %}
