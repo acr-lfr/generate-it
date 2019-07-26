@@ -1,8 +1,10 @@
 import config from '../../../config'
 import express = require('express')
 
+import NodegenRequest from '@/models/NodegenRequest'
+
 export default (headerName: string) => {
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  return (req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
     const deny = (e: any, message = 'Invalid api key provided', apiKey = '') => {
       console.error(e)
       res.status(401).json({

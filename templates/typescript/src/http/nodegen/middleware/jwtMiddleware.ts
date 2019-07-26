@@ -1,13 +1,11 @@
 import Jwt from '../../../services/Jwt'
 import express = require('express')
 
-interface Request extends express.Request {
-  jwtData: string;
-  originalToken: string;
-}
+import NodegenRequest from '@/models/NodegenRequest'
+
 
 export default (headerName: string) => {
-  return (req: Request, res: express.Response, next: express.NextFunction) => {
+  return (req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
     const deny = (e: any, msg = 'Invalid auth token provided', tokenProvided = '') => {
       console.error(e)
       res.status(401).json({

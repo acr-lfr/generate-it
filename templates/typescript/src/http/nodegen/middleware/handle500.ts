@@ -1,7 +1,9 @@
 import express = require('express')
 
+import NodegenRequest from '@/models/NodegenRequest'
+
 export default () => {
-  return (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  return (err: any, req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
     console.error(err.stack)
     if (err) return res.status(500).send(JSON.stringify({ message: err.message }))
     next(err)

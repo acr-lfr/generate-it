@@ -1,7 +1,9 @@
 import express = require('express')
 
+import NodegenRequest from '@/models/NodegenRequest'
+
 export default () => {
-  return (req: express.Request, res: express.Response) => {
+  return (req: NodegenRequest, res: express.Response) => {
     res.status(404)
 
     // respond with json

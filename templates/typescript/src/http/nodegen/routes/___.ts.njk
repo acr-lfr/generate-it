@@ -1,6 +1,9 @@
 import express from 'express'
 import Router from 'express-promise-router'
 import objectReduceByMap from 'object-reduce-by-map'
+
+import NodegenRequest from '@/models/NodegenRequest'
+
 {{ celebrateImport(operations) }}
 import jwtMiddleware from '../middleware/jwtMiddleware'
 import apiKeyMiddleware from '../middleware/apiKeyMiddleware'
@@ -17,7 +20,7 @@ export default function() {
   router.{{key}}(
     '{{op.subresource}}',
     {{getSecDefMiddleware(path, swagger)}} {{celebrateRoute(operation_name, path.parameters, path.operationId)}}
-    async (req: express.Request, res: express.Response) => {
+    async (req: NodegenRequest, res: express.Response) => {
       return res.json(
         objectReduceByMap(
           await {{camelCase(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(path, false, true)}}),
