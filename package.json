@@ -45,7 +45,7 @@
     "uglify-es": "^3.3.9",
     "walk": "^2.3.14",
     "word-wrap": "^1.2.3",
-    "prettier": "1.18.2"
+    "prettier": "^1.18.2"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
