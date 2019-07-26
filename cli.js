@@ -12,6 +12,7 @@ const go = (mockServer) => {
     swaggerFilePath: cli.swaggerFile,
     target_dir: cli.program.output,
     template: cli.program.template,
+    segmentsCount: +cli.program.segmentsCount,
     handlebars_helper: cli.program.handlebars ? path.resolve(process.cwd(), cli.program.handlebars) : undefined,
     ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
     mockServer: mockServer || false

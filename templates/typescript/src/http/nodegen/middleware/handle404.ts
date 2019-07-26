@@ -1,14 +1,16 @@
-import { Request, Response } from 'express';
+import express = require('express')
+
+import NodegenRequest from '../../../models/NodegenRequest'
 
 export default () => {
-  return (req: Request, res: Response) => {
-    res.status(404);
+  return (req: NodegenRequest, res: express.Response) => {
+    res.status(404)
 
     // respond with json
     if (req.accepts('json')) {
-      return res.send({ error: 'Not found' });
+      return res.send({ error: 'Not found' })
     }
     // default to plain-text. send()
-    return res.type('txt').send('Not found');
-  };
-};
+    return res.type('txt').send('Not found')
+  }
+}

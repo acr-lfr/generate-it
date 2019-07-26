@@ -4,8 +4,10 @@ import NodegenRequest from '../../../models/NodegenRequest'
 
 export default () => {
   return (err: any, req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack)
-    if (err) return res.status(500).send(JSON.stringify({ message: err.message }))
+    const msgSplit = err.message.split(':')
+    if (err.message.includes(':') && err.message.split(':').length > 0) {
+      return res.status(Number(msgSplit[0])).json({ message: msgSplit[1] })
+    }
     next(err)
   }
 }

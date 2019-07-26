@@ -8,6 +8,6 @@ module.exports = {
       'node_modules',
       'src',
     ],
-    watch: ['build', 'src/views'],
+    watch: ['build', 'src/views', '.env'],
   }],
 }

@@ -1,0 +1,9 @@
+FROM node:10-alpine
+
+WORKDIR /code
+COPY . /code
+
+RUN npm install
+RUN npm run build
+
+CMD node ./build/src/server.js

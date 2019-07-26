@@ -1,18 +1,18 @@
-import config from '../../../config';
-import cors from 'cors';
+import config from '../../../config'
+import cors from 'cors'
 
 export default () => {
-  const whitelist = config.corsWhiteList.split(',');
+  const whitelist = config.corsWhiteList.split(',')
   if (whitelist.length === 1 && whitelist[0] === '*') {
-    return cors();
+    return cors()
   }
   return cors({
-    origin: (origin: any, callback: any) => {
+    origin: (origin, callback) => {
       if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
+        callback(null, true)
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error('Not allowed by CORS'))
       }
     },
-  });
+  })
 }

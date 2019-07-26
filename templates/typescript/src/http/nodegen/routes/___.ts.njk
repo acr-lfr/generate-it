@@ -1,0 +1,37 @@
+import express from 'express'
+import Router from 'express-promise-router'
+import objectReduceByMap from 'object-reduce-by-map'
+
+import NodegenRequest from '../../../models/NodegenRequest'
+
+{{ celebrateImport(operations) }}
+import jwtMiddleware from '../middleware/jwtMiddleware'
+import apiKeyMiddleware from '../middleware/apiKeyMiddleware'
+import {{ camelCase(operation_name) }}Validators from'../validators/{{ prettifyRouteName(operation_name) }}Validators'
+import {{camelCase(operation_name)}}Domain from '../../../domains/{{capitaLetter(operation_name)}}Domain'
+import {{camelCase(operation_name)}}TransformOutputs from '../transformOutputs/{{operation_name}}TransformOutput'
+
+export default function() {
+  const router = Router()
+  {% for op in operations -%}
+    {% for key, path in op.path -%}
+      {% if validMethod(key)%}
+  // {{ path.operationId }}
+  router.{{key}}(
+    '{{op.subresource}}',
+    {{getSecDefMiddleware(path, swagger)}} {{celebrateRoute(operation_name, path.parameters, path.operationId)}}
+    async (req: NodegenRequest, res: express.Response) => {
+      return res.json(
+        objectReduceByMap(
+          await {{camelCase(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(path, false, true)}}),
+          {{camelCase(operation_name)}}TransformOutputs.{{path.operationId}}
+        )
+      )
+    }
+  )
+      {% endif %}
+    {%- endfor %}
+  {%- endfor %}
+
+  return router
+}
