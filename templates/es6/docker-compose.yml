@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  cdc-auth:
+    image: "dsd-authentication-service"
+    build:
+      dockerfile: Dockerfile
+      context: .
+networks:
+  default:
+    external:
+      name: dsd-network
