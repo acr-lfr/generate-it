@@ -1,9 +1,9 @@
 import express from 'express'
 import handle401 from './nodegen/middleware/handle401'
-import handle403 from '@/http/nodegen/middleware/handle403'
+import handle403 from './nodegen/middleware/handle403'
 import handle404 from './nodegen/middleware/handle404'
 import handle410 from './nodegen/middleware/handle410'
-import handle422 from '@/http/nodegen/middleware/handle422'
+import handle422 from './nodegen/middleware/handle422'
 import handle423 from './nodegen/middleware/handle423'
 import handle500 from './nodegen/middleware/handle500'
 

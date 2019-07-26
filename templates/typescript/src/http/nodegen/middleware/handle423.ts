@@ -1,7 +1,7 @@
 import http423 from '../errors/423'
 import express = require('express')
 
-import NodegenRequest from '@/models/NodegenRequest'
+import NodegenRequest from '../../../models/NodegenRequest'
 
 /**
  * Required for if an unauthorised response should be thrown from a domain or controller
