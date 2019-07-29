@@ -6,6 +6,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+    ports:
+      - "8080:8000"
 networks:
   default:
     external:
