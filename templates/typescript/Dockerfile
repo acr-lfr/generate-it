@@ -4,6 +4,6 @@ WORKDIR /code
 COPY . /code
 
 RUN npm install
-RUN npm run build
+RUN npm run build:ts
 
 CMD node ./build/src/server.js

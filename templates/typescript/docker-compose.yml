@@ -9,4 +9,4 @@ services:
 networks:
   default:
     external:
-      name: dsd-network
+      name: {{ package.name }}-network
