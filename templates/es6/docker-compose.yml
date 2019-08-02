@@ -2,11 +2,13 @@ version: "3"
 
 services:
   cdc-auth:
-    image: "dsd-authentication-service"
+    image: "{{ package.name }}"
     build:
       dockerfile: Dockerfile
       context: .
+    ports:
+      - "8080:8000"
 networks:
   default:
     external:
-      name: dsd-network
+      name: {{ package.name }}-network

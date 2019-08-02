@@ -23,7 +23,7 @@ export default (headerName) => {
     // Please apply here your own token verification logic
     Jwt.verifyAccessJWT(token)
       .then(decodedToken => {
-        req.jwtData = decodedToken.data
+        req.jwtData = decodedToken
         req.originalToken = token
         next()
       })

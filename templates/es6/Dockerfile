@@ -6,4 +6,4 @@ COPY . /code
 RUN npm install
 RUN npm run build
 
-CMD node ./build/src/server.js
+CMD node ./build/server.js
