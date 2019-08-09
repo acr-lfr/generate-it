@@ -1,14 +1,11 @@
 import http422 from '../errors/422'
-import express = require('express')
-
-import NodegenRequest from '../../../models/NodegenRequest'
 
 /**
  * Required for if an unauthorised response should be thrown from a domain or controller
  * @returns {Function}
  */
 export default () => {
-  return (err: any, req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
+  return (err, req, res, next) => {
     if (err instanceof http422) {
       res.status(422).send()
     } else {
