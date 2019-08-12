@@ -25,9 +25,6 @@ module.exports = () => {
     console.error('> Path to Swagger file not provided.'.red)
     program.help()
     process.exit(0)
-  // } else if (program.template === 'typescript') {
-  //   console.error('> Typescript is currently a work in progress, only es6 is presently available.'.red)
-  //   process.exit(0)
   } else {
     return {
       program: program,

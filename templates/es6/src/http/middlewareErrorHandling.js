@@ -1,7 +1,9 @@
 import handleValidationErrors from './nodegen/middleware/handleValidationErrors'
 import handleStatusMessageErrors from './nodegen/middleware/handleStatusMessageErrors'
 import handle401 from './nodegen/middleware/handle401'
-import handle404 from './nodegen/middleware/handle404'
+import handle403 from './nodegen/middleware/handle403'
+import handleExpress404 from './nodegen/middleware/handleExpress404'
+import handleDomain404 from './nodegen/middleware/handleDomain404'
 import handle410 from './nodegen/middleware/handle410'
 import handle423 from './nodegen/middleware/handle423'
 import handle500 from './nodegen/middleware/handle500'
@@ -11,8 +13,10 @@ import handle500 from './nodegen/middleware/handle500'
  * @param app
  */
 export default (app) => {
-  app.use(handle404())
+  app.use(handleExpress404())
+  app.use(handleDomain404())
   app.use(handle401())
+  app.use(handle403())
   app.use(handle410())
   app.use(handle423())
 
