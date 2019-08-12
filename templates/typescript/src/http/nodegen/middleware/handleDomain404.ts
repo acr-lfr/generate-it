@@ -1,4 +1,4 @@
-import http423 from '../errors/423';
+import http404 from '../errors/404';
 
 import NodegenRequest from '../models/NodegenRequest.model';
 import express = require('express');
@@ -9,8 +9,15 @@ import express = require('express');
  */
 export default () => {
   return (err: any, req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
-    if (err instanceof http423) {
-      res.status(423).send();
+    if (err instanceof http404) {
+      res.status(404);
+
+      // respond with json
+      if (req.accepts('json')) {
+        return res.send({error: 'Not found'});
+      }
+      // default to plain-text. send()
+      return res.type('txt').send('Not found');
     } else {
       next(err);
     }

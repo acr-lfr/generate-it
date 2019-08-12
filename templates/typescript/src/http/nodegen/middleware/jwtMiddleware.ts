@@ -1,7 +1,7 @@
 import Jwt from '../../../services/Jwt'
 import express = require('express')
 
-import NodegenRequest from '../../../models/NodegenRequest'
+import NodegenRequest from '../models/NodegenRequest.model'
 
 
 export default (headerName: string) => {
