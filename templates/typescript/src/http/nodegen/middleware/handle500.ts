@@ -1,6 +1,6 @@
 import express = require('express')
 
-import NodegenRequest from '../../../models/NodegenRequest'
+import NodegenRequest from '../models/NodegenRequest'
 
 export default () => {
   return (err: any, req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
