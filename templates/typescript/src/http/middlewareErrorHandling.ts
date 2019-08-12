@@ -4,7 +4,7 @@ import handle403 from './nodegen/middleware/handle403';
 import handleDomain404 from './nodegen/middleware/handleDomain404';
 import handleExpress404 from './nodegen/middleware/handleExpress404';
 import handle410 from './nodegen/middleware/handle410';
-import handle422 from './nodegen/middleware/handle422';
+import handleValidationErrors from './nodegen/middleware/handleValidationErrors';
 import handle423 from './nodegen/middleware/handle423';
 import handle500 from './nodegen/middleware/handle500';
 
@@ -21,7 +21,7 @@ export default (app: express.Application) => {
   app.use(handle423());
 
   // Validation requests
-  app.use(handle422());
+  app.use(handleValidationErrors());
 
   // Handle 500 errors
   app.use(handle500());
