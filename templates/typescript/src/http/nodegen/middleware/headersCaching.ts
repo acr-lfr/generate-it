@@ -1,6 +1,6 @@
 import express = require('express')
 
-import NodegenRequest from '../models/NodegenRequest.model'
+import NodegenRequest from '../interfaces/NodegenRequest.model'
 
 /**
  * Express middleware to control the http headers for caching only

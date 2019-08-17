@@ -6,6 +6,11 @@ const codegen = require('./lib')
 const inquirer = require('inquirer')
 
 console.log('All looks good, give me a moment to generate the server for you!'.yellow)
+global.verboseLogging = (o) => {
+  if (cli.program.verbose) {
+    console.log(JSON.stringify(o, '', 2))
+  }
+}
 
 const go = (mockServer) => {
   codegen({
@@ -15,18 +20,18 @@ const go = (mockServer) => {
     segmentsCount: +cli.program.segmentsCount,
     handlebars_helper: cli.program.handlebars ? path.resolve(process.cwd(), cli.program.handlebars) : undefined,
     ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
-    mockServer: mockServer || false
+    mockServer: mockServer || false,
   }).then(() => {
     console.log('Done! ✨'.green)
     console.log('Check out your shiny new API at '.yellow + cli.program.output.magenta + '.'.yellow)
-  }).catch(err => {
-    console.error('Aaww 💩. Something went wrong:'.red)
+  }).catch((err) => {
+    console.error('Aaww '.yellow + '💩'.white + '. Something went wrong:'.red)
     console.error(err.stack.red || err.message.red)
   })
 }
 
 let question = 'All src/http/nodegen files will be replaced. Are you sure you want to continue? Press Y to continue.'
-if (cli.program.mocked){
+if (cli.program.mocked) {
   question = 'All src/http/nodegen and src/domains/__mocks__ files will be replaced. Are you sure you want to continue? Press Y to continue.'
 }
 const questions = [{
@@ -38,7 +43,7 @@ const questions = [{
 inquirer.prompt(questions)
   .then((answers) => {
     if (answers.installConfirm) {
-      go(true)
+      go(cli.program.mocked)
     } else {
       console.log('Aborted')
     }

@@ -1,7 +1,7 @@
 import config from '../../../config'
 import express = require('express')
 
-import NodegenRequest from '../models/NodegenRequest.model'
+import NodegenRequest from '../interfaces/NodegenRequest.model'
 
 export default (headerName: string) => {
   return (req: NodegenRequest, res: express.Response, next: express.NextFunction) => {
