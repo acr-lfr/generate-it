@@ -8,7 +8,7 @@ interface JwtDetails {
 }
 
 class Jwt {
-  generateJWToken (details: JwtDetails) {
+  public generateJWToken(details: JwtDetails) {
     if (typeof details.maxAge !== 'number') {
       details.maxAge = 3600;
     }
@@ -27,7 +27,7 @@ class Jwt {
     });
   }
 
-  verifyJWTToken (token: string) {
+  public verifyJWTToken(token: string) {
     return new Promise((resolve, reject) => {
       jwt.verify(token, config.jwtSecret, (err: any, decodedToken: any) => {
         if (err || !decodedToken) {
@@ -40,4 +40,4 @@ class Jwt {
   }
 }
 
-export default new Jwt()
+export default new Jwt();

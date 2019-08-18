@@ -1,11 +1,10 @@
-{% if mockServer %}
-import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
-{% endif %}
-
 {% set interfaces = importInterfaces(operations) %}
 {% for interface in interfaces -%}
   import {{ interface }} from '../http/nodegen/interfaces/{{ interface }}';
 {%- endfor %}
+{% if mockServer %}
+import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
+{% endif %}
 
 class {{ operation_name | capitalize }}Domain {
   {% for op in operations -%}

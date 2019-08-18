@@ -1,8 +1,8 @@
 import express from 'express';
 
-import routesImporter from './http/nodegen/routesImporter';
-import middlewaresImporter from './http/middlewaresImporter';
 import middlewareErrorHandling from './http/middlewareErrorHandling';
+import middlewaresImporter from './http/middlewaresImporter';
+import routesImporter from './http/nodegen/routesImporter';
 
 const app = express();
 

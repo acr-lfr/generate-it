@@ -3,6 +3,7 @@ import ConfigHelper from './services/ConfigHelper';
 
 dotenv.config();
 
+/* tslint:disable */
 export default {
   // Swagger file
   swaggerFile: ConfigHelper.withDefault('SWAGGER_FILE', 'latest'),
@@ -29,3 +30,4 @@ export default {
   // Api key
   apiKey: ConfigHelper.withDefault('API_KEY', false),
 };
+/* tslint:enable */
