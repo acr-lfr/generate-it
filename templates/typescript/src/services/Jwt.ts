@@ -22,8 +22,8 @@ class Jwt {
     return jwt.sign({
       data: details.sessionData,
     }, config.jwtSecret, {
-      expiresIn: details.maxAge,
       algorithm: 'HS256',
+      expiresIn: details.maxAge,
     });
   }
 
@@ -33,7 +33,6 @@ class Jwt {
         if (err || !decodedToken) {
           return reject(err);
         }
-
         resolve(decodedToken);
       });
     });
