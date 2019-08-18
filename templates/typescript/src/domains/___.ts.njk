@@ -4,7 +4,7 @@ import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operatio
 
 {% set interfaces = importInterfaces(operations) %}
 {% for interface in interfaces -%}
-  import {{ interface }} from '@/http/nodegen/interfaces/{{ interface }}';
+  import {{ interface }} from '../http/nodegen/interfaces/{{ interface }}';
 {%- endfor %}
 
 class {{ operation_name | capitalize }}Domain {

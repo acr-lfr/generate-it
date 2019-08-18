@@ -1,9 +1,9 @@
 # OpenAPI Nodegen
 [![Build Status](https://travis-ci.org/acrontum/openapi-nodegen.svg?branch=master)](https://travis-ci.org/acrontum/openapi-nodegen)
 
-OpenAPI Nodegen is a tool which will generate a NodeJS Express Server based on the provided OpenAPI (YML) file.
+OpenAPI Nodegen is a tool which will generate a NodeJS Express Server in es6 or typscript based on the provided OpenAPI (YML) file.
 
-In addition to creating a server, you can also stub the domain layer with auto mock generators by using use the `--mocked` option.
+Pass the `--mocked` flag to quickly generate a server that will return mock data based on the Swagger file.
 
 The server will be generated using the [Nunjucks Template](https://www.npmjs.com/package/nunjucks) engine, which is a port of [jinja2](http://jinja.pocoo.org).
 
