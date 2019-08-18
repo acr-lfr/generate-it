@@ -8,7 +8,7 @@ import NodegenRequest from '../interfaces/NodegenRequest.model'
 import jwtMiddleware from '../middleware/jwtMiddleware'
 import apiKeyMiddleware from '../middleware/apiKeyMiddleware'
 import {{ camelCase(operation_name) }}Validators from'../validators/{{ prettifyRouteName(operation_name) }}Validators'
-import {{camelCase(operation_name)}}Domain from '../../../domains/{{capitaLetter(operation_name)}}Domain'
+import {{camelCase(operation_name)}}Domain from '../../../domains/{{operation_name | capitalize}}Domain'
 import {{camelCase(operation_name)}}TransformOutputs from '../transformOutputs/{{operation_name}}TransformOutput'
 
 export default function() {
@@ -23,7 +23,7 @@ export default function() {
     async (req: NodegenRequest, res: express.Response) => {
       return res.json(
         objectReduceByMap(
-          await {{camelCase(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(path, false, true)}}),
+          await {{camelCase(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(path, false, true, 'params')}}),
           {{camelCase(operation_name)}}TransformOutputs.{{path.operationId}}
         )
       )

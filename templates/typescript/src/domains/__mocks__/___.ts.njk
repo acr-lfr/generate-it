@@ -1,15 +1,20 @@
 import { mockItGenerator } from 'openapi-nodegen-mockers'
 
-class {{ capitaLetter(operation_name)}}DomainMock {
+{% set interfaces = importInterfaces(operations) %}
+{% for interface in interfaces -%}
+import {{ interface }} from '@/http/nodegen/interfaces/{{ interface }}';
+{%- endfor %}
+
+class {{ operation_name | capitalize}}DomainMock {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if validMethod(key) %}
-  // {{ path.operationId }}
-  async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true, false, true) }}) {
+  // Operation ID: {{ path.operationId }}
+  async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true, false) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
     {{mockOutput( path, mockServer )}}
   }
       {% endif %}
     {%- endfor %}
   {%- endfor %}
 }
-export default new {{capitaLetter(operation_name)}}DomainMock()
+export default new {{operation_name | capitalize}}DomainMock()
