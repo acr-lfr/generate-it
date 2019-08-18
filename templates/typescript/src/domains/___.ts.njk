@@ -1,16 +1,30 @@
-{{mockDomainImportGenerators(mockServer, operation_name)}}
+{% set interfaces = importInterfaces(operations) %}
+{% for interface in interfaces -%}
+  import {{ interface }} from '../http/nodegen/interfaces/{{ interface }}';
+{%- endfor %}
+{% if mockServer %}
+import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
+{% endif %}
 
-class {{capitaLetter(operation_name)}}Domain {
+class {{ operation_name | capitalize }}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if validMethod(key) %}
-  // {{ path.operationId }}
-  async {{path.operationId}} ({{pathParamsToDomainParams(path, true)}}) {
-    {{ mockDomainOutput( mockServer, operation_name, path.operationId) }}
+  // Operation ID: {{ path.operationId }}
+  public async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
+    {% if mockServer %}
+    return {{ operation_name | capitalize }}DomainMock.{{ path.operationId }}(
+      {% for requestType, value in path['x-request-definitions'] -%}
+      {{ requestType }},
+      {%- endfor %}
+    );
+    {% else %}
+    return {};
+    {% endif %}
   }
       {% endif %}
     {%- endfor %}
   {%- endfor %}
 }
 
-export default new {{capitaLetter(operation_name)}}Domain()
+export default new {{ operation_name | capitalize }}Domain();

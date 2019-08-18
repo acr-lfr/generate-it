@@ -1,10 +1,10 @@
 import { mockItGenerator } from 'openapi-nodegen-mockers'
 
-class {{ capitaLetter(operation_name)}}DomainMock {
+class {{ operation_name | capitalize}}DomainMock {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if validMethod(key) %}
-  // {{ path.operationId }}
+  // Operation ID: {{ path.operationId }}
   async {{ path.operationId }} ({{ pathParamsToDomainParams(path) }}) {
     {{mockOutput( path, mockServer )}}
   }
@@ -12,4 +12,4 @@ class {{ capitaLetter(operation_name)}}DomainMock {
     {%- endfor %}
   {%- endfor %}
 }
-export default new {{capitaLetter(operation_name)}}DomainMock()
+export default new {{operation_name | capitalize}}DomainMock()

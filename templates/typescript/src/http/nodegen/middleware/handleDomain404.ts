@@ -1,6 +1,6 @@
 import http404 from '../errors/404';
 
-import NodegenRequest from '../models/NodegenRequest.model';
+import NodegenRequest from '../interfaces/NodegenRequest';
 import express = require('express');
 
 /**

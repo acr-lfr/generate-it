@@ -1,16 +1,22 @@
-{{mockDomainImportGenerators(mockServer, operation_name)}}
+{% if mockServer %}
+import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
+{% endif %}
 
-class {{capitaLetter(operation_name)}}Domain {
+class {{operation_name | capitalize}}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if validMethod(key) %}
-  // {{ path.operationId }}
+  // Operation ID: {{ path.operationId }}
   async {{path.operationId}} ({{pathParamsToDomainParams(path)}}) {
-    {{ mockDomainOutput( mockServer, operation_name, path.operationId) }}
+    {% if mockServer %}
+    return {{ operation_name | capitalize }}DomainMock.{{ path.operationId }}();
+    {% else %}
+    return {};
+    {% endif %}
   }
       {% endif %}
     {%- endfor %}
   {%- endfor %}
 }
 
-export default new {{capitaLetter(operation_name)}}Domain()
+export default new {{operation_name | capitalize}}Domain()

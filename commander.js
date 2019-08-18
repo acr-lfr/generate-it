@@ -6,7 +6,7 @@ require('colors')
 module.exports = () => {
   let swaggerFile
 
-  const parseOutput = dir => path.resolve(dir)
+  const parseOutput = (dir) => path.resolve(dir)
 
   program
     .version(packageInfo.version)
@@ -19,6 +19,7 @@ module.exports = () => {
     .option('-t, --template <template>', 'template to use (es6 or typescript)', 'es6')
     .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', 1)
     .option('-i, --ignored-modules <ignoredModules>', 'ignore the following type of modules (routes, controllers, domains, validators, transformers) in case they already exist (separated by commas)')
+    .option('-v, --verbose', 'Outputs verbose logging')
     .parse(process.argv)
 
   if (!swaggerFile) {

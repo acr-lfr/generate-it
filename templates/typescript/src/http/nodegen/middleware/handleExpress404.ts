@@ -1,5 +1,5 @@
 import express = require('express');
-import NodegenRequest from '../models/NodegenRequest.model';
+import NodegenRequest from '../interfaces/NodegenRequest';
 
 export default () => {
   return (req: NodegenRequest, res: express.Response) => {

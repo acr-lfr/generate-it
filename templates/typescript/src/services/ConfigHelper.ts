@@ -4,7 +4,7 @@ class ConfigHelper {
    * @param environmentVariable
    * @returns {string | any}
    */
-  required(environmentVariable: string) {
+  public required(environmentVariable: string) {
     const value = process.env[environmentVariable];
     if (!value) {
       console.error(`
@@ -25,7 +25,7 @@ VARIABE=VALUE. You can use the provived .env-example as a template.
    * @param defaultValue
    * @returns {string | any | *}
    */
-  withDefault(environmentVariable: string, defaultValue: any) {
+  public withDefault(environmentVariable: string, defaultValue: any) {
     return process.env[environmentVariable] || defaultValue;
   }
 }
