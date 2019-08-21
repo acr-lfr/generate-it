@@ -1,0 +1,3 @@
+{% for interface in swagger.interfaces -%}
+export {default as {{ interface.name}}} from './{{ interface.name }}';
+{% endfor %}

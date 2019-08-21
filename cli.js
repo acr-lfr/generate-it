@@ -8,14 +8,20 @@ const inquirer = require('inquirer')
 console.log('All looks good, give me a moment to generate the server for you!'.yellow)
 global.verboseLogging = (o) => {
   if (cli.program.verbose) {
-    console.log(JSON.stringify(o, '', 2))
+    console.log(' ')
+    if(typeof o === 'object'){
+      console.log(JSON.stringify(o, undefined, 2))
+    } else {
+      console.log(o)
+    }
+    console.log(' ')
   }
 }
 
 const go = (mockServer) => {
   codegen({
     swaggerFilePath: cli.swaggerFile,
-    target_dir: cli.program.output,
+    targetDir: cli.program.output,
     template: cli.program.template,
     segmentsCount: +cli.program.segmentsCount,
     handlebars_helper: cli.program.handlebars ? path.resolve(process.cwd(), cli.program.handlebars) : undefined,
