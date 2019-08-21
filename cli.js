@@ -8,7 +8,13 @@ const inquirer = require('inquirer')
 console.log('All looks good, give me a moment to generate the server for you!'.yellow)
 global.verboseLogging = (o) => {
   if (cli.program.verbose) {
-    console.log(JSON.stringify(o, undefined, 2))
+    console.log(' ')
+    if(typeof o === 'object'){
+      console.log(JSON.stringify(o, undefined, 2))
+    } else {
+      console.log(o)
+    }
+    console.log(' ')
   }
 }
 
