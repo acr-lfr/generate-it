@@ -5,7 +5,7 @@ const cli = require('./commander')()
 const codegen = require('./lib')
 const inquirer = require('inquirer')
 
-console.log('All looks good, give me a moment to generate the server for you!'.yellow)
+console.log('Give me a moment to generate the server for you!'.yellow)
 global.verboseLogging = (o) => {
   if (cli.program.verbose) {
     console.log(' ')
