@@ -1,6 +1,14 @@
+# keep gitkeep
+!.gitkeep
+cache
+
+# dependencies
 node_modules
+
+# ide
+.idea/workspace.xml
+
+# Generated
+jest/
 .DS_Store
 npm-debug.log
-server
-
-\.idea/workspace\.xml
