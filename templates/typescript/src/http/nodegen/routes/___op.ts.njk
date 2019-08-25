@@ -15,7 +15,7 @@ export default function() {
   const router = Router()
   {% for op in operations -%}
     {% for key, path in op.path -%}
-      {% if isisValidMethod(key)%}
+      {% if isValidMethod(key)%}
   // {{ path.operationId }}
   router.{{key}}(
     '{{op.subresource}}',
