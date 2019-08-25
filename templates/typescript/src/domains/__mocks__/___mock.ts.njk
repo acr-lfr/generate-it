@@ -7,7 +7,7 @@ import { mockItGenerator } from 'openapi-nodegen-mockers'
 class {{ operation_name | capitalize}}DomainMock {
   {% for op in operations -%}
     {% for key, path in op.path -%}
-      {% if validMethod(key) %}
+      {% if isisValidMethod(key) %}
   // Operation ID: {{ path.operationId }}
   async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true, false) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
     {{mockOutput( path, mockServer )}}

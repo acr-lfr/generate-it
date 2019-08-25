@@ -1,7 +1,7 @@
 export default {
   {% for op in operations -%}
     {% for key, path in op.path -%}
-      {% if validMethod(key) %}
+      {% if isisValidMethod(key) %}
   // {{path.operationId}}
   {{path.operationId}}: {{ paramsOutputReducer(path.responses)}}
       {% endif %}
