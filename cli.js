@@ -62,7 +62,7 @@ Aaww `.red + '💩'.red.bold + '. Something went wrong:'.red)
 
 let question = `Continuing will replace the entire http layer:`.green +
   `
-- ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes will be lost. 
+- ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost. 
 - Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.
 - See the manual for further information: https://acrontum.github.io/openapi-nodegen/
 - This message is of no concern for a 1st time run.
