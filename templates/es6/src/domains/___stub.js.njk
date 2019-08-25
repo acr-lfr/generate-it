@@ -5,7 +5,7 @@ import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operatio
 class {{operation_name | capitalize}}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
-      {% if isisValidMethod(key) %}
+      {% if isValidMethod(key) %}
   // Operation ID: {{ path.operationId }}
   async {{path.operationId}} ({{pathParamsToDomainParams(path)}}) {
     {% if mockServer %}
