@@ -5,21 +5,21 @@ const inquirer = require('inquirer')
 const progressBar = require('progress')
 const cli = require('./commander')()
 const pause = require('./lib/pause')
+const logger = require('./lib/logger')
 const codegen = require('./lib')
 
 console.log(`Provided arguments look ok, preceding to build the http layer and any stub files.
 
 `.yellow)
 
+global.veryVerboseLogging = (o) => {
+  if (cli.program['veryVerbose']) {
+    logger(o)
+  }
+}
 global.verboseLogging = (o) => {
-  if (cli.program.verbose) {
-    console.log(' ')
-    if (typeof o === 'object') {
-      console.log(JSON.stringify(o, undefined, 2))
-    } else {
-      console.log(o)
-    }
-    console.log(' ')
+  if (cli.program['verbose'] || cli.program['veryVerbose']) {
+    logger(o)
   }
 }
 

@@ -20,6 +20,7 @@ module.exports = () => {
     .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', 1)
     .option('-i, --ignored-modules <ignoredModules>', 'ignore the following type of modules (routes, controllers, domains, validators, transformers) in case they already exist (separated by commas)')
     .option('-v, --verbose', 'Outputs verbose logging')
+    .option('--very-verbose', 'Outputs very verbose logging')
     .parse(process.argv)
 
   if (!swaggerFile) {

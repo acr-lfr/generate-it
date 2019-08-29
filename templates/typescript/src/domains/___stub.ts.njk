@@ -3,17 +3,17 @@
   import {{ interface }} from '../http/nodegen/interfaces/{{ interface }}';
 {%- endfor %}
 {% if mockServer %}
-import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
+import {{ ucFirst(operation_name) }}DomainMock from './__mocks__/{{ ucFirst(operation_name) }}DomainMock'
 {% endif %}
 
-class {{ operation_name | capitalize }}Domain {
+class {{ ucFirst(operation_name) }}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if isValidMethod(key) %}
   // Operation ID: {{ path.operationId }}
   public async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
     {% if mockServer %}
-    return {{ operation_name | capitalize }}DomainMock.{{ path.operationId }}(
+    return {{ ucFirst(operation_name) }}DomainMock.{{ path.operationId }}(
       {% for requestType, value in path['x-request-definitions'] -%}
       {{ requestType }},
       {%- endfor %}
@@ -27,4 +27,4 @@ class {{ operation_name | capitalize }}Domain {
   {%- endfor %}
 }
 
-export default new {{ operation_name | capitalize }}Domain();
+export default new {{ ucFirst(operation_name) }}Domain();
