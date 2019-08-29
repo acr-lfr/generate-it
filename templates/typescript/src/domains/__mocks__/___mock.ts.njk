@@ -4,7 +4,7 @@ import {{ interface }} from '../../http/nodegen/interfaces/{{ interface }}';
 {%- endfor %}
 import { mockItGenerator } from 'openapi-nodegen-mockers'
 
-class {{ operation_name | capitalize}}DomainMock {
+class {{ ucFirst(operation_name) }}DomainMock {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if isValidMethod(key) %}
@@ -16,4 +16,4 @@ class {{ operation_name | capitalize}}DomainMock {
     {%- endfor %}
   {%- endfor %}
 }
-export default new {{operation_name | capitalize}}DomainMock()
+export default new {{ucFirst(operation_name)}}DomainMock()

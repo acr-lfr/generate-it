@@ -1,15 +1,15 @@
 {% if mockServer %}
-import {{ operation_name | capitalize }}DomainMock from './__mocks__/{{ operation_name | capitalize }}DomainMock'
+import {{ ucFirst(operation_name) }}DomainMock from './__mocks__/{{ ucFirst(operation_name) }}DomainMock'
 {% endif %}
 
-class {{operation_name | capitalize}}Domain {
+class {{ucFirst(operation_name)}}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if isValidMethod(key) %}
   // Operation ID: {{ path.operationId }}
   async {{path.operationId}} ({{pathParamsToDomainParams(path)}}) {
     {% if mockServer %}
-    return {{ operation_name | capitalize }}DomainMock.{{ path.operationId }}();
+    return {{ ucFirst(operation_name) }}DomainMock.{{ path.operationId }}();
     {% else %}
     return {};
     {% endif %}
@@ -19,4 +19,4 @@ class {{operation_name | capitalize}}Domain {
   {%- endfor %}
 }
 
-export default new {{operation_name | capitalize}}Domain()
+export default new {{ucFirst(operation_name)}}Domain()
