@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
-class Jwt {
+class JwtService {
   async verifyAccessJWT (token) {
     return jwt.verify(token, config.jwtAccessSecret)
   }
@@ -41,4 +41,4 @@ class Jwt {
   }
 }
 
-export default new Jwt()
+export default new JwtService()
