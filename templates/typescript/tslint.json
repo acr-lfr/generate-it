@@ -63,6 +63,7 @@
     "no-null-keyword": true,
     "only-arrow-functions": false,
     "prefer-const": true,
-    "jsdoc-format": true
+    "jsdoc-format": true,
+    "space-before-function-paren": true
   }
 }
