@@ -16,7 +16,11 @@ export default function() {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if isValidMethod(key)%}
-  // {{ path.operationId }}
+  /**
+   * Operation ID: {{ path.operationId }}
+   * {% if path.summary %}Summary: {{ path.summary }}{% endif %}
+   * {% if path.description %}Description: {{ path.description }}{% endif %}
+   */
   router.{{key}}(
     '{{op.subresource}}',
     {{getSecDefMiddleware(path, swagger)}} {{celebrateRoute(operation_name, path.parameters, path.operationId)}}
