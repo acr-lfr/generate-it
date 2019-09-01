@@ -3,6 +3,7 @@
   "description": "{{ inline( swagger.info.description) }}",
   "version": "{{ swagger.info.version }}",
   "scripts": {
+    "install:githooks": "cp ./githooks/* ./.git/hooks",
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
     "start:dev": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}",
@@ -49,8 +50,8 @@
     "@types/fs-extra": "^5.0.4",
     "@types/hapi__joi": "^15.0.3",
     "openapi-nodegen-mockers": "^0.0.6",
-    "typescript": "^3.5.3",
-    "tslint": "5.18.0",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.2"
   }
 }

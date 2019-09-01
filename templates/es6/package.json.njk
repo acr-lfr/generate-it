@@ -3,6 +3,7 @@
   "description": "{{ inline( swagger.info.description) }}",
   "version": "{{ swagger.info.version }}",
   "scripts": {
+    "install:githooks": "cp ./githooks/* ./.git/hooks",
     "build:prod": "node node_modules/webpack/bin/webpack.js --progress --colors",
     "build:dev": "node node_modules/webpack/bin/webpack.js -d --progress --colors",
     "build:dev-watch": "node node_modules/webpack/bin/webpack.js -wd --progress --colors",
