@@ -23,12 +23,12 @@ const logger = createLogger({
 });
 
 // Override the base console log with winston
-console.log = function() {
+console.log = function () {
   return logger.info.apply(logger, arguments);
 };
-console.error = function() {
+console.error = function () {
   return logger.error.apply(logger, arguments);
 };
-console.info = function() {
+console.info = function () {
   return logger.warn.apply(logger, arguments);
 };
