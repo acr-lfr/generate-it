@@ -7,7 +7,7 @@ interface JwtDetails {
   sessionData: any;
 }
 
-class Jwt {
+class JwtService {
   public generateJWToken(details: JwtDetails) {
     if (typeof details.maxAge !== 'number') {
       details.maxAge = 3600;
@@ -27,16 +27,9 @@ class Jwt {
     });
   }
 
-  public verifyJWTToken(token: string) {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, config.jwtSecret, (err: any, decodedToken: any) => {
-        if (err || !decodedToken) {
-          return reject(err);
-        }
-        resolve(decodedToken);
-      });
-    });
+  public async verifyAccessJWT(token: string) {
+    return jwt.verify(token, config.jwtSecret)
   }
 }
 
-export default new Jwt();
+export default new JwtService();

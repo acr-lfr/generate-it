@@ -1,4 +1,4 @@
-import Jwt from '../../../services/Jwt'
+import JwtService from '../../../services/JwtService'
 
 export default (headerName) => {
   return (req, res, next) => {
@@ -21,7 +21,7 @@ export default (headerName) => {
     }
 
     // Please apply here your own token verification logic
-    Jwt.verifyAccessJWT(token)
+    JwtService.verifyAccessJWT(token)
       .then(decodedToken => {
         req.jwtData = decodedToken
         req.originalToken = token

@@ -1,4 +1,4 @@
-class ConfigHelper {
+class ConfigHelperService {
   /**
    * Ensures that the given string representation of the envVar exists.
    * @param environmentVariable
@@ -30,4 +30,4 @@ VARIABE=VALUE. You can use the provived .env-example as a template.
   }
 }
 
-export default new ConfigHelper()
+export default new ConfigHelperService()

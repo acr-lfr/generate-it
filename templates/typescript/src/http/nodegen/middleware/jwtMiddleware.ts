@@ -1,4 +1,4 @@
-import Jwt from '../../../services/Jwt';
+import JwtService from '../../../services/JwtService';
 
 import NodegenRequest from '../interfaces/NodegenRequest';
 import express = require('express');
@@ -24,7 +24,7 @@ export default (headerName: string) => {
     }
 
     // Please apply here your own token verification logic
-    Jwt.verifyJWTToken(token)
+    JwtService.verifyAccessJWT(token)
       .then((decodedToken: any) => {
         req.jwtData = decodedToken;
         req.originalToken = token;
