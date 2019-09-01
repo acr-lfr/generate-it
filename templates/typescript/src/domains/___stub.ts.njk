@@ -10,7 +10,11 @@ class {{ ucFirst(operation_name) }}Domain {
   {% for op in operations -%}
     {% for key, path in op.path -%}
       {% if isValidMethod(key) %}
-  // Operation ID: {{ path.operationId }}
+  /**
+   * Operation ID: {{ path.operationId }}
+   * {% if path.summary %}Summary: {{ path.summary }}{% endif %}
+   * {% if path.description %}Description: {{ path.description }}{% endif %}
+   */
   public async {{ path.operationId }} ({{ pathParamsToDomainParams(path, true) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
     {% if mockServer %}
     return {{ ucFirst(operation_name) }}DomainMock.{{ path.operationId }}(

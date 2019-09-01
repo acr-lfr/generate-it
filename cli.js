@@ -2,16 +2,14 @@
 require('colors')
 const path = require('path')
 const inquirer = require('inquirer')
-const progressBar = require('progress')
 const cli = require('./commander')()
-const pause = require('./lib/pause')
 const logger = require('./lib/logger')
 const codegen = require('./lib')
 
 console.log(`Provided arguments look ok, preceding to build the http layer and any stub files.
 
 `.yellow)
-
+global.startISOString = (new Date()).toISOString()
 global.veryVerboseLogging = (o) => {
   if (cli.program['veryVerbose']) {
     logger(o)
@@ -20,19 +18,6 @@ global.veryVerboseLogging = (o) => {
 global.verboseLogging = (o) => {
   if (cli.program['verbose'] || cli.program['veryVerbose']) {
     logger(o)
-  }
-}
-
-let timerComplete = false
-const timer = () => {
-  if (!cli.program.verbose) {
-    let bar = new progressBar(':bar', { total: 10 })
-    let timer = setInterval(function () {
-      bar.tick()
-      if (timerComplete) {
-        clearInterval(timer)
-      }
-    }, 100)
   }
 }
 
@@ -45,18 +30,16 @@ const go = (mockServer) => {
     handlebars_helper: cli.program.handlebars ? path.resolve(process.cwd(), cli.program.handlebars) : undefined,
     ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
     mockServer: mockServer || false,
-  }).then(async () => {
-    timerComplete = true
-    await pause(150)
+  }).then(() => {
     console.log(`
 Done! ✨`.green.bold)
-    console.log('Your API files have been output here: '.yellow + cli.program.output.magenta + '.'.yellow)
+    console.log(`
+Your API files have been output here: `.yellow + cli.program.output.magenta + `.
+`.yellow)
   }).catch(async (err) => {
-    timerComplete = true
-    await pause(150)
-    console.error(`
-Aaww `.red + '💩'.red.bold + '. Something went wrong:'.red)
-    console.error(err.stack.red || err.message.red)
+    console.error('Something went wrong:'.red)
+    console.trace(err)
+    process.exit(1)
   })
 }
 
@@ -82,19 +65,15 @@ inquirer.prompt(questions)
       console.log(`
 Starting the generation...
 `)
-      timer()
       go(cli.program.mocked)
     } else {
-      timerComplete = true
       console.log('Generation cancelled. No files have been touched.'.red)
     }
   })
   .catch((e) => {
-    timerComplete = true
     console.error(e)
   })
 
 process.on('unhandledRejection', (err) => {
-  timerComplete = true
   console.error(err)
 })
