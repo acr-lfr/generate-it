@@ -2,20 +2,47 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
-    "noImplicitAny": true,
+    "target": "ES2017",
     "moduleResolution": "node",
-    "sourceMap": true,
     "outDir": "build",
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "sourceMap": true,
     "resolveJsonModule": true,
-    "importHelpers": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "paths": {
+      "@constants": [
+        "src/constants"
+      ],
+      "@database": [
+        "src/database"
+      ],
+      "@domains": [
+        "src/domains"
+      ],
+      "@http": [
+        "src/http"
+      ],
+      "@services": [
+        "src/services"
+      ],
+      "@utils": [
+        "src/utils"
+      ],
       "@/*": [
         "src/*"
       ]
-    }
-  }
+    },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths",
+        "exclude": ["*"]
+      }
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "package.json"
+  ]
 }
