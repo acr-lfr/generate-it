@@ -4,10 +4,13 @@
   "version": "{{ swagger.info.version }}",
   "scripts": {
     "install:githooks": "cp ./githooks/* ./.git/hooks",
-    "build:ts": "tsc",
-    "watch:ts": "tsc -w",
+    "npm-update-git-deps": "npm-update-git-deps",
+    "build": "npm run build:clean && ttsc -p .",
+    "build:clean": "rm -rf build/*",
+    "watch:ts": "ttsc --watch -p .",
     "start:dev": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}",
     "lint": "tslint --project tsconfig.json",
+    "lint:fix": "tslint --project tsconfig.json --fix",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "jest"
   },
@@ -49,10 +52,13 @@
     "@types/lodash": "^4.14.119",
     "@types/fs-extra": "^5.0.4",
     "@types/hapi__joi": "^15.0.3",
+    "@zerollup/ts-transform-paths": "^1.7.3",
     "jest": "^24.9.0",
+    "npm-update-git-deps": "^1.2.5",
     "openapi-nodegen-mockers": "^0.0.6",
     "ts-jest": "^24.0.2",
     "tslint": "^5.19.0",
+    "ttypescript": "^1.5.7",
     "typescript": "^3.6.2"
   }
 }
