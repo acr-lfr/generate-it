@@ -31,7 +31,12 @@ export default () => {
       },
       challenge: 'Protected area',
     }))
-    router.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+    router.use('/', function (req, res, next) {
+      if (swaggerDocument.swagger) {
+        swaggerDocument.host = req.get('host')
+      }
+      next();
+    }, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
   return router
 }
