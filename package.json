@@ -1,7 +1,7 @@
 {
   "name": "openapi-nodegen",
   "main": "./lib/codegen.js",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "bin": {
     "openapi-nodegen": "./cli.js"
