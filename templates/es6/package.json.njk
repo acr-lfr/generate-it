@@ -3,12 +3,13 @@
   "description": "{{ inline( swagger.info.description) }}",
   "version": "{{ swagger.info.version }}",
   "scripts": {
-    "install:githooks": "cp ./githooks/* ./.git/hooks",
-    "build:prod": "node node_modules/webpack/bin/webpack.js --progress --colors",
-    "build:dev": "node node_modules/webpack/bin/webpack.js -d --progress --colors",
-    "build:dev-watch": "node node_modules/webpack/bin/webpack.js -wd --progress --colors",
-    "start:dev": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}",
+    "build": "node node_modules/webpack/bin/webpack.js --progress --colors",
+    "dev:build": "node node_modules/webpack/bin/webpack.js -d --progress --colors",
+    "dev:build-watch": "node node_modules/webpack/bin/webpack.js -wd --progress --colors",
+    "dev:start": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}",
+    "dev:setup": "npm i && cp ./githooks/* .git/hooks && echo 'Ensure you have a .env file, copy the .env.example'",
     "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "jest"
   },
