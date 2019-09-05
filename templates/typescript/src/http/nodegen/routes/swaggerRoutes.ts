@@ -31,13 +31,13 @@ export default () => {
       challenge: 'Protected area',
     }),
   );
-  router.use('/', function (req, res, next) {
+  router.use('/', (req: any, res: any, next: any) => {
     let doc = YAML.load(path.resolve(swaggerFile));
     if (doc.swagger) {
       doc.host = req.get('host');
     }
     req.swaggerDoc = doc;
-    next();
+    return next();
   }, swaggerUi.serve, swaggerUi.setup());
 
   return router;
