@@ -8,7 +8,7 @@ const getQueries = (url: string) => {
     let vars = url.split('&');
     for (let i = 0; i < vars.length; i++) {
       let pair = vars[i].split('=');
-      queries[pair[0]] = decodeURIComponent(pair[1]);
+      queries[pair[0]] = pair[1];
     }
   }
   return queries;
@@ -20,7 +20,9 @@ export default () => {
     for (let key in queries) {
       let query = queries[key];
       if (query && query.includes(',')) {
-        queries[key] = query.split(',');
+        queries[key] = query.split(',').map((s: any) => decodeURIComponent((s)));
+      } else {
+        queries[key] = decodeURIComponent(queries[key]);
       }
     }
     req.query = queries;
