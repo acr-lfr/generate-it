@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 import packageJson from '../../package.json';
+import queryArrayParserMiddleware from './nodegen/middleware/queryArrayParserMiddleware';
 import corsMiddleware from './nodegen/middleware/corsMiddleware';
 import headersCaching from './nodegen/middleware/headersCaching';
 const expressFormData = require('express-form-data');
@@ -20,6 +21,9 @@ const requestParser = (app: express.Application) => {
     uploadDir: require('os').tmpdir(),
   }));
   app.use(bodyParser.json({ limit: '50mb' }));
+
+  // parse query params
+  app.use(queryArrayParserMiddleware());
 
   // clear all empty files (size == 0)
   app.use(expressFormData.format());
