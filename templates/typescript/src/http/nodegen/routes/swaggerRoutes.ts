@@ -19,7 +19,7 @@ export default () => {
       }
     });
   }
-
+  let doc = YAML.load(path.resolve(swaggerFile));
   // Middleware for basicauth and xauth
   router.use(
     expressAuthMiddle({
@@ -32,7 +32,6 @@ export default () => {
     }),
   );
   router.use('/', (req: any, res: any, next: any) => {
-    let doc = YAML.load(path.resolve(swaggerFile));
     if (doc.swagger) {
       doc.host = req.get('host');
     }
