@@ -1,5 +1,5 @@
 import config from './src/config'
-import './src/utils/logger'
+import 'openapi-nodegen-logger'
 
 import app from './src/app'
 import appCli from './src/app.cli'

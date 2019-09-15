@@ -4,7 +4,6 @@ import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import path from 'path'
 import config from '../../../config'
-
 export default () => {
   const router = Router({})
   if(config.env !== 'production') {
@@ -19,7 +18,7 @@ export default () => {
         }
       })
     }
-
+    let doc = YAML.load(path.resolve(swaggerFile));
     // Middleware for basicauth and xauth
     router.use(expressAuthMiddle({
       methods: ['basic-auth'],
@@ -30,7 +29,6 @@ export default () => {
       challenge: 'Protected area',
     }))
     router.use('/', function (req, res, next) {
-      let doc = YAML.load(path.resolve(swaggerFile));
       if (doc.swagger) {
         doc.host = req.get('host');
       }
