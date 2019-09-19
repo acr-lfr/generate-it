@@ -8,7 +8,7 @@
     "dev:build-watch": "ttsc --watch -p .",
     "dev:start": "pm2 start pm2.dev.config.js && pm2 logs {{package.name}}",
     "dev:setup": "npm i && cp ./githooks/* .git/hooks && echo 'Ensure you have a .env file, copy the .env.example'",
-    "npm-update-git-deps": "npm-update-git-deps",
+    "npm-update-git-deps": "npm-update-git-d  eps",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "test": "npm run lint && npm run test:unit",
