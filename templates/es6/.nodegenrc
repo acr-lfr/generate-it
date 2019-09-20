@@ -1,3 +1,4 @@
 {
-  "nodegenDir": "src/http/nodegen"
+  "nodegenDir": "src/http/nodegen",
+  "nodegenMockDir": "src/domains/__mocks__"
 }
