@@ -1,7 +1,7 @@
 {
   "name": "openapi-nodegen",
   "main": "./cli.js",
-  "version": "2.10.4",
+  "version": "2.10.5",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "bin": {
     "openapi-nodegen": "./cli.js"
@@ -31,8 +31,8 @@
     "generator"
   ],
   "dependencies": {
-    "colors": "^1.3.3",
-    "commander": "^3.0.0",
+    "colors": "^1.4.0",
+    "commander": "^3.0.2",
     "deepmerge": "^4.0.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
@@ -53,7 +53,7 @@
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "eslint": "^6.2.2",
+    "eslint": "^6.5.0",
     "jest": "^24.9.0"
   }
 }
