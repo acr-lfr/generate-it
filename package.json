@@ -1,7 +1,7 @@
 {
   "name": "openapi-nodegen",
   "main": "./cli.js",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "bin": {
     "openapi-nodegen": "./cli.js"
@@ -32,21 +32,21 @@
   ],
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^3.0.2",
-    "deepmerge": "^4.0.0",
+    "commander": "^4.0.1",
+    "deepmerge": "^4.2.2",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
     "js-yaml": "^3.13.1",
-    "json-schema-ref-parser": "^7.1.1",
+    "json-schema-ref-parser": "^7.1.2",
     "lodash": "^4.17.15",
     "md5-file": "^4.0.0",
     "nunjucks": "^3.2.0",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "progress": "^2.0.3",
     "project-name-generator": "^2.1.7",
     "quicktype": "^15.0.207",
     "recursive-copy": "^2.0.10",
-    "text-file-diff": "^1.0.6",
+    "text-file-diff": "^1.1.2",
     "uglify-es": "^3.3.9",
     "walk": "^2.3.14",
     "word-wrap": "^1.2.3"
@@ -54,7 +54,7 @@
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "eslint": "^6.5.0",
+    "eslint": "^6.6.0",
     "jest": "^24.9.0"
   }
 }
