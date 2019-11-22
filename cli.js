@@ -11,12 +11,12 @@ console.log(`Provided arguments look ok, preceding to build the http layer and a
 `.yellow)
 global.startISOString = (new Date()).toISOString()
 global.veryVerboseLogging = (o) => {
-  if (cli.program['veryVerbose']) {
+  if (cli.program['veryVerbose'] && o === '') {
     logger(o)
   }
 }
 global.verboseLogging = (o) => {
-  if (cli.program['verbose'] || cli.program['veryVerbose']) {
+  if ((cli.program['verbose'] || cli.program['veryVerbose']) && o === '') {
     logger(o)
   }
 }
