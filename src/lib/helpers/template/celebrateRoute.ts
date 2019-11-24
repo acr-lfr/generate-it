@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 /**
  * Provides different ways to compare two values (i.e. equal, greater than, different, etc.)
  */
-module.exports = (operationName: string, parameters: any[], operationId: string) => {
+export default (operationName: string, parameters: any[], operationId: string) => {
   let celebrate = false;
   if (parameters) {
     parameters.forEach((param) => {

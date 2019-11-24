@@ -7,7 +7,7 @@ const _ = tslib_1.__importStar(require("lodash"));
 class OpenAPIInjectInterfaceNaming {
     constructor(jsObject, passedConfig) {
         this.apiObject = jsObject;
-        this.config = passedConfig;
+        this.config = passedConfig || {};
     }
     /**
      * Merges the parameter namings into the path objects
@@ -197,4 +197,4 @@ class OpenAPIInjectInterfaceNaming {
         return response;
     }
 }
-module.exports = OpenAPIInjectInterfaceNaming;
+exports.default = OpenAPIInjectInterfaceNaming;

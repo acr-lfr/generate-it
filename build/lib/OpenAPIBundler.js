@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require('lodash');
-const fs = require('fs-extra');
-const path = require('path');
-const YAML = require('js-yaml');
-const RefParser = require('json-schema-ref-parser');
-const commandRun = require('./commandRun');
-const OpenAPIInjectInterfaceNaming = require('./OpenAPIInjectInterfaceNaming');
-const GeneratedComparison = require('./GeneratedComparison');
+const tslib_1 = require("tslib");
+const _ = tslib_1.__importStar(require("lodash"));
+const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+const path_1 = tslib_1.__importDefault(require("path"));
+const YAML = tslib_1.__importStar(require("js-yaml"));
+const RefParser = tslib_1.__importStar(require("json-schema-ref-parser"));
+const commandRun_1 = tslib_1.__importDefault(require("./commandRun"));
+const OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPIInjectInterfaceNaming"));
+const GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
 class OpenAPIBundler {
     async bundle(filePath, config) {
         let content;
@@ -32,7 +33,7 @@ class OpenAPIBundler {
             throw e;
         }
         try {
-            parsedContentWithInterfaceNaming = (new OpenAPIInjectInterfaceNaming(parsedContent, config)).inject();
+            parsedContentWithInterfaceNaming = (new OpenAPIInjectInterfaceNaming_1.default(parsedContent, config)).inject();
         }
         catch (e) {
             console.error('Can not dereference the JSON obtained from the content of the Swagger specification file');
@@ -46,7 +47,7 @@ class OpenAPIBundler {
             throw e;
         }
         try {
-            mergedParameters = (new OpenAPIInjectInterfaceNaming(dereferencedJSON, config)).mergeParameters();
+            mergedParameters = (new OpenAPIInjectInterfaceNaming_1.default(dereferencedJSON, config)).mergeParameters();
         }
         catch (e) {
             console.error('Can not merge the request paramters to build the interfaces:');
@@ -70,7 +71,7 @@ class OpenAPIBundler {
         return JSON.parse(JSON.stringify(bundledJSON));
     }
     async getFileContent(filePath) {
-        return fs.readFileSync(path.resolve(__dirname, filePath));
+        return fs_extra_1.default.readFileSync(path_1.default.resolve(__dirname, filePath));
     }
     parseContent(content) {
         content = content.toString('utf8');
@@ -82,14 +83,14 @@ class OpenAPIBundler {
         }
     }
     async dereference(json) {
-        return RefParser.dereference(json, {
+        return RefParser.prototype.dereference(json, {
             dereference: {
                 circular: 'ignore',
             },
         });
     }
     async bundleObject(json) {
-        return RefParser.bundle(json, {
+        return RefParser.prototype.bundle(json, {
             dereference: {
                 circular: 'ignore',
             },
@@ -145,14 +146,14 @@ class OpenAPIBundler {
         return apiObject;
     }
     async generateInterfaceText(mainInterfaceName, definitionObject, targetDir) {
-        const baseInterfaceDir = path.join(GeneratedComparison.getCacheBaseDir(targetDir), 'interface');
-        fs.ensureDirSync(baseInterfaceDir);
-        const tmpJsonSchema = path.join(baseInterfaceDir, mainInterfaceName + '.json');
+        const baseInterfaceDir = path_1.default.join(GeneratedComparison_1.default.getCacheBaseDir(targetDir), 'interface');
+        fs_extra_1.default.ensureDirSync(baseInterfaceDir);
+        const tmpJsonSchema = path_1.default.join(baseInterfaceDir, mainInterfaceName + '.json');
         // write the json to disk
-        fs.writeJsonSync(tmpJsonSchema, definitionObject);
+        fs_extra_1.default.writeJsonSync(tmpJsonSchema, definitionObject);
         // parse to interface
-        return commandRun('node', [
-            path.join(__dirname, '../node_modules/quicktype/dist/cli/index.js'),
+        return commandRun_1.default('node', [
+            path_1.default.join(__dirname, '../node_modules/quicktype/dist/cli/index.js'),
             '--just-types',
             '--src',
             tmpJsonSchema,

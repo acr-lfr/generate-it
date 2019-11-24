@@ -5,7 +5,7 @@ const _ = tslib_1.__importStar(require("lodash"));
 /**
  * Provides different ways to compare two values (i.e. equal, greater than, different, etc.)
  */
-module.exports = (operationName, parameters, operationId) => {
+exports.default = (operationName, parameters, operationId) => {
     let celebrate = false;
     if (parameters) {
         parameters.forEach((param) => {

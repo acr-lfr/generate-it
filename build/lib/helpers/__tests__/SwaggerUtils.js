@@ -1,4 +1,7 @@
-const SwaggerUtils = require('../SwaggerUtils');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
+const SwaggerUtils_1 = tslib_1.__importDefault(require("../SwaggerUtils"));
 const params = [{
         in: 'body',
         name: 'v1UserPasswordPut',
@@ -45,14 +48,14 @@ const params = [{
         ],
     }];
 test('Returns joi with 2 required params', () => {
-    expect(SwaggerUtils.createJoiValidation([params[0]])).toBe('body: {password:Joi.string().allow(\'\').required(),newPassword:Joi.string().allow(\'\').required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
+    expect(SwaggerUtils_1.default.createJoiValidation([params[0]])).toBe('body: {password:Joi.string().allow(\'\').required(),newPassword:Joi.string().allow(\'\').required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
 });
 test('openapi3 query request param', () => {
-    expect(SwaggerUtils.createJoiValidation([params[1]])).toBe('query: {limit:Joi.number().integer(),},');
+    expect(SwaggerUtils_1.default.createJoiValidation([params[1]])).toBe('query: {limit:Joi.number().integer(),},');
 });
 test('openapi2 enums', () => {
-    expect(SwaggerUtils.createJoiValidation([params[3]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
+    expect(SwaggerUtils_1.default.createJoiValidation([params[3]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
 });
 test('openapi3 enums', () => {
-    expect(SwaggerUtils.createJoiValidation([params[2]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
+    expect(SwaggerUtils_1.default.createJoiValidation([params[2]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
 });
