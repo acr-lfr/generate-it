@@ -6,5 +6,6 @@
     <mapping directory="$PROJECT_DIR$/cache/httpsGithubComAcrontumOpenapiNodegenTypescriptApiTestRig" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cache/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cache/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit306" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cache/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGitDevelop" vcs="Git" />
   </component>
 </project>
