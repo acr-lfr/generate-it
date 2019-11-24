@@ -113,7 +113,7 @@ class TemplateFetchURL {
    * @param gitBranchOrTag
    * @return {Promise<*>}
    */
-  public async gitClone (url: string, cacheDirectory: string, gitBranchOrTag?: string,) {
+  public async gitClone (url: string, cacheDirectory: string, gitBranchOrTag?: string) {
     console.log(cacheDirectory);
     console.log('Clone git repository');
     fs.ensureDirSync(cacheDirectory);
