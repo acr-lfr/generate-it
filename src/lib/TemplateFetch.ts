@@ -6,7 +6,7 @@ import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement
 import { GIT_DIRECTORY } from '@/constants/CachePaths';
 
 class TemplateFetchURL {
-  targetGitCacheDir: string;
+  public targetGitCacheDir: string;
 
   public getCacheFolder (targetGitCacheDir: string) {
     this.targetGitCacheDir = path.join(targetGitCacheDir, GIT_DIRECTORY);
@@ -73,15 +73,11 @@ class TemplateFetchURL {
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
     const urlParts = this.getUrlParts(url);
     try {
-      if (this.gitCacheExists(cacheDirectory)) {
-        if (urlParts.b) {
-          this.cleanSingleCacheDir(cacheDirectory);
-          await this.gitClone(url, cacheDirectory);
-        } else {
-          await this.gitPull(cacheDirectory);
-        }
+      if (this.gitCacheExists(cacheDirectory) && !urlParts.b) {
+        await this.gitPull(cacheDirectory);
       } else {
-        await this.gitClone(url, cacheDirectory);
+        this.cleanSingleCacheDir(cacheDirectory);
+        await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
       }
     } catch (e) {
       console.error('Could not clone or pull the given git repository!');
@@ -114,16 +110,17 @@ class TemplateFetchURL {
    * Clones a remote git url to a given local directory
    * @param url
    * @param cacheDirectory
+   * @param gitBranchOrTag
    * @return {Promise<*>}
    */
-  public async gitClone (url: string, cacheDirectory: string) {
+  public async gitClone (url: string, cacheDirectory: string, gitBranchOrTag?: string,) {
     console.log(cacheDirectory);
     console.log('Clone git repository');
-    const urlParts = this.getUrlParts(url);
-    if (urlParts.b) {
-      return commandRun('git', ['clone', '-b', urlParts.b, urlParts.url, cacheDirectory], true);
+    fs.ensureDirSync(cacheDirectory);
+    if (gitBranchOrTag) {
+      return commandRun('git', ['clone', '-b', gitBranchOrTag, url, cacheDirectory], true);
     } else {
-      return commandRun('git', ['clone', urlParts.url, cacheDirectory], true);
+      return commandRun('git', ['clone', url, cacheDirectory], true);
     }
   }
 
