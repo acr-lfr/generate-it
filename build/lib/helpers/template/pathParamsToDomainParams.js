@@ -52,3 +52,4 @@ exports.default = (value, withType = false, withPrefix, pathNameChange = 'path')
     }
     return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
 };
+//# sourceMappingURL=pathParamsToDomainParams.js.map

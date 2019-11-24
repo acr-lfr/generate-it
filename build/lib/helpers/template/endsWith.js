@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (subject, endvalue) => {
     return (String(subject)[subject.length - 1] === String(endvalue));
 };
+//# sourceMappingURL=endsWith.js.map

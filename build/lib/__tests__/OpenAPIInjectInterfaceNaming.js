@@ -27,3 +27,4 @@ describe('Initialise and validate file type checks', () => {
         expect(initialisedSwagger.isOpenAPI3()).toBe(false);
     });
 });
+//# sourceMappingURL=OpenAPIInjectInterfaceNaming.js.map

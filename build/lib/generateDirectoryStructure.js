@@ -30,3 +30,4 @@ exports.default = (config, templatesDir) => {
     }
     return IS_FIRST_RUN;
 };
+//# sourceMappingURL=generateDirectoryStructure.js.map

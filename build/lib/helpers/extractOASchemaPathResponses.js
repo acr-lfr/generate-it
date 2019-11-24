@@ -17,3 +17,4 @@ exports.default = (responses) => {
     }
     return {};
 };
+//# sourceMappingURL=extractOASchemaPathResponses.js.map

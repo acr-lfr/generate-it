@@ -8,3 +8,4 @@ exports.default = (o) => {
         console.log(o);
     }
 };
+//# sourceMappingURL=logger.js.map

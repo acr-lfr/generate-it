@@ -15,3 +15,4 @@ exports.default = (value, swagger) => {
     }
     return '';
 };
+//# sourceMappingURL=getSecDefMiddleware.js.map

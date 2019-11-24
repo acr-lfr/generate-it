@@ -109,3 +109,4 @@ class FileWalker {
     }
 }
 exports.default = new FileWalker();
+//# sourceMappingURL=FileIterator.js.map

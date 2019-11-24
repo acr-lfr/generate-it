@@ -5,7 +5,7 @@
     "target": "ES2017",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": "build",
     "baseUrl": ".",
     "resolveJsonModule": true,

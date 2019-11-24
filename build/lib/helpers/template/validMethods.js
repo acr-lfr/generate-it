@@ -9,3 +9,4 @@ const ValidHttpMethods_1 = tslib_1.__importDefault(require("../../../constants/V
 exports.default = () => {
     return ValidHttpMethods_1.default;
 };
+//# sourceMappingURL=validMethods.js.map

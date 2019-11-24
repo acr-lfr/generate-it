@@ -75,3 +75,4 @@ class NamingUtils {
     }
 }
 exports.default = new NamingUtils();
+//# sourceMappingURL=NamingUtils.js.map

@@ -15,3 +15,4 @@ it('should return spec.js from file name', () => {
 it('should return spec.js from file name', () => {
     expect(getfileExt('tests/world.spec.js')).toBe('spec.js');
 });
+//# sourceMappingURL=namingUtils.getFileExt.js.map

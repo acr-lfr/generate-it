@@ -77,3 +77,4 @@ Starting the generation...
 process.on('unhandledRejection', (err) => {
     console.error(err);
 });
+//# sourceMappingURL=cli.js.map

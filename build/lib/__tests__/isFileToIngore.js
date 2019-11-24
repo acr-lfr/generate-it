@@ -24,3 +24,4 @@ describe('Should other directories in and .njk files', () => {
         expect(isFileToIngore_1.default('som/dir/http', '___op.njk')).toBe(false);
     });
 });
+//# sourceMappingURL=isFileToIngore.js.map

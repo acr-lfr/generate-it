@@ -9,3 +9,4 @@ it('should return customerTransformOutput.ts', () => {
 it('should return customerRoutes.ts', () => {
     expect(generateOperationSuffix('src/http/nodegen/routes', 'customer', 'ts')).toBe('customerRoutes.ts');
 });
+//# sourceMappingURL=namingUtils.generateOperationSuffix.js.map

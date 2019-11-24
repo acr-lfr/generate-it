@@ -31,3 +31,4 @@ it('hasGit should not throw error', async () => {
 //     }
 //   })
 // })
+//# sourceMappingURL=TemplateFetch.js.map

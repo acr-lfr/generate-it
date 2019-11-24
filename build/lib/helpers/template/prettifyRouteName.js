@@ -5,3 +5,4 @@ const NamingUtils_1 = tslib_1.__importDefault(require("../NamingUtils"));
 exports.default = (value) => {
     return NamingUtils_1.default.fixRouteName(value);
 };
+//# sourceMappingURL=prettifyRouteName.js.map

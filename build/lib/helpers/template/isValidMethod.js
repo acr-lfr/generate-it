@@ -8,3 +8,4 @@ const ValidHttpMethods_1 = tslib_1.__importDefault(require("../../../constants/V
 exports.default = (method) => {
     return (ValidHttpMethods_1.default.indexOf(method.toUpperCase()) !== -1);
 };
+//# sourceMappingURL=isValidMethod.js.map

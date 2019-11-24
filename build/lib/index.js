@@ -42,3 +42,4 @@ exports.default = async (config) => {
     console.log('Comparison version cleanup...'.green.bold);
     GeneratedComparison_1.default.versionCleanup(config.targetDir);
 };
+//# sourceMappingURL=index.js.map

@@ -21,3 +21,4 @@ exports.default = (operations) => {
     }
     return (celebrate) ? 'import { celebrate } from \'celebrate\'' : '';
 };
+//# sourceMappingURL=celebrateImport.js.map

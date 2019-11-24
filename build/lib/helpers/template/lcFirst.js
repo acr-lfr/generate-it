@@ -11,3 +11,4 @@ exports.default = (inputString) => {
     }
     return inputString.charAt(0).toLowerCase() + inputString.slice(1);
 };
+//# sourceMappingURL=lcFirst.js.map

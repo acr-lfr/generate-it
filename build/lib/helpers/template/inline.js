@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (str) => {
     return str ? str.replace(/\n/g, '') : '';
 };
+//# sourceMappingURL=inline.js.map

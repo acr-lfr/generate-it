@@ -198,3 +198,4 @@ class OpenAPIInjectInterfaceNaming {
     }
 }
 exports.default = OpenAPIInjectInterfaceNaming;
+//# sourceMappingURL=OpenAPIInjectInterfaceNaming.js.map

@@ -56,3 +56,4 @@ exports.default = (config, operation, operationName, verbose = false, additional
         });
     });
 };
+//# sourceMappingURL=generateOperationFile.js.map

@@ -99,3 +99,4 @@ it('Validate array-interface of arrays', () => {
     const returnString = `[ { name: String, age: String, }],`;
     expect(paramsOutputReducer_1.default(responses)).toBe(returnString);
 });
+//# sourceMappingURL=paramsOutputReducer.js.map

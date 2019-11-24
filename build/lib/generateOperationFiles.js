@@ -40,3 +40,4 @@ exports.default = (config) => new Promise((resolve, reject) => {
         }).catch(reject);
     });
 });
+//# sourceMappingURL=generateOperationFiles.js.map

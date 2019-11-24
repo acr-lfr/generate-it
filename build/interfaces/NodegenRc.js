@@ -5,3 +5,4 @@ var nodegenType;
     nodegenType["Server"] = "server";
     nodegenType["Client"] = "client";
 })(nodegenType || (nodegenType = {}));
+//# sourceMappingURL=NodegenRc.js.map

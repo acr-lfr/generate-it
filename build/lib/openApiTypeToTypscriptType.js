@@ -18,3 +18,4 @@ exports.default = (inputType) => {
             return 'any';
     }
 };
+//# sourceMappingURL=openApiTypeToTypscriptType.js.map

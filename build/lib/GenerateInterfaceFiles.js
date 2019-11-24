@@ -47,3 +47,4 @@ class GenerateInterfaceFiles {
     }
 }
 exports.default = GenerateInterfaceFiles;
+//# sourceMappingURL=GenerateInterfaceFiles.js.map

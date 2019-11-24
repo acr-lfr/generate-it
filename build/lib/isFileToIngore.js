@@ -12,3 +12,4 @@ exports.default = (dir, filename) => {
     }
     return false;
 };
+//# sourceMappingURL=isFileToIngore.js.map

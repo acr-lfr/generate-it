@@ -34,3 +34,4 @@ it('INTERFACE return false', async () => {
     expect(FileTypeCheck_1.default.isInterfaceFile('___INTERFACE.js.njk')).toBe(false);
     expect(FileTypeCheck_1.default.isInterfaceFile('bob')).toBe(false);
 });
+//# sourceMappingURL=FileTypeCheck.js.map

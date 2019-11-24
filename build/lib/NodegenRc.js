@@ -40,3 +40,4 @@ class NodegenRc {
     }
 }
 exports.default = new NodegenRc();
+//# sourceMappingURL=NodegenRc.js.map

@@ -9,3 +9,4 @@ it('should return js from a simple test.js file name', () => {
 it('should return js from a js.njk file name', () => {
     expect(stripNjkExtension('test.js.njk')).toBe('test.js');
 });
+//# sourceMappingURL=namingUtils.stripNjkExtension.js.map

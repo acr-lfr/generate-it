@@ -44,3 +44,4 @@ class FileTypeCheck {
     }
 }
 exports.default = new FileTypeCheck();
+//# sourceMappingURL=FileTypeCheck.js.map

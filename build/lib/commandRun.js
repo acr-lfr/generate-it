@@ -40,3 +40,4 @@ exports.default = (program, args = [], verbose = false) => {
         });
     });
 };
+//# sourceMappingURL=commandRun.js.map

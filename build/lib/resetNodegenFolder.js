@@ -26,3 +26,4 @@ exports.default = (targetDir, templatesDir, mocked = false, nodegenRc) => {
         fs.copySync(path_1.default.join(templatesDir, mocksDir), path_1.default.join(targetDir, mocksDir), copyFilter);
     }
 };
+//# sourceMappingURL=resetNodegenFolder.js.map

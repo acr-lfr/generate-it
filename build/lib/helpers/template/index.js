@@ -18,3 +18,4 @@ for (const key in _) {
     }
 }
 exports.default = object;
+//# sourceMappingURL=index.js.map

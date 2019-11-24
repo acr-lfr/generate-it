@@ -25,3 +25,4 @@ exports.default = (methodName, pathName) => {
     filePathParts.push(_.upperFirst(methodName));
     return _.camelCase(filePathParts.join(''));
 };
+//# sourceMappingURL=generateOperationId.js.map

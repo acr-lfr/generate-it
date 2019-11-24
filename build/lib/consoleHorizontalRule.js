@@ -7,3 +7,4 @@ exports.default = () => {
     }
     console.log(hr);
 };
+//# sourceMappingURL=consoleHorizontalRule.js.map

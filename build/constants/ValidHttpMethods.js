@@ -16,3 +16,4 @@ exports.default = [
     'UNLOCK',
     'PROPFIND',
 ];
+//# sourceMappingURL=ValidHttpMethods.js.map

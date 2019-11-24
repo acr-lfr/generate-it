@@ -16,3 +16,4 @@ exports.default = (operationName, parameters, operationId) => {
     }
     return (celebrate) ? 'celebrate(' + _.camelCase(operationName) + 'Validators.' + operationId + '),' : '';
 };
+//# sourceMappingURL=celebrateRoute.js.map

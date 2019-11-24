@@ -42,3 +42,4 @@ exports.default = (targetDir, templatesDir, additionalOptionsToInject) => {
         });
     }
 };
+//# sourceMappingURL=generateBaseStructure.js.map

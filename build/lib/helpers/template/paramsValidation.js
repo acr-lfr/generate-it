@@ -5,3 +5,4 @@ const SwaggerUtils_1 = tslib_1.__importDefault(require("../SwaggerUtils"));
 exports.default = (params) => {
     return SwaggerUtils_1.default.createJoiValidation(params);
 };
+//# sourceMappingURL=paramsValidation.js.map

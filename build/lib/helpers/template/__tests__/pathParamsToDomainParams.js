@@ -112,3 +112,4 @@ describe('Without req prefix', () => {
         expect(output).toBe('body, path, query, req');
     });
 });
+//# sourceMappingURL=pathParamsToDomainParams.js.map

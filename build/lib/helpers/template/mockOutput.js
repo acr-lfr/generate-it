@@ -15,3 +15,4 @@ exports.default = (path, mockServer) => {
         return 'return {}';
     }
 };
+//# sourceMappingURL=mockOutput.js.map

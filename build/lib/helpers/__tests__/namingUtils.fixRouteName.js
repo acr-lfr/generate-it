@@ -11,3 +11,4 @@ it('Return camelcase from snake case', () => {
 it('Return camelcase from multi snake case', () => {
     expect(NamingUtils_1.default.fixRouteName('hello-world-today-now')).toBe('helloWorldTodayNow');
 });
+//# sourceMappingURL=namingUtils.fixRouteName.js.map

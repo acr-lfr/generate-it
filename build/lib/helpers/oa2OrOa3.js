@@ -12,3 +12,4 @@ exports.default = (param) => {
         return param.schema;
     }
 };
+//# sourceMappingURL=oa2OrOa3.js.map

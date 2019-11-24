@@ -24,3 +24,4 @@ describe('Array of replacer values', () => {
         expect(camelCaseStringReplacement_1.default('https:://www.acrontum..de', ['.', '/', ':'])).toBe('httpsWwwAcrontumDe');
     });
 });
+//# sourceMappingURL=camelCaseStringReplacement.js.map

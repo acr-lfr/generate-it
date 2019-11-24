@@ -154,3 +154,4 @@ class TemplateFetchURL {
     }
 }
 exports.default = new TemplateFetchURL();
+//# sourceMappingURL=TemplateFetch.js.map
