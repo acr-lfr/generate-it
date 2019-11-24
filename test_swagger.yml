@@ -1,0 +1,165 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: openweathermap-swagger
+  description: A sample API
+  contact:
+    name: Swagger API Team
+    email: john@boats.io
+    url: 'https://github.com/johndcarmichael/boats/'
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+host: samples.openweathermap.org
+basePath: /data/2.5
+schemes:
+  - https
+tags:
+  - name: weather
+    description: Weather data
+paths:
+  /weather/:
+    get:
+      tags:
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: weatherGet
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/queryAppId'
+        - $ref: '#/parameters/queryCountry'
+        - $ref: '#/parameters/queryId'
+        - $ref: '#/parameters/queryLat'
+        - $ref: '#/parameters/queryLon'
+        - in: body
+          name: createAthlete
+          required: true
+          schema:
+            $ref: '#/definitions/Coord'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Weather'
+        '400':
+          description: Invalid Identifier supplied
+        '404':
+          description: Round not found
+parameters:
+  queryAppId:
+    in: query
+    name: appid
+    required: true
+    type: string
+    description: |
+      Grab a free API key from here: https://openweathermap.org/price
+  queryCountry:
+    in: query
+    name: q
+    required: false
+    type: string
+    description: >
+      q city name and country code divided by comma, use ISO 3166 country codes.
+      for example: q=London,uk or just q=London
+  queryId:
+    in: query
+    name: id
+    required: false
+    type: number
+    description: >
+      City ID based on city.list.json.gz can be downloaded here
+      http://bulk.openweathermap.org/sample/
+  queryLat:
+    in: query
+    name: lat
+    required: false
+    type: number
+    description: |
+      Needs to be paired with lon
+  queryLon:
+    in: query
+    name: lon
+    required: false
+    type: number
+    description: |
+      Needs to be paired with lat
+definitions:
+  Coord:
+    type: object
+    properties:
+      lon:
+        type: number
+      lat:
+        type: number
+  Weather:
+    type: object
+    required:
+      - coord
+    properties:
+      coord:
+        $ref: '#/definitions/Coord'
+      weather:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+            main:
+              type: string
+            description:
+              type: string
+            icon:
+              type: string
+      base:
+        type: string
+      main:
+        type: object
+        properties:
+          temp:
+            type: number
+          pressure:
+            type: number
+          humidity:
+            type: number
+          temp_min:
+            type: number
+          temp_max:
+            type: number
+          sea_level:
+            type: number
+          grnd_level:
+            type: number
+      wind:
+        type: object
+        properties:
+          speed:
+            type: number
+          deg:
+            type: number
+          clouds:
+            type: object
+            properties:
+              all:
+                type: number
+      dt:
+        type: number
+      sys:
+        type: object
+        properties:
+          message:
+            type: number
+          country:
+            type: string
+          sunrise:
+            type: number
+          sunset:
+            type: number
+      id:
+        type: number
+      name:
+        type: string
+      cod:
+        type: number

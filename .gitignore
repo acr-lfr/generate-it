@@ -9,6 +9,7 @@ node_modules
 .idea/workspace.xml
 
 # Generated
+testserver/
 jest/
 .DS_Store
 npm-debug.log
