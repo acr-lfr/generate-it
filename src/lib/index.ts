@@ -9,6 +9,7 @@ import GeneratedComparison from '@/lib/GeneratedComparison';
 import generateDirectoryStructure from '@/lib/generateDirectoryStructure';
 import OpenApiToObject from '@/lib/OpenApiToObject';
 import TemplateFetch from '@/lib/TemplateFetch';
+import OpenapiCacheFolder from '@/lib/OpenapiCacheFolder';
 
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
@@ -24,13 +25,14 @@ import TemplateFetch from '@/lib/TemplateFetch';
  * @return {Promise}
  */
 export default async (config: Config) => {
+  console.log(config);
   console.log('Preparing templates...'.green.bold);
-  const templatesDir = await TemplateFetch.resolveTemplateType(config.template);
+  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir);
   let extendedConfig = await ConfigMerger.base(config, templatesDir);
 
   console.log('Preparing openapi object...'.green.bold);
   const apiObject = await (new OpenApiToObject(extendedConfig)).build();
-  const baseCompiledObjectPath = path.join(GeneratedComparison.getCacheBaseDir(config.targetDir), 'apiObject.json');
+  const baseCompiledObjectPath = path.join(OpenapiCacheFolder.getCacheBaseDir(config.targetDir), 'apiObject.json');
 
   console.log(`Printing full object to: ${baseCompiledObjectPath}`.green.bold);
   fs.ensureFileSync(baseCompiledObjectPath);

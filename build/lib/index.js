@@ -10,6 +10,7 @@ const GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedCompar
 const generateDirectoryStructure_1 = tslib_1.__importDefault(require("./generateDirectoryStructure"));
 const OpenApiToObject_1 = tslib_1.__importDefault(require("./OpenApiToObject"));
 const TemplateFetch_1 = tslib_1.__importDefault(require("./TemplateFetch"));
+const OpenapiCacheFolder_1 = tslib_1.__importDefault(require("@/lib/OpenapiCacheFolder"));
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
  *
@@ -24,12 +25,13 @@ const TemplateFetch_1 = tslib_1.__importDefault(require("./TemplateFetch"));
  * @return {Promise}
  */
 exports.default = async (config) => {
+    console.log(config);
     console.log('Preparing templates...'.green.bold);
-    const templatesDir = await TemplateFetch_1.default.resolveTemplateType(config.template);
+    const templatesDir = await TemplateFetch_1.default.resolveTemplateType(config.template, config.targetDir);
     let extendedConfig = await ConfigMerger_1.default.base(config, templatesDir);
     console.log('Preparing openapi object...'.green.bold);
     const apiObject = await (new OpenApiToObject_1.default(extendedConfig)).build();
-    const baseCompiledObjectPath = path_1.default.join(GeneratedComparison_1.default.getCacheBaseDir(config.targetDir), 'apiObject.json');
+    const baseCompiledObjectPath = path_1.default.join(OpenapiCacheFolder_1.default.getCacheBaseDir(config.targetDir), 'apiObject.json');
     console.log(`Printing full object to: ${baseCompiledObjectPath}`.green.bold);
     fs.ensureFileSync(baseCompiledObjectPath);
     fs.writeJsonSync(baseCompiledObjectPath, apiObject, { spaces: 2 });

@@ -4,9 +4,7 @@ import path from 'path';
 
 import consoleHorizontalRule from '@/lib/consoleHorizontalRule';
 import fileDiff from '@/lib/fileDiff';
-
-const COMPARE_DIRECTORY = '.openapi-nodegen/cache/compare';
-const MAX_CACHE_COUNT = 5;
+import { COMPARE_DIRECTORY, MAX_CACHE_COUNT } from '@/constants/CachePaths';
 
 class GeneratedComparison {
 

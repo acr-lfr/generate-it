@@ -5,24 +5,27 @@ const commandRun_1 = tslib_1.__importDefault(require("./commandRun"));
 const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const camelCaseStringReplacement_1 = tslib_1.__importDefault(require("./helpers/camelCaseStringReplacement"));
+const CachePaths_1 = require("../constants/CachePaths");
 class TemplateFetchURL {
-    getCacheFolder() {
-        return path_1.default.join(process.cwd(), 'node_modules/openapi-nodegen/cache');
+    getCacheFolder(targetGitCacheDir) {
+        this.targetGitCacheDir = path_1.default.join(targetGitCacheDir, CachePaths_1.GIT_DIRECTORY);
+        return this.targetGitCacheDir;
     }
     /**
      * Generates a cache directory relative to the url given
      * @param url
+     * @param targetGitCacheDir
      * @return {string}
      */
-    calculateLocalDirectoryFromUrl(url) {
+    calculateLocalDirectoryFromUrl(url, targetGitCacheDir) {
         const camelCaseUrl = camelCaseStringReplacement_1.default(url, ['/', ':', '.', '-', '?', '#']);
-        return path_1.default.join(this.getCacheFolder(), camelCaseUrl);
+        return path_1.default.join(this.getCacheFolder(targetGitCacheDir), camelCaseUrl);
     }
     /**
      * Deletes the entire cache directory
      */
     cleanSingleCacheDir(cachePath) {
-        if (!cachePath.includes(this.getCacheFolder())) {
+        if (!cachePath.includes(this.targetGitCacheDir)) {
             console.error('For safety all folder removals must live within node_modules of this package.');
             console.error('An incorrect cache folder path has been calculated, aborting! Please report this as an issue on gitHub.');
             throw new Error('Aborting openapi-nodegen, see above comments.');
@@ -55,13 +58,14 @@ class TemplateFetchURL {
     /**
      * Fetches the contents of a gitFetch url to the local cache
      * @param {string} url - Url to fetch via gitFetch
+     * @param targetGitCacheDir
      * @return {Promise<string>}
      */
-    async gitFetch(url) {
+    async gitFetch(url, targetGitCacheDir) {
         if (!await this.hasGit()) {
             throw new Error('Could not fetch cache from gitFetch url as gitFetch is not locally installed');
         }
-        const cacheDirectory = this.calculateLocalDirectoryFromUrl(url);
+        const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
         const urlParts = this.getUrlParts(url);
         try {
             if (this.gitCacheExists(cacheDirectory)) {
@@ -142,11 +146,12 @@ class TemplateFetchURL {
      * Returns local template name or full path to cached directory
      * @param {string} input - Either es6 | typescript | https github url |
      *                        local directory relative to where this package is called from
+     * @param targetGitCacheDir
      * @return {Promise<string>} - Returns the full path on the local drive to the tpl directory.
      */
-    async resolveTemplateType(input) {
+    async resolveTemplateType(input, targetGitCacheDir) {
         if (input.substring(0, 8) === 'https://') {
-            return await this.gitFetch(input);
+            return await this.gitFetch(input, targetGitCacheDir);
         }
         else {
             throw new Error('The provided template argument must be a valid https url');

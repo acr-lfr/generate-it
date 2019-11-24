@@ -6,11 +6,10 @@ const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const consoleHorizontalRule_1 = tslib_1.__importDefault(require("./consoleHorizontalRule"));
 const fileDiff_1 = tslib_1.__importDefault(require("./fileDiff"));
-const COMPARE_DIRECTORY = '.openapi-nodegen/cache/compare';
-const MAX_CACHE_COUNT = 5;
+const CachePaths_1 = require("../constants/CachePaths");
 class GeneratedComparison {
     getCacheBaseDir(targetParentDirectory) {
-        return path_1.default.join(targetParentDirectory, COMPARE_DIRECTORY);
+        return path_1.default.join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
     }
     /**
      * Retutns a path to the config cache compare dir
@@ -43,7 +42,7 @@ class GeneratedComparison {
      * @return {string}
      */
     getCompareDirectory(targetParentDirectory) {
-        const compareDir = path_1.default.join(targetParentDirectory, COMPARE_DIRECTORY);
+        const compareDir = path_1.default.join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
         fs_extra_1.default.ensureDirSync(compareDir);
         return compareDir;
     }
@@ -117,9 +116,9 @@ class GeneratedComparison {
         const configPath = this.getCacheCompareConfigPath(targetParentDirectory);
         const json = this.getCacheCompareJson(configPath);
         const versions = Object.keys(json.versions).sort().reverse();
-        if (versions.length >= MAX_CACHE_COUNT) {
+        if (versions.length >= CachePaths_1.MAX_CACHE_COUNT) {
             versions.forEach((version, i) => {
-                if (i >= MAX_CACHE_COUNT) {
+                if (i >= CachePaths_1.MAX_CACHE_COUNT) {
                     const paths = Object.keys(json.versions[version]);
                     paths.forEach((singlePath, j) => {
                         paths[j] = path_1.default.join(singlePath, '/', version);
