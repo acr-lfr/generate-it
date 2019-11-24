@@ -153,7 +153,7 @@ class OpenAPIBundler {
         fs_extra_1.default.writeJsonSync(tmpJsonSchema, definitionObject);
         // parse to interface
         return commandRun_1.default('node', [
-            path_1.default.join(__dirname, '../node_modules/quicktype/dist/cli/index.js'),
+            path_1.default.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
             '--just-types',
             '--src',
             tmpJsonSchema,

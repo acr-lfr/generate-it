@@ -162,7 +162,10 @@ class OpenAPIInjectInterfaceNaming {
         }
       });
       if (!clear) {
-        this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = this.objectToInterfaceString(requestObject);
+        const name = this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
+        this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
+          outputString: this.objectToInterfaceString(requestObject, name)
+        };
       } else {
         delete this.apiObject.paths[path][method]['x-request-definitions'][requestType];
       }
@@ -172,15 +175,16 @@ class OpenAPIInjectInterfaceNaming {
   /**
    * Convert interface object to string
    * @param object
+   * @param name
    * @return {string}
    */
-  public objectToInterfaceString (object: any) {
-    let text = '';
+  public objectToInterfaceString (object: any, name: string) {
+    let text = `export interface ${name} {\n  `;
     const delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
     Object.keys(object).forEach((key) => {
       text += key + ':' + object[key] + delim;
     });
-    return text;
+    return text + '  \n } ';
   }
 
   /**

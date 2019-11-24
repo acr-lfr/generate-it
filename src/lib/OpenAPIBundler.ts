@@ -174,7 +174,7 @@ class OpenAPIBundler {
 
     // parse to interface
     return commandRun('node', [
-      path.join(__dirname, '../node_modules/quicktype/dist/cli/index.js'),
+      path.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
       '--just-types',
       '--src',
       tmpJsonSchema,

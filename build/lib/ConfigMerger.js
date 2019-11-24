@@ -15,7 +15,7 @@ class ConfigMerger {
         const nodegenRc = await NodegenRc_1.default.fetch(templatesDir, config.targetDir);
         return Object.assign(config, {
             templates: templatesDir,
-            nodegenRc,
+            nodegenRc: nodegenRc,
             interfaceStyle: nodegenRc.interfaceStyle || 'interface',
         });
     }
