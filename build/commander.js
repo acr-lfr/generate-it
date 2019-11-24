@@ -7,8 +7,10 @@ const path_1 = tslib_1.__importDefault(require("path"));
 const packageInfo = require('../package.json');
 exports.default = () => {
     let swaggerFile;
-    const parseOutput = (dir) => path_1.default.resolve(dir);
     const cwd = process.cwd();
+    const parseOutput = (dir) => {
+        return path_1.default.join(cwd, dir);
+    };
     commander_1.default
         .version(packageInfo.version)
         .arguments('<swaggerFile>')

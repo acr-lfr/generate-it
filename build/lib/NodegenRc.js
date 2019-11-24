@@ -7,7 +7,7 @@ class NodegenRc {
      * Fetched a local rc file or for a fresh install from the tpl directory
      * @param {string} tplDir - The tpl directory
      */
-    async fetch(tplDir) {
+    async fetch(tplDir, targetDir) {
         const base = process.cwd();
         const rcName = '.nodegenrc';
         const localPath = path.join(base, rcName);

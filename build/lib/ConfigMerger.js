@@ -12,7 +12,7 @@ const _ = tslib_1.__importStar(require("lodash"));
  */
 class ConfigMerger {
     async base(config, templatesDir) {
-        const nodegenRc = await NodegenRc_1.default.fetch(templatesDir);
+        const nodegenRc = await NodegenRc_1.default.fetch(templatesDir, config.targetDir);
         return Object.assign(config, {
             templates: templatesDir,
             nodegenRc,

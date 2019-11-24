@@ -12,7 +12,7 @@ import * as _ from 'lodash';
  */
 class ConfigMerger {
   public async base (config: Config, templatesDir: string): Promise<ConfigExtendedBase> {
-    const nodegenRc = await NodegenRc.fetch(templatesDir);
+    const nodegenRc = await NodegenRc.fetch(templatesDir, config.targetDir);
     return Object.assign(config, {
       templates: templatesDir,
       nodegenRc,

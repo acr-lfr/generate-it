@@ -7,8 +7,10 @@ const packageInfo = require('../package.json');
 export default () => {
   let swaggerFile;
 
-  const parseOutput = (dir: any) => path.resolve(dir);
   const cwd = process.cwd();
+  const parseOutput = (dir: any) => {
+    return path.join(cwd, dir);
+  };
   program
     .version(packageInfo.version)
     .arguments('<swaggerFile>')

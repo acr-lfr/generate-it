@@ -3,10 +3,10 @@ import * as _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import * as YAML from 'js-yaml';
-import * as RefParser from 'json-schema-ref-parser';
 import commandRun from '@/lib/commandRun';
 import OpenAPIInjectInterfaceNaming from '@/lib/OpenAPIInjectInterfaceNaming';
 import GeneratedComparison from '@/lib/GeneratedComparison';
+const RefParser = require('json-schema-ref-parser');
 
 class OpenAPIBundler {
   public async bundle (filePath: string, config: Config) {
@@ -84,7 +84,7 @@ class OpenAPIBundler {
   }
 
   public async dereference (json: object) {
-    return RefParser.prototype.dereference(json, {
+    return RefParser.dereference(json, {
       dereference: {
         circular: 'ignore',
       },
@@ -92,7 +92,7 @@ class OpenAPIBundler {
   }
 
   public async bundleObject (json: object) {
-    return RefParser.prototype.bundle(json, {
+    return RefParser.bundle(json, {
       dereference: {
         circular: 'ignore',
       },

@@ -5,10 +5,10 @@ const _ = tslib_1.__importStar(require("lodash"));
 const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const YAML = tslib_1.__importStar(require("js-yaml"));
-const RefParser = tslib_1.__importStar(require("json-schema-ref-parser"));
 const commandRun_1 = tslib_1.__importDefault(require("./commandRun"));
 const OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPIInjectInterfaceNaming"));
 const GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
+const RefParser = require('json-schema-ref-parser');
 class OpenAPIBundler {
     async bundle(filePath, config) {
         let content;
@@ -83,14 +83,14 @@ class OpenAPIBundler {
         }
     }
     async dereference(json) {
-        return RefParser.prototype.dereference(json, {
+        return RefParser.dereference(json, {
             dereference: {
                 circular: 'ignore',
             },
         });
     }
     async bundleObject(json) {
-        return RefParser.prototype.bundle(json, {
+        return RefParser.bundle(json, {
             dereference: {
                 circular: 'ignore',
             },
