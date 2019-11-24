@@ -1,4 +1,4 @@
-const isFileToIngore = require('../isFileToIngore');
+import isFileToIngore from '@/lib/isFileToIngore';
 
 describe('Should no allow directories on black list, eg git idea vscode, even as a file', () => {
   it('should no allow git paths', () => {

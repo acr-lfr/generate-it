@@ -1,4 +1,6 @@
-const generateOperationSuffix = require('../NamingUtils').generateOperationSuffix;
+import NamingUtils from '@/lib/helpers/NamingUtils';
+
+const generateOperationSuffix = NamingUtils.generateOperationSuffix;
 
 it('should return customerTransformOutput.ts', () => {
   expect(

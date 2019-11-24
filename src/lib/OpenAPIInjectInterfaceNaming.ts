@@ -7,9 +7,9 @@ class OpenAPIInjectInterfaceNaming {
   public config: any;
   public apiObject: any;
 
-  constructor (jsObject: any, passedConfig: ConfigExtendedBase) {
+  constructor (jsObject: any, passedConfig?: ConfigExtendedBase) {
     this.apiObject = jsObject;
-    this.config = passedConfig;
+    this.config = passedConfig || {};
   }
 
   /**
@@ -206,4 +206,4 @@ class OpenAPIInjectInterfaceNaming {
   }
 }
 
-module.exports = OpenAPIInjectInterfaceNaming;
+export default OpenAPIInjectInterfaceNaming;

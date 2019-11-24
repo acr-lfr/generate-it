@@ -1,4 +1,4 @@
-const SwaggerUtils = require('../SwaggerUtils');
+import SwaggerUtils from '../SwaggerUtils';
 
 const params = [{
   in: 'body',

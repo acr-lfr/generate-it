@@ -1,4 +1,4 @@
-const camelCaseStringReplacement = require('../camelCaseStringReplacement');
+import camelCaseStringReplacement from '../camelCaseStringReplacement';
 
 describe('Single replacer entries', () => {
   it('Should split spaces to return helloWorldHowAreYou', () => {

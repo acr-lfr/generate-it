@@ -4,6 +4,7 @@
     "exclude": ["src/http/nodegen/**/*", "src/domains/__mocks__/**/*"]
   },
   "rules": {
+    "ordered-imports": false,
     "object-literal-sort-keys": false,
     "max-line-length": [
       true,

@@ -1,13 +1,13 @@
-const fixRouteName = require('../NamingUtils').fixRouteName;
+import NamingUtils from '@/lib/helpers/NamingUtils';
 
 it('Return as is if provided argument does not contain -', () => {
-  expect(fixRouteName('helloworld')).toBe('helloworld');
+  expect(NamingUtils.fixRouteName('helloworld')).toBe('helloworld');
 });
 
 it('Return camelcase from snake case', () => {
-  expect(fixRouteName('hello-world')).toBe('helloWorld');
+  expect(NamingUtils.fixRouteName('hello-world')).toBe('helloWorld');
 });
 
 it('Return camelcase from multi snake case', () => {
-  expect(fixRouteName('hello-world-today-now')).toBe('helloWorldTodayNow');
+  expect(NamingUtils.fixRouteName('hello-world-today-now')).toBe('helloWorldTodayNow');
 });

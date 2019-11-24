@@ -1,5 +1,4 @@
-const TemplateFetch = require('../TemplateFetch');
-const fs = require('fs-extra');
+import TemplateFetch from '../TemplateFetch';
 const repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 let camelCaseUrl = '';
 

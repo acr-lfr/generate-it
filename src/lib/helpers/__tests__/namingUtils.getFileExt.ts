@@ -1,4 +1,6 @@
-const getfileExt = require('../NamingUtils').getFileExt;
+import NamingUtils from '@/lib/helpers/NamingUtils';
+
+const getfileExt = NamingUtils.getFileExt;
 
 it('should return js from a simple js file name', () => {
   expect(getfileExt('hello/world.js')).toBe('js');

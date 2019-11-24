@@ -1,4 +1,4 @@
-const FileTypeCheck = require('../FileTypeCheck');
+import FileTypeCheck from '@/lib/FileTypeCheck';
 
 it('OP return true', async () => {
   expect(FileTypeCheck.isOpertationFile('___op.js.njk')).toBe(true);

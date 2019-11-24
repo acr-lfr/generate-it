@@ -1,13 +1,12 @@
 import Config from '@/interfaces/Config';
-
-const _ = require('lodash');
-const fs = require('fs-extra');
-const path = require('path');
-const YAML = require('js-yaml');
-const RefParser = require('json-schema-ref-parser');
-const commandRun = require('./commandRun');
-const OpenAPIInjectInterfaceNaming = require('./OpenAPIInjectInterfaceNaming');
-const GeneratedComparison = require('./GeneratedComparison');
+import * as _ from 'lodash';
+import fs from 'fs-extra';
+import path from 'path';
+import * as YAML from 'js-yaml';
+import * as RefParser from 'json-schema-ref-parser';
+import commandRun from '@/lib/commandRun';
+import OpenAPIInjectInterfaceNaming from '@/lib/OpenAPIInjectInterfaceNaming';
+import GeneratedComparison from '@/lib/GeneratedComparison';
 
 class OpenAPIBundler {
   public async bundle (filePath: string, config: Config) {
@@ -85,7 +84,7 @@ class OpenAPIBundler {
   }
 
   public async dereference (json: object) {
-    return RefParser.dereference(json, {
+    return RefParser.prototype.dereference(json, {
       dereference: {
         circular: 'ignore',
       },
@@ -93,7 +92,7 @@ class OpenAPIBundler {
   }
 
   public async bundleObject (json: object) {
-    return RefParser.bundle(json, {
+    return RefParser.prototype.bundle(json, {
       dereference: {
         circular: 'ignore',
       },

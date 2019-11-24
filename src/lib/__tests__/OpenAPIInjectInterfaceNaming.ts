@@ -1,4 +1,5 @@
-const OpenAPIInjectInterfaceNaming = require('../OpenAPIInjectInterfaceNaming');
+
+import OpenAPIInjectInterfaceNaming from '@/lib/OpenAPIInjectInterfaceNaming';
 
 const swagger2obj = {
   swagger: '2.0',
