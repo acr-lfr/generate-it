@@ -166,7 +166,7 @@ class OpenAPIInjectInterfaceNaming {
       if (!clear) {
         const name = this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
         this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
-          outputString: this.objectToInterfaceString(requestObject, name)
+          outputString: this.objectToInterfaceString(requestObject, name),
         };
       } else {
         delete this.apiObject.paths[path][method]['x-request-definitions'][requestType];

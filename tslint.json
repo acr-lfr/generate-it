@@ -4,15 +4,14 @@
     "exclude": ["src/http/nodegen/**/*", "src/domains/__mocks__/**/*"]
   },
   "rules": {
+    "object-literal-shorthand": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "max-line-length": [
       true,
       {
         "limit": 240,
-        "ignore-pattern": "^import |^export {(.*?)}",
-        "check-strings": true,
-        "check-regex": true
+        "ignore-pattern": "^import |^export {(.*?)}"
       }
     ],
     "class-name": true,

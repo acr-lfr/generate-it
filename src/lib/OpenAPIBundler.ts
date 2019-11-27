@@ -41,7 +41,7 @@ class OpenAPIBundler {
       parsedContentWithInterfaceNaming = (new OpenAPIInjectInterfaceNaming(parsedContent, config)).inject();
     } catch (e) {
       console.error('Can inject interface naming for:');
-      global.verboseLogging(JSON.stringify(parsedContent, null, 2));
+      global.verboseLogging(JSON.stringify(parsedContent, undefined, 2));
       throw e;
     }
 
@@ -49,7 +49,7 @@ class OpenAPIBundler {
       dereferencedJSON = await this.dereference(parsedContentWithInterfaceNaming);
     } catch (e) {
       console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
-      global.verboseLogging(JSON.stringify(parsedContentWithInterfaceNaming, null, 2));
+      global.verboseLogging(JSON.stringify(parsedContentWithInterfaceNaming, undefined, 2));
       throw e;
     }
 
@@ -57,7 +57,7 @@ class OpenAPIBundler {
       mergedParameters = (new OpenAPIInjectInterfaceNaming(dereferencedJSON, config)).mergeParameters();
     } catch (e) {
       console.error('Can not merge the request paramters to build the interfaces:');
-      global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+      global.verboseLogging(JSON.stringify(dereferencedJSON, undefined, 2));
       throw e;
     }
 
@@ -65,7 +65,7 @@ class OpenAPIBundler {
       resolvedAllOf = openApiResolveAllOfs(mergedParameters);
     } catch (e) {
       console.error('Could not resolve of allOfs');
-      global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+      global.verboseLogging(JSON.stringify(dereferencedJSON, undefined, 2));
       throw e;
     }
 
@@ -73,7 +73,7 @@ class OpenAPIBundler {
       injectedInterfaces = await this.injectInterfaces(resolvedAllOf, config);
     } catch (e) {
       console.error('Cannot inject the interfaces: ');
-      global.verboseLogging(JSON.stringify(mergedParameters, null, 2));
+      global.verboseLogging(JSON.stringify(mergedParameters, undefined, 2));
       throw e;
     }
 

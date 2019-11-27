@@ -34,7 +34,7 @@ class FileWalker {
         try {
           await this.fileIteration(root, stats, next);
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
       })
       // @ts-ignore

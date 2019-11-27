@@ -43,7 +43,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         }
                         catch (e) {
                             console.error('Can inject interface naming for:');
-                            global.verboseLogging(JSON.stringify(parsedContent, null, 2));
+                            global.verboseLogging(JSON.stringify(parsedContent, undefined, 2));
                             throw e;
                         }
                         _a.label = 4;
@@ -56,7 +56,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 6:
                         e_2 = _a.sent();
                         console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
-                        global.verboseLogging(JSON.stringify(parsedContentWithInterfaceNaming, null, 2));
+                        global.verboseLogging(JSON.stringify(parsedContentWithInterfaceNaming, undefined, 2));
                         throw e_2;
                     case 7:
                         try {
@@ -64,7 +64,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         }
                         catch (e) {
                             console.error('Can not merge the request paramters to build the interfaces:');
-                            global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+                            global.verboseLogging(JSON.stringify(dereferencedJSON, undefined, 2));
                             throw e;
                         }
                         try {
@@ -72,7 +72,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         }
                         catch (e) {
                             console.error('Could not resolve of allOfs');
-                            global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+                            global.verboseLogging(JSON.stringify(dereferencedJSON, undefined, 2));
                             throw e;
                         }
                         _a.label = 8;
@@ -85,7 +85,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 10:
                         e_3 = _a.sent();
                         console.error('Cannot inject the interfaces: ');
-                        global.verboseLogging(JSON.stringify(mergedParameters, null, 2));
+                        global.verboseLogging(JSON.stringify(mergedParameters, undefined, 2));
                         throw e_3;
                     case 11:
                         _a.trys.push([11, 13, , 14]);

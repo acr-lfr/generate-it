@@ -11,32 +11,34 @@ var _ = tslib_1.__importStar(require("lodash"));
  */
 exports["default"] = (function (config) { return new Promise(function (resolve, reject) {
     var files = {};
-    _.each(config.data.swagger.paths, function (operationPath, pathName) {
+    // Iterate over all path
+    // pathProperties = all the http verbs and their contents
+    // pathName = the full path after the basepath
+    _.each(config.data.swagger.paths, function (pathProperties, pathName) {
         var operationName;
         var segments = pathName.split('/').filter(function (s) { return s && s.trim() !== ''; });
         var joinedSegments;
-        if (segments.length > config.segmentsCount) {
-            segments.splice(config.segmentsCount);
-            operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, function (m, chr) { return chr.toUpperCase(); });
-            joinedSegments = segments.join('/');
-        }
-        else {
-            operationName = operationPath.endpointName;
-            joinedSegments = operationName;
-        }
+        // if (segments.length > config.segmentsCount) {
+        // segments.splice(config.segmentsCount);
+        // operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+        // joinedSegments = segments.join('/');
+        // } else {
+        operationName = pathProperties.endpointName;
+        joinedSegments = operationName;
+        // }
         if (files[operationName] === undefined) {
             files[operationName] = [];
         }
         pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
         files[operationName].push({
             path_name: pathName,
-            path: operationPath,
+            path: pathProperties,
             subresource: (pathName.substring(joinedSegments.length + 1) || '/').replace(/}/g, '').replace(/{/g, ':')
         });
-        Promise.all(_.map(files, function (operation, operationNameItem) {
-            return generateOperationFile_1["default"](config, operation, operationNameItem);
-        })).then(function () {
-            resolve(files);
-        })["catch"](reject);
     });
+    Promise.all(_.map(files, function (operation, operationNameItem) {
+        return generateOperationFile_1["default"](config, operation, operationNameItem);
+    })).then(function () {
+        resolve(files);
+    })["catch"](reject);
 }); });

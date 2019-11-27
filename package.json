@@ -17,7 +17,7 @@
     "build": "ttsc -p .",
     "build:watch": "ttsc --watch -p .",
     "start": "node cli.js",
-    "prepublish": "npm run lint && npm run test"
+    "prepublishOnly": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",

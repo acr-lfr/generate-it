@@ -1,6 +1,6 @@
-import prettier from 'prettier'
-import fs from 'fs-extra'
-import path from 'path'
+import prettier from 'prettier';
+import fs from 'fs-extra';
+import path from 'path';
 
 import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
 import NamingUtils from '@/lib/helpers/NamingUtils';
