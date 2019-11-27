@@ -122,6 +122,8 @@ definitions:
     allOf:
       - $ref: '#/definitions/Weather'
       - type: object
+        required:
+          - name
         properties:
           id:
             type: string

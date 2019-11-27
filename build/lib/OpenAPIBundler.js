@@ -67,7 +67,15 @@ var OpenAPIBundler = /** @class */ (function () {
                             global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
                             throw e;
                         }
-                        return [2 /*return*/, mergedParameters];
+                        try {
+                            resolvedAllOf = openApiResolveAllOfs_1["default"](mergedParameters);
+                        }
+                        catch (e) {
+                            console.error('Could not resolve of allOfs');
+                            global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+                            throw e;
+                        }
+                        _a.label = 8;
                     case 8:
                         _a.trys.push([8, 10, , 11]);
                         return [4 /*yield*/, this.injectInterfaces(resolvedAllOf, config)];
@@ -247,9 +255,7 @@ var OpenAPIBundler = /** @class */ (function () {
                                 '--lang',
                                 'ts',
                             ])];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
+                    case 2: return [2 /*return*/, _a.sent()];
                     case 3:
                         e_6 = _a.sent();
                         console.error(e_6);

@@ -60,7 +60,7 @@ class OpenAPIBundler {
       global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
       throw e;
     }
-    return mergedParameters;
+
     try {
       resolvedAllOf = openApiResolveAllOfs(mergedParameters);
     } catch (e) {
@@ -192,7 +192,7 @@ class OpenAPIBundler {
 
     // parse to interface
     try {
-      await commandRun('node', [
+      return await commandRun('node', [
         path.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
         '--just-types',
         '--src',
