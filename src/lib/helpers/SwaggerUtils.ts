@@ -20,7 +20,7 @@ class SwaggerUtils {
         validationText += 'Joi.' + type + '()';
       }
 
-      if (type === 'string') {
+      if (type === 'string' && !isRequired) {
         validationText += `.allow('')`;
       }
       if (param.default) {
