@@ -1,6 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (obj, isNumber) => {
+exports.__esModule = true;
+exports["default"] = (function (obj, isNumber) {
     return (Object.keys(obj).length === isNumber);
-};
-//# sourceMappingURL=isObjLength.js.map
+});

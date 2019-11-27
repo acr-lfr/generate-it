@@ -1,11 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const NamingUtils_1 = tslib_1.__importDefault(require("./helpers/NamingUtils"));
-const TemplateRenderer_1 = tslib_1.__importDefault(require("./TemplateRenderer"));
-const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
-const _ = tslib_1.__importStar(require("lodash"));
-const path_1 = tslib_1.__importDefault(require("path"));
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var NamingUtils_1 = tslib_1.__importDefault(require("./helpers/NamingUtils"));
+var TemplateRenderer_1 = tslib_1.__importDefault(require("./TemplateRenderer"));
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+var _ = tslib_1.__importStar(require("lodash"));
+var path_1 = tslib_1.__importDefault(require("path"));
 /**
  * Generates a file.
  *
@@ -20,52 +20,53 @@ const path_1 = tslib_1.__importDefault(require("path"));
  * @param  {Object} [additionalTplObject]  An additional object that will be passed to the tpl, defaults to an empty object
  * @return {Promise}
  */
-exports.default = (config, isFirstRun, additionalTplObject = {}) => {
-    return new Promise((resolve, reject) => {
-        const templatesDir = config.templates_dir;
-        const targetDir = config.targetDir;
-        const fileName = config.file_name;
-        const root = config.root;
+exports["default"] = (function (config, isFirstRun, additionalTplObject) {
+    if (additionalTplObject === void 0) { additionalTplObject = {}; }
+    return new Promise(function (resolve, reject) {
+        var templatesDir = config.templates_dir;
+        var targetDir = config.targetDir;
+        var fileName = config.file_name;
+        var root = config.root;
         // const data = config.data
-        const loadFilePath = (fileName !== 'package.json.njk') ? path_1.default.resolve(root, fileName) : path_1.default.resolve(process.cwd(), 'package.json');
-        const templatePath = path_1.default.resolve(targetDir, path_1.default.relative(templatesDir, path_1.default.resolve(root, fileName)));
+        var loadFilePath = (fileName !== 'package.json.njk') ? path_1["default"].resolve(root, fileName) : path_1["default"].resolve(process.cwd(), 'package.json');
+        var templatePath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, fileName)));
         // should write or not
-        if (isFirstRun || !fs_extra_1.default.existsSync(NamingUtils_1.default.stripNjkExtension(templatePath)) || root.includes('/http/nodegen')) {
+        if (isFirstRun || !fs_extra_1["default"].existsSync(NamingUtils_1["default"].stripNjkExtension(templatePath)) || root.includes('/http/nodegen')) {
             // This could be a new file in the templates, ensure the dir structure is present before preceding
-            fs_extra_1.default.ensureFileSync(templatePath);
+            fs_extra_1["default"].ensureFileSync(templatePath);
             global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
-            fs_extra_1.default.readFile(loadFilePath, 'utf8', (err, content) => {
+            fs_extra_1["default"].readFile(loadFilePath, 'utf8', function (err, content) {
                 if (err) {
                     return reject(err);
                 }
                 try {
-                    const endpoints = [];
+                    var endpoints_1 = [];
                     if (fileName.startsWith('routesImporter')) {
-                        _.each(config.data.swagger.paths, (operationPath, pathName) => {
-                            let operationName;
-                            const segments = pathName.split('/').filter((s) => s && s.trim() !== '');
+                        _.each(config.data.swagger.paths, function (operationPath, pathName) {
+                            var operationName;
+                            var segments = pathName.split('/').filter(function (s) { return s && s.trim() !== ''; });
                             if (segments.length > config.segmentsCount) {
                                 segments.splice(config.segmentsCount);
-                                operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9-]+(.)/g, (m, chr) => chr.toUpperCase());
+                                operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9-]+(.)/g, function (m, chr) { return chr.toUpperCase(); });
                             }
                             else {
                                 operationName = operationPath.endpointName;
                             }
-                            if (!endpoints.includes(operationName)) {
-                                endpoints.push(operationName);
+                            if (!endpoints_1.includes(operationName)) {
+                                endpoints_1.push(operationName);
                             }
                         });
                     }
-                    const template = TemplateRenderer_1.default.load(content, {
+                    var template = TemplateRenderer_1["default"].load(content, {
                         package: config.package,
                         swagger: config.data.swagger,
                         definitions: Object.keys(config.data.swagger.definitions),
-                        endpoints,
-                        additionalTplObject,
+                        endpoints: endpoints_1,
+                        additionalTplObject: additionalTplObject
                     });
-                    const parsedContent = template.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
-                    const generatedPath = path_1.default.resolve(targetDir, path_1.default.relative(templatesDir, path_1.default.resolve(root, NamingUtils_1.default.stripNjkExtension(fileName))));
-                    fs_extra_1.default.writeFile(generatedPath, parsedContent, 'utf8', (wfErr) => {
+                    var parsedContent = template.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
+                    var generatedPath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, NamingUtils_1["default"].stripNjkExtension(fileName))));
+                    fs_extra_1["default"].writeFile(generatedPath, parsedContent, 'utf8', function (wfErr) {
                         if (wfErr) {
                             return reject(wfErr);
                         }
@@ -81,5 +82,4 @@ exports.default = (config, isFirstRun, additionalTplObject = {}) => {
             resolve();
         }
     });
-};
-//# sourceMappingURL=generateFile.js.map
+});

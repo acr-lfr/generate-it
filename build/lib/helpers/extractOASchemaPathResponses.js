@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (responses) => {
+exports.__esModule = true;
+exports["default"] = (function (responses) {
     if (responses['200']) {
         if (responses['200'].schema) {
             // we are oa2
@@ -16,5 +16,4 @@ exports.default = (responses) => {
         }
     }
     return {};
-};
-//# sourceMappingURL=extractOASchemaPathResponses.js.map
+});

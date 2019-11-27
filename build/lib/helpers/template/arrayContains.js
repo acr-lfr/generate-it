@@ -1,14 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /**
  * Returns true if any item within the haystack contains the needle
  * @param {string} needle
  * @param {array} haystack
  * @return {boolean}
  */
-exports.default = (needle = '', haystack = []) => {
-    for (let i = 0; i < haystack.length; ++i) {
-        const item = haystack[i];
+exports["default"] = (function (needle, haystack) {
+    if (needle === void 0) { needle = ''; }
+    if (haystack === void 0) { haystack = []; }
+    for (var i = 0; i < haystack.length; ++i) {
+        var item = haystack[i];
         if (needle === item) {
             return true;
         }
@@ -17,5 +19,4 @@ exports.default = (needle = '', haystack = []) => {
         }
     }
     return false;
-};
-//# sourceMappingURL=arrayContains.js.map
+});

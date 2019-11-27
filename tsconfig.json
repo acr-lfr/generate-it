@@ -2,10 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "ES2017",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "build",
     "baseUrl": ".",
     "resolveJsonModule": true,
@@ -26,6 +25,7 @@
   },
   "exclude": [
     "package.json",
-    "__tests__/**"
+    "__tests__/**",
+    "testserver/**"
   ]
 }

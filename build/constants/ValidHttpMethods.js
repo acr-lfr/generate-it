@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = [
+exports.__esModule = true;
+exports["default"] = [
     'GET',
     'POST',
     'PUT',
@@ -16,4 +16,3 @@ exports.default = [
     'UNLOCK',
     'PROPFIND',
 ];
-//# sourceMappingURL=ValidHttpMethods.js.map

@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /**
  * Example {{ getContext() | dump| safe }}
  * @return {*}
@@ -7,5 +7,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function default_1() {
     return this.ctx;
 }
-exports.default = default_1;
-//# sourceMappingURL=getContext.js.map
+exports["default"] = default_1;

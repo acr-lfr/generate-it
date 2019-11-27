@@ -1,7 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class OaToJs {
-    oaToJsType(input, from) {
+exports.__esModule = true;
+var OaToJs = /** @class */ (function () {
+    function OaToJs() {
+    }
+    OaToJs.prototype.oaToJsType = function (input, from) {
         if (!input.type && input.properties) {
             input.type = 'object';
         }
@@ -36,9 +38,9 @@ class OaToJs {
                     return this.objectWalk(input.properties);
                 }
         }
-    }
-    objectWalk(input) {
-        for (const key in input) {
+    };
+    OaToJs.prototype.objectWalk = function (input) {
+        for (var key in input) {
             if (input[key].type) {
                 input[key] = this.oaToJsType(input[key], key);
             }
@@ -47,7 +49,7 @@ class OaToJs {
             }
         }
         return input;
-    }
-}
-exports.default = new OaToJs();
-//# sourceMappingURL=OaToJs.js.map
+    };
+    return OaToJs;
+}());
+exports["default"] = new OaToJs();

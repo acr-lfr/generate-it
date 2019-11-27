@@ -1,35 +1,45 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require('fs-extra');
-const path = require('path');
-class NodegenRc {
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var fs = require('fs-extra');
+var path = require('path');
+var NodegenRc = /** @class */ (function () {
+    function NodegenRc() {
+    }
     /**
      * Fetched a local rc file or for a fresh install from the tpl directory
      * @param {string} tplDir - The tpl directory
+     * @param targetDir
      */
-    async fetch(tplDir, targetDir) {
-        const base = process.cwd();
-        const rcName = '.nodegenrc';
-        const localPath = path.join(base, rcName);
-        if (fs.pathExistsSync(localPath)) {
-            return this.validate(localPath);
-        }
-        else {
-            const tplRcFilePath = path.join(tplDir, rcName);
-            if (!fs.pathExistsSync(tplRcFilePath)) {
-                throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
-            }
-            fs.copySync(tplRcFilePath, localPath);
-            return this.validate(localPath);
-        }
-    }
+    NodegenRc.prototype.fetch = function (tplDir, targetDir) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var base, rcName, localPath, tplRcFilePath;
+            return tslib_1.__generator(this, function (_a) {
+                base = targetDir;
+                rcName = '.nodegenrc';
+                localPath = path.join(base, rcName);
+                if (fs.pathExistsSync(localPath)) {
+                    return [2 /*return*/, this.validate(localPath)];
+                }
+                else {
+                    tplRcFilePath = path.join(tplDir, rcName);
+                    if (!fs.pathExistsSync(tplRcFilePath)) {
+                        throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
+                    }
+                    fs.copySync(tplRcFilePath, localPath);
+                    return [2 /*return*/, this.validate(localPath)];
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
     /**
      * Parses and validates a provided nodegenrc file
      * @param localNodegenPath
      * @return {{nodegenDir}|*}
      */
-    validate(localNodegenPath) {
-        const nodegenRcOject = fs.readJsonSync(localNodegenPath);
+    NodegenRc.prototype.validate = function (localNodegenPath) {
+        var nodegenRcOject = fs.readJsonSync(localNodegenPath);
         if (!nodegenRcOject.nodegenDir) {
             throw new Error('Missing .nodegenrc attribute: nodegenDir');
         }
@@ -37,7 +47,7 @@ class NodegenRc {
             throw new Error('Missing .nodegenrc attribute: nodegenMockDir');
         }
         return nodegenRcOject;
-    }
-}
-exports.default = new NodegenRc();
-//# sourceMappingURL=NodegenRc.js.map
+    };
+    return NodegenRc;
+}());
+exports["default"] = new NodegenRc();

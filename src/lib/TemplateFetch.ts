@@ -64,14 +64,19 @@ class TemplateFetchURL {
    * Fetches the contents of a gitFetch url to the local cache
    * @param {string} url - Url to fetch via gitFetch
    * @param targetGitCacheDir
+   * @param dontUpdateTplCache
    * @return {Promise<string>}
    */
-  public async gitFetch (url: string, targetGitCacheDir: string) {
+  public async gitFetch (url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
     if (!await this.hasGit()) {
       throw new Error('Could not fetch cache from gitFetch url as gitFetch is not locally installed');
     }
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
     const urlParts = this.getUrlParts(url);
+    if (this.gitCacheExists(cacheDirectory) && !dontUpdateTplCache) {
+      console.log('Template cache already found and bypass update true: ' + url);
+      return cacheDirectory;
+    }
     try {
       if (this.gitCacheExists(cacheDirectory) && !urlParts.b) {
         await this.gitPull(cacheDirectory);
@@ -148,11 +153,12 @@ class TemplateFetchURL {
    * @param {string} input - Either es6 | typescript | https github url |
    *                        local directory relative to where this package is called from
    * @param targetGitCacheDir
+   * @param dontUpdateTplCache
    * @return {Promise<string>} - Returns the full path on the local drive to the tpl directory.
    */
-  public async resolveTemplateType (input: string, targetGitCacheDir: string) {
+  public async resolveTemplateType (input: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
     if (input.substring(0, 8) === 'https://') {
-      return await this.gitFetch(input, targetGitCacheDir);
+      return await this.gitFetch(input, targetGitCacheDir, dontUpdateTplCache);
     } else {
       throw new Error('The provided template argument must be a valid https url');
     }

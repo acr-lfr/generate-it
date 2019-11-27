@@ -47,7 +47,32 @@ paths:
           description: Invalid Identifier supplied
         '404':
           description: Round not found
+  /weather/{id}:
+    get:
+      tags:
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: weatherIdGet
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/pathId'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/WeatherFull'
+        '400':
+          description: Invalid Identifier supplied
+        '404':
+          description: Round not found
 parameters:
+  pathId:
+    in: path
+    name: id
+    required: true
+    type: string
   queryAppId:
     in: query
     name: appid
@@ -93,6 +118,15 @@ definitions:
         type: number
       lat:
         type: number
+  WeatherFull:
+    allOf:
+      - $ref: '#/definitions/Weather'
+      - type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
   Weather:
     type: object
     required:

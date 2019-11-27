@@ -6,6 +6,8 @@ import * as YAML from 'js-yaml';
 import commandRun from '@/lib/commandRun';
 import OpenAPIInjectInterfaceNaming from '@/lib/OpenAPIInjectInterfaceNaming';
 import GeneratedComparison from '@/lib/GeneratedComparison';
+import openApiResolveAllOfs from '@/lib/openApiResolveAllOfs';
+
 const RefParser = require('json-schema-ref-parser');
 
 class OpenAPIBundler {
@@ -15,6 +17,7 @@ class OpenAPIBundler {
     let parsedContentWithInterfaceNaming;
     let dereferencedJSON;
     let mergedParameters;
+    let resolvedAllOf;
     let injectedInterfaces;
     let bundledJSON;
 
@@ -22,6 +25,7 @@ class OpenAPIBundler {
       content = await this.getFileContent(filePath);
     } catch (e) {
       console.error('Can not load the content of the Swagger specification file');
+      console.log(filePath);
       throw e;
     }
 
@@ -29,20 +33,23 @@ class OpenAPIBundler {
       parsedContent = this.parseContent(content);
     } catch (e) {
       console.error('Can not parse the content of the Swagger specification file');
+      global.verboseLogging(content);
       throw e;
     }
 
     try {
       parsedContentWithInterfaceNaming = (new OpenAPIInjectInterfaceNaming(parsedContent, config)).inject();
     } catch (e) {
-      console.error('Can not dereference the JSON obtained from the content of the Swagger specification file');
+      console.error('Can inject interface naming for:');
+      global.verboseLogging(JSON.stringify(parsedContent, null, 2));
       throw e;
     }
 
     try {
       dereferencedJSON = await this.dereference(parsedContentWithInterfaceNaming);
     } catch (e) {
-      console.error('Can not dereference the JSON obtained from the content of the Swagger specification file');
+      console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
+      global.verboseLogging(JSON.stringify(parsedContentWithInterfaceNaming, null, 2));
       throw e;
     }
 
@@ -50,12 +57,23 @@ class OpenAPIBundler {
       mergedParameters = (new OpenAPIInjectInterfaceNaming(dereferencedJSON, config)).mergeParameters();
     } catch (e) {
       console.error('Can not merge the request paramters to build the interfaces:');
+      global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
       throw e;
     }
+    return mergedParameters;
     try {
-      injectedInterfaces = await this.injectInterfaces(mergedParameters, config);
+      resolvedAllOf = openApiResolveAllOfs(mergedParameters);
     } catch (e) {
-      console.error('Cannot inject the interfaces:');
+      console.error('Could not resolve of allOfs');
+      global.verboseLogging(JSON.stringify(dereferencedJSON, null, 2));
+      throw e;
+    }
+
+    try {
+      injectedInterfaces = await this.injectInterfaces(resolvedAllOf, config);
+    } catch (e) {
+      console.error('Cannot inject the interfaces: ');
+      global.verboseLogging(JSON.stringify(mergedParameters, null, 2));
       throw e;
     }
 
@@ -173,16 +191,21 @@ class OpenAPIBundler {
     );
 
     // parse to interface
-    return commandRun('node', [
-      path.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
-      '--just-types',
-      '--src',
-      tmpJsonSchema,
-      '--src-lang',
-      'schema',
-      '--lang',
-      'ts',
-    ]);
+    try {
+      await commandRun('node', [
+        path.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
+        '--just-types',
+        '--src',
+        tmpJsonSchema,
+        '--src-lang',
+        'schema',
+        '--lang',
+        'ts',
+      ]);
+    } catch (e) {
+      console.error(e);
+      throw new Error('quicktype error, full input json used: ' + tmpJsonSchema);
+    }
   }
 }
 

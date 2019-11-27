@@ -22,9 +22,9 @@ global.verboseLogging = (o: any) => {
     logger(o);
   }
 };
-
 const go = (mockServer: boolean) => {
   codegen({
+    dontUpdateTplCache: cli.program.dontUpdateTplCache,
     swaggerFilePath: cli.swaggerFile,
     targetDir: cli.program.output,
     template: cli.program.template,

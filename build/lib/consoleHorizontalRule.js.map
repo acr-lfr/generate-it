@@ -1,1 +1,0 @@
-{"version":3,"file":"consoleHorizontalRule.js","sourceRoot":"","sources":["../../src/lib/consoleHorizontalRule.ts"],"names":[],"mappings":";;AAAA,kBAAe,GAAG,EAAE;IAClB,IAAI,EAAE,GAAG,EAAE,CAAC;IACZ,KAAK,IAAI,CAAC,GAAG,CAAC,EAAE,CAAC,GAAG,OAAO,CAAC,MAAM,CAAC,OAAO,EAAE,EAAE,CAAC,EAAE;QAC/C,EAAE,IAAI,GAAG,CAAC;KACX;IACD,OAAO,CAAC,GAAG,CAAC,EAAE,CAAC,CAAC;AAClB,CAAC,CAAC"}

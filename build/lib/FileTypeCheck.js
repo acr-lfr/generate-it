@@ -1,7 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class FileTypeCheck {
-    constructor() {
+exports.__esModule = true;
+var FileTypeCheck = /** @class */ (function () {
+    function FileTypeCheck() {
         this.OPERATION = 'OPERATION';
         this.OPERATION_INDEX = 'OPERATION_INDEX';
         this.INTERFACE = 'INTERFACE';
@@ -9,7 +9,7 @@ class FileTypeCheck {
         this.STUB = 'STUB';
         this.OTHER = 'OTHER';
     }
-    getFileType(name) {
+    FileTypeCheck.prototype.getFileType = function (name) {
         if (this.isOpertationIndexFile(name)) {
             return this.OPERATION_INDEX;
         }
@@ -26,22 +26,22 @@ class FileTypeCheck {
             return this.INTERFACE;
         }
         return this.OTHER;
-    }
-    isOpertationFile(name) {
+    };
+    FileTypeCheck.prototype.isOpertationFile = function (name) {
         return name.substr(0, 5) === '___op';
-    }
-    isOpertationIndexFile(name) {
+    };
+    FileTypeCheck.prototype.isOpertationIndexFile = function (name) {
         return name.substr(0, 10) === '___opIndex';
-    }
-    isMockFile(name) {
+    };
+    FileTypeCheck.prototype.isMockFile = function (name) {
         return name.substr(0, 7) === '___mock';
-    }
-    isStubFile(name) {
+    };
+    FileTypeCheck.prototype.isStubFile = function (name) {
         return name.substr(0, 7) === '___stub';
-    }
-    isInterfaceFile(name) {
+    };
+    FileTypeCheck.prototype.isInterfaceFile = function (name) {
         return name.substr(0, 12) === '___interface';
-    }
-}
-exports.default = new FileTypeCheck();
-//# sourceMappingURL=FileTypeCheck.js.map
+    };
+    return FileTypeCheck;
+}());
+exports["default"] = new FileTypeCheck();

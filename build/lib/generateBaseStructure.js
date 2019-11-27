@@ -1,9 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const deepmerge_1 = tslib_1.__importDefault(require("deepmerge"));
-const fs = tslib_1.__importStar(require("fs-extra"));
-const path_1 = tslib_1.__importDefault(require("path"));
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var deepmerge_1 = tslib_1.__importDefault(require("deepmerge"));
+var fs = tslib_1.__importStar(require("fs-extra"));
+var path_1 = tslib_1.__importDefault(require("path"));
 /**
  * Creates the base structure
  * @param targetDir
@@ -11,13 +11,13 @@ const path_1 = tslib_1.__importDefault(require("path"));
  * @param additionalOptionsToInject
  * @return void
  */
-exports.default = (targetDir, templatesDir, additionalOptionsToInject) => {
+exports["default"] = (function (targetDir, templatesDir, additionalOptionsToInject) {
     additionalOptionsToInject = additionalOptionsToInject || {};
     fs.mkdirsSync(targetDir);
-    const callerPackageJsonPath = path_1.default.join(targetDir, 'package.json');
-    const packageJsonFound = (fs.existsSync(callerPackageJsonPath));
+    var callerPackageJsonPath = path_1["default"].join(targetDir, 'package.json');
+    var packageJsonFound = (fs.existsSync(callerPackageJsonPath));
     fs.copySync(templatesDir, targetDir, {
-        filter: (src) => {
+        filter: function (src) {
             if (src.indexOf('__mocks__') !== -1 && !additionalOptionsToInject.mockingServer) {
                 return false;
             }
@@ -30,16 +30,15 @@ exports.default = (targetDir, templatesDir, additionalOptionsToInject) => {
                 }
             }
             return true;
-        },
+        }
     });
     if (packageJsonFound) {
         // merge the package json files together
-        const callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
-        const templatePackageJson = JSON.parse(fs.readFileSync(path_1.default.join(templatesDir, 'package.json.njk'), 'utf8'));
-        const merged = Object.assign(deepmerge_1.default(callerPackageJson, templatePackageJson), additionalOptionsToInject);
+        var callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
+        var templatePackageJson = JSON.parse(fs.readFileSync(path_1["default"].join(templatesDir, 'package.json.njk'), 'utf8'));
+        var merged = Object.assign(deepmerge_1["default"](callerPackageJson, templatePackageJson), additionalOptionsToInject);
         fs.writeJsonSync(callerPackageJsonPath, merged, {
-            spaces: 2,
+            spaces: 2
         });
     }
-};
-//# sourceMappingURL=generateBaseStructure.js.map
+});

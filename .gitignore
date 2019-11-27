@@ -10,6 +10,7 @@ node_modules
 
 # Generated
 testserver/
+!testserver/package.json
 jest/
 .DS_Store
 npm-debug.log

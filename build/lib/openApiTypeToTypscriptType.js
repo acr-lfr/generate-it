@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (inputType) => {
+exports.__esModule = true;
+exports["default"] = (function (inputType) {
     switch (inputType) {
         case 'string':
             return 'string';
@@ -17,5 +17,4 @@ exports.default = (inputType) => {
         default:
             return 'any';
     }
-};
-//# sourceMappingURL=openApiTypeToTypscriptType.js.map
+});

@@ -1,76 +1,78 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
+exports.__esModule = true;
+var tslib_1 = require("tslib");
 require("colors");
-const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
-const path_1 = tslib_1.__importDefault(require("path"));
-const consoleHorizontalRule_1 = tslib_1.__importDefault(require("./consoleHorizontalRule"));
-const fileDiff_1 = tslib_1.__importDefault(require("./fileDiff"));
-const CachePaths_1 = require("../constants/CachePaths");
-class GeneratedComparison {
-    getCacheBaseDir(targetParentDirectory) {
-        return path_1.default.join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+var path_1 = tslib_1.__importDefault(require("path"));
+var consoleHorizontalRule_1 = tslib_1.__importDefault(require("./consoleHorizontalRule"));
+var fileDiff_1 = tslib_1.__importDefault(require("./fileDiff"));
+var CachePaths_1 = require("../constants/CachePaths");
+var GeneratedComparison = /** @class */ (function () {
+    function GeneratedComparison() {
     }
+    GeneratedComparison.prototype.getCacheBaseDir = function (targetParentDirectory) {
+        return path_1["default"].join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
+    };
     /**
      * Retutns a path to the config cache compare dir
      * @param {string} targetParentDirectory - The
      * @return {string}
      */
-    getCacheCompareConfigPath(targetParentDirectory) {
-        return path_1.default.join(this.getCacheBaseDir(targetParentDirectory), 'config.json');
-    }
+    GeneratedComparison.prototype.getCacheCompareConfigPath = function (targetParentDirectory) {
+        return path_1["default"].join(this.getCacheBaseDir(targetParentDirectory), 'config.json');
+    };
     /**
      * fetch the config json from the compare dir
      * @param jsonFilePath
      * @return {{versions: {}}}
      */
-    getCacheCompareJson(jsonFilePath) {
-        let json;
-        if (fs_extra_1.default.pathExistsSync(jsonFilePath)) {
-            json = fs_extra_1.default.readJsonSync(jsonFilePath);
+    GeneratedComparison.prototype.getCacheCompareJson = function (jsonFilePath) {
+        var json;
+        if (fs_extra_1["default"].pathExistsSync(jsonFilePath)) {
+            json = fs_extra_1["default"].readJsonSync(jsonFilePath);
         }
         else {
             json = {
-                versions: {},
+                versions: {}
             };
         }
         return json;
-    }
+    };
     /**
      * Ensures the compare dir exists and returns its path
      * @param targetParentDirectory
      * @return {string}
      */
-    getCompareDirectory(targetParentDirectory) {
-        const compareDir = path_1.default.join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
-        fs_extra_1.default.ensureDirSync(compareDir);
+    GeneratedComparison.prototype.getCompareDirectory = function (targetParentDirectory) {
+        var compareDir = path_1["default"].join(targetParentDirectory, CachePaths_1.COMPARE_DIRECTORY);
+        fs_extra_1["default"].ensureDirSync(compareDir);
         return compareDir;
-    }
+    };
     /**
      *
      * @param targetParentDirectory
      * @return {Promise<string|*>}
      */
-    fileDiffs(targetParentDirectory) {
-        return new Promise((resolve, reject) => {
-            const json = this.getCacheCompareJson(this.getCacheCompareConfigPath(targetParentDirectory));
-            const versions = Object.keys(json.versions).sort();
+    GeneratedComparison.prototype.fileDiffs = function (targetParentDirectory) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var json = _this.getCacheCompareJson(_this.getCacheCompareConfigPath(targetParentDirectory));
+            var versions = Object.keys(json.versions).sort();
             if (versions.length <= 1) {
                 return console.log('No previous files to compare from, a diff comparison chart will be available after the next generation.');
             }
-            const newVersionKey = versions.pop();
-            const oldVersionKey = versions.pop();
-            let error = false;
-            Object.keys(json.versions[newVersionKey]).forEach((directory) => {
-                const newFilePath = path_1.default.join(directory, newVersionKey);
+            var newVersionKey = versions.pop();
+            var oldVersionKey = versions.pop();
+            var error = false;
+            Object.keys(json.versions[newVersionKey]).forEach(function (directory) {
+                var newFilePath = path_1["default"].join(directory, newVersionKey);
                 if (json.versions[oldVersionKey][directory]) {
-                    const oldFilePath = path_1.default.join(directory, oldVersionKey);
+                    var oldFilePath = path_1["default"].join(directory, oldVersionKey);
                     try {
-                        fileDiff_1.default(oldFilePath, newFilePath)
-                            .then((diff) => {
+                        fileDiff_1["default"](oldFilePath, newFilePath)
+                            .then(function (diff) {
                             json.versions[newVersionKey][directory].diff = diff;
-                        })
-                            .catch((e) => {
+                        })["catch"](function (e) {
                             error = e;
                         });
                     }
@@ -81,59 +83,59 @@ class GeneratedComparison {
             });
             return !error ? resolve(json.versions[newVersionKey]) : reject(error);
         });
-    }
+    };
     /**
      * Console logs a table of file diffs
      * @param outputDir
      * @param input
      */
-    fileDiffsPrint(outputDir, input) {
+    GeneratedComparison.prototype.fileDiffsPrint = function (outputDir, input) {
         if (typeof input === 'string' && input !== '') {
             return console.log(input);
         }
-        const logDiffs = {};
-        const cacheCompareDir = this.getCompareDirectory(outputDir);
-        const buildDiff = function (add, minus) {
+        var logDiffs = {};
+        var cacheCompareDir = this.getCompareDirectory(outputDir);
+        var buildDiff = function (add, minus) {
             this.added = add;
             this.removed = minus;
             this.message = (add > 0 || minus > 0) ? 'Diff print in full above' : 'No differences';
         };
-        Object.keys(input).forEach((key) => {
-            const displayPath = key.replace(cacheCompareDir, '');
+        Object.keys(input).forEach(function (key) {
+            var displayPath = key.replace(cacheCompareDir, '');
             if (input[key].diff && input[key].diff.difference && input[key].diff.difference.length > 0) {
-                consoleHorizontalRule_1.default();
+                consoleHorizontalRule_1["default"]();
                 console.log('START' + displayPath.bold);
                 console.log(input[key].diff.difference);
                 console.log('END' + displayPath.bold);
-                consoleHorizontalRule_1.default();
+                consoleHorizontalRule_1["default"]();
             }
             // @ts-ignore
             logDiffs[displayPath] = new buildDiff(input[key].diff.plus, input[key].diff.minus);
         });
         console.table(logDiffs);
-    }
-    versionCleanup(targetParentDirectory) {
-        const configPath = this.getCacheCompareConfigPath(targetParentDirectory);
-        const json = this.getCacheCompareJson(configPath);
-        const versions = Object.keys(json.versions).sort().reverse();
+    };
+    GeneratedComparison.prototype.versionCleanup = function (targetParentDirectory) {
+        var configPath = this.getCacheCompareConfigPath(targetParentDirectory);
+        var json = this.getCacheCompareJson(configPath);
+        var versions = Object.keys(json.versions).sort().reverse();
         if (versions.length >= CachePaths_1.MAX_CACHE_COUNT) {
-            versions.forEach((version, i) => {
+            versions.forEach(function (version, i) {
                 if (i >= CachePaths_1.MAX_CACHE_COUNT) {
-                    const paths = Object.keys(json.versions[version]);
-                    paths.forEach((singlePath, j) => {
-                        paths[j] = path_1.default.join(singlePath, '/', version);
+                    var paths_1 = Object.keys(json.versions[version]);
+                    paths_1.forEach(function (singlePath, j) {
+                        paths_1[j] = path_1["default"].join(singlePath, '/', version);
                     });
-                    paths.forEach((singlePath) => {
-                        fs_extra_1.default.removeSync(singlePath);
+                    paths_1.forEach(function (singlePath) {
+                        fs_extra_1["default"].removeSync(singlePath);
                     });
                     delete json.versions[version];
                 }
             });
         }
-        fs_extra_1.default.writeJsonSync(configPath, json, {
-            spaces: 2,
+        fs_extra_1["default"].writeJsonSync(configPath, json, {
+            spaces: 2
         });
-    }
+    };
     /**
      * Compares the new content for the proposed stub file that already exists on the file system.
      * If there is not already a backup to compare, an error message is shown.
@@ -145,14 +147,19 @@ class GeneratedComparison {
      * @param {string} newFileString - The newly rendered content
      * @return {Promise<void>}
      */
-    async generateComparisonFile(targetFile, targetParentDirectory, subDirectory, newFilename, newFileString) {
-        const backupComparePath = path_1.default.join(this.getCompareDirectory(targetParentDirectory), subDirectory, newFilename);
-        const backUpFile = path_1.default.join(backupComparePath, '/', global.startISOString);
-        fs_extra_1.default.ensureFileSync(backUpFile);
-        fs_extra_1.default.ensureDirSync(backupComparePath);
-        this.addToCacheComparisonReport(this.getCacheCompareConfigPath(targetParentDirectory), backupComparePath, global.startISOString);
-        return fs_extra_1.default.writeFileSync(backUpFile, newFileString, 'utf8');
-    }
+    GeneratedComparison.prototype.generateComparisonFile = function (targetFile, targetParentDirectory, subDirectory, newFilename, newFileString) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var backupComparePath, backUpFile;
+            return tslib_1.__generator(this, function (_a) {
+                backupComparePath = path_1["default"].join(this.getCompareDirectory(targetParentDirectory), subDirectory, newFilename);
+                backUpFile = path_1["default"].join(backupComparePath, '/', global.startISOString);
+                fs_extra_1["default"].ensureFileSync(backUpFile);
+                fs_extra_1["default"].ensureDirSync(backupComparePath);
+                this.addToCacheComparisonReport(this.getCacheCompareConfigPath(targetParentDirectory), backupComparePath, global.startISOString);
+                return [2 /*return*/, fs_extra_1["default"].writeFileSync(backUpFile, newFileString, 'utf8')];
+            });
+        });
+    };
     /**
      * Adds a new path to the current cache comparison json
      * @param {string} jsonFilePath - Path to the json config file
@@ -160,20 +167,20 @@ class GeneratedComparison {
      * @param {string} isoTimstamp - Current runtime timestamp
      * @return {void}
      */
-    addToCacheComparisonReport(jsonFilePath, backupComparePath, isoTimstamp) {
-        const json = this.getCacheCompareJson(jsonFilePath);
+    GeneratedComparison.prototype.addToCacheComparisonReport = function (jsonFilePath, backupComparePath, isoTimstamp) {
+        var json = this.getCacheCompareJson(jsonFilePath);
         if (!json.versions[isoTimstamp]) {
             json.versions[isoTimstamp] = {};
         }
         if (!json.versions[isoTimstamp][backupComparePath]) {
             json.versions[isoTimstamp][backupComparePath] = {
-                diff: '',
+                diff: ''
             };
         }
-        fs_extra_1.default.writeJsonSync(jsonFilePath, json, {
-            spaces: 2,
+        fs_extra_1["default"].writeJsonSync(jsonFilePath, json, {
+            spaces: 2
         });
-    }
-}
-exports.default = new GeneratedComparison();
-//# sourceMappingURL=GeneratedComparison.js.map
+    };
+    return GeneratedComparison;
+}());
+exports["default"] = new GeneratedComparison();

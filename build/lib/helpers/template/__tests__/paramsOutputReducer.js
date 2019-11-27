@@ -1,9 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const paramsOutputReducer_1 = tslib_1.__importDefault(require("../paramsOutputReducer"));
-it('Example input response of mixed should return valid string', () => {
-    const responses = {
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var paramsOutputReducer_1 = tslib_1.__importDefault(require("../paramsOutputReducer"));
+it('Example input response of mixed should return valid string', function () {
+    var responses = {
         200: {
             description: 'Fetched items',
             schema: {
@@ -28,8 +28,8 @@ it('Example input response of mixed should return valid string', () => {
                             name: { type: 'string', description: 'Original name of the image' },
                             sizeKB: { type: 'string', description: 'Size in KB of the original image' },
                             height: { type: 'number', description: 'The height in pixels of the image' },
-                            width: { type: 'number', description: 'The width in pixels of the image' },
-                        },
+                            width: { type: 'number', description: 'The width in pixels of the image' }
+                        }
                     },
                     userAddedPhotos: {
                         type: 'array',
@@ -40,21 +40,21 @@ it('Example input response of mixed should return valid string', () => {
                                 name: { type: 'string', description: 'Original name of the image' },
                                 sizeKB: { type: 'string', description: 'Size in KB of the original image' },
                                 height: { type: 'number', description: 'The height in pixels of the image' },
-                                width: { type: 'number', description: 'The width in pixels of the image' },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+                                width: { type: 'number', description: 'The width in pixels of the image' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     };
     /* tslint:disable */
-    const returnString = `{id: String, birthday: String, birthday2: String, dateAdded: String, addedByUsername: String, recommendation: Boolean, recommendationForUserName: String, channelId: String, channelName: String, text: String, url: String, urlPreviewHTML: String, urlImage: {id: String, name: String, sizeKB: String, height: Number, width: Number, },userAddedPhotos: [ { id: String, name: String, sizeKB: String, height: Number, width: Number, }],},`;
+    var returnString = "{id: String, birthday: String, birthday2: String, dateAdded: String, addedByUsername: String, recommendation: Boolean, recommendationForUserName: String, channelId: String, channelName: String, text: String, url: String, urlPreviewHTML: String, urlImage: {id: String, name: String, sizeKB: String, height: Number, width: Number, },userAddedPhotos: [ { id: String, name: String, sizeKB: String, height: Number, width: Number, }],},";
     /* tslint:enable */
-    expect(paramsOutputReducer_1.default(responses)).toBe(returnString);
+    expect(paramsOutputReducer_1["default"](responses)).toBe(returnString);
 });
-it('Validate array of arrays', () => {
-    const responses = {
+it('Validate array of arrays', function () {
+    var responses = {
         200: {
             description: 'Fetched items',
             schema: {
@@ -63,21 +63,21 @@ it('Validate array of arrays', () => {
                     type: 'object',
                     properties: {
                         name: {
-                            type: 'string',
+                            type: 'string'
                         },
                         age: {
-                            type: 'string',
-                        },
-                    },
-                },
-            },
-        },
+                            type: 'string'
+                        }
+                    }
+                }
+            }
+        }
     };
-    const returnString = `[ { name: String, age: String, }],`;
-    expect(paramsOutputReducer_1.default(responses)).toBe(returnString);
+    var returnString = "[ { name: String, age: String, }],";
+    expect(paramsOutputReducer_1["default"](responses)).toBe(returnString);
 });
-it('Validate array-interface of arrays', () => {
-    const responses = {
+it('Validate array-interface of arrays', function () {
+    var responses = {
         200: {
             description: 'Fetched items',
             schema: {
@@ -86,17 +86,16 @@ it('Validate array-interface of arrays', () => {
                     type: 'object',
                     properties: {
                         name: {
-                            type: 'string',
+                            type: 'string'
                         },
                         age: {
-                            type: 'string',
-                        },
-                    },
-                },
-            },
-        },
+                            type: 'string'
+                        }
+                    }
+                }
+            }
+        }
     };
-    const returnString = `[ { name: String, age: String, }],`;
-    expect(paramsOutputReducer_1.default(responses)).toBe(returnString);
+    var returnString = "[ { name: String, age: String, }],";
+    expect(paramsOutputReducer_1["default"](responses)).toBe(returnString);
 });
-//# sourceMappingURL=paramsOutputReducer.js.map

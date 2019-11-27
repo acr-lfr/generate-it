@@ -1,22 +1,22 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
+exports.__esModule = true;
+var tslib_1 = require("tslib");
 require("colors");
-const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
-const path_1 = tslib_1.__importDefault(require("path"));
-exports.default = (targetDir, templatesDir) => {
-    const packagJsonStr = 'package.json';
-    const existing = JSON.parse(fs_extra_1.default.readFileSync(path_1.default.join(targetDir, packagJsonStr), { encoding: 'utf8' }));
-    const newJson = JSON.parse(fs_extra_1.default.readFileSync(path_1.default.join(templatesDir, packagJsonStr + '.njk'), 'utf8'));
-    const scriptsChanged = {};
-    const dependenciesChanged = {};
-    const devDependenciesChanged = {};
-    const buildDiff = function (changed, from) {
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+var path_1 = tslib_1.__importDefault(require("path"));
+exports["default"] = (function (targetDir, templatesDir) {
+    var packagJsonStr = 'package.json';
+    var existing = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(targetDir, packagJsonStr), { encoding: 'utf8' }));
+    var newJson = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(templatesDir, packagJsonStr + '.njk'), 'utf8'));
+    var scriptsChanged = {};
+    var dependenciesChanged = {};
+    var devDependenciesChanged = {};
+    var buildDiff = function (changed, from) {
         this['Changed To'] = changed;
         this.from = from || 'Not present on existing package.json, please add.';
     };
     if (newJson.scripts) {
-        Object.keys(newJson.scripts).forEach((key) => {
+        Object.keys(newJson.scripts).forEach(function (key) {
             if (!existing.scripts[key] || existing.scripts[key] !== newJson.scripts[key]) {
                 // @ts-ignore
                 scriptsChanged[key] = new buildDiff(newJson.scripts[key], existing.scripts[key]);
@@ -24,7 +24,7 @@ exports.default = (targetDir, templatesDir) => {
         });
     }
     if (newJson.dependencies) {
-        Object.keys(newJson.dependencies).forEach((key) => {
+        Object.keys(newJson.dependencies).forEach(function (key) {
             if (!existing.dependencies[key] || existing.dependencies[key] !== newJson.dependencies[key]) {
                 // @ts-ignore
                 dependenciesChanged[key] = new buildDiff(newJson.dependencies[key], existing.dependencies[key]);
@@ -32,7 +32,7 @@ exports.default = (targetDir, templatesDir) => {
         });
     }
     if (newJson.devDependencies) {
-        Object.keys(newJson.devDependencies).forEach((key) => {
+        Object.keys(newJson.devDependencies).forEach(function (key) {
             if (!existing.devDependencies[key] || existing.devDependencies[key] !== newJson.devDependencies[key]) {
                 // @ts-ignore
                 devDependenciesChanged[key] = new buildDiff(newJson.devDependencies[key], existing.devDependencies[key]);
@@ -51,5 +51,4 @@ exports.default = (targetDir, templatesDir) => {
         console.log('The following package.json devDependencies have been updated:'.green);
         console.table(devDependenciesChanged);
     }
-};
-//# sourceMappingURL=displayDependencyDiffs.js.map
+});

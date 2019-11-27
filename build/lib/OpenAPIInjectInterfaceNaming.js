@@ -1,11 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const generateOperationId_1 = tslib_1.__importDefault(require("./generateOperationId"));
-const openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTypeToTypscriptType"));
-const _ = tslib_1.__importStar(require("lodash"));
-class OpenAPIInjectInterfaceNaming {
-    constructor(jsObject, passedConfig) {
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var generateOperationId_1 = tslib_1.__importDefault(require("./generateOperationId"));
+var openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTypeToTypscriptType"));
+var _ = tslib_1.__importStar(require("lodash"));
+var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
+    function OpenAPIInjectInterfaceNaming(jsObject, passedConfig) {
         this.apiObject = jsObject;
         this.config = passedConfig || {};
     }
@@ -13,115 +13,119 @@ class OpenAPIInjectInterfaceNaming {
      * Merges the parameter namings into the path objects
      * @return {{paths}|module.exports.apiObject|{}}
      */
-    inject() {
+    OpenAPIInjectInterfaceNaming.prototype.inject = function () {
         if (this.isOpenAPI3()) {
             throw new Error('Currently openApi 3 is not supported');
         }
         if (this.isSwagger()) {
             return this.swaggerPathIterator(true);
         }
-    }
+    };
     /**
      * Merges the injected request params into single interface objects
      */
-    mergeParameters() {
+    OpenAPIInjectInterfaceNaming.prototype.mergeParameters = function () {
         if (this.isOpenAPI3()) {
             throw new Error('Currently openApi 3 is not supported');
         }
         if (this.isSwagger()) {
             return this.swaggerPathIterator(false);
         }
-    }
+    };
     /**
      * @param {string} ref
      * @return {string}
      */
-    convertRefToOjectPath(ref) {
-        const pathParts = [];
-        ref.split('/').forEach((part) => {
+    OpenAPIInjectInterfaceNaming.prototype.convertRefToOjectPath = function (ref) {
+        var pathParts = [];
+        ref.split('/').forEach(function (part) {
             if (part !== '#') {
                 pathParts.push(part);
             }
         });
         return pathParts.join('.');
-    }
+    };
     /**
      * True is apiobject is swagger
      * @return {boolean}
      */
-    isSwagger() {
+    OpenAPIInjectInterfaceNaming.prototype.isSwagger = function () {
         return !!(this.apiObject.swagger && this.apiObject.swagger === '2.0');
-    }
+    };
     /**
      * True is apiobject is openapi
      * @return {boolean}
      */
-    isOpenAPI3() {
+    OpenAPIInjectInterfaceNaming.prototype.isOpenAPI3 = function () {
         return !!(this.apiObject.openapi);
-    }
+    };
     /**
      * Injects x-[request|response]-definitions into the main object
      * @return {{paths}|module.exports.apiObject|{paths}|{}}
      */
-    swaggerPathIterator(fromInject) {
+    OpenAPIInjectInterfaceNaming.prototype.swaggerPathIterator = function (fromInject) {
+        var _this = this;
         if (!this.apiObject.paths) {
             throw new Error('No paths found to iterate over');
         }
-        Object.keys(this.apiObject.paths).forEach((path) => {
-            Object.keys(this.apiObject.paths[path]).forEach((method) => {
+        Object.keys(this.apiObject.paths).forEach(function (path) {
+            Object.keys(_this.apiObject.paths[path]).forEach(function (method) {
                 if (fromInject) {
-                    this.swaggerXInjector(path, method);
+                    _this.swaggerXInjector(path, method);
                 }
                 else {
-                    this.mergeSwaggerInjectedParameters(path, method);
+                    _this.mergeSwaggerInjectedParameters(path, method);
                 }
             });
         });
         return this.apiObject;
-    }
+    };
     /**
      * Injects param/definition paths
      * @param {string} path - Path of api
      * @param {string} method - Method of path to x inject to
      */
-    swaggerXInjector(path, method) {
+    OpenAPIInjectInterfaceNaming.prototype.swaggerXInjector = function (path, method) {
         this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromSwaggerpaths(path, method);
         this.apiObject.paths[path][method]['x-response-definitions'] = this.injectFromSwaggerResponse(path, method);
-    }
+    };
     /**
      * Calculates and injects the parameters into the main api object
      * @param path
      * @param method
      * @return {{headers: [], path: [], query: [], body: []}}
      */
-    injectFromSwaggerpaths(path, method) {
-        const requestParams = {
+    OpenAPIInjectInterfaceNaming.prototype.injectFromSwaggerpaths = function (path, method) {
+        var _this = this;
+        var requestParams = {
             body: {
-                name: _.upperFirst(generateOperationId_1.default(_.upperFirst(method) + 'Body', path)),
-                params: [],
+                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Body', path)),
+                params: []
             },
             headers: {
-                name: _.upperFirst(generateOperationId_1.default(_.upperFirst(method) + 'Headers', path)),
-                params: [],
+                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Headers', path)),
+                params: []
             },
             path: {
-                name: _.upperFirst(generateOperationId_1.default(_.upperFirst(method) + 'Path', path)),
-                params: [],
+                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Path', path)),
+                params: []
             },
             query: {
-                name: _.upperFirst(generateOperationId_1.default(_.upperFirst(method) + 'Query', path)),
-                params: [],
-            },
+                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Query', path)),
+                params: []
+            }
         };
         if (this.apiObject.paths[path][method].parameters) {
-            this.apiObject.paths[path][method].parameters.forEach((p) => {
+            this.apiObject.paths[path][method].parameters.forEach(function (p) {
                 if (p.$ref || (p.schema && p.schema.$ref)) {
                     try {
-                        const paramPath = this.convertRefToOjectPath(p.$ref || p.schema.$ref);
-                        const parameterObject = _.get(this.apiObject, paramPath);
-                        requestParams[parameterObject.in || p.in].params.push(paramPath);
+                        var paramPath = _this.convertRefToOjectPath(p.$ref || p.schema.$ref);
+                        var parameterObject = _.get(_this.apiObject, paramPath);
+                        requestParams[parameterObject["in"] || p["in"]].params.push(paramPath);
                         if (p.schema) {
-                            requestParams.body.interfaceName = paramPath.split('.').pop();
+                            var name_1 = paramPath.split('.').pop();
+                            requestParams.body.interfaceName = name_1;
+                            requestParams.body.name = name_1;
                         }
                     }
                     catch (e) {
@@ -131,65 +135,66 @@ class OpenAPIInjectInterfaceNaming {
             });
         }
         return requestParams;
-    }
+    };
     /**
      * Inject the interfaces for query|path|header paramters and leave the path to the body definition
      * @param path
      * @param method
      */
-    mergeSwaggerInjectedParameters(path, method) {
-        Object.keys(this.apiObject.paths[path][method]['x-request-definitions']).forEach((requestType) => {
-            const requestObject = {};
-            let clear = true;
-            this.apiObject.paths[path][method]['x-request-definitions'][requestType].params.forEach((requestPath) => {
-                const parameterObject = _.get(this.apiObject, requestPath);
+    OpenAPIInjectInterfaceNaming.prototype.mergeSwaggerInjectedParameters = function (path, method) {
+        var _this = this;
+        Object.keys(this.apiObject.paths[path][method]['x-request-definitions']).forEach(function (requestType) {
+            var requestObject = {};
+            var clear = true;
+            _this.apiObject.paths[path][method]['x-request-definitions'][requestType].params.forEach(function (requestPath) {
+                var parameterObject = _.get(_this.apiObject, requestPath);
                 clear = false;
                 if (requestType === 'body') {
                     // make object from body
                 }
                 else {
-                    let name = parameterObject.name;
-                    name += (!parameterObject.required) ? '?' : '';
-                    requestObject[name] = openApiTypeToTypscriptType_1.default(parameterObject.type);
+                    var name_2 = parameterObject.name;
+                    name_2 += (!parameterObject.required) ? '?' : '';
+                    requestObject[name_2] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
                 }
             });
             if (!clear) {
-                const name = this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
-                this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
-                    outputString: this.objectToInterfaceString(requestObject, name)
+                var name_3 = _this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
+                _this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
+                    outputString: _this.objectToInterfaceString(requestObject, name_3)
                 };
             }
             else {
-                delete this.apiObject.paths[path][method]['x-request-definitions'][requestType];
+                delete _this.apiObject.paths[path][method]['x-request-definitions'][requestType];
             }
         });
-    }
+    };
     /**
      * Convert interface object to string
      * @param object
      * @param name
      * @return {string}
      */
-    objectToInterfaceString(object, name) {
-        let text = `export interface ${name} {\n  `;
-        const delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
-        Object.keys(object).forEach((key) => {
+    OpenAPIInjectInterfaceNaming.prototype.objectToInterfaceString = function (object, name) {
+        var text = "export interface " + name + " {\n  ";
+        var delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
+        Object.keys(object).forEach(function (key) {
             text += key + ':' + object[key] + delim;
         });
         return text + '  \n } ';
-    }
+    };
     /**
      * Injects the request interface naming for the response objects
      * @param path
      * @param method
      * @return {{'200': null}}
      */
-    injectFromSwaggerResponse(path, method) {
-        const response = {};
-        const pathResponses = this.apiObject.paths[path][method].responses || false;
+    OpenAPIInjectInterfaceNaming.prototype.injectFromSwaggerResponse = function (path, method) {
+        var response = {};
+        var pathResponses = this.apiObject.paths[path][method].responses || false;
         if (pathResponses && pathResponses['200'] && pathResponses['200'].schema && pathResponses['200'].schema.$ref) {
             try {
-                const responseInterface = this.convertRefToOjectPath(pathResponses['200'].schema.$ref).split('.').pop();
+                var responseInterface = this.convertRefToOjectPath(pathResponses['200'].schema.$ref).split('.').pop();
                 if (responseInterface) {
                     response['200'] = responseInterface;
                 }
@@ -199,7 +204,7 @@ class OpenAPIInjectInterfaceNaming {
             }
         }
         return response;
-    }
-}
-exports.default = OpenAPIInjectInterfaceNaming;
-//# sourceMappingURL=OpenAPIInjectInterfaceNaming.js.map
+    };
+    return OpenAPIInjectInterfaceNaming;
+}());
+exports["default"] = OpenAPIInjectInterfaceNaming;

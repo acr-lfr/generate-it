@@ -1,7 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const _ = tslib_1.__importStar(require("lodash"));
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var _ = tslib_1.__importStar(require("lodash"));
 /**
  * Generates an "operationId" attribute based on path and method names  <path><method>
  *
@@ -10,13 +10,13 @@ const _ = tslib_1.__importStar(require("lodash"));
  * @param  {String} pathName   Path name.
  * @return {String}
  */
-exports.default = (methodName, pathName) => {
+exports["default"] = (function (methodName, pathName) {
     methodName = _.camelCase(methodName);
     if (pathName === '/') {
         return methodName;
     }
-    const filePathParts = pathName.split('/');
-    filePathParts.forEach((part, i) => {
+    var filePathParts = pathName.split('/');
+    filePathParts.forEach(function (part, i) {
         if (part[0] === '{') {
             part = part.slice(1, part.length - 1);
         }
@@ -24,5 +24,4 @@ exports.default = (methodName, pathName) => {
     });
     filePathParts.push(_.upperFirst(methodName));
     return _.camelCase(filePathParts.join(''));
-};
-//# sourceMappingURL=generateOperationId.js.map
+});

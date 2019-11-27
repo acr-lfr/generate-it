@@ -1,3 +1,2 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=Config.js.map
+exports.__esModule = true;

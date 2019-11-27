@@ -1,5 +1,29 @@
 import fs from 'fs-extra';
 import nunjucks from 'nunjucks';
+import _ from 'lodash';
+import arrayContains from '@/lib/helpers/template/arrayContains';
+import celebrateImport from '@/lib/helpers/template/celebrateImport';
+import celebrateRoute from '@/lib/helpers/template/celebrateRoute';
+import endsWith from '@/lib/helpers/template/endsWith';
+import getApiKeyHeaders from '@/lib/helpers/template/getApiKeyHeaders';
+import getSecDefMiddleware from '@/lib/helpers/template/getSecDefMiddleware';
+import importInterfaces from '@/lib/helpers/template/importInterfaces';
+import inline from '@/lib/helpers/template/inline';
+import isObjLength from '@/lib/helpers/template/isObjLength';
+import isUsingJwt from '@/lib/helpers/template/isUsingJwt';
+import isUsingSecurityDefinition from '@/lib/helpers/template/isUsingSecurityDefinition';
+import isValidMethod from '@/lib/helpers/template/isValidMethod';
+import lcFirst from '@/lib/helpers/template/lcFirst';
+import mockOutput from '@/lib/helpers/template/mockOutput';
+import objLength from '@/lib/helpers/template/objLength';
+import paramsInputReducer from '@/lib/helpers/template/paramsInputReducer';
+import paramsOutputReducer from '@/lib/helpers/template/paramsOutputReducer';
+import paramsValidation from '@/lib/helpers/template/paramsValidation';
+import pathParamsToDomainParams from '@/lib/helpers/template/pathParamsToDomainParams';
+import prettifyRouteName from '@/lib/helpers/template/prettifyRouteName';
+import ucFirst from '@/lib/helpers/template/ucFirst';
+import urlPathJoin from '@/lib/helpers/template/urlPathJoin';
+import validMethods from '@/lib/helpers/template/validMethods';
 
 class TemplateRenderer {
   /**
@@ -11,10 +35,7 @@ class TemplateRenderer {
    * @return {*}
    */
   public load (inputString: string, customVars = {}, additionalHelpers = {}, configRcFile = '') {
-    this.nunjucksSetup(
-      Object.assign(require('./helpers/template/index'), additionalHelpers),
-      configRcFile,
-    );
+    this.nunjucksSetup(additionalHelpers, configRcFile);
     return nunjucks.renderString(inputString, customVars);
   }
 
@@ -32,6 +53,33 @@ class TemplateRenderer {
         env.addGlobal(key, processEnvVars[key]);
       }
     }
+
+    env.addGlobal('arrayContains', arrayContains);
+    env.addGlobal('celebrateImport', celebrateImport);
+    env.addGlobal('celebrateRoute', celebrateRoute);
+    env.addGlobal('endsWith', endsWith);
+    env.addGlobal('getApiKeyHeaders', getApiKeyHeaders);
+    env.addGlobal('getSecDefMiddleware', getSecDefMiddleware);
+    env.addGlobal('importInterfaces', importInterfaces);
+    env.addGlobal('inline', inline);
+    env.addGlobal('isObjLength', isObjLength);
+    env.addGlobal('isUsingJwt', isUsingJwt);
+    env.addGlobal('isUsingSecurityDefinition', isUsingSecurityDefinition);
+    env.addGlobal('isValidMethod', isValidMethod);
+    env.addGlobal('lcFirst', lcFirst);
+    env.addGlobal('mockOutput', mockOutput);
+    env.addGlobal('objLength', objLength);
+    env.addGlobal('paramsInputReducer', paramsInputReducer);
+    env.addGlobal('paramsOutputReducer', paramsOutputReducer);
+    env.addGlobal('paramsValidation', paramsValidation);
+    env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams);
+    env.addGlobal('prettifyRouteName', prettifyRouteName);
+    env.addGlobal('ucFirst', ucFirst);
+    env.addGlobal('urlPathJoin', urlPathJoin);
+    env.addGlobal('validMethods', validMethods);
+
+    env.addGlobal('_', _);
+
     Object.keys(helperFunctionKeyValueObject).forEach((key: string) => {
       env.addGlobal(key, helperFunctionKeyValueObject[key]);
     });

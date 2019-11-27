@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const NodegenRc_1 = tslib_1.__importDefault(require("./NodegenRc"));
-const _ = tslib_1.__importStar(require("lodash"));
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var NodegenRc_1 = tslib_1.__importDefault(require("./NodegenRc"));
+var _ = tslib_1.__importStar(require("lodash"));
 /**
  * Creates an extended config object
  * @param {object} config
@@ -10,23 +10,34 @@ const _ = tslib_1.__importStar(require("lodash"));
  * @param templates
  * @return {Promise<{mockServer}|*>}
  */
-class ConfigMerger {
-    async base(config, templatesDir) {
-        const nodegenRc = await NodegenRc_1.default.fetch(templatesDir, config.targetDir);
-        return Object.assign(config, {
-            templates: templatesDir,
-            nodegenRc: nodegenRc,
-            interfaceStyle: nodegenRc.interfaceStyle || 'interface',
-        });
+var ConfigMerger = /** @class */ (function () {
+    function ConfigMerger() {
     }
-    injectSwagger(config, swagger) {
+    ConfigMerger.prototype.base = function (config, templatesDir) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var nodegenRc;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, NodegenRc_1["default"].fetch(templatesDir, config.targetDir)];
+                    case 1:
+                        nodegenRc = _a.sent();
+                        return [2 /*return*/, Object.assign(config, {
+                                templates: templatesDir,
+                                nodegenRc: nodegenRc,
+                                interfaceStyle: nodegenRc.interfaceStyle || 'interface'
+                            })];
+                }
+            });
+        });
+    };
+    ConfigMerger.prototype.injectSwagger = function (config, swagger) {
         return Object.assign(config, {
-            swagger,
+            swagger: swagger,
             package: {
-                name: _.kebabCase(swagger.info.title),
-            },
+                name: _.kebabCase(swagger.info.title)
+            }
         });
-    }
-}
-exports.default = new ConfigMerger();
-//# sourceMappingURL=ConfigMerger.js.map
+    };
+    return ConfigMerger;
+}());
+exports["default"] = new ConfigMerger();

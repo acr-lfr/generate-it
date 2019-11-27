@@ -1,9 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /**
  * Checks if a string ends with a provided value.
  */
-exports.default = (subject, endvalue) => {
+exports["default"] = (function (subject, endvalue) {
     return (String(subject)[subject.length - 1] === String(endvalue));
-};
-//# sourceMappingURL=endsWith.js.map
+});

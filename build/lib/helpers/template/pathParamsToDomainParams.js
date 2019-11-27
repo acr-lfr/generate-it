@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 function addType(withType, pathObject, requestType) {
     if (!withType) {
         return '';
@@ -18,25 +18,27 @@ function addType(withType, pathObject, requestType) {
  * @param pathNameChange
  * @returns {string}
  */
-exports.default = (value, withType = false, withPrefix, pathNameChange = 'path') => {
+exports["default"] = (function (value, withType, withPrefix, pathNameChange) {
+    if (withType === void 0) { withType = false; }
+    if (pathNameChange === void 0) { pathNameChange = 'path'; }
     if (!value) {
         return '';
     }
-    let params = [];
+    var params = [];
     if (value.parameters) {
-        if (value.parameters.some((p) => p.in === 'query')) {
+        if (value.parameters.some(function (p) { return p["in"] === 'query'; })) {
             params.push('query' + addType(withType, value, 'query'));
         }
-        if (value.parameters.some((p) => p.in === 'path')) {
+        if (value.parameters.some(function (p) { return p["in"] === 'path'; })) {
             params.push(pathNameChange + addType(withType, value, 'path'));
         }
-        if (value.parameters.some((p) => p.in === 'body')) {
+        if (value.parameters.some(function (p) { return p["in"] === 'body'; })) {
             params.push('body' + addType(withType, value, 'body'));
         }
-        if (value.parameters.some((p) => p.in === 'headers')) {
+        if (value.parameters.some(function (p) { return p["in"] === 'headers'; })) {
             params.push('headers' + addType(withType, value, 'headers'));
         }
-        if (value.parameters.some((p) => p.in === 'formData')) {
+        if (value.parameters.some(function (p) { return p["in"] === 'formData'; })) {
             params.push('files' + addType(withType, value, 'formData'));
         }
     }
@@ -48,8 +50,7 @@ exports.default = (value, withType = false, withPrefix, pathNameChange = 'path')
     }
     params.sort();
     if (withPrefix) {
-        params = params.map((p) => (p === 'req') ? 'req' : 'req.' + p);
+        params = params.map(function (p) { return (p === 'req') ? 'req' : 'req.' + p; });
     }
     return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
-};
-//# sourceMappingURL=pathParamsToDomainParams.js.map
+});

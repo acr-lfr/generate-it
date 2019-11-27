@@ -14,6 +14,7 @@ class FileWalker {
   public files: any = {};
   public config: ConfigExtendedBase;
   public isFirstRun: boolean;
+
   /**
    * Walks over the file system compiling tpl files with the config data
    * @param {boolean} providedIsFirstRun
@@ -29,8 +30,14 @@ class FileWalker {
     return new Promise((resolve, reject) => {
       walk.walk(templatesDir, {
         followLinks: false,
-      }).on('file', this.fileIteration)
-        // @ts-ignore
+      }).on('file', async (root: string, stats: any, next: any) => {
+        try {
+          await this.fileIteration(root, stats, next);
+        } catch (e) {
+          console.error(e)
+        }
+      })
+      // @ts-ignore
         .on('errors', (root: any, nodeStatsArray: any) => {
           reject(nodeStatsArray);
         })

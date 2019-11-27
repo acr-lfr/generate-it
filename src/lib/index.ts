@@ -24,9 +24,8 @@ import TemplateFetch from '@/lib/TemplateFetch';
  * @return {Promise}
  */
 export default async (config: Config) => {
-  console.log(config);
   console.log('Preparing templates...'.green.bold);
-  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir);
+  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir, config.dontUpdateTplCache);
   let extendedConfig = await ConfigMerger.base(config, templatesDir);
 
   console.log('Preparing openapi object...'.green.bold);
@@ -36,7 +35,7 @@ export default async (config: Config) => {
   console.log(`Printing full object to: ${baseCompiledObjectPath}`.green.bold);
   fs.ensureFileSync(baseCompiledObjectPath);
   fs.writeJsonSync(baseCompiledObjectPath, apiObject, {spaces: 2});
-  extendedConfig = ConfigMerger.injectSwagger(apiObject, apiObject);
+  extendedConfig = ConfigMerger.injectSwagger(extendedConfig, apiObject);
 
   console.log('Injecting content to files...'.green.bold);
   await FileIterator.walk(generateDirectoryStructure(extendedConfig, templatesDir), extendedConfig);

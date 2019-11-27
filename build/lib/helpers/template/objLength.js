@@ -1,6 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (obj) => {
+exports.__esModule = true;
+exports["default"] = (function (obj) {
     return Object.keys(obj).length;
-};
-//# sourceMappingURL=objLength.js.map
+});

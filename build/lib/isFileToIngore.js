@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (dir, filename) => {
-    const prohibited = ['.git', '.idea', '.vscode'];
-    for (let i = 0; i < prohibited.length; i++) {
+exports.__esModule = true;
+exports["default"] = (function (dir, filename) {
+    var prohibited = ['.git', '.idea', '.vscode'];
+    for (var i = 0; i < prohibited.length; i++) {
         if (dir.indexOf(prohibited[i]) !== -1) {
             return true;
         }
@@ -11,5 +11,4 @@ exports.default = (dir, filename) => {
         }
     }
     return false;
-};
-//# sourceMappingURL=isFileToIngore.js.map
+});

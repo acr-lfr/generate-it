@@ -1,50 +1,57 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const prettier = require('prettier');
-const fs = require('fs-extra');
-const path = require('path');
-const namingUtils = require('./helpers/NamingUtils');
-const TemplateRenderer = require('./TemplateRenderer');
-class GenerateInterfaceFiles {
-    constructor(config) {
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var prettier_1 = tslib_1.__importDefault(require("prettier"));
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+var path_1 = tslib_1.__importDefault(require("path"));
+var NamingUtils_1 = tslib_1.__importDefault(require("./helpers/NamingUtils"));
+var TemplateRenderer_1 = tslib_1.__importDefault(require("./TemplateRenderer"));
+var GenerateInterfaceFiles = /** @class */ (function () {
+    function GenerateInterfaceFiles(config) {
         this.config = config;
     }
-    async writeFiles() {
-        const swagger = this.config.data.swagger;
-        this.iterateInterfaces(swagger);
-    }
-    iterateInterfaces(swagger) {
-        swagger.interfaces.forEach((interace) => {
-            this.parseDefinition(interace.content, interace.name);
+    GenerateInterfaceFiles.prototype.writeFiles = function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var swagger;
+            return tslib_1.__generator(this, function (_a) {
+                swagger = this.config.data.swagger;
+                this.iterateInterfaces(swagger);
+                return [2 /*return*/];
+            });
         });
-    }
-    parseDefinition(interfaceText, definitionName) {
-        const filePath = path.join(this.config.root, this.config.file_name);
-        const data = fs.readFileSync(filePath, 'utf8');
-        const subdir = this.config.root.replace(new RegExp(`${this.config.templates_dir}[/]?`), '');
-        const ext = namingUtils.getFileExt(this.config.file_name);
-        const newFilename = definitionName + '.' + ext;
-        const targetFile = path.resolve(this.config.targetDir, subdir, newFilename);
-        let content = TemplateRenderer.load(data.toString(), {
-            definitionName,
-            definitionInterfaceText: interfaceText,
+    };
+    GenerateInterfaceFiles.prototype.iterateInterfaces = function (swagger) {
+        var _this = this;
+        swagger.interfaces.forEach(function (interace) {
+            _this.parseDefinition(interace.content.outputString, interace.name);
+        });
+    };
+    GenerateInterfaceFiles.prototype.parseDefinition = function (interfaceText, definitionName) {
+        var filePath = path_1["default"].join(this.config.root, this.config.file_name);
+        var data = fs_extra_1["default"].readFileSync(filePath, 'utf8');
+        var subdir = this.config.root.replace(new RegExp(this.config.templates_dir + "[/]?"), '');
+        var ext = NamingUtils_1["default"].getFileExt(this.config.file_name);
+        var newFilename = definitionName + '.' + ext;
+        var targetFile = path_1["default"].resolve(this.config.targetDir, subdir, newFilename);
+        var content = TemplateRenderer_1["default"].load(data.toString(), {
+            definitionName: definitionName,
+            definitionInterfaceText: interfaceText
         });
         content = content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
-        content = prettier.format(content, {
-            indent_size: 2,
-            space_in_empty_paren: true,
-            end_with_newline: true,
+        content = prettier_1["default"].format(content, {
+            bracketSpacing: true,
+            endOfLine: 'auto',
             semi: true,
             singleQuote: true,
-            parser: ext === 'ts' ? 'typescript' : 'babel',
+            parser: ext === 'ts' ? 'typescript' : 'babel'
         });
-        const moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
-        if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs.existsSync(targetFile)) {
+        var moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
+        if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs_extra_1["default"].existsSync(targetFile)) {
             throw new Error('file exists');
         }
-        fs.writeFileSync(targetFile, content, 'utf8');
+        fs_extra_1["default"].writeFileSync(targetFile, content, 'utf8');
         return true;
-    }
-}
-exports.default = GenerateInterfaceFiles;
-//# sourceMappingURL=GenerateInterfaceFiles.js.map
+    };
+    return GenerateInterfaceFiles;
+}());
+exports["default"] = GenerateInterfaceFiles;

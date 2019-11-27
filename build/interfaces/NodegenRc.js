@@ -1,8 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var nodegenType;
 (function (nodegenType) {
     nodegenType["Server"] = "server";
     nodegenType["Client"] = "client";
 })(nodegenType || (nodegenType = {}));
-//# sourceMappingURL=NodegenRc.js.map

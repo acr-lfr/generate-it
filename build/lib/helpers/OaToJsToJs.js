@@ -1,7 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class OaToJsToJs {
-    getType(leaf) {
+exports.__esModule = true;
+var OaToJsToJs = /** @class */ (function () {
+    function OaToJsToJs() {
+    }
+    OaToJsToJs.prototype.getType = function (leaf) {
         if (leaf === Object) {
             return 'Object';
         }
@@ -17,10 +19,10 @@ class OaToJsToJs {
         else if (leaf === Boolean) {
             return 'Boolean';
         }
-    }
-    arrayWalkWrite(input, builtString) {
+    };
+    OaToJsToJs.prototype.arrayWalkWrite = function (input, builtString) {
         builtString = builtString || ' ';
-        for (let i = 0; i < input.length; ++i) {
+        for (var i = 0; i < input.length; ++i) {
             if (typeof input[i] === 'function') {
                 builtString += this.getType(input[i]) + ', ';
             }
@@ -32,12 +34,12 @@ class OaToJsToJs {
             }
         }
         return builtString.substring(0, builtString.length - 2);
-    }
-    objectWalkWrite(input, builtString) {
+    };
+    OaToJsToJs.prototype.objectWalkWrite = function (input, builtString) {
         builtString = builtString || '{';
-        for (const key in input) {
+        for (var key in input) {
             if (typeof input[key] === 'function') {
-                builtString += key + ': ' + this.getType(input[key]) + `, `;
+                builtString += key + ': ' + this.getType(input[key]) + ", ";
             }
             else if (Array.isArray(input[key])) {
                 builtString += key + ': [' + this.arrayWalkWrite(input[key]) + '],';
@@ -48,7 +50,7 @@ class OaToJsToJs {
         }
         builtString += '},';
         return builtString;
-    }
-}
-exports.default = new OaToJsToJs();
-//# sourceMappingURL=OaToJsToJs.js.map
+    };
+    return OaToJsToJs;
+}());
+exports["default"] = new OaToJsToJs();

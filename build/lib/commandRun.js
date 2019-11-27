@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const child_process_1 = tslib_1.__importDefault(require("child_process"));
-const spawn = child_process_1.default.spawn;
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var child_process_1 = tslib_1.__importDefault(require("child_process"));
+var spawn = child_process_1["default"].spawn;
 /**
  * Runs a shell command with given arguments in an array
  * @param {string} program - The string of the command, eg ln
@@ -10,14 +10,16 @@ const spawn = child_process_1.default.spawn;
  * @param {boolean} [verbose] - Default false, when true console logs all output
  * @return {Promise<unknown>}
  */
-exports.default = (program, args = [], verbose = false) => {
-    return new Promise((resolve, reject) => {
+exports["default"] = (function (program, args, verbose) {
+    if (args === void 0) { args = []; }
+    if (verbose === void 0) { verbose = false; }
+    return new Promise(function (resolve, reject) {
         if (verbose) {
             console.log(program + ' ' + args.join(' '));
         }
-        const command = spawn(program, args);
-        let outputString = '';
-        let outputErrorString = '';
+        var command = spawn(program, args);
+        var outputString = '';
+        var outputErrorString = '';
         command.stdout.on('data', function (data) {
             if (verbose && data !== '') {
                 console.log(String(data));
@@ -32,12 +34,11 @@ exports.default = (program, args = [], verbose = false) => {
         });
         command.on('close', function (code) {
             if (code === 0) {
-                resolve({ outputString, outputErrorString });
+                resolve({ outputString: outputString, outputErrorString: outputErrorString });
             }
             else {
-                reject({ code, outputString, outputErrorString });
+                reject({ code: code, outputString: outputString, outputErrorString: outputErrorString });
             }
         });
     });
-};
-//# sourceMappingURL=commandRun.js.map
+});

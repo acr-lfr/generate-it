@@ -1,10 +1,10 @@
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
+import prettier from 'prettier'
+import fs from 'fs-extra'
+import path from 'path'
 
-const prettier = require('prettier');
-const fs = require('fs-extra');
-const path = require('path');
-const namingUtils = require('./helpers/NamingUtils');
-const TemplateRenderer = require('./TemplateRenderer');
+import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
+import NamingUtils from '@/lib/helpers/NamingUtils';
+import TemplateRenderer from '@/lib/TemplateRenderer';
 
 class GenerateInterfaceFiles {
   public config: GenerateOperationFileConfig;
@@ -20,7 +20,7 @@ class GenerateInterfaceFiles {
 
   public iterateInterfaces (swagger: any) {
     swagger.interfaces.forEach((interace: any) => {
-      this.parseDefinition(interace.content, interace.name);
+      this.parseDefinition(interace.content.outputString, interace.name);
     });
   }
 
@@ -29,7 +29,7 @@ class GenerateInterfaceFiles {
     const data = fs.readFileSync(filePath, 'utf8');
 
     const subdir = this.config.root.replace(new RegExp(`${this.config.templates_dir}[/]?`), '');
-    const ext = namingUtils.getFileExt(this.config.file_name);
+    const ext = NamingUtils.getFileExt(this.config.file_name);
     const newFilename = definitionName + '.' + ext;
     const targetFile = path.resolve(this.config.targetDir, subdir, newFilename);
     let content = TemplateRenderer.load(data.toString(), {
@@ -39,9 +39,8 @@ class GenerateInterfaceFiles {
 
     content = content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
     content = prettier.format(content, {
-      indent_size: 2,
-      space_in_empty_paren: true,
-      end_with_newline: true,
+      bracketSpacing: true,
+      endOfLine: 'auto',
       semi: true,
       singleQuote: true,
       parser: ext === 'ts' ? 'typescript' : 'babel',
