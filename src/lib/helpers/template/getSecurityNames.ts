@@ -1,16 +1,10 @@
-export default (value: any, swagger: any) => {
+export default (value: any) => {
   if (!value || !value.security || value.security.length === 0) {
     return false;
   }
 
   /**
-
-   "security": [{
-    "apiKeyAdmin": []
-    },{
-     "jwtToken": []
-    }],
-
+   * Example input "security": [{"apiKeyAdmin": []},{"jwtToken": []}],
    */
   const names: string[] = [];
   value.security.forEach((secObj: any) => {
