@@ -40,8 +40,17 @@ export default (value: any, withType: boolean = false, withPrefix?: string, path
     }
   }
   if (value.security) {
-    // todo iterate over security blocks and lookout for jwt for injecting this
-    params.push('jwtData' + addType(withType, value));
+    let push = false;
+    value.security.forEach((security: any) => {
+      Object.keys(security).forEach((key) => {
+        if (key.toLowerCase().includes('jwt')) {
+          push = true;
+        }
+      });
+    });
+    if (push) {
+      params.push('jwtData' + addType(withType, value));
+    }
   }
   if (value['x-passRequest']) {
     params.push('req' + addType(withType, value));

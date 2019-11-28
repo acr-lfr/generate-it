@@ -64,6 +64,24 @@ describe('With req prefix', () => {
 });
 
 describe('Without req prefix', () => {
+  it('Should return req.query without security as name does not include jwt', () => {
+    const testObject = {
+      parameters: [
+        {
+          in: 'query',
+        },
+      ],
+      security: [{
+        token: 1,
+      }],
+    };
+    const output = pathParamsToDomainParams(testObject, false);
+    expect(
+      output,
+    ).toBe(
+      'query',
+    );
+  });
   it('Should return req.query and security', () => {
     const testObject = {
       parameters: [
@@ -71,9 +89,9 @@ describe('Without req prefix', () => {
           in: 'query',
         },
       ],
-      security: {
-        a: 1,
-      },
+      security: [{
+        jwttoken: 1,
+      }],
     };
     const output = pathParamsToDomainParams(testObject, false);
     expect(
