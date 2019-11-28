@@ -43,8 +43,17 @@ exports["default"] = (function (value, withType, withPrefix, pathNameChange) {
         }
     }
     if (value.security) {
-        // todo iterate over security blocks and lookout for jwt for injecting this
-        params.push('jwtData' + addType(withType, value));
+        var push_1 = false;
+        value.security.forEach(function (security) {
+            Object.keys(security).forEach(function (key) {
+                if (key.toLowerCase().includes('jwt')) {
+                    push_1 = true;
+                }
+            });
+        });
+        if (push_1) {
+            params.push('jwtData' + addType(withType, value));
+        }
     }
     if (value['x-passRequest']) {
         params.push('req' + addType(withType, value));
