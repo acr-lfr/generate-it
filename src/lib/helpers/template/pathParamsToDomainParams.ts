@@ -1,5 +1,3 @@
-import getSecurityNames from '@/lib/helpers/template/getSecurityNames';
-
 function addType (withType: boolean, pathObject: any, requestType?: string) {
   if (!withType) {
     return '';
@@ -42,8 +40,15 @@ export default (value: any, withType: boolean = false, withPrefix?: string, path
     }
   }
   if (value.security) {
-    const securityNames = getSecurityNames(value);
-    if (securityNames.includes('jwt')) {
+    let push = false;
+    value.security.forEach((security: any) => {
+      Object.keys(security).forEach((key) => {
+        if (key.toLowerCase().includes('jwt')) {
+          push = true;
+        }
+      });
+    });
+    if (push) {
       params.push('jwtData' + addType(withType, value));
     }
   }
