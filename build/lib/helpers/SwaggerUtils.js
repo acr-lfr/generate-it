@@ -1,0 +1,128 @@
+"use strict";
+exports.__esModule = true;
+var tslib_1 = require("tslib");
+var SwaggerUtils = /** @class */ (function () {
+    function SwaggerUtils() {
+    }
+    /**
+     * Converts a sub-section of a definition
+     * @param {Object} param
+     * @param {Object} [options] - options.isFromArray [string], options.requiredField [string[]]
+     * @return {string|void}
+     */
+    SwaggerUtils.prototype.pathParamsToJoi = function (param, options) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        if (!param) {
+            console.log(param, options);
+            return;
+        }
+        var validationText = param.name ? param.name + ':' : '';
+        var isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
+        var type = param.type || param.schema.type;
+        if (['string', 'number', 'integer', 'boolean'].includes(type)) {
+            if (type === 'integer') {
+                validationText += 'Joi.number().integer()';
+            }
+            else {
+                validationText += 'Joi.' + type + '()';
+            }
+            if (type === 'string' && !isRequired) {
+                validationText += ".allow('')";
+            }
+            if (param["default"]) {
+                if (type === 'string') {
+                    validationText += ".default('" + param["default"] + "')";
+                }
+                else {
+                    validationText += ".default(" + param["default"] + ")";
+                }
+            }
+            if (param["enum"] || (param.schema && param.schema["enum"])) {
+                var enumValues = param["enum"] || param.schema["enum"];
+                validationText += '.valid([' + enumValues.map(function (e) { return "'" + e + "'"; }).join(', ') + '])';
+            }
+            if (param.minLength) {
+                validationText += (param.minLength ? ".min(" + +param.minLength + ")" : '');
+            }
+            if (param.minimum) {
+                validationText += (param.minimum ? ".min(" + +param.minimum + ")" : '');
+            }
+            if (param.maxLength) {
+                validationText += (param.maxLength ? ".max(" + +param.maxLength + ")" : '');
+            }
+            if (param.maximum) {
+                validationText += (param.maximum ? ".max(" + +param.maximum + ")" : '');
+            }
+            if (type === 'string' && param.pattern) {
+                validationText += (param.pattern ? ".regex(/" + param.pattern + "/)" : '');
+            }
+            validationText += (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+        }
+        else if (type === 'array') {
+            validationText += 'Joi.array().items(';
+            validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
+                isFromArray: true
+            });
+            validationText += ')';
+            if (param.minItems) {
+                validationText += (param.minItems ? ".min(" + +param.minItems + ")" : '');
+            }
+            if (param.maxItems) {
+                validationText += (param.maxItems ? ".max(" + +param.maxItems + ")" : '');
+            }
+            validationText += (isRequired ? '.required(),' : ',');
+        }
+        else if (param.properties || param.schema) {
+            var properties_1 = param.properties || param.schema.properties || {};
+            validationText += 'Joi.object({';
+            Object.keys(properties_1).forEach(function (propertyKey) {
+                validationText += _this.pathParamsToJoi(tslib_1.__assign({ name: propertyKey }, properties_1[propertyKey]));
+            });
+            validationText += '})' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+        }
+        else {
+            validationText += 'Joi.any()' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+        }
+        return validationText;
+    };
+    /**
+     * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
+     * @param {Object} requestParams
+     * @return {string|void}
+     */
+    SwaggerUtils.prototype.createJoiValidation = function (requestParams) {
+        var _this = this;
+        if (!requestParams) {
+            return;
+        }
+        var paramsTypes = {
+            body: requestParams.filter(function (param) { return param["in"] === 'body'; }),
+            params: requestParams.filter(function (param) { return param["in"] === 'path'; }),
+            query: requestParams.filter(function (param) { return param["in"] === 'query'; })
+        };
+        var validationText = '';
+        Object.keys(paramsTypes).forEach(function (paramTypeKey) {
+            if (paramsTypes[paramTypeKey].length === 0) {
+                return;
+            }
+            validationText += paramTypeKey + ': {';
+            paramsTypes[paramTypeKey].forEach(function (param) {
+                if (param.schema && param.schema.properties) {
+                    Object.keys(param.schema.properties).forEach(function (propertyKey) {
+                        validationText += _this.pathParamsToJoi(tslib_1.__assign({ name: propertyKey }, param.schema.properties[propertyKey]), {
+                            requiredFields: param.schema.required
+                        });
+                    });
+                }
+                else if (param.type || (param.schema && param.schema.type)) {
+                    validationText += _this.pathParamsToJoi(param);
+                }
+            });
+            validationText += '},';
+        });
+        return validationText;
+    };
+    return SwaggerUtils;
+}());
+exports["default"] = new SwaggerUtils();
