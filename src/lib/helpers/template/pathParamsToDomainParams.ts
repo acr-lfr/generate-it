@@ -1,3 +1,5 @@
+import getSecurityNames from '@/lib/helpers/template/getSecurityNames';
+
 function addType (withType: boolean, pathObject: any, requestType?: string) {
   if (!withType) {
     return '';
@@ -40,8 +42,10 @@ export default (value: any, withType: boolean = false, withPrefix?: string, path
     }
   }
   if (value.security) {
-    // todo iterate over security blocks and lookout for jwt for injecting this
-    params.push('jwtData' + addType(withType, value));
+    const securityNames = getSecurityNames(value);
+    if (securityNames.includes('jwt')) {
+      params.push('jwtData' + addType(withType, value));
+    }
   }
   if (value['x-passRequest']) {
     params.push('req' + addType(withType, value));

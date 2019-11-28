@@ -96,14 +96,6 @@ class TemplateRenderer {
   public nunjucksOptions (configRcFile = '') {
     const baseOptions = {
       autoescape: false,
-      // tags: {
-      //   blockStart: '<%',
-      //   blockEnd: '%>',
-      //   variableStart: '<$',
-      //   variableEnd: '$>',
-      //   commentStart: '<#',
-      //   commentEnd: '#>'
-      // }
     };
     try {
       const json = fs.readJsonSync(configRcFile);

@@ -1,16 +1,24 @@
-export default (value: any) => {
-  if (!value || !value.security || value.security.length === 0) {
-    return false;
+/**
+ * Extracts the security key names from a path object and returns as a tpl string or array
+ * @param pathObject
+ * @param fullSwaggerObject
+ */
+export default (pathObject: any, fullSwaggerObject: any): string => {
+  if (!pathObject || !pathObject.security || pathObject.security.length === 0 || !fullSwaggerObject.securityDefinitions) {
+    return '';
   }
 
   /**
    * Example input "security": [{"apiKeyAdmin": []},{"jwtToken": []}],
    */
   const names: string[] = [];
-  value.security.forEach((secObj: any) => {
+  pathObject.security.forEach((secObj: any) => {
     Object.keys(secObj).forEach((name) => {
-      names.push(`'${name}'`);
+      if (fullSwaggerObject.securityDefinitions[name]) {
+        const headerName = fullSwaggerObject.securityDefinitions[name].name;
+        names.push(`'${headerName}'`);
+      }
     });
   });
-  return '[' + names.join(', ') + ']';
+  return (names.length === 0) ? '' : '[' + names.join(', ') + ']';
 };
