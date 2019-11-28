@@ -246,7 +246,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, commandRun_1["default"]('node', [
-                                path_1["default"].join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
+                                path_1["default"].join('./node_modules/quicktype/dist/cli/index.js'),
                                 '--just-types',
                                 '--src',
                                 tmpJsonSchema,
