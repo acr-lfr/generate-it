@@ -5,13 +5,7 @@ exports["default"] = (function (value, swagger) {
         return false;
     }
     /**
-  
-     "security": [{
-      "apiKeyAdmin": []
-      },{
-       "jwtToken": []
-      }],
-  
+     * Example input "security": [{"apiKeyAdmin": []},{"jwtToken": []}],
      */
     var names = [];
     value.security.forEach(function (secObj) {

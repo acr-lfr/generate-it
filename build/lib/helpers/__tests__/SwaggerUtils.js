@@ -48,7 +48,7 @@ var params = [{
         ]
     }];
 test('Returns joi with 2 required params', function () {
-    expect(SwaggerUtils_1["default"].createJoiValidation([params[0]])).toBe('body: {password:Joi.string().allow(\'\').required(),newPassword:Joi.string().allow(\'\').required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
+    expect(SwaggerUtils_1["default"].createJoiValidation([params[0]])).toBe('body: {password:Joi.string().required(),newPassword:Joi.string().required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
 });
 test('openapi3 query request param', function () {
     expect(SwaggerUtils_1["default"].createJoiValidation([params[1]])).toBe('query: {limit:Joi.number().integer(),},');

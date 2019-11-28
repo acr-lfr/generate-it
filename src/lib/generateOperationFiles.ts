@@ -18,12 +18,12 @@ export default (config: GenerateOperationFileConfig) => new Promise((resolve, re
     const segments = pathName.split('/').filter((s) => s && s.trim() !== '');
     let joinedSegments;
     // if (segments.length > config.segmentsCount) {
-      // segments.splice(config.segmentsCount);
-      // operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-      // joinedSegments = segments.join('/');
+    // segments.splice(config.segmentsCount);
+    // operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    // joinedSegments = segments.join('/');
     // } else {
-      operationName = pathProperties.endpointName;
-      joinedSegments = operationName;
+    operationName = pathProperties.endpointName;
+    joinedSegments = operationName;
     // }
 
     if (files[operationName] === undefined) {

@@ -52,7 +52,7 @@ test('Returns joi with 2 required params', () => {
   expect(
     SwaggerUtils.createJoiValidation([params[0]]),
   ).toBe(
-    'body: {password:Joi.string().allow(\'\').required(),newPassword:Joi.string().allow(\'\').required(),newPasswordConfirm:Joi.string().allow(\'\'),},',
+    'body: {password:Joi.string().required(),newPassword:Joi.string().required(),newPasswordConfirm:Joi.string().allow(\'\'),},',
   );
 });
 
