@@ -9,7 +9,7 @@
   "scripts": {
     "install:githooks": "cp ./githooks/* .git/hooks",
     "test": "npm run lint && npm run test:unit",
-    "test:build": "node build/cli.js test_swagger.yml -t https://github.com/acrontum/openapi-nodegen-typescript-server.git#develop -m -o testserver/",
+    "test:build": "node build/cli.js test_swagger.yml -t https://github.com/acrontum/openapi-nodegen-typescript-server.git#develop -m -o testserver/ --dont-update-tpl-cache true",
     "test:unit": "jest",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",

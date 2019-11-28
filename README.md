@@ -15,4 +15,4 @@ ___
 
 ___
 
-OpenAPI Nodegen is an opensourced project from [acrontum](https://www.acrontum.de/) and requires NodeJS 10+ LTS to run.
+OpenAPI Nodegen is an opensourced project from [acrontum](https://www.acrontum.de/) written in TypeScript and is tested on NodeJS 12 LTS. 

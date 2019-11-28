@@ -17,6 +17,15 @@ schemes:
 tags:
   - name: weather
     description: Weather data
+securityDefinitions:
+  jwtToken:
+    type: apiKey
+    name: Authorization
+    in: header
+  apiKeyAdmin:
+    type: apiKey
+    name: x-api-key
+    in: header
 paths:
   /weather/:
     get:
@@ -47,6 +56,9 @@ paths:
           description: Invalid Identifier supplied
         '404':
           description: Round not found
+      security:
+        - apiKeyAdmin: []
+        - jwtToken: []
   /weather/{id}:
     get:
       tags:

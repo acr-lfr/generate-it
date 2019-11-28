@@ -6,7 +6,7 @@ import celebrateImport from '@/lib/helpers/template/celebrateImport';
 import celebrateRoute from '@/lib/helpers/template/celebrateRoute';
 import endsWith from '@/lib/helpers/template/endsWith';
 import getApiKeyHeaders from '@/lib/helpers/template/getApiKeyHeaders';
-import getSecDefMiddleware from '@/lib/helpers/template/getSecDefMiddleware';
+import getSecurityNames from '@/lib/helpers/template/getSecurityNames';
 import importInterfaces from '@/lib/helpers/template/importInterfaces';
 import inline from '@/lib/helpers/template/inline';
 import isObjLength from '@/lib/helpers/template/isObjLength';
@@ -59,7 +59,7 @@ class TemplateRenderer {
     env.addGlobal('celebrateRoute', celebrateRoute);
     env.addGlobal('endsWith', endsWith);
     env.addGlobal('getApiKeyHeaders', getApiKeyHeaders);
-    env.addGlobal('getSecDefMiddleware', getSecDefMiddleware);
+    env.addGlobal('getSecurityNames', getSecurityNames);
     env.addGlobal('importInterfaces', importInterfaces);
     env.addGlobal('inline', inline);
     env.addGlobal('isObjLength', isObjLength);

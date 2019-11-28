@@ -73,7 +73,7 @@ class TemplateFetchURL {
     }
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
     const urlParts = this.getUrlParts(url);
-    if (this.gitCacheExists(cacheDirectory) && !dontUpdateTplCache) {
+    if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
       console.log('Template cache already found and bypass update true: ' + url);
       return cacheDirectory;
     }

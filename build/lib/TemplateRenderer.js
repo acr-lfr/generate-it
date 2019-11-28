@@ -9,7 +9,7 @@ var celebrateImport_1 = tslib_1.__importDefault(require("./helpers/template/cele
 var celebrateRoute_1 = tslib_1.__importDefault(require("./helpers/template/celebrateRoute"));
 var endsWith_1 = tslib_1.__importDefault(require("./helpers/template/endsWith"));
 var getApiKeyHeaders_1 = tslib_1.__importDefault(require("./helpers/template/getApiKeyHeaders"));
-var getSecDefMiddleware_1 = tslib_1.__importDefault(require("./helpers/template/getSecDefMiddleware"));
+var getSecurityNames_1 = tslib_1.__importDefault(require("./helpers/template/getSecurityNames"));
 var importInterfaces_1 = tslib_1.__importDefault(require("./helpers/template/importInterfaces"));
 var inline_1 = tslib_1.__importDefault(require("./helpers/template/inline"));
 var isObjLength_1 = tslib_1.__importDefault(require("./helpers/template/isObjLength"));
@@ -65,7 +65,7 @@ var TemplateRenderer = /** @class */ (function () {
         env.addGlobal('celebrateRoute', celebrateRoute_1["default"]);
         env.addGlobal('endsWith', endsWith_1["default"]);
         env.addGlobal('getApiKeyHeaders', getApiKeyHeaders_1["default"]);
-        env.addGlobal('getSecDefMiddleware', getSecDefMiddleware_1["default"]);
+        env.addGlobal('getSecurityNames', getSecurityNames_1["default"]);
         env.addGlobal('importInterfaces', importInterfaces_1["default"]);
         env.addGlobal('inline', inline_1["default"]);
         env.addGlobal('isObjLength', isObjLength_1["default"]);
