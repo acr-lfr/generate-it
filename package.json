@@ -1,7 +1,7 @@
 {
   "name": "openapi-nodegen",
   "main": "./build/cli.js",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "bin": {
     "openapi-nodegen": "./build/cli.js"

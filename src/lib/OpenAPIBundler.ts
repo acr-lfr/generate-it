@@ -193,7 +193,7 @@ class OpenAPIBundler {
     // parse to interface
     try {
       return await commandRun('node', [
-        path.join(__dirname, '../../node_modules/quicktype/dist/cli/index.js'),
+        path.join('./node_modules/quicktype/dist/cli/index.js'),
         '--just-types',
         '--src',
         tmpJsonSchema,
