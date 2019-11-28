@@ -4,7 +4,9 @@
 .eslintrc
 .idea/
 .git
+.vscode/
 .git*
 .git/*
 __tests__/
 githooks/
+testserver/
