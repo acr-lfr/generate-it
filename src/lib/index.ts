@@ -7,8 +7,8 @@ import ConfigMerger from '@/lib/ConfigMerger';
 import FileIterator from '@/lib/FileIterator';
 import GeneratedComparison from '@/lib/GeneratedComparison';
 import generateDirectoryStructure from '@/lib/generateDirectoryStructure';
-import OpenApiToObject from '@/lib/OpenApiToObject';
 import TemplateFetch from '@/lib/TemplateFetch';
+import OpenAPIBundler from '@/lib/OpenAPIBundler';
 
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
@@ -29,7 +29,7 @@ export default async (config: Config) => {
   let extendedConfig = await ConfigMerger.base(config, templatesDir);
 
   console.log('Preparing openapi object...'.green.bold);
-  const apiObject = await (new OpenApiToObject(extendedConfig)).build();
+  const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, config);
   const baseCompiledObjectPath = path.join(GeneratedComparison.getCacheBaseDir(config.targetDir), 'apiObject.json');
 
   console.log(`Printing full object to: ${baseCompiledObjectPath}`.green.bold);

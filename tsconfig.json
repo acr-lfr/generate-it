@@ -26,6 +26,6 @@
   "exclude": [
     "package.json",
     "__tests__/**",
-    "testserver/**"
+    "testserver/**/*.*"
   ]
 }

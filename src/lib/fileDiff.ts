@@ -1,3 +1,5 @@
+import FileDiff from '@/interfaces/FileDiff';
+
 const TextFileDiff = require('text-file-diff');
 
 /**
@@ -6,7 +8,7 @@ const TextFileDiff = require('text-file-diff');
  * @param {string} newTextFile - New text filepath to compare
  * @return {Promise<{minus: *, difference: *, plus: *}>}
  */
-export default async (oldTextFile: string = '', newTextFile: string = '') => {
+export default async (oldTextFile: string = '', newTextFile: string = ''): Promise<FileDiff> => {
   const m = new TextFileDiff();
   let difference = '';
   let minus = 0;

@@ -8,8 +8,8 @@ var ConfigMerger_1 = tslib_1.__importDefault(require("./ConfigMerger"));
 var FileIterator_1 = tslib_1.__importDefault(require("./FileIterator"));
 var GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
 var generateDirectoryStructure_1 = tslib_1.__importDefault(require("./generateDirectoryStructure"));
-var OpenApiToObject_1 = tslib_1.__importDefault(require("./OpenApiToObject"));
 var TemplateFetch_1 = tslib_1.__importDefault(require("./TemplateFetch"));
+var OpenAPIBundler_1 = tslib_1.__importDefault(require("./OpenAPIBundler"));
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
  *
@@ -36,7 +36,7 @@ exports["default"] = (function (config) { return tslib_1.__awaiter(void 0, void 
             case 2:
                 extendedConfig = _a.sent();
                 console.log('Preparing openapi object...'.green.bold);
-                return [4 /*yield*/, (new OpenApiToObject_1["default"](extendedConfig)).build()];
+                return [4 /*yield*/, OpenAPIBundler_1["default"].bundle(config.swaggerFilePath, config)];
             case 3:
                 apiObject = _a.sent();
                 baseCompiledObjectPath = path_1["default"].join(GeneratedComparison_1["default"].getCacheBaseDir(config.targetDir), 'apiObject.json');
