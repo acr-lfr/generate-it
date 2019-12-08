@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var prettier_1 = tslib_1.__importDefault(require("prettier"));
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var NamingUtils_1 = tslib_1.__importDefault(require("../helpers/NamingUtils"));
@@ -36,15 +35,7 @@ var GenerateInterfaceFiles = /** @class */ (function () {
         var content = TemplateRenderer_1["default"].load(data.toString(), {
             definitionName: definitionName,
             definitionInterfaceText: interfaceText
-        });
-        content = content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
-        content = prettier_1["default"].format(content, {
-            bracketSpacing: true,
-            endOfLine: 'auto',
-            semi: true,
-            singleQuote: true,
-            parser: ext === 'ts' ? 'typescript' : 'babel'
-        });
+        }, ext);
         var moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
         if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs_extra_1["default"].existsSync(targetFile)) {
             throw new Error('file exists');

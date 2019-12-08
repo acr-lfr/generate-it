@@ -20,66 +20,43 @@ import path from 'path';
  * @return {Promise}
  */
 export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additionalTplObject: any = {}) => {
-  return new Promise((resolve, reject) => {
-    const templatesDir = config.templates_dir;
-    const targetDir = config.targetDir;
-    const fileName = config.file_name;
-    const root = config.root;
 
-    // const data = config.data
-    const loadFilePath = (fileName !== 'package.json.njk') ? path.resolve(root, fileName) : path.resolve(process.cwd(), 'package.json');
-    const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
+  const templatesDir = config.templates_dir;
+  const targetDir = config.targetDir;
+  const fileName = config.file_name;
+  const root = config.root;
 
-    // should write or not
-    if (isFirstRun || !fs.existsSync(NamingUtils.stripNjkExtension(templatePath)) || root.includes('/http/nodegen')) {
-      // This could be a new file in the templates, ensure the dir structure is present before preceding
-      fs.ensureFileSync(templatePath);
-      global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
-      fs.readFile(loadFilePath, 'utf8', (err, content) => {
-        if (err) {
-          return reject(err);
-        }
-        try {
-          const endpoints: string[] = [];
-          if (fileName.startsWith('routesImporter')) {
-            _.each(config.data.swagger.paths, (operationPath, pathName) => {
-              let operationName;
-              const segments = pathName.split('/').filter((s) => s && s.trim() !== '');
-              if (segments.length > config.segmentsCount) {
-                segments.splice(config.segmentsCount);
-                operationName = segments.join(' ').toLowerCase().replace(/[^a-zA-Z0-9-]+(.)/g, (m, chr) => chr.toUpperCase());
-              } else {
-                operationName = operationPath.endpointName;
-              }
-              if (!endpoints.includes(operationName)) {
-                endpoints.push(operationName);
-              }
-            });
-          }
-          const template = TemplateRenderer.load(content, {
-            package: config.package,
-            swagger: config.data.swagger,
-            definitions: Object.keys(config.data.swagger.definitions),
-            endpoints,
-            additionalTplObject,
-          });
-          const parsedContent = template.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
-          const generatedPath = path.resolve(
-            targetDir,
-            path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
-          );
-          fs.writeFile(generatedPath, parsedContent, 'utf8', (wfErr) => {
-            if (wfErr) {
-              return reject(wfErr);
-            }
-            resolve();
-          });
-        } catch (e) {
-          reject(e);
-        }
-      });
-    } else {
-      resolve();
-    }
+  // const data = config.data
+  const loadFilePath = (fileName !== 'package.json.njk') ? path.resolve(root, fileName) : path.resolve(process.cwd(), 'package.json');
+  const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
+
+  // should write or not
+  if (!isFirstRun || fs.existsSync(NamingUtils.stripNjkExtension(templatePath)) || !root.includes('/http/nodegen')) {
+    return;
+  }
+  // This could be a new file in the templates, ensure the dir structure is present before preceding
+  fs.ensureFileSync(templatePath);
+  global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
+  const content = fs.readFileSync(loadFilePath, 'utf8');
+  const endpoints: string[] = [];
+  if (fileName.startsWith('routesImporter')) {
+    _.each(config.data.swagger.paths, (operationPath) => {
+      const operationName = operationPath.endpointName;
+      if (!endpoints.includes(operationName)) {
+        endpoints.push(operationName);
+      }
+    });
+  }
+  const renderedContent = TemplateRenderer.load(content, {
+    package: config.package,
+    swagger: config.data.swagger,
+    definitions: Object.keys(config.data.swagger.definitions),
+    endpoints,
+    additionalTplObject,
   });
+  const generatedPath = path.resolve(
+    targetDir,
+    path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
+  );
+  return fs.writeFileSync(generatedPath, renderedContent, 'utf8');
 };

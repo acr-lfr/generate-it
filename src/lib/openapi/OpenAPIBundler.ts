@@ -7,6 +7,7 @@ import commandRun from '@/utils/commandRun';
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
+import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -145,9 +146,8 @@ class OpenAPIBundler {
           const xRequestDefinitionsKeys = Object.keys(xRequestDefinitions);
           for (let k = 0; k < xRequestDefinitionsKeys.length; ++k) {
             const paramType = xRequestDefinitionsKeys[k];
-            if (xRequestDefinitions[paramType].interfaceText === '' &&
-              xRequestDefinitions[paramType].params.length > 0) {
-              xRequestDefinitions[paramType].interfaceText = await this.generateInterfaceText(
+            if (xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0) {
+              xRequestDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
                 apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name,
                 _.get(
                   apiObject,
@@ -182,7 +182,7 @@ class OpenAPIBundler {
       try {
         apiObject.interfaces.push({
           name: defKeys[i],
-          content: await this.generateInterfaceText(
+          content: await generateTypeScriptInterfaceText(
             defKeys[i],
             definitionObject,
             config.targetDir,
@@ -209,41 +209,6 @@ class OpenAPIBundler {
 
     apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
     return apiObject;
-  }
-
-  /**
-   * Generates the interface text via quicktype
-   * @param mainInterfaceName
-   * @param definitionObject
-   * @param targetDir
-   */
-  public async generateInterfaceText (mainInterfaceName: string, definitionObject: any, targetDir: string) {
-    const baseInterfaceDir = path.join(GeneratedComparison.getCacheBaseDir(targetDir), 'interface');
-    fs.ensureDirSync(baseInterfaceDir);
-    const tmpJsonSchema = path.join(baseInterfaceDir, mainInterfaceName + '.json');
-
-    // write the json to disk
-    fs.writeJsonSync(
-      tmpJsonSchema,
-      definitionObject,
-    );
-
-    // parse to interface
-    try {
-      return await commandRun('node', [
-        path.join('./node_modules/quicktype/dist/cli/index.js'),
-        '--just-types',
-        '--src',
-        tmpJsonSchema,
-        '--src-lang',
-        'schema',
-        '--lang',
-        'ts',
-      ]);
-    } catch (e) {
-      console.error(e);
-      throw new Error('quicktype error, full input json used: ' + tmpJsonSchema);
-    }
   }
 }
 
