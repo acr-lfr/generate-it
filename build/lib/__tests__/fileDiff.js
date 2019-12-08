@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var fileDiff_1 = tslib_1.__importDefault(require("../fileDiff"));
+var fileDiff_1 = tslib_1.__importDefault(require("../diff/fileDiff"));
 var path_1 = tslib_1.__importDefault(require("path"));
 it('should return ', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
     var a, diff;

@@ -16,7 +16,7 @@ exports["default"] = (function () {
     })
         .option('-m, --mocked', 'If passed, the domains will be configured to return dummy content.')
         .option('-o, --output <outputDir>', 'directory where to put the generated files (defaults to current directory)', commanderParseOutput_1["default"], process.cwd())
-        .requiredOption('-t, --template <template>', 'Full URL to a public git repo, eg github')
+        .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
         .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
         .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', 1)
         .option('-v, --verbose', 'Outputs verbose logging')

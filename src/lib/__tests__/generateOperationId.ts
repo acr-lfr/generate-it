@@ -1,4 +1,4 @@
-import generateOperationId from '@/lib/generateOperationId';
+import generateOperationId from '@/lib/generate/generateOperationId';
 
 it('handle a simple path', () => {
   expect(generateOperationId('get', 'some/path')).toBe('somePathGet');

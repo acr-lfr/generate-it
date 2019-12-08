@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var generateOperationId_1 = tslib_1.__importDefault(require("../generateOperationId"));
+var generateOperationId_1 = tslib_1.__importDefault(require("../generate/generateOperationId"));
 it('handle a simple path', function () {
     expect(generateOperationId_1["default"]('get', 'some/path')).toBe('somePathGet');
 });

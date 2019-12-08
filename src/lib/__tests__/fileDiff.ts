@@ -1,4 +1,4 @@
-import fileDiff from '@/lib/fileDiff';
+import fileDiff from '@/lib/diff/fileDiff';
 import path from 'path';
 
 it('should return ', async () => {

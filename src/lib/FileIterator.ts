@@ -4,11 +4,11 @@ import walk from 'walk';
 
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
-import generateFile from '@/lib/generateFile';
-import GenerateInterfaceFiles from '@/lib/GenerateInterfaceFiles';
-import generateOperationFile from '@/lib/generateOperationFile';
-import generateOperationFiles from '@/lib/generateOperationFiles';
-import isFileToIngore from '@/lib/isFileToIngore';
+import generateFile from '@/lib/generate/generateFile';
+import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
+import generateOperationFile from '@/lib/generate/generateOperationFile';
+import generateOperationFiles from '@/lib/generate/generateOperationFiles';
+import isFileToIngore from '@/utils/isFileToIngore';
 
 class FileWalker {
   public files: any = {};

@@ -1,5 +1,5 @@
-import lcFirst from '@/lib/helpers/template/lcFirst';
-import ucFirst from '@/lib/helpers/template/ucFirst';
+import lcFirst from '@/lib/template/helpers/lcFirst';
+import ucFirst from '@/lib/template/helpers/ucFirst';
 
 /**
  *

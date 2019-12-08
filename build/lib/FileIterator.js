@@ -5,11 +5,11 @@ var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var walk_1 = tslib_1.__importDefault(require("walk"));
 var FileTypeCheck_1 = tslib_1.__importDefault(require("./FileTypeCheck"));
-var generateFile_1 = tslib_1.__importDefault(require("./generateFile"));
-var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./GenerateInterfaceFiles"));
-var generateOperationFile_1 = tslib_1.__importDefault(require("./generateOperationFile"));
-var generateOperationFiles_1 = tslib_1.__importDefault(require("./generateOperationFiles"));
-var isFileToIngore_1 = tslib_1.__importDefault(require("./isFileToIngore"));
+var generateFile_1 = tslib_1.__importDefault(require("./generate/generateFile"));
+var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./generate/GenerateInterfaceFiles"));
+var generateOperationFile_1 = tslib_1.__importDefault(require("./generate/generateOperationFile"));
+var generateOperationFiles_1 = tslib_1.__importDefault(require("./generate/generateOperationFiles"));
+var isFileToIngore_1 = tslib_1.__importDefault(require("../utils/isFileToIngore"));
 var FileWalker = /** @class */ (function () {
     function FileWalker() {
         this.files = {};

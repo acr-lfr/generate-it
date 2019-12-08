@@ -3,19 +3,19 @@
   "version": "4.0.6",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "licence": "MIT",
-  "main": "./build/cli.js",
+  "main": "./build/openapiNodegen.js",
   "bin": {
     "openapi-nodegen": "./build/cli.js"
   },
   "scripts": {
     "install:githooks": "cp ./githooks/* .git/hooks",
     "test": "npm run lint && npm run test:unit",
-    "test:build": "node build/cli.js test_swagger.yml -t https://github.com/acrontum/openapi-nodegen-typescript-server.git#develop -m -o testserver/ --dont-update-tpl-cache true",
-    "test:unit": "jest",
-    "lint": "tslint --project tsconfig.json",
+    "test:unit": "npm run build && jest",
+    "test:unit:single": "jest --collect-coverage false",
+    "lint": "tslint --project tsconfig.json --fix",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "build:tocs": "npx doctoc .",
-    "build": "ttsc -p .",
+    "build": "rm -fR ./build && ttsc -p .",
     "build:watch": "ttsc --watch -p .",
     "start": "node cli.js",
     "prepublishOnly": "npm run lint && npm run test"
@@ -71,6 +71,7 @@
     "@types/yamljs": "^0.2.30",
     "@zerollup/ts-transform-paths": "^1.7.3",
     "eslint": "^6.6.0",
+    "hasha": "^5.1.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
