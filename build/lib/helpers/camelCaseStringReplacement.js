@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var lcFirst_1 = tslib_1.__importDefault(require("./template/lcFirst"));
-var ucFirst_1 = tslib_1.__importDefault(require("./template/ucFirst"));
+var lcFirst_1 = tslib_1.__importDefault(require("../template/helpers/lcFirst"));
+var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 /**
  *
  * @param input

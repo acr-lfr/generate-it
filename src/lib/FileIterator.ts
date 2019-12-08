@@ -4,11 +4,11 @@ import walk from 'walk';
 
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
-import generateFile from '@/lib/generateFile';
-import GenerateInterfaceFiles from '@/lib/GenerateInterfaceFiles';
-import generateOperationFile from '@/lib/generateOperationFile';
-import generateOperationFiles from '@/lib/generateOperationFiles';
-import isFileToIngore from '@/lib/isFileToIngore';
+import generateFile from '@/lib/generate/generateFile';
+import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
+import generateOperationFile from '@/lib/generate/generateOperationFile';
+import generateOperationFiles from '@/lib/generate/generateOperationFiles';
+import isFileToIngore from '@/utils/isFileToIngore';
 
 class FileWalker {
   public files: any = {};
@@ -37,7 +37,7 @@ class FileWalker {
           console.error(e);
         }
       })
-      // @ts-ignore
+        // @ts-ignore
         .on('errors', (root: any, nodeStatsArray: any) => {
           reject(nodeStatsArray);
         })
@@ -66,6 +66,32 @@ class FileWalker {
     }
   }
 
+  public calculateTemplatePath (dir: string, filename: string): string {
+    return path.resolve(
+      this.config.targetDir,
+      path.relative(
+        this.config.templates,
+        path.resolve(
+          dir,
+          filename,
+        ),
+      ),
+    );
+  }
+
+  public buildPathDataObject (root: string, filename: string) {
+    return {
+      root,
+      templates_dir: this.config.templates,
+      targetDir: this.config.targetDir,
+      package: this.config.package,
+      data: this.config,
+      file_name: filename,
+      segmentsCount: this.config.segmentsCount,
+      mockServer: this.config.mockServer,
+    };
+  }
+
   /**
    * The walker function for a single file
    * @param {string} root - The directory to the file
@@ -79,43 +105,30 @@ class FileWalker {
     }
     global.veryVerboseLogging('Dir:' + root);
     global.veryVerboseLogging('File:' + stats.name);
-    const targetDir = this.config.targetDir;
-    const templatesDir = this.config.templates;
-    const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, stats.name)));
-    const generationDataObject = {
-      root,
-      templates_dir: templatesDir,
-      targetDir,
-      package: this.config.package,
-      data: this.config,
-      file_name: stats.name,
-      segmentsCount: this.config.segmentsCount,
-      mockServer: this.config.mockServer,
-    };
-    const fileType = FileTypeCheck.getFileType(generationDataObject.file_name);
-    if (fileType === FileTypeCheck.INTERFACE) {
-      global.veryVerboseLogging('Interface file: ' + generationDataObject.file_name);
-      // iterates over the interfaces array in the swagger object creating multiple interface files
-      await (new GenerateInterfaceFiles(generationDataObject)).writeFiles();
 
-    } else if (
-      (this.config.mockServer && fileType === FileTypeCheck.MOCK) ||
-      fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION
-    ) {
-      global.veryVerboseLogging('Mock|Stub|Operation file: ' + generationDataObject.file_name);
-      // this file should be handled for each in swagger.paths creating multiple path based files, eg domains or routes etc etc
+    const templatePath = this.calculateTemplatePath(root, stats.name);
+    const generationDataObject = this.buildPathDataObject(root, stats.name);
+    const fileType = FileTypeCheck.getFileType(generationDataObject.file_name);
+
+    switch (fileType) {
+      case FileTypeCheck.INTERFACE:
+        await (new GenerateInterfaceFiles(generationDataObject)).writeFiles();
+        break;
+      case FileTypeCheck.OTHER:
+        await generateFile(generationDataObject, this.isFirstRun);
+        break;
+      case FileTypeCheck.OPERATION_INDEX:
+        this.files[fileType] = {generationDataObject};
+        break;
+    }
+
+    if ((this.config.mockServer && fileType === FileTypeCheck.MOCK) || fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION) {
       this.files[fileType] = {
         files: await generateOperationFiles(generationDataObject),
         generationDataObject,
       };
-    } else if (fileType === FileTypeCheck.OPERATION_INDEX) {
-      this.files[fileType] = {
-        generationDataObject,
-      };
-    } else if (fileType === FileTypeCheck.OTHER) {
-      // standard tpl file, no iterations, simple parse with the generationDataObject
-      await generateFile(generationDataObject, this.isFirstRun);
     }
+
     if (templatePath.substr(templatePath.length - 3) === 'njk') {
       fs.removeSync(templatePath);
     }

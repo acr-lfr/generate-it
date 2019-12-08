@@ -5,11 +5,11 @@ var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var walk_1 = tslib_1.__importDefault(require("walk"));
 var FileTypeCheck_1 = tslib_1.__importDefault(require("./FileTypeCheck"));
-var generateFile_1 = tslib_1.__importDefault(require("./generateFile"));
-var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./GenerateInterfaceFiles"));
-var generateOperationFile_1 = tslib_1.__importDefault(require("./generateOperationFile"));
-var generateOperationFiles_1 = tslib_1.__importDefault(require("./generateOperationFiles"));
-var isFileToIngore_1 = tslib_1.__importDefault(require("./isFileToIngore"));
+var generateFile_1 = tslib_1.__importDefault(require("./generate/generateFile"));
+var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./generate/GenerateInterfaceFiles"));
+var generateOperationFile_1 = tslib_1.__importDefault(require("./generate/generateOperationFile"));
+var generateOperationFiles_1 = tslib_1.__importDefault(require("./generate/generateOperationFiles"));
+var isFileToIngore_1 = tslib_1.__importDefault(require("../utils/isFileToIngore"));
 var FileWalker = /** @class */ (function () {
     function FileWalker() {
         this.files = {};
@@ -86,6 +86,21 @@ var FileWalker = /** @class */ (function () {
             });
         });
     };
+    FileWalker.prototype.calculateTemplatePath = function (dir, filename) {
+        return path_1["default"].resolve(this.config.targetDir, path_1["default"].relative(this.config.templates, path_1["default"].resolve(dir, filename)));
+    };
+    FileWalker.prototype.buildPathDataObject = function (root, filename) {
+        return {
+            root: root,
+            templates_dir: this.config.templates,
+            targetDir: this.config.targetDir,
+            package: this.config.package,
+            data: this.config,
+            file_name: filename,
+            segmentsCount: this.config.segmentsCount,
+            mockServer: this.config.mockServer
+        };
+    };
     /**
      * The walker function for a single file
      * @param {string} root - The directory to the file
@@ -95,67 +110,48 @@ var FileWalker = /** @class */ (function () {
      */
     FileWalker.prototype.fileIteration = function (root, stats, next) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var targetDir, templatesDir, templatePath, generationDataObject, fileType, _a, _b, _c;
-            return tslib_1.__generator(this, function (_d) {
-                switch (_d.label) {
+            var templatePath, generationDataObject, fileType, _a, _b, _c, _d;
+            return tslib_1.__generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
                         if (isFileToIngore_1["default"](root, stats.name)) {
                             return [2 /*return*/, next()];
                         }
                         global.veryVerboseLogging('Dir:' + root);
                         global.veryVerboseLogging('File:' + stats.name);
-                        targetDir = this.config.targetDir;
-                        templatesDir = this.config.templates;
-                        templatePath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, stats.name)));
-                        generationDataObject = {
-                            root: root,
-                            templates_dir: templatesDir,
-                            targetDir: targetDir,
-                            package: this.config.package,
-                            data: this.config,
-                            file_name: stats.name,
-                            segmentsCount: this.config.segmentsCount,
-                            mockServer: this.config.mockServer
-                        };
+                        templatePath = this.calculateTemplatePath(root, stats.name);
+                        generationDataObject = this.buildPathDataObject(root, stats.name);
                         fileType = FileTypeCheck_1["default"].getFileType(generationDataObject.file_name);
-                        if (!(fileType === FileTypeCheck_1["default"].INTERFACE)) return [3 /*break*/, 2];
-                        global.veryVerboseLogging('Interface file: ' + generationDataObject.file_name);
-                        // iterates over the interfaces array in the swagger object creating multiple interface files
-                        return [4 /*yield*/, (new GenerateInterfaceFiles_1["default"](generationDataObject)).writeFiles()];
-                    case 1:
-                        // iterates over the interfaces array in the swagger object creating multiple interface files
-                        _d.sent();
-                        return [3 /*break*/, 7];
+                        _a = fileType;
+                        switch (_a) {
+                            case FileTypeCheck_1["default"].INTERFACE: return [3 /*break*/, 1];
+                            case FileTypeCheck_1["default"].OTHER: return [3 /*break*/, 3];
+                            case FileTypeCheck_1["default"].OPERATION_INDEX: return [3 /*break*/, 5];
+                        }
+                        return [3 /*break*/, 6];
+                    case 1: return [4 /*yield*/, (new GenerateInterfaceFiles_1["default"](generationDataObject)).writeFiles()];
                     case 2:
-                        if (!((this.config.mockServer && fileType === FileTypeCheck_1["default"].MOCK) ||
-                            fileType === FileTypeCheck_1["default"].STUB || fileType === FileTypeCheck_1["default"].OPERATION)) return [3 /*break*/, 4];
-                        global.veryVerboseLogging('Mock|Stub|Operation file: ' + generationDataObject.file_name);
-                        // this file should be handled for each in swagger.paths creating multiple path based files, eg domains or routes etc etc
-                        _a = this.files;
-                        _b = fileType;
-                        _c = {};
-                        return [4 /*yield*/, generateOperationFiles_1["default"](generationDataObject)];
-                    case 3:
-                        // this file should be handled for each in swagger.paths creating multiple path based files, eg domains or routes etc etc
-                        _a[_b] = (_c.files = _d.sent(),
-                            _c.generationDataObject = generationDataObject,
-                            _c);
-                        return [3 /*break*/, 7];
+                        _e.sent();
+                        return [3 /*break*/, 6];
+                    case 3: return [4 /*yield*/, generateFile_1["default"](generationDataObject, this.isFirstRun)];
                     case 4:
-                        if (!(fileType === FileTypeCheck_1["default"].OPERATION_INDEX)) return [3 /*break*/, 5];
-                        this.files[fileType] = {
-                            generationDataObject: generationDataObject
-                        };
-                        return [3 /*break*/, 7];
+                        _e.sent();
+                        return [3 /*break*/, 6];
                     case 5:
-                        if (!(fileType === FileTypeCheck_1["default"].OTHER)) return [3 /*break*/, 7];
-                        // standard tpl file, no iterations, simple parse with the generationDataObject
-                        return [4 /*yield*/, generateFile_1["default"](generationDataObject, this.isFirstRun)];
+                        this.files[fileType] = { generationDataObject: generationDataObject };
+                        return [3 /*break*/, 6];
                     case 6:
-                        // standard tpl file, no iterations, simple parse with the generationDataObject
-                        _d.sent();
-                        _d.label = 7;
+                        if (!((this.config.mockServer && fileType === FileTypeCheck_1["default"].MOCK) || fileType === FileTypeCheck_1["default"].STUB || fileType === FileTypeCheck_1["default"].OPERATION)) return [3 /*break*/, 8];
+                        _b = this.files;
+                        _c = fileType;
+                        _d = {};
+                        return [4 /*yield*/, generateOperationFiles_1["default"](generationDataObject)];
                     case 7:
+                        _b[_c] = (_d.files = _e.sent(),
+                            _d.generationDataObject = generationDataObject,
+                            _d);
+                        _e.label = 8;
+                    case 8:
                         if (templatePath.substr(templatePath.length - 3) === 'njk') {
                             fs_extra_1["default"].removeSync(templatePath);
                         }

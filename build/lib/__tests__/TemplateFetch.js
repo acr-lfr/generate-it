@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
-var TemplateFetch_1 = tslib_1.__importDefault(require("../TemplateFetch"));
+var TemplateFetch_1 = tslib_1.__importDefault(require("../template/TemplateFetch"));
 var repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 var camelCaseUrl = '';
 describe('calculateLocalDirectoryFromUrl should return valid directory', function () {

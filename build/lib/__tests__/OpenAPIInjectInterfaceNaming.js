@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("../OpenAPIInjectInterfaceNaming"));
+var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("../openapi/OpenAPIInjectInterfaceNaming"));
 var swagger2obj = {
     swagger: '2.0'
 };

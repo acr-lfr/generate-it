@@ -1,5 +1,5 @@
 import path from 'path';
-import TemplateFetch from '../TemplateFetch';
+import TemplateFetch from '../template/TemplateFetch';
 
 const repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 let camelCaseUrl = '';
