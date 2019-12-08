@@ -7,9 +7,8 @@ var walk_1 = tslib_1.__importDefault(require("walk"));
 var FileTypeCheck_1 = tslib_1.__importDefault(require("./FileTypeCheck"));
 var generateFile_1 = tslib_1.__importDefault(require("./generate/generateFile"));
 var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./generate/GenerateInterfaceFiles"));
-var generateOperationFile_1 = tslib_1.__importDefault(require("./generate/generateOperationFile"));
-var generateOperationFiles_1 = tslib_1.__importDefault(require("./generate/generateOperationFiles"));
 var isFileToIngore_1 = tslib_1.__importDefault(require("../utils/isFileToIngore"));
+var GenerateOperation_1 = tslib_1.__importDefault(require("./generate/GenerateOperation"));
 var FileWalker = /** @class */ (function () {
     function FileWalker() {
         this.files = {};
@@ -75,7 +74,7 @@ var FileWalker = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.files[FileTypeCheck_1["default"].OPERATION_INDEX]) return [3 /*break*/, 2];
-                        return [4 /*yield*/, generateOperationFile_1["default"](this.files[FileTypeCheck_1["default"].OPERATION_INDEX].generationDataObject, [], 'index', true, {
+                        return [4 /*yield*/, GenerateOperation_1["default"].file(this.files[FileTypeCheck_1["default"].OPERATION_INDEX].generationDataObject, [], 'index', true, {
                                 operationFiles: this.files[FileTypeCheck_1["default"].OPERATION].files
                             })];
                     case 1:
@@ -145,7 +144,7 @@ var FileWalker = /** @class */ (function () {
                         _b = this.files;
                         _c = fileType;
                         _d = {};
-                        return [4 /*yield*/, generateOperationFiles_1["default"](generationDataObject)];
+                        return [4 /*yield*/, GenerateOperation_1["default"].files(generationDataObject)];
                     case 7:
                         _b[_c] = (_d.files = _e.sent(),
                             _d.generationDataObject = generationDataObject,

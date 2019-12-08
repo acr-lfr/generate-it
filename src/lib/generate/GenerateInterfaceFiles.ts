@@ -32,19 +32,14 @@ class GenerateInterfaceFiles {
     const ext = NamingUtils.getFileExt(this.config.file_name);
     const newFilename = definitionName + '.' + ext;
     const targetFile = path.resolve(this.config.targetDir, subdir, newFilename);
-    let content = TemplateRenderer.load(data.toString(), {
-      definitionName,
-      definitionInterfaceText: interfaceText,
-    });
-
-    content = content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
-    content = prettier.format(content, {
-      bracketSpacing: true,
-      endOfLine: 'auto',
-      semi: true,
-      singleQuote: true,
-      parser: ext === 'ts' ? 'typescript' : 'babel',
-    });
+    const content = TemplateRenderer.load(
+      data.toString(),
+      {
+        definitionName,
+        definitionInterfaceText: interfaceText,
+      },
+      ext,
+    );
 
     const moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
     if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs.existsSync(targetFile)) {

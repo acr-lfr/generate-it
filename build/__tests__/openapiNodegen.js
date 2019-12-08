@@ -61,7 +61,9 @@ describe('e2e testing', function () {
                     filePaths = [
                         ['testserver/src/domains/RainDomain.ts', 'f768ac3c949e6d77aff47810f0150a23'],
                         ['testserver/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
-                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '7af932add1d926b1905e1859fa7fefb7'],
+                        ['testserver/src/http/nodegen/interfaces/index.ts', '0e5a6b1bfad08b8c378be83a6b4c436c'],
+                        ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
+                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '7b02f2da8180e6ca2334433d2eae3b2c'],
                         ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
                     ];
                     i = 0;
@@ -73,7 +75,9 @@ describe('e2e testing', function () {
                     return [4 /*yield*/, hasha_1["default"].fromFile(path_1["default"].join(process.cwd(), filePath), { algorithm: 'md5' })];
                 case 2:
                     hash = _a.sent();
-                    expect(hash).toBe(fileHash);
+                    if (hash !== fileHash) {
+                        done("Hash mis-match for file " + filePath + ". Expected hash " + fileHash + " but got " + hash);
+                    }
                     _a.label = 3;
                 case 3:
                     ++i;
@@ -81,6 +85,34 @@ describe('e2e testing', function () {
                 case 4:
                     done();
                     return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+        var tplUrl, ymlPath, e_2;
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
+                    ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
+                    return [4 /*yield*/, openapiNodegen_1["default"]({
+                            dontUpdateTplCache: false,
+                            mockServer: false,
+                            segmentsCount: 1,
+                            swaggerFilePath: ymlPath,
+                            targetDir: testServerPath,
+                            template: tplUrl
+                        })];
+                case 1:
+                    _a.sent();
+                    done();
+                    return [3 /*break*/, 3];
+                case 2:
+                    e_2 = _a.sent();
+                    done(e_2);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     }); });

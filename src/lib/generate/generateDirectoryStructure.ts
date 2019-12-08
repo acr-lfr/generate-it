@@ -29,5 +29,6 @@ export default (config: ConfigExtendedBase, templatesDir: string) => {
     resetNodegenFolder(targetDir, templatesDir, config.mockServer, config.nodegenRc);
     displayDependencyDiffs(targetDir, templatesDir);
   }
+  console.log('Nodegen directory structure ready');
   return IS_FIRST_RUN;
 };

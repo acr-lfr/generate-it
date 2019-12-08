@@ -6,9 +6,8 @@ import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import generateFile from '@/lib/generate/generateFile';
 import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
-import generateOperationFile from '@/lib/generate/generateOperationFile';
-import generateOperationFiles from '@/lib/generate/generateOperationFiles';
 import isFileToIngore from '@/utils/isFileToIngore';
+import GenerateOperation from '@/lib/generate/GenerateOperation';
 
 class FileWalker {
   public files: any = {};
@@ -54,7 +53,7 @@ class FileWalker {
    */
   public async parseOpIndex () {
     if (this.files[FileTypeCheck.OPERATION_INDEX]) {
-      await generateOperationFile(
+      await GenerateOperation.file(
         this.files[FileTypeCheck.OPERATION_INDEX].generationDataObject,
         [],
         'index',
@@ -124,7 +123,7 @@ class FileWalker {
 
     if ((this.config.mockServer && fileType === FileTypeCheck.MOCK) || fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION) {
       this.files[fileType] = {
-        files: await generateOperationFiles(generationDataObject),
+        files: await GenerateOperation.files(generationDataObject),
         generationDataObject,
       };
     }

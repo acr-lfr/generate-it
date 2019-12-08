@@ -5,10 +5,9 @@ var _ = tslib_1.__importStar(require("lodash"));
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var YAML = tslib_1.__importStar(require("js-yaml"));
-var commandRun_1 = tslib_1.__importDefault(require("../../utils/commandRun"));
 var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPIInjectInterfaceNaming"));
-var GeneratedComparison_1 = tslib_1.__importDefault(require("../generate/GeneratedComparison"));
 var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAllOfs"));
+var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -185,10 +184,9 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 4:
                         if (!(k < xRequestDefinitionsKeys.length)) return [3 /*break*/, 8];
                         paramType = xRequestDefinitionsKeys[k];
-                        if (!(xRequestDefinitions[paramType].interfaceText === '' &&
-                            xRequestDefinitions[paramType].params.length > 0)) return [3 /*break*/, 6];
+                        if (!(xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0)) return [3 /*break*/, 6];
                         _a = xRequestDefinitions[paramType];
-                        return [4 /*yield*/, this.generateInterfaceText(apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name, _.get(apiObject, apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0]), config.targetDir)];
+                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name, _.get(apiObject, apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0]), config.targetDir)];
                     case 5:
                         _a.interfaceText = _b.sent();
                         _b.label = 6;
@@ -239,7 +237,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         _c = {
                             name: defKeys[i]
                         };
-                        return [4 /*yield*/, this.generateInterfaceText(defKeys[i], definitionObject, config.targetDir)];
+                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](defKeys[i], definitionObject, config.targetDir)];
                     case 3:
                         _b.apply(_a, [(_c.content = _d.sent(),
                                 _c)]);
@@ -268,46 +266,6 @@ var OpenAPIBundler = /** @class */ (function () {
         });
         apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
         return apiObject;
-    };
-    /**
-     * Generates the interface text via quicktype
-     * @param mainInterfaceName
-     * @param definitionObject
-     * @param targetDir
-     */
-    OpenAPIBundler.prototype.generateInterfaceText = function (mainInterfaceName, definitionObject, targetDir) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var baseInterfaceDir, tmpJsonSchema, e_5;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        baseInterfaceDir = path_1["default"].join(GeneratedComparison_1["default"].getCacheBaseDir(targetDir), 'interface');
-                        fs_extra_1["default"].ensureDirSync(baseInterfaceDir);
-                        tmpJsonSchema = path_1["default"].join(baseInterfaceDir, mainInterfaceName + '.json');
-                        // write the json to disk
-                        fs_extra_1["default"].writeJsonSync(tmpJsonSchema, definitionObject);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, commandRun_1["default"]('node', [
-                                path_1["default"].join('./node_modules/quicktype/dist/cli/index.js'),
-                                '--just-types',
-                                '--src',
-                                tmpJsonSchema,
-                                '--src-lang',
-                                'schema',
-                                '--lang',
-                                'ts',
-                            ])];
-                    case 2: return [2 /*return*/, _a.sent()];
-                    case 3:
-                        e_5 = _a.sent();
-                        console.error(e_5);
-                        throw new Error('quicktype error, full input json used: ' + tmpJsonSchema);
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
     };
     return OpenAPIBundler;
 }());

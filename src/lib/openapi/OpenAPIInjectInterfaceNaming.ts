@@ -129,11 +129,11 @@ class OpenAPIInjectInterfaceNaming {
             const paramPath = this.convertRefToOjectPath(p.$ref || p.schema.$ref);
             const parameterObject = _.get(this.apiObject, paramPath);
             requestParams[parameterObject.in || p.in].params.push(paramPath);
-            if (p.schema) {
-              const name = paramPath.split('.').pop();
-              requestParams.body.interfaceName = name;
-              requestParams.body.name = name;
-            }
+            // if (p.schema) {
+            //   const name = paramPath.split('.').pop();
+            //   requestParams.body.interfaceName = name;
+            //   requestParams.body.name = name;
+            // }
           } catch (e) {
             console.error(e);
           }

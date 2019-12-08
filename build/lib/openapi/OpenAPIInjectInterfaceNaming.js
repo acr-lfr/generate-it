@@ -122,11 +122,11 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                         var paramPath = _this.convertRefToOjectPath(p.$ref || p.schema.$ref);
                         var parameterObject = _.get(_this.apiObject, paramPath);
                         requestParams[parameterObject["in"] || p["in"]].params.push(paramPath);
-                        if (p.schema) {
-                            var name_1 = paramPath.split('.').pop();
-                            requestParams.body.interfaceName = name_1;
-                            requestParams.body.name = name_1;
-                        }
+                        // if (p.schema) {
+                        //   const name = paramPath.split('.').pop();
+                        //   requestParams.body.interfaceName = name;
+                        //   requestParams.body.name = name;
+                        // }
                     }
                     catch (e) {
                         console.error(e);
@@ -153,15 +153,15 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                     // make object from body
                 }
                 else {
-                    var name_2 = parameterObject.name;
-                    name_2 += (!parameterObject.required) ? '?' : '';
-                    requestObject[name_2] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
+                    var name_1 = parameterObject.name;
+                    name_1 += (!parameterObject.required) ? '?' : '';
+                    requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
                 }
             });
             if (!clear) {
-                var name_3 = _this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
+                var name_2 = _this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
                 _this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
-                    outputString: _this.objectToInterfaceString(requestObject, name_3)
+                    outputString: _this.objectToInterfaceString(requestObject, name_2)
                 };
             }
             else {
