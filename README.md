@@ -1,9 +1,9 @@
 # OpenAPI Nodegen
-[![Build Status](https://travis-ci.org/acrontum/openapi-nodegen.svg?branch=master)](https://travis-ci.org/acrontum/openapi-nodegen)
+[![License](http://img.shields.io/npm/l/boats.svg)](https://github.com/acrontum/openapi-nodegen/blob/master/LICENSE) | [![Dependencies](https://david-dm.org/johndcarmichael/boats.svg)](https://david-dm.org/acrontum/openapi-nodegen) | [![Codecov Coverage](https://img.shields.io/codecov/c/github/acrontum/openapi-nodegen/master.svg?style=flat-square)](https://codecov.io/gh/acrontum/openapi-nodegen/) | [![Build Status](https://travis-ci.org/acrontum/openapi-nodegen.svg?branch=master)](https://travis-ci.org/acrontum/openapi-nodegen)
 
 OpenAPI Nodegen is a tool to generate RESTful servers and clients without a dependency on Java.
 
-Example using the pre-made Typescript ExpressJS Server templates:
+This is an example use the pre-made Typescript ExpressJS Server templates c/w interfaces:
 ```
 openapi-nodegen apifile.yml --template https://github.com/acrontum/openapi-nodegen-typescript-server.git
 ```
