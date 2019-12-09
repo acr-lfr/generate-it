@@ -4,22 +4,19 @@ import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import fs from 'fs-extra';
 import * as _ from 'lodash';
 import path from 'path';
+import generateFileDoWrite from '@/lib/generate/generateFileDoWrite';
 
 /**
  * Generates a file.
  *
  * @private
- * @param  {Object} config
- * @param  {String} config.templates_dir Directory where the templates live.
- * @param  {String} config.targetDir     Directory where the file will be generated.
- * @param  {String} config.file_name     Name of the generated file.
- * @param  {String} config.root          Root directory.
- * @param  {Object} config.data          Data to pass to the helpers.
+ * @param  {GenerateOperationFileConfig} config
  * @param  {Boolean} isFirstRun
  * @param  {Object} [additionalTplObject]  An additional object that will be passed to the tpl, defaults to an empty object
+ * @param  {string }nodegenDir
  * @return {Promise}
  */
-export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additionalTplObject: any = {}) => {
+export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additionalTplObject: any = {}, nodegenDir: string) => {
 
   const templatesDir = config.templates_dir;
   const targetDir = config.targetDir;
@@ -31,7 +28,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
 
   // should write or not
-  if (!isFirstRun || fs.existsSync(NamingUtils.stripNjkExtension(templatePath)) || !root.includes('/http/nodegen')) {
+  if (!generateFileDoWrite(isFirstRun, templatePath, root, nodegenDir)) {
     return;
   }
   // This could be a new file in the templates, ensure the dir structure is present before preceding
