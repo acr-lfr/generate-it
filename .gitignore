@@ -9,6 +9,7 @@ node_modules
 .idea/workspace.xml
 
 # Generated
+coverage/
 testserver/
 !testserver/package.json
 jest/
