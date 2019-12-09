@@ -114,7 +114,7 @@ class FileWalker {
         await (new GenerateInterfaceFiles(generationDataObject)).writeFiles();
         break;
       case FileTypeCheck.OTHER:
-        await generateFile(generationDataObject, this.isFirstRun);
+        await generateFile(generationDataObject, this.isFirstRun, {}, this.config.nodegenRc.nodegenDir);
         break;
       case FileTypeCheck.OPERATION_INDEX:
         this.files[fileType] = {generationDataObject};

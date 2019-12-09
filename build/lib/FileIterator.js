@@ -132,7 +132,7 @@ var FileWalker = /** @class */ (function () {
                     case 2:
                         _e.sent();
                         return [3 /*break*/, 6];
-                    case 3: return [4 /*yield*/, generateFile_1["default"](generationDataObject, this.isFirstRun)];
+                    case 3: return [4 /*yield*/, generateFile_1["default"](generationDataObject, this.isFirstRun, {}, this.config.nodegenRc.nodegenDir)];
                     case 4:
                         _e.sent();
                         return [3 /*break*/, 6];

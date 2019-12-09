@@ -6,21 +6,18 @@ var TemplateRenderer_1 = tslib_1.__importDefault(require("../template/TemplateRe
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var _ = tslib_1.__importStar(require("lodash"));
 var path_1 = tslib_1.__importDefault(require("path"));
+var generateFileDoWrite_1 = tslib_1.__importDefault(require("./generateFileDoWrite"));
 /**
  * Generates a file.
  *
  * @private
- * @param  {Object} config
- * @param  {String} config.templates_dir Directory where the templates live.
- * @param  {String} config.targetDir     Directory where the file will be generated.
- * @param  {String} config.file_name     Name of the generated file.
- * @param  {String} config.root          Root directory.
- * @param  {Object} config.data          Data to pass to the helpers.
+ * @param  {GenerateOperationFileConfig} config
  * @param  {Boolean} isFirstRun
  * @param  {Object} [additionalTplObject]  An additional object that will be passed to the tpl, defaults to an empty object
+ * @param  {string }nodegenDir
  * @return {Promise}
  */
-exports["default"] = (function (config, isFirstRun, additionalTplObject) {
+exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegenDir) {
     if (additionalTplObject === void 0) { additionalTplObject = {}; }
     var templatesDir = config.templates_dir;
     var targetDir = config.targetDir;
@@ -30,7 +27,7 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject) {
     var loadFilePath = (fileName !== 'package.json.njk') ? path_1["default"].resolve(root, fileName) : path_1["default"].resolve(process.cwd(), 'package.json');
     var templatePath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, fileName)));
     // should write or not
-    if (!isFirstRun || fs_extra_1["default"].existsSync(NamingUtils_1["default"].stripNjkExtension(templatePath)) || !root.includes('/http/nodegen')) {
+    if (!generateFileDoWrite_1["default"](isFirstRun, templatePath, root, nodegenDir)) {
         return;
     }
     // This could be a new file in the templates, ensure the dir structure is present before preceding
