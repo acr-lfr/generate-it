@@ -5,6 +5,7 @@ export default interface Config {
   targetDir: string;
   template: string;
   dontUpdateTplCache: boolean;
+  dontRunComparisonTool: boolean;
   segmentsCount: number;
   handlebars_helper?: any;
   ignoredModules?: string[];

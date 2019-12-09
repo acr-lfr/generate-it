@@ -13,6 +13,7 @@ console.log(("Provided arguments look ok, preceding to build the http layer and 
 var config = {
     verbose: cli.program.verbose || false,
     veryVerbose: cli.program.veryVerbose || false,
+    dontRunComparisonTool: cli.program.dontRunComparisonTool,
     dontUpdateTplCache: cli.program.dontUpdateTplCache,
     swaggerFilePath: cli.swaggerFile,
     targetDir: cli.program.output,

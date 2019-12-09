@@ -31,6 +31,7 @@ describe('e2e testing', () => {
       const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
       const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
+        dontRunComparisonTool: false,
         dontUpdateTplCache: false,
         mockServer: false,
         segmentsCount: 1,
@@ -51,6 +52,7 @@ describe('e2e testing', () => {
       const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
       const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
+        dontRunComparisonTool: false,
         dontUpdateTplCache: false,
         mockServer: false,
         segmentsCount: 1,
@@ -85,7 +87,7 @@ describe('e2e testing', () => {
       // Check dynamic docker file (OTHER file)
       ['testserver/docker-compose.yml', 'd553b06bbfc2fb3e9f4fa92dd293b4c1'],
       // Check dynamic docker file (OTHER file)
-      ['testserver/package.json', '645a599deede396cd7927307780922b2'],
+      ['testserver/package.json', 'b5c4efb73bdd92d9bea3b9af47c653d4'],
       // Check git ignore was copied over (OTHER file)
       ['testserver/.gitignore', 'f4f0aea2df6293d79666f3c7c622d45c'],
       // Check the deleted service file was reinjected
