@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1575877972961" clover="3.2.0">
-  <project timestamp="1575877972961" name="All files">
-    <metrics statements="1247" coveredstatements="1028" conditionals="621" coveredconditionals="392" methods="217" coveredmethods="187" elements="2085" coveredelements="1607" complexity="0" loc="1247" ncloc="1247" packages="13" files="67" classes="67"/>
+<coverage generated="1575889261027" clover="3.2.0">
+  <project timestamp="1575889261027" name="All files">
+    <metrics statements="1260" coveredstatements="1041" conditionals="623" coveredconditionals="393" methods="218" coveredmethods="188" elements="2101" coveredelements="1622" complexity="0" loc="1260" ncloc="1260" packages="13" files="68" classes="68"/>
     <package name="src">
-      <metrics statements="70" coveredstatements="45" conditionals="14" coveredconditionals="2" methods="11" coveredmethods="5"/>
+      <metrics statements="80" coveredstatements="55" conditionals="16" coveredconditionals="3" methods="11" coveredmethods="5"/>
       <file name="cli.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/cli.ts">
         <metrics statements="25" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
@@ -15,11 +15,10 @@
         <line num="10" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -27,10 +26,11 @@
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
       <file name="commander.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/commander.ts">
         <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
@@ -42,9 +42,9 @@
         <line num="8" count="1" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
-        <line num="26" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
+        <line num="27" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
       </file>
       <file name="commanderParseOutput.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/commanderParseOutput.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -53,7 +53,7 @@
         <line num="4" count="2" type="stmt"/>
       </file>
       <file name="openapiNodegen.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/openapiNodegen.ts">
-        <metrics statements="31" coveredstatements="31" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="41" coveredstatements="41" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -64,27 +64,37 @@
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
         <line num="20" count="2" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
         <line num="25" count="2" type="stmt"/>
         <line num="26" count="2" type="stmt"/>
-        <line num="28" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
         <line num="30" count="2" type="stmt"/>
         <line num="31" count="2" type="stmt"/>
-        <line num="33" count="2" type="stmt"/>
-        <line num="34" count="4" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
         <line num="36" count="2" type="stmt"/>
         <line num="37" count="2" type="stmt"/>
-        <line num="38" count="4" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
         <line num="40" count="2" type="stmt"/>
-        <line num="41" count="2" type="stmt"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.constants">
@@ -1426,7 +1436,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="46" coveredstatements="43" conditionals="31" coveredconditionals="23" methods="11" coveredmethods="11"/>
+      <metrics statements="49" coveredstatements="46" conditionals="31" coveredconditionals="23" methods="12" coveredmethods="12"/>
       <file name="commandRun.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/utils/commandRun.ts">
         <metrics statements="21" coveredstatements="20" conditionals="16" coveredconditionals="13" methods="5" coveredmethods="5"/>
         <line num="1" count="2" type="stmt"/>
@@ -1481,6 +1491,12 @@
         <line num="7" count="366" type="cond" truecount="2" falsecount="0"/>
         <line num="8" count="1" type="stmt"/>
         <line num="11" count="116" type="stmt"/>
+      </file>
+      <file name="logTimeDiff.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/utils/logTimeDiff.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="14" type="stmt"/>
+        <line num="3" count="14" type="stmt"/>
       </file>
       <file name="prettyfyRenderedContent.ts" path="/home/carmichael/code/open-source-projects/openapi-nodegen/src/utils/prettyfyRenderedContent.ts">
         <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>

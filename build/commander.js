@@ -18,6 +18,7 @@ exports["default"] = (function () {
         .option('-o, --output <outputDir>', 'directory where to put the generated files (defaults to current directory)', commanderParseOutput_1["default"], process.cwd())
         .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
         .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
+        .option('--dont-run-comparison-tool', 'Skips the stub file comparison tool and version cleanup', false)
         .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', 1)
         .option('-v, --verbose', 'Outputs verbose logging')
         .option('--very-verbose', 'Outputs very verbose logging')

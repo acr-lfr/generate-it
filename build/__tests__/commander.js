@@ -24,6 +24,7 @@ describe('Check all program options are captured and names correctly', function 
         expect(cli.program.output).toBe(path_1["default"].join(process.cwd(), 'mydir'));
         expect(cli.program.template).toBe('https://www.mygit.com');
         expect(cli.program.dontUpdateTplCache).toBe(true);
+        expect(cli.program.dontRunComparisonTool).toBe(false);
         expect(cli.program.segmentsCount).toBe('3');
         expect(cli.program.verbose).toBe(true);
         expect(cli.program.veryVerbose).toBe(true);
