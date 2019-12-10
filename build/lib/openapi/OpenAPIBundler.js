@@ -8,6 +8,7 @@ var YAML = tslib_1.__importStar(require("js-yaml"));
 var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPIInjectInterfaceNaming"));
 var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAllOfs"));
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
+var logTimeDiff_1 = tslib_1.__importDefault(require("../../utils/logTimeDiff"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -19,19 +20,25 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.bundle = function (filePath, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var content, e_1, e_2, e_3;
+            var content, startTime, filepath, e_1, e_2, e_3;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        startTime = new Date().getTime();
+                        logTimeDiff_1["default"](0, 0);
                         try {
-                            content = fs_extra_1["default"].readFileSync(path_1["default"].resolve(__dirname, filePath));
+                            filepath = path_1["default"].resolve(__dirname, filePath);
+                            console.log('Reading file: ' + filePath);
+                            content = fs_extra_1["default"].readFileSync(filePath);
                         }
                         catch (e) {
                             console.error('Can not load the content of the Swagger specification file');
                             console.log(filePath);
                             throw e;
                         }
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         try {
+                            console.log('Parsing file contents');
                             content = this.parseContent(content);
                         }
                         catch (e) {
@@ -39,7 +46,9 @@ var OpenAPIBundler = /** @class */ (function () {
                             global.verboseLogging(content);
                             throw e;
                         }
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         try {
+                            console.log('Injecting path interface names');
                             content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).inject();
                         }
                         catch (e) {
@@ -47,9 +56,11 @@ var OpenAPIBundler = /** @class */ (function () {
                             global.verboseLogging(JSON.stringify(content, undefined, 2));
                             throw e;
                         }
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
+                        console.log('De-referencing object');
                         return [4 /*yield*/, this.dereference(content)];
                     case 2:
                         content = _a.sent();
@@ -60,7 +71,9 @@ var OpenAPIBundler = /** @class */ (function () {
                         global.verboseLogging(JSON.stringify(content, undefined, 2));
                         throw e_1;
                     case 4:
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         try {
+                            console.log('Calculating all request definitions to interface relations');
                             content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters();
                         }
                         catch (e) {
@@ -68,7 +81,9 @@ var OpenAPIBundler = /** @class */ (function () {
                             global.verboseLogging(JSON.stringify(content, undefined, 2));
                             throw e;
                         }
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         try {
+                            console.log('Resolving all allOf references');
                             content = openApiResolveAllOfs_1["default"](content);
                         }
                         catch (e) {
@@ -76,9 +91,11 @@ var OpenAPIBundler = /** @class */ (function () {
                             global.verboseLogging(JSON.stringify(content, undefined, 2));
                             throw e;
                         }
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         _a.label = 5;
                     case 5:
                         _a.trys.push([5, 7, , 8]);
+                        console.log('Injecting interface texts');
                         return [4 /*yield*/, this.injectInterfaces(content, config)];
                     case 6:
                         content = _a.sent();
@@ -89,17 +106,23 @@ var OpenAPIBundler = /** @class */ (function () {
                         global.verboseLogging(JSON.stringify(content, undefined, 2));
                         throw e_2;
                     case 8:
-                        _a.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, this.bundleObject(content)];
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
+                        _a.label = 9;
                     case 9:
-                        content = _a.sent();
-                        return [3 /*break*/, 11];
+                        _a.trys.push([9, 11, , 12]);
+                        console.log('Bundling the full object');
+                        return [4 /*yield*/, this.bundleObject(content)];
                     case 10:
+                        content = _a.sent();
+                        return [3 /*break*/, 12];
+                    case 11:
                         e_3 = _a.sent();
                         console.error('Cannot bundle the object:');
                         throw e_3;
-                    case 11:
+                    case 12:
                         global.verboseLogging(content);
+                        logTimeDiff_1["default"](startTime, new Date().getTime());
+                        console.log('Injecting the endpoint names');
                         return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content)))];
                 }
             });
