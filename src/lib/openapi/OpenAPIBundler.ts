@@ -3,11 +3,10 @@ import * as _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import * as YAML from 'js-yaml';
-import commandRun from '@/utils/commandRun';
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
-import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
+import logTimeDiff from '@/utils/logTimeDiff';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -19,16 +18,23 @@ class OpenAPIBundler {
    */
   public async bundle (filePath: string, config: Config) {
     let content;
+    const startTime = new Date().getTime();
+    logTimeDiff(0, 0);
 
     try {
-      content = fs.readFileSync(path.resolve(__dirname, filePath));
+      const filepath = path.resolve(__dirname, filePath);
+      console.log('Reading file: ' + filePath);
+      content = fs.readFileSync(filePath);
     } catch (e) {
       console.error('Can not load the content of the Swagger specification file');
       console.log(filePath);
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Parsing file contents');
       content = this.parseContent(content);
     } catch (e) {
       console.error('Can not parse the content of the Swagger specification file');
@@ -36,7 +42,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Injecting path interface names');
       content = (new OpenAPIInjectInterfaceNaming(content, config)).inject();
     } catch (e) {
       console.error('Cannot inject interface naming for:');
@@ -44,7 +53,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('De-referencing object');
       content = await this.dereference(content);
     } catch (e) {
       console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
@@ -52,7 +64,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Calculating all request definitions to interface relations');
       content = (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
     } catch (e) {
       console.error('Can not merge the request paramters to build the interfaces:');
@@ -60,7 +75,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Resolving all allOf references');
       content = openApiResolveAllOfs(content);
     } catch (e) {
       console.error('Could not resolve of allOfs');
@@ -68,7 +86,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Injecting interface texts');
       content = await this.injectInterfaces(content, config);
     } catch (e) {
       console.error('Cannot inject the interfaces: ');
@@ -76,7 +97,10 @@ class OpenAPIBundler {
       throw e;
     }
 
+    logTimeDiff(startTime, new Date().getTime());
+
     try {
+      console.log('Bundling the full object');
       content = await this.bundleObject(content);
     } catch (e) {
       console.error('Cannot bundle the object:');
@@ -84,6 +108,9 @@ class OpenAPIBundler {
     }
     global.verboseLogging(content);
 
+    logTimeDiff(startTime, new Date().getTime());
+
+    console.log('Injecting the endpoint names');
     return JSON.parse(JSON.stringify(
       this.pathEndpointInjection(content),
     ));
