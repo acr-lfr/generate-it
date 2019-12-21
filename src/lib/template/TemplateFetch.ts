@@ -1,6 +1,8 @@
+import 'colors';
 import commandRun from '@/utils/commandRun';
 import fs from 'fs-extra';
 import path from 'path';
+import compareVersions from 'compare-versions';
 
 import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement';
 import { GIT_DIRECTORY } from '@/constants/CachePaths';
@@ -60,6 +62,13 @@ class TemplateFetchURL {
     return fs.existsSync(cachePath);
   }
 
+  public extractTagOrBranch (url: string) {
+    const parts = url.split('#');
+    if (parts.length === 1) {
+      return 'default';
+    }
+  }
+
   /**
    * Fetches the contents of a gitFetch url to the local cache
    * @param {string} url - Url to fetch via gitFetch
@@ -104,11 +113,68 @@ class TemplateFetchURL {
       console.log('Updating git cache');
       await commandRun('git', ['pull'], true);
       process.chdir(cwd);
+      await this.logTagWarning(cacheDirectory);
       return true;
     } catch (e) {
       process.chdir(cwd);
       throw e;
     }
+  }
+
+  /**
+   * Logs the tpl tag and warns
+   */
+  public async logTagWarning (cacheDirectory: string, tagBranch?: string) {
+    // If a branch or tag was given, only continue if it is a semver and
+    // not a branch thus allowing testing of develop / feature branches
+    if (tagBranch && !this.isSemVer(tagBranch)) {
+      return;
+    }
+    const pkVersion = require('../../../package.json').version;
+    const tplTag = tagBranch || await this.getTplTag(cacheDirectory);
+    if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
+      console.log('IMPORTANT! The openapi-nodegen version is behind the tagged version pulled of the tpl repository.'.red.bold);
+      console.log(`
+To fix this issue please ensure the tagged tpl version you are using is less than or equal to the openapi-nodegen version.
+You are current using:
+openapi-nodegen: ${tplTag}
+template version tag: ${tplTag}
+`);
+
+      console.log('Aborting'.red.bold);
+      process.exit(0);
+    }
+  }
+
+  /**
+   * Checks the input is a valid semantic version string
+   * @param input
+   */
+  public isSemVer (input: string): boolean {
+    const semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
+    return semver.test(input);
+  }
+  /**
+   * Returns the last tag from a given git repo
+   * @param cacheDirectory - The git directory
+   */
+  public async getTplTag (cacheDirectory: string): Promise<string> {
+    const cwd = process.cwd();
+    process.chdir(cacheDirectory);
+    const tag = await commandRun('git', ['describe', '--abbrev=0', '--tags']);
+    process.chdir(cwd);
+    return tag.outputString.trim();
+  }
+  /**
+   * Ensure the current version and tpl tag semver will work together
+   * @param packageVersion
+   * @param tplTag
+   */
+  public packageAndTplVersionOK (packageVersion: string, tplTag: string) {
+    if (Number(packageVersion[0]) > Number(tplTag[0])) {
+      return false;
+    }
+    return compareVersions(packageVersion, tplTag) >= 0;
   }
 
   /**
@@ -123,10 +189,11 @@ class TemplateFetchURL {
     console.log('Clone git repository');
     fs.ensureDirSync(cacheDirectory);
     if (gitBranchOrTag) {
-      return commandRun('git', ['clone', '-b', gitBranchOrTag, url, cacheDirectory], true);
+      await commandRun('git', ['clone', '-b', gitBranchOrTag, url, cacheDirectory], true);
     } else {
-      return commandRun('git', ['clone', url, cacheDirectory], true);
+      await commandRun('git', ['clone', url, cacheDirectory], true);
     }
+    await this.logTagWarning(cacheDirectory);
   }
 
   /**

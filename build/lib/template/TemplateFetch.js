@@ -1,9 +1,11 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
+require("colors");
 var commandRun_1 = tslib_1.__importDefault(require("../../utils/commandRun"));
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
+var compare_versions_1 = tslib_1.__importDefault(require("compare-versions"));
 var camelCaseStringReplacement_1 = tslib_1.__importDefault(require("../helpers/camelCaseStringReplacement"));
 var CachePaths_1 = require("../../constants/CachePaths");
 var TemplateFetchURL = /** @class */ (function () {
@@ -66,6 +68,12 @@ var TemplateFetchURL = /** @class */ (function () {
      */
     TemplateFetchURL.prototype.gitCacheExists = function (cachePath) {
         return fs_extra_1["default"].existsSync(cachePath);
+    };
+    TemplateFetchURL.prototype.extractTagOrBranch = function (url) {
+        var parts = url.split('#');
+        if (parts.length === 1) {
+            return 'default';
+        }
     };
     /**
      * Fetches the contents of a gitFetch url to the local cache
@@ -130,21 +138,98 @@ var TemplateFetchURL = /** @class */ (function () {
                         process.chdir(cacheDirectory);
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.trys.push([1, 4, , 5]);
                         console.log('Updating git cache');
                         return [4 /*yield*/, commandRun_1["default"]('git', ['pull'], true)];
                     case 2:
                         _a.sent();
                         process.chdir(cwd);
-                        return [2 /*return*/, true];
+                        return [4 /*yield*/, this.logTagWarning(cacheDirectory)];
                     case 3:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 4:
                         e_3 = _a.sent();
                         process.chdir(cwd);
                         throw e_3;
-                    case 4: return [2 /*return*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
+    };
+    /**
+     * Logs the tpl tag and warns
+     */
+    TemplateFetchURL.prototype.logTagWarning = function (cacheDirectory, tagBranch) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var pkVersion, tplTag, _a;
+            return tslib_1.__generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        // If a branch or tag was given, only continue if it is a semver and
+                        // not a branch thus allowing testing of develop / feature branches
+                        if (tagBranch && !this.isSemVer(tagBranch)) {
+                            return [2 /*return*/];
+                        }
+                        pkVersion = require('../../../package.json').version;
+                        _a = tagBranch;
+                        if (_a) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.getTplTag(cacheDirectory)];
+                    case 1:
+                        _a = (_b.sent());
+                        _b.label = 2;
+                    case 2:
+                        tplTag = _a;
+                        if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
+                            console.log('IMPORTANT! The openapi-nodegen version is behind the tagged version pulled of the tpl repository.'.red.bold);
+                            console.log("\nTo fix this issue please ensure the tagged tpl version you are using is less than or equal to the openapi-nodegen version.\nYou are current using:\nopenapi-nodegen: " + tplTag + "\ntemplate version tag: " + tplTag + "\n");
+                            console.log('Aborting'.red.bold);
+                            process.exit(0);
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Checks the input is a valid semantic version string
+     * @param input
+     */
+    TemplateFetchURL.prototype.isSemVer = function (input) {
+        var semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
+        return semver.test(input);
+    };
+    /**
+     * Returns the last tag from a given git repo
+     * @param cacheDirectory - The git directory
+     */
+    TemplateFetchURL.prototype.getTplTag = function (cacheDirectory) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var cwd, tag;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cwd = process.cwd();
+                        process.chdir(cacheDirectory);
+                        return [4 /*yield*/, commandRun_1["default"]('git', ['describe', '--abbrev=0', '--tags'])];
+                    case 1:
+                        tag = _a.sent();
+                        process.chdir(cwd);
+                        return [2 /*return*/, tag.outputString.trim()];
+                }
+            });
+        });
+    };
+    /**
+     * Ensure the current version and tpl tag semver will work together
+     * @param packageVersion
+     * @param tplTag
+     */
+    TemplateFetchURL.prototype.packageAndTplVersionOK = function (packageVersion, tplTag) {
+        if (Number(packageVersion[0]) > Number(tplTag[0])) {
+            return false;
+        }
+        return compare_versions_1["default"](packageVersion, tplTag) >= 0;
     };
     /**
      * Clones a remote git url to a given local directory
@@ -156,16 +241,25 @@ var TemplateFetchURL = /** @class */ (function () {
     TemplateFetchURL.prototype.gitClone = function (url, cacheDirectory, gitBranchOrTag) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                console.log(cacheDirectory);
-                console.log('Clone git repository');
-                fs_extra_1["default"].ensureDirSync(cacheDirectory);
-                if (gitBranchOrTag) {
-                    return [2 /*return*/, commandRun_1["default"]('git', ['clone', '-b', gitBranchOrTag, url, cacheDirectory], true)];
+                switch (_a.label) {
+                    case 0:
+                        console.log(cacheDirectory);
+                        console.log('Clone git repository');
+                        fs_extra_1["default"].ensureDirSync(cacheDirectory);
+                        if (!gitBranchOrTag) return [3 /*break*/, 2];
+                        return [4 /*yield*/, commandRun_1["default"]('git', ['clone', '-b', gitBranchOrTag, url, cacheDirectory], true)];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, commandRun_1["default"]('git', ['clone', url, cacheDirectory], true)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [4 /*yield*/, this.logTagWarning(cacheDirectory)];
+                    case 5:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                else {
-                    return [2 /*return*/, commandRun_1["default"]('git', ['clone', url, cacheDirectory], true)];
-                }
-                return [2 /*return*/];
             });
         });
     };

@@ -26,6 +26,8 @@ var ucFirst_1 = tslib_1.__importDefault(require("./helpers/ucFirst"));
 var urlPathJoin_1 = tslib_1.__importDefault(require("./helpers/urlPathJoin"));
 var validMethods_1 = tslib_1.__importDefault(require("./helpers/validMethods"));
 var prettyfyRenderedContent_1 = tslib_1.__importDefault(require("../../utils/prettyfyRenderedContent"));
+var operationsPathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/operationsPathsHasParamsToValidate"));
+var pathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/pathsHasParamsToValidate"));
 var TemplateRenderer = /** @class */ (function () {
     function TemplateRenderer() {
     }
@@ -84,6 +86,9 @@ var TemplateRenderer = /** @class */ (function () {
         env.addGlobal('objLength', objLength_1["default"]);
         env.addGlobal('paramsOutputReducer', paramsOutputReducer_1["default"]);
         env.addGlobal('paramsValidation', paramsValidation_1["default"]);
+        env.addGlobal('operationsPathsHasParamsToValidate', operationsPathsHasParamsToValidate_1["default"]);
+        env.addGlobal('paramsValidation', paramsValidation_1["default"]);
+        env.addGlobal('pathsHasParamsToValidate', pathsHasParamsToValidate_1["default"]);
         env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams_1["default"]);
         env.addGlobal('prettifyRouteName', prettifyRouteName_1["default"]);
         env.addGlobal('ucFirst', ucFirst_1["default"]);

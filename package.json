@@ -1,6 +1,6 @@
 {
   "name": "openapi-nodegen",
-  "version": "4.0.12",
+  "version": "4.1.0",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "licence": "MIT",
   "main": "./build/openapiNodegen.js",
@@ -71,6 +71,7 @@
     "@types/yamljs": "^0.2.30",
     "@zerollup/ts-transform-paths": "^1.7.3",
     "codecov": "^3.6.1",
+    "compare-versions": "^3.5.1",
     "eslint": "^6.6.0",
     "hasha": "^5.1.0",
     "jest": "^24.9.0",

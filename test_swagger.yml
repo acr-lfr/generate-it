@@ -66,6 +66,7 @@ paths:
       summary: Get weather
       description: Query with varying content
       operationId: weatherIdGet
+      x-permission: getWeatherDetail
       produces:
         - application/json
       parameters:
@@ -79,6 +80,9 @@ paths:
           description: Invalid Identifier supplied
         '404':
           description: Round not found
+      security:
+        - apiKeyAdmin: []
+        - jwtToken: []
   /rain/:
     get:
       tags:
