@@ -133,11 +133,11 @@ class TemplateFetchURL {
     const pkVersion = require('../../../package.json').version;
     const tplTag = tagBranch || await this.getTplTag(cacheDirectory);
     if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
-      console.log('IMPORTANT! The openapi-nodegen version is behind the tagged version pulled of the tpl repository.'.red.bold);
+      console.log('IMPORTANT! The openapi-nodegen version template tagged version issue.'.red.bold);
       console.log(`
-To fix this issue please ensure the tagged tpl version you are using is less than or equal to the openapi-nodegen version.
+The openapi-nodegen version must be greater or equal to the semver of the template tag but within the same major version.
 You are current using:
-openapi-nodegen: ${tplTag}
+openapi-nodegen: ${pkVersion}
 template version tag: ${tplTag}
 `);
 
