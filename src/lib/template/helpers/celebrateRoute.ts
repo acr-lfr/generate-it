@@ -1,15 +1,17 @@
 import * as _ from 'lodash';
+import pathsHasParamsToValidate from '@/lib/template/helpers/pathsHasParamsToValidate';
 
 /**
- * Provides different ways to compare two values (i.e. equal, greater than, different, etc.)
+ * @deprecated WARNING this will be removed, please add this to the templates directly.
+ * @param operationName
+ * @param parameters
+ * @param operationId
  */
 export default (operationName: string, parameters: any[], operationId: string) => {
   let celebrate = false;
   if (parameters) {
-    parameters.forEach((param) => {
-      if (['path', 'query', 'body'].indexOf(param.in) !== -1) {
-        celebrate = true;
-      }
+    celebrate = pathsHasParamsToValidate({
+      parameters: parameters,
     });
   }
   return (celebrate) ? 'celebrate(' + _.camelCase(operationName) + 'Validators.' + operationId + '),' : '';

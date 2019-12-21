@@ -1,23 +1,14 @@
 "use strict";
 exports.__esModule = true;
+var tslib_1 = require("tslib");
 /**
  * Provides different ways to compare two values (i.e. equal, greater than, different, etc.)
  */
+var operationsPathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./operationsPathsHasParamsToValidate"));
+/**
+ * @deprecated WARNING this will be removed soon, please add this import into the templates directly.
+ * @param operations
+ */
 exports["default"] = (function (operations) {
-    var celebrate = false;
-    if (operations) {
-        operations.forEach(function (operation) {
-            Object.keys(operation.path).forEach(function (pathVerb) {
-                var path = operation.path[pathVerb];
-                if (path.parameters) {
-                    path.parameters.forEach(function (param) {
-                        if (['path', 'query', 'body'].indexOf(param["in"]) !== -1) {
-                            celebrate = true;
-                        }
-                    });
-                }
-            });
-        });
-    }
-    return (celebrate) ? 'import { celebrate } from \'celebrate\'' : '';
+    return operationsPathsHasParamsToValidate_1["default"](operations) ? 'import { celebrate } from \'celebrate\'' : '';
 });

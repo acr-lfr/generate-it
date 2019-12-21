@@ -23,6 +23,8 @@ import ucFirst from '@/lib/template/helpers/ucFirst';
 import urlPathJoin from '@/lib/template/helpers/urlPathJoin';
 import validMethods from '@/lib/template/helpers/validMethods';
 import prettyfyRenderedContent from '@/utils/prettyfyRenderedContent';
+import operationsPathsHasParamsToValidate from '@/lib/template/helpers/operationsPathsHasParamsToValidate';
+import pathsHasParamsToValidate from '@/lib/template/helpers/pathsHasParamsToValidate';
 
 class TemplateRenderer {
   /**
@@ -81,6 +83,9 @@ class TemplateRenderer {
     env.addGlobal('objLength', objLength);
     env.addGlobal('paramsOutputReducer', paramsOutputReducer);
     env.addGlobal('paramsValidation', paramsValidation);
+    env.addGlobal('operationsPathsHasParamsToValidate', operationsPathsHasParamsToValidate);
+    env.addGlobal('paramsValidation', paramsValidation);
+    env.addGlobal('pathsHasParamsToValidate', pathsHasParamsToValidate);
     env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams);
     env.addGlobal('prettifyRouteName', prettifyRouteName);
     env.addGlobal('ucFirst', ucFirst);

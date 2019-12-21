@@ -15,6 +15,7 @@ const packageJson = {
     'openapi-nodegen': 'latest',
   },
 };
+const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
 
 describe('e2e testing', () => {
   beforeAll(() => {
@@ -28,12 +29,11 @@ describe('e2e testing', () => {
 
   it('Should build without error', async (done) => {
     try {
-      const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
       const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: false,
-        mockServer: false,
+        mockServer: true,
         segmentsCount: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
@@ -49,12 +49,11 @@ describe('e2e testing', () => {
     try {
       // remove a servive file which should then be copied back over
       fs.removeSync(path.join(process.cwd(), 'testserver/src/services/HttpHeadersCacheService.ts'));
-      const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
       const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: false,
-        mockServer: false,
+        mockServer: true,
         segmentsCount: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
@@ -73,15 +72,16 @@ describe('e2e testing', () => {
     // C) Something broke when building the said files
     const filePaths = [
       // Check generated domains (STUB file)
-      ['testserver/src/domains/RainDomain.ts', 'f768ac3c949e6d77aff47810f0150a23'],
+      ['testserver/src/domains/RainDomain.ts', '63755a585c2c862d6ef7602d8a24dc9f'],
       // Check complex interface (INTERFACE file)
       ['testserver/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
       // Check the interface index file (OTHER file)
       ['testserver/src/http/nodegen/interfaces/index.ts', '0e5a6b1bfad08b8c378be83a6b4c436c'],
       // Check the security definition files (OTHER file)
       ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
-      // Check the generated routes file (OPERATION file)
-      ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '7b02f2da8180e6ca2334433d2eae3b2c'],
+      // Check the generated routes files (OPERATION file)
+      ['testserver/src/http/nodegen/routes/rainRoutes.ts', 'a3f4d34e8e0b36ff4cc68169f16c39e9'],
+      ['testserver/src/http/nodegen/routes/weatherRoutes.ts', 'cddb41f44c1d426323176da1bece9079'],
       // Check the output transformers (OPERATION file)
       ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
       // Check dynamic docker file (OTHER file)
@@ -91,14 +91,19 @@ describe('e2e testing', () => {
       // Check the deleted service file was reinjected
       ['testserver/src/services/HttpHeadersCacheService.ts', '144cd39920fd8e042a57f83628479979'],
     ];
+    const mismatched = [];
     for (let i = 0; i < filePaths.length; ++i) {
       const filePath = filePaths[i][0];
       const fileHash = filePaths[i][1];
       const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
       if (hash !== fileHash) {
-        done(`Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`);
+        mismatched.push(`Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`);
       }
     }
-    done();
+    if (mismatched.length > 0) {
+      done(mismatched);
+    } else {
+      done();
+    }
   });
 });

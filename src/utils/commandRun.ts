@@ -9,7 +9,12 @@ const spawn = child_process.spawn;
  * @param {boolean} [verbose] - Default false, when true console logs all output
  * @return {Promise<unknown>}
  */
-export default (program: string, args: string[] = [], verbose: boolean = false) => {
+interface CommandRunResolve {
+  outputString: string;
+  outputErrorString: string;
+}
+
+export default (program: string, args: string[] = [], verbose: boolean = false): Promise<CommandRunResolve> => {
   return new Promise((resolve, reject) => {
     if (verbose) {
       console.log(program + ' ' + args.join(' '));
