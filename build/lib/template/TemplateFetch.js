@@ -181,8 +181,8 @@ var TemplateFetchURL = /** @class */ (function () {
                     case 2:
                         tplTag = _a;
                         if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
-                            console.log('IMPORTANT! The openapi-nodegen version is behind the tagged version pulled of the tpl repository.'.red.bold);
-                            console.log("\nTo fix this issue please ensure the tagged tpl version you are using is less than or equal to the openapi-nodegen version.\nYou are current using:\nopenapi-nodegen: " + tplTag + "\ntemplate version tag: " + tplTag + "\n");
+                            console.log('IMPORTANT! The openapi-nodegen version template tagged version issue.'.red.bold);
+                            console.log("\nThe openapi-nodegen version must be greater or equal to the semver of the template tag but within the same major version.\nYou are current using:\nopenapi-nodegen: " + pkVersion + "\ntemplate version tag: " + tplTag + "\n");
                             console.log('Aborting'.red.bold);
                             process.exit(0);
                         }
