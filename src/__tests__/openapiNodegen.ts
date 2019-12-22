@@ -80,8 +80,8 @@ describe('e2e testing', () => {
       // Check the security definition files (OTHER file)
       ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
       // Check the generated routes files (OPERATION file)
-      ['testserver/src/http/nodegen/routes/rainRoutes.ts', 'a3f4d34e8e0b36ff4cc68169f16c39e9'],
-      ['testserver/src/http/nodegen/routes/weatherRoutes.ts', 'cddb41f44c1d426323176da1bece9079'],
+      ['testserver/src/http/nodegen/routes/rainRoutes.ts', '14a1aaff4a0919e978196c0da3014ce2'],
+      ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '41181409d237ef89991f65dc5329bdd0'],
       // Check the output transformers (OPERATION file)
       ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
       // Check dynamic docker file (OTHER file)

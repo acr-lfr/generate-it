@@ -1,40 +1,32 @@
-import path from 'path';
-import GeneratedComparison from '@/lib/generate/GeneratedComparison';
-import fs from 'fs-extra';
-import commandRun from '@/utils/commandRun';
+import { LINEBREAK } from '@/constants/cli';
+import GenerateTypeScriptInterfaceText from '@/interfaces/GenerateTypeScriptInterfaceText';
 
-export default async (mainInterfaceName: string, definitionObject: any, targetDir: string) => {
-  const baseInterfaceDir = path.join(
-    GeneratedComparison.getCacheBaseDir(targetDir),
-    'interface',
-  );
-  fs.ensureDirSync(baseInterfaceDir);
-  const tmpJsonSchema = path.join(baseInterfaceDir, mainInterfaceName + '.json');
+const {InputData, JSONSchemaInput, JSONSchemaStore, quicktype} = require('quicktype/dist/quicktype-core');
 
-  // write the json to disk
-  fs.writeJsonSync(
-    tmpJsonSchema,
-    definitionObject,
-  );
+export default async (name: string, schema: string): Promise<GenerateTypeScriptInterfaceText> => {
+  const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
+  await schemaInput.addSource({
+    name,
+    schema: schema,
+  });
 
-  // parse to interface
-  try {
-    return await commandRun('node', [
-      path.join('./node_modules/quicktype/dist/cli/index.js'),
-      '--just-types',
-      '--src',
-      tmpJsonSchema,
-      '--src-lang',
-      'schema',
-      '--acronym-style',
-      'original',
-      '--top-level',
-      mainInterfaceName,
-      '--lang',
-      'ts',
-    ]);
-  } catch (e) {
-    console.error(e);
-    throw new Error('quicktype error, full input json used: ' + tmpJsonSchema);
-  }
+  const inputData = new InputData();
+  inputData.addInput(schemaInput);
+
+  const interfaceContent = await quicktype({
+    inputData,
+    lang: 'ts',
+    rendererOptions: {
+      'just-types': true,
+      'acronym-style': 'original',
+    },
+  });
+
+  let interfaceReturnString = '';
+  interfaceContent.lines.forEach((line: string) => {
+    interfaceReturnString += line + LINEBREAK;
+  });
+  return {
+    outputString: interfaceReturnString,
+  };
 };
