@@ -24,7 +24,7 @@ describe('e2e testing', function () {
         fs_extra_1["default"].writeJsonSync(path_1["default"].join(testServerPath, 'package.json'), packageJson, { spaces: 2 });
     });
     afterAll(function () {
-        // return fs.removeSync(testServerPath);
+        return fs_extra_1["default"].removeSync(testServerPath);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;

@@ -24,7 +24,7 @@ describe('e2e testing', () => {
     fs.writeJsonSync(path.join(testServerPath, 'package.json'), packageJson, {spaces: 2});
   });
   afterAll(() => {
-    // return fs.removeSync(testServerPath);
+    return fs.removeSync(testServerPath);
   });
 
   it('Should build without error', async (done) => {
