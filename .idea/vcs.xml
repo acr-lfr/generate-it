@@ -4,5 +4,6 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/testserver/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/testserver/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGitDevelop" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/testtt/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServer" vcs="Git" />
   </component>
 </project>
