@@ -1,0 +1,67 @@
+swagger: '2.0'
+info:
+  description: The version numbers are independant to the yaml files
+  version: 1.0.0
+  title: dummy api
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.domain.com'
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: dummy.restapiexample.com
+basePath: /api/v1
+paths:
+  /employee/{id}:
+    get:
+      tags:
+        - employee
+      summary: Get all employees
+      operationId: employeeGet
+      parameters:
+        - '#/parameters/pathId'
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/EmployeeModels'
+  /employees/:
+    get:
+      tags:
+        - employee
+      summary: Get all employees
+      operationId: employeeGet
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/EmployeeModels'
+parameters:
+  pathId:
+    in: path
+    name: id
+    required: true
+    type: string
+definitions:
+  EmployeeModels:
+    type: array
+    items:
+      $ref: '#/definitions/EmployeeModel'
+  EmployeeModel:
+    type: object
+    properties:
+      id:
+        type: string
+      employee_name:
+        type: string
+      employee_salary:
+        type: string
+      employee_age:
+        type: string
+      profile_image:
+        type: string

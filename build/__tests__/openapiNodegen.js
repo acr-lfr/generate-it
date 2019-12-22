@@ -24,7 +24,7 @@ describe('e2e testing', function () {
         fs_extra_1["default"].writeJsonSync(path_1["default"].join(testServerPath, 'package.json'), packageJson, { spaces: 2 });
     });
     afterAll(function () {
-        return fs_extra_1["default"].removeSync(testServerPath);
+        // return fs.removeSync(testServerPath);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -99,8 +99,8 @@ describe('e2e testing', function () {
                         // Check the security definition files (OTHER file)
                         ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
                         // Check the generated routes files (OPERATION file)
-                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', 'a3f4d34e8e0b36ff4cc68169f16c39e9'],
-                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', 'cddb41f44c1d426323176da1bece9079'],
+                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', '14a1aaff4a0919e978196c0da3014ce2'],
+                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '41181409d237ef89991f65dc5329bdd0'],
                         // Check the output transformers (OPERATION file)
                         ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
                         // Check dynamic docker file (OTHER file)

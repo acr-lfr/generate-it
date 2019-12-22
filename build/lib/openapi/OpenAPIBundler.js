@@ -209,7 +209,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         paramType = xRequestDefinitionsKeys[k];
                         if (!(xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0)) return [3 /*break*/, 6];
                         _a = xRequestDefinitions[paramType];
-                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name, _.get(apiObject, apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0]), config.targetDir)];
+                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name, JSON.stringify(_.get(apiObject, apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0])))];
                     case 5:
                         _a.interfaceText = _b.sent();
                         _b.label = 6;
@@ -260,7 +260,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         _c = {
                             name: defKeys[i]
                         };
-                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](defKeys[i], definitionObject, config.targetDir)];
+                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](defKeys[i], JSON.stringify(definitionObject))];
                     case 3:
                         _b.apply(_a, [(_c.content = _d.sent(),
                                 _c)]);

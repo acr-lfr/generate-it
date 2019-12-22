@@ -176,11 +176,10 @@ class OpenAPIBundler {
             if (xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0) {
               xRequestDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
                 apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name,
-                _.get(
+                JSON.stringify(_.get(
                   apiObject,
                   apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0],
-                ),
-                config.targetDir,
+                )),
               );
             }
             apiObject.interfaces.push({
@@ -211,8 +210,7 @@ class OpenAPIBundler {
           name: defKeys[i],
           content: await generateTypeScriptInterfaceText(
             defKeys[i],
-            definitionObject,
-            config.targetDir,
+            JSON.stringify(definitionObject),
           ),
         });
       } catch (e) {
