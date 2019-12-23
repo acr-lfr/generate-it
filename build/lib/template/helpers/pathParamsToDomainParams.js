@@ -1,10 +1,15 @@
 "use strict";
 exports.__esModule = true;
+var tslib_1 = require("tslib");
+var ucFirst_1 = tslib_1.__importDefault(require("./ucFirst"));
 function addType(withType, pathObject, requestType) {
     if (!withType) {
         return '';
     }
     if (requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
+        if (requestType === 'body') {
+            return ': ' + ucFirst_1["default"](pathObject['x-request-definitions'][requestType].params[0].name);
+        }
         return ': ' + pathObject['x-request-definitions'][requestType].name;
     }
     return ': any';
@@ -12,39 +17,39 @@ function addType(withType, pathObject, requestType) {
 /**
  * Provides parameters for controller and domain functions.
  * Will auto inject the req.jwtData if the path has a security attribute.
- * @param value The full value of the path object
+ * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
  * @param pathNameChange
  * @returns {string}
  */
-exports["default"] = (function (value, withType, withPrefix, pathNameChange) {
+exports["default"] = (function (pathObject, withType, withPrefix, pathNameChange) {
     if (withType === void 0) { withType = false; }
     if (pathNameChange === void 0) { pathNameChange = 'path'; }
-    if (!value) {
+    if (!pathObject) {
         return '';
     }
     var params = [];
-    if (value.parameters) {
-        if (value.parameters.some(function (p) { return p["in"] === 'query'; })) {
-            params.push('query' + addType(withType, value, 'query'));
+    if (pathObject.parameters) {
+        if (pathObject.parameters.some(function (p) { return p["in"] === 'query'; })) {
+            params.push('query' + addType(withType, pathObject, 'query'));
         }
-        if (value.parameters.some(function (p) { return p["in"] === 'path'; })) {
-            params.push(pathNameChange + addType(withType, value, 'path'));
+        if (pathObject.parameters.some(function (p) { return p["in"] === 'path'; })) {
+            params.push(pathNameChange + addType(withType, pathObject, 'path'));
         }
-        if (value.parameters.some(function (p) { return p["in"] === 'body'; })) {
-            params.push('body' + addType(withType, value, 'body'));
+        if (pathObject.parameters.some(function (p) { return p["in"] === 'body'; })) {
+            params.push('body' + addType(withType, pathObject, 'body'));
         }
-        if (value.parameters.some(function (p) { return p["in"] === 'headers'; })) {
-            params.push('headers' + addType(withType, value, 'headers'));
+        if (pathObject.parameters.some(function (p) { return p["in"] === 'headers'; })) {
+            params.push('headers' + addType(withType, pathObject, 'headers'));
         }
-        if (value.parameters.some(function (p) { return p["in"] === 'formData'; })) {
-            params.push('files' + addType(withType, value, 'formData'));
+        if (pathObject.parameters.some(function (p) { return p["in"] === 'formData'; })) {
+            params.push('files' + addType(withType, pathObject, 'formData'));
         }
     }
-    if (value.security) {
+    if (pathObject.security) {
         var push_1 = false;
-        value.security.forEach(function (security) {
+        pathObject.security.forEach(function (security) {
             Object.keys(security).forEach(function (key) {
                 if (key.toLowerCase().includes('jwt')) {
                     push_1 = true;
@@ -52,11 +57,11 @@ exports["default"] = (function (value, withType, withPrefix, pathNameChange) {
             });
         });
         if (push_1) {
-            params.push('jwtData' + addType(withType, value));
+            params.push('jwtData' + addType(withType, pathObject));
         }
     }
-    if (value['x-passRequest']) {
-        params.push('req' + addType(withType, value));
+    if (pathObject['x-passRequest']) {
+        params.push('req' + addType(withType, pathObject));
     }
     params.sort();
     if (withPrefix) {

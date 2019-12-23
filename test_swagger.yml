@@ -42,11 +42,6 @@ paths:
         - $ref: '#/parameters/queryId'
         - $ref: '#/parameters/queryLat'
         - $ref: '#/parameters/queryLon'
-        - in: body
-          name: createAthlete
-          required: true
-          schema:
-            $ref: '#/definitions/Coord'
       responses:
         '200':
           description: successful operation
@@ -94,6 +89,29 @@ paths:
         - application/json
       parameters:
         - $ref: '#/parameters/queryCountry'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Weather'
+        '400':
+          description: Invalid Identifier supplied
+        '404':
+          description: Round not found
+    post:
+      tags:
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: rainPost
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: createRain
+        required: true
+        schema:
+          $ref: '#/definitions/Coord'
       responses:
         '200':
           description: successful operation
