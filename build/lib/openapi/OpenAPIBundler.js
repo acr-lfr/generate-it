@@ -9,6 +9,7 @@ var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPII
 var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAllOfs"));
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var logTimeDiff_1 = tslib_1.__importDefault(require("../../utils/logTimeDiff"));
+var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -102,6 +103,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         return [3 /*break*/, 8];
                     case 7:
                         e_2 = _a.sent();
+                        console.error(e_2);
                         console.error('Cannot inject the interfaces: ');
                         global.verboseLogging(JSON.stringify(content, undefined, 2));
                         throw e_2;
@@ -179,56 +181,16 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.injectInterfaces = function (apiObject, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var pathsKeys, i, singlePath, methods, j, method, xRequestDefinitions, xRequestDefinitionsKeys, k, paramType, _a;
-            return tslib_1.__generator(this, function (_b) {
-                switch (_b.label) {
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         apiObject.interfaces = [];
-                        return [4 /*yield*/, this.injectDefinitionInterfaces(apiObject, config)];
+                        return [4 /*yield*/, this.injectDefinitionInterfaces(apiObject)];
                     case 1:
-                        apiObject = _b.sent();
-                        pathsKeys = Object.keys(apiObject.paths);
-                        i = 0;
-                        _b.label = 2;
+                        apiObject = _a.sent();
+                        return [4 /*yield*/, this.injectParameterInterfaces(apiObject, config)];
                     case 2:
-                        if (!(i < pathsKeys.length)) return [3 /*break*/, 10];
-                        singlePath = pathsKeys[i];
-                        methods = Object.keys(apiObject.paths[singlePath]);
-                        j = 0;
-                        _b.label = 3;
-                    case 3:
-                        if (!(j < methods.length)) return [3 /*break*/, 9];
-                        method = methods[j];
-                        xRequestDefinitions = apiObject.paths[singlePath][method]['x-request-definitions'];
-                        if (!xRequestDefinitions) return [3 /*break*/, 8];
-                        xRequestDefinitionsKeys = Object.keys(xRequestDefinitions);
-                        k = 0;
-                        _b.label = 4;
-                    case 4:
-                        if (!(k < xRequestDefinitionsKeys.length)) return [3 /*break*/, 8];
-                        paramType = xRequestDefinitionsKeys[k];
-                        if (!(xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0)) return [3 /*break*/, 6];
-                        _a = xRequestDefinitions[paramType];
-                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name, JSON.stringify(_.get(apiObject, apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0])))];
-                    case 5:
-                        _a.interfaceText = _b.sent();
-                        _b.label = 6;
-                    case 6:
-                        apiObject.interfaces.push({
-                            name: apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name,
-                            content: apiObject.paths[singlePath][method]['x-request-definitions'][paramType].interfaceText
-                        });
-                        _b.label = 7;
-                    case 7:
-                        ++k;
-                        return [3 /*break*/, 4];
-                    case 8:
-                        ++j;
-                        return [3 /*break*/, 3];
-                    case 9:
-                        ++i;
-                        return [3 /*break*/, 2];
-                    case 10:
+                        apiObject = _a.sent();
                         apiObject.interfaces = apiObject.interfaces.sort(function (a, b) { return (a.name > b.name) ? 1 : -1; });
                         return [2 /*return*/, apiObject];
                 }
@@ -238,10 +200,9 @@ var OpenAPIBundler = /** @class */ (function () {
     /**
      * Iterates over the definitions already known to generate the respective interfaces
      * @param apiObject
-     * @param config
      * @return apiObject
      */
-    OpenAPIBundler.prototype.injectDefinitionInterfaces = function (apiObject, config) {
+    OpenAPIBundler.prototype.injectDefinitionInterfaces = function (apiObject) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var defKeys, i, definitionObject, _a, _b, _c, e_4;
             return tslib_1.__generator(this, function (_d) {
@@ -274,6 +235,72 @@ var OpenAPIBundler = /** @class */ (function () {
                         ++i;
                         return [3 /*break*/, 1];
                     case 6: return [2 /*return*/, apiObject];
+                }
+            });
+        });
+    };
+    /**
+     * Iterates over all path generating interface texts from the json schema in the request definitions
+     * @param apiObject
+     * @param config
+     */
+    OpenAPIBundler.prototype.injectParameterInterfaces = function (apiObject, config) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var pathsKeys, i, thisPath, thisPathsMethods, j, thisMethod, thisMethodXRequestionDefinitions, xRequestDefinitionsKeys, k, paramType, param, _a;
+            return tslib_1.__generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        pathsKeys = Object.keys(apiObject.paths);
+                        i = 0;
+                        _b.label = 1;
+                    case 1:
+                        if (!(i < pathsKeys.length)) return [3 /*break*/, 9];
+                        thisPath = pathsKeys[i];
+                        thisPathsMethods = Object.keys(apiObject.paths[thisPath]);
+                        j = 0;
+                        _b.label = 2;
+                    case 2:
+                        if (!(j < thisPathsMethods.length)) return [3 /*break*/, 8];
+                        thisMethod = thisPathsMethods[j];
+                        thisMethodXRequestionDefinitions = apiObject.paths[thisPath][thisMethod]['x-request-definitions'];
+                        if (!thisMethodXRequestionDefinitions) {
+                            return [3 /*break*/, 7];
+                        }
+                        xRequestDefinitionsKeys = Object.keys(thisMethodXRequestionDefinitions);
+                        k = 0;
+                        _b.label = 3;
+                    case 3:
+                        if (!(k < xRequestDefinitionsKeys.length)) return [3 /*break*/, 7];
+                        paramType = xRequestDefinitionsKeys[k];
+                        if (!(paramType === 'body')) return [3 /*break*/, 5];
+                        param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
+                        param.name = ucFirst_1["default"](param.name);
+                        _a = thisMethodXRequestionDefinitions[paramType];
+                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](param.name, JSON.stringify(_.get(apiObject, param.path)))];
+                    case 4:
+                        _a.interfaceText = _b.sent();
+                        apiObject.interfaces.push({
+                            name: param.name,
+                            content: thisMethodXRequestionDefinitions[paramType].interfaceText
+                        });
+                        return [3 /*break*/, 6];
+                    case 5:
+                        // handle the rest
+                        apiObject.interfaces.push({
+                            name: apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].name,
+                            content: apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].interfaceText
+                        });
+                        _b.label = 6;
+                    case 6:
+                        ++k;
+                        return [3 /*break*/, 3];
+                    case 7:
+                        ++j;
+                        return [3 /*break*/, 2];
+                    case 8:
+                        ++i;
+                        return [3 /*break*/, 1];
+                    case 9: return [2 /*return*/, apiObject];
                 }
             });
         });

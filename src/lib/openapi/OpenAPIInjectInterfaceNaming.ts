@@ -106,7 +106,7 @@ class OpenAPIInjectInterfaceNaming {
   public injectFromSwaggerpaths (path: string, method: string) {
     const requestParams: any = {
       body: {
-        name: _.upperFirst(generateOperationId(_.upperFirst(method) + 'Body', path)),
+        name: _.upperFirst(generateOperationId(_.upperFirst(method), path)),
         params: [],
       },
       headers: {
@@ -128,7 +128,16 @@ class OpenAPIInjectInterfaceNaming {
           try {
             const paramPath = this.convertRefToOjectPath(p.$ref || p.schema.$ref);
             const parameterObject = _.get(this.apiObject, paramPath);
-            requestParams[parameterObject.in || p.in].params.push(paramPath);
+            const paramType = parameterObject.in || p.in;
+            if (paramType === 'body') {
+              requestParams[paramType].params.push({
+                name: p.name,
+                path: paramPath,
+              });
+            } else {
+              requestParams[paramType].params.push(paramPath);
+            }
+
             // if (p.schema) {
             //   const name = paramPath.split('.').pop();
             //   requestParams.body.interfaceName = name;

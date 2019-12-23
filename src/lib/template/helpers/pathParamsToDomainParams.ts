@@ -1,8 +1,13 @@
+import ucFirst from '@/lib/template/helpers/ucFirst';
+
 function addType (withType: boolean, pathObject: any, requestType?: string) {
   if (!withType) {
     return '';
   }
   if (requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
+    if (requestType === 'body') {
+      return ': ' + ucFirst(pathObject['x-request-definitions'][requestType].params[0].name);
+    }
     return ': ' + pathObject['x-request-definitions'][requestType].name;
   }
   return ': any';
@@ -11,37 +16,37 @@ function addType (withType: boolean, pathObject: any, requestType?: string) {
 /**
  * Provides parameters for controller and domain functions.
  * Will auto inject the req.jwtData if the path has a security attribute.
- * @param value The full value of the path object
+ * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
  * @param pathNameChange
  * @returns {string}
  */
-export default (value: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') => {
-  if (!value) {
+export default (pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') => {
+  if (!pathObject) {
     return '';
   }
   let params: string[] = [];
-  if (value.parameters) {
-    if (value.parameters.some((p: any) => p.in === 'query')) {
-      params.push('query' + addType(withType, value, 'query'));
+  if (pathObject.parameters) {
+    if (pathObject.parameters.some((p: any) => p.in === 'query')) {
+      params.push('query' + addType(withType, pathObject, 'query'));
     }
-    if (value.parameters.some((p: any) => p.in === 'path')) {
-      params.push(pathNameChange + addType(withType, value, 'path'));
+    if (pathObject.parameters.some((p: any) => p.in === 'path')) {
+      params.push(pathNameChange + addType(withType, pathObject, 'path'));
     }
-    if (value.parameters.some((p: any) => p.in === 'body')) {
-      params.push('body' + addType(withType, value, 'body'));
+    if (pathObject.parameters.some((p: any) => p.in === 'body')) {
+      params.push('body' + addType(withType, pathObject, 'body'));
     }
-    if (value.parameters.some((p: any) => p.in === 'headers')) {
-      params.push('headers' + addType(withType, value, 'headers'));
+    if (pathObject.parameters.some((p: any) => p.in === 'headers')) {
+      params.push('headers' + addType(withType, pathObject, 'headers'));
     }
-    if (value.parameters.some((p: any) => p.in === 'formData')) {
-      params.push('files' + addType(withType, value, 'formData'));
+    if (pathObject.parameters.some((p: any) => p.in === 'formData')) {
+      params.push('files' + addType(withType, pathObject, 'formData'));
     }
   }
-  if (value.security) {
+  if (pathObject.security) {
     let push = false;
-    value.security.forEach((security: any) => {
+    pathObject.security.forEach((security: any) => {
       Object.keys(security).forEach((key) => {
         if (key.toLowerCase().includes('jwt')) {
           push = true;
@@ -49,11 +54,11 @@ export default (value: any, withType: boolean = false, withPrefix?: string, path
       });
     });
     if (push) {
-      params.push('jwtData' + addType(withType, value));
+      params.push('jwtData' + addType(withType, pathObject));
     }
   }
-  if (value['x-passRequest']) {
-    params.push('req' + addType(withType, value));
+  if (pathObject['x-passRequest']) {
+    params.push('req' + addType(withType, pathObject));
   }
   params.sort();
   if (withPrefix) {

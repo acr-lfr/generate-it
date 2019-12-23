@@ -99,7 +99,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
         var _this = this;
         var requestParams = {
             body: {
-                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Body', path)),
+                name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method), path)),
                 params: []
             },
             headers: {
@@ -121,7 +121,16 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                     try {
                         var paramPath = _this.convertRefToOjectPath(p.$ref || p.schema.$ref);
                         var parameterObject = _.get(_this.apiObject, paramPath);
-                        requestParams[parameterObject["in"] || p["in"]].params.push(paramPath);
+                        var paramType = parameterObject["in"] || p["in"];
+                        if (paramType === 'body') {
+                            requestParams[paramType].params.push({
+                                name: p.name,
+                                path: paramPath
+                            });
+                        }
+                        else {
+                            requestParams[paramType].params.push(paramPath);
+                        }
                         // if (p.schema) {
                         //   const name = paramPath.split('.').pop();
                         //   requestParams.body.interfaceName = name;

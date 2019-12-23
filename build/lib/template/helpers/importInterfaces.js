@@ -17,9 +17,14 @@ function default_1(operations) {
                                 imports.push(path['x-request-definitions'][requestType].interfaceName);
                             }
                         }
-                        if (path['x-request-definitions'][requestType].name) {
-                            if (imports.indexOf(path['x-request-definitions'][requestType].name) === -1) {
-                                imports.push(path['x-request-definitions'][requestType].name);
+                        if (requestType === 'body') {
+                            imports.push(path['x-request-definitions'][requestType].params[0].name);
+                        }
+                        else {
+                            if (path['x-request-definitions'][requestType].name) {
+                                if (imports.indexOf(path['x-request-definitions'][requestType].name) === -1) {
+                                    imports.push(path['x-request-definitions'][requestType].name);
+                                }
                             }
                         }
                     }

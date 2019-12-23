@@ -7,6 +7,8 @@ import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNa
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import logTimeDiff from '@/utils/logTimeDiff';
+import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import ucFirst from '@/lib/template/helpers/ucFirst';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -92,6 +94,7 @@ class OpenAPIBundler {
       console.log('Injecting interface texts');
       content = await this.injectInterfaces(content, config);
     } catch (e) {
+      console.error(e);
       console.error('Cannot inject the interfaces: ');
       global.verboseLogging(JSON.stringify(content, undefined, 2));
       throw e;
@@ -159,38 +162,10 @@ class OpenAPIBundler {
    * @param config
    * @return {Promise<void>}
    */
-  public async injectInterfaces (apiObject: any, config: Config) {
+  public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
-    apiObject = await this.injectDefinitionInterfaces(apiObject, config);
-    const pathsKeys = Object.keys(apiObject.paths);
-    for (let i = 0; i < pathsKeys.length; ++i) {
-      const singlePath = pathsKeys[i];
-      const methods = Object.keys(apiObject.paths[singlePath]);
-      for (let j = 0; j < methods.length; ++j) {
-        const method = methods[j];
-        const xRequestDefinitions = apiObject.paths[singlePath][method]['x-request-definitions'];
-        if (xRequestDefinitions) {
-          const xRequestDefinitionsKeys = Object.keys(xRequestDefinitions);
-          for (let k = 0; k < xRequestDefinitionsKeys.length; ++k) {
-            const paramType = xRequestDefinitionsKeys[k];
-            if (xRequestDefinitions[paramType].interfaceText === '' && xRequestDefinitions[paramType].params.length > 0) {
-              xRequestDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
-                apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name,
-                JSON.stringify(_.get(
-                  apiObject,
-                  apiObject.paths[singlePath][method]['x-request-definitions'][paramType].params[0],
-                )),
-              );
-            }
-            apiObject.interfaces.push({
-              name: apiObject.paths[singlePath][method]['x-request-definitions'][paramType].name,
-              content: apiObject.paths[singlePath][method]['x-request-definitions'][paramType].interfaceText,
-            });
-          }
-        }
-      }
-    }
-
+    apiObject = await this.injectDefinitionInterfaces(apiObject);
+    apiObject = await this.injectParameterInterfaces(apiObject, config);
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
     return apiObject;
   }
@@ -198,10 +173,9 @@ class OpenAPIBundler {
   /**
    * Iterates over the definitions already known to generate the respective interfaces
    * @param apiObject
-   * @param config
    * @return apiObject
    */
-  public async injectDefinitionInterfaces (apiObject: any, config: Config): Promise<any> {
+  public async injectDefinitionInterfaces (apiObject: any): Promise<any> {
     const defKeys = Object.keys(apiObject.definitions);
     for (let i = 0; i < defKeys.length; ++i) {
       const definitionObject = apiObject.definitions[defKeys[i]];
@@ -217,6 +191,60 @@ class OpenAPIBundler {
         console.log(defKeys[i]);
         console.log(e);
         throw new Error('Could not generate the interface text for the above object');
+      }
+    }
+    return apiObject;
+  }
+
+  /**
+   * Iterates over all path generating interface texts from the json schema in the request definitions
+   * @param apiObject
+   * @param config
+   */
+  public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
+    // iterate over paths with for loop so can use await later
+    const pathsKeys = Object.keys(apiObject.paths);
+    for (let i = 0; i < pathsKeys.length; ++i) {
+      const thisPath = pathsKeys[i];
+      const thisPathsMethods = Object.keys(apiObject.paths[thisPath]);
+
+      // iterate over this paths methods, ie get/post/put etc
+      for (let j = 0; j < thisPathsMethods.length; ++j) {
+        const thisMethod = thisPathsMethods[j];
+        const thisMethodXRequestionDefinitions = apiObject.paths[thisPath][thisMethod]['x-request-definitions'];
+
+        if (!thisMethodXRequestionDefinitions) {
+          continue;
+        }
+
+        // iterate over the request definitions
+        const xRequestDefinitionsKeys = Object.keys(thisMethodXRequestionDefinitions);
+        for (let k = 0; k < xRequestDefinitionsKeys.length; ++k) {
+          const paramType = xRequestDefinitionsKeys[k];
+
+          // handle request body
+          if (paramType === 'body') {
+            const param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
+            param.name = ucFirst(param.name);
+            thisMethodXRequestionDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
+              param.name,
+              JSON.stringify(_.get(
+                apiObject,
+                param.path,
+              )),
+            );
+            apiObject.interfaces.push({
+              name: param.name,
+              content: thisMethodXRequestionDefinitions[paramType].interfaceText,
+            });
+          } else {
+            // handle the rest
+            apiObject.interfaces.push({
+              name: apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].name,
+              content: apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].interfaceText,
+            });
+          }
+        }
       }
     }
     return apiObject;

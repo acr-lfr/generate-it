@@ -85,22 +85,22 @@ describe('e2e testing', function () {
         });
     }); });
     it('Should have the correct file hashes', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-        var filePaths, mismatched, i, filePath, fileHash, hash;
+        var filePaths, mismatched, i, filePath, fileHash, hash, wrong;
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['testserver/src/domains/RainDomain.ts', '63755a585c2c862d6ef7602d8a24dc9f'],
+                        ['testserver/src/domains/RainDomain.ts', 'd2bc7e72ec26206b99fea20db5c9ba1f'],
                         // Check complex interface (INTERFACE file)
                         ['testserver/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)
-                        ['testserver/src/http/nodegen/interfaces/index.ts', '0e5a6b1bfad08b8c378be83a6b4c436c'],
+                        ['testserver/src/http/nodegen/interfaces/index.ts', 'bc7ff6b28707bd67f3f7a35f8b5d10f7'],
                         // Check the security definition files (OTHER file)
                         ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
                         // Check the generated routes files (OPERATION file)
-                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', '14a1aaff4a0919e978196c0da3014ce2'],
-                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', '41181409d237ef89991f65dc5329bdd0'],
+                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', 'aa1a436614b0ee23e764ea0620407841'],
+                        ['testserver/src/http/nodegen/routes/weatherRoutes.ts', 'df058e2bd376253104f0c7c9501a72c9'],
                         // Check the output transformers (OPERATION file)
                         ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
                         // Check dynamic docker file (OTHER file)
@@ -121,7 +121,8 @@ describe('e2e testing', function () {
                 case 2:
                     hash = _a.sent();
                     if (hash !== fileHash) {
-                        mismatched.push("Hash mis-match for file " + filePath + ". Expected hash " + fileHash + " but got " + hash);
+                        wrong = "Hash mis-match for file " + filePath + ". Expected hash " + fileHash + " but got " + hash;
+                        mismatched.push(wrong);
                     }
                     _a.label = 3;
                 case 3:
