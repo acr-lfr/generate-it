@@ -118,9 +118,9 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
         if (this.apiObject.paths[path][method].parameters) {
             this.apiObject.paths[path][method].parameters.forEach(function (p) {
                 if (p.$ref || (p.schema && p.schema.$ref)) {
+                    var paramPath = _this.convertRefToOjectPath(p.$ref || p.schema.$ref);
+                    var parameterObject = _.get(_this.apiObject, paramPath);
                     try {
-                        var paramPath = _this.convertRefToOjectPath(p.$ref || p.schema.$ref);
-                        var parameterObject = _.get(_this.apiObject, paramPath);
                         var paramType = parameterObject["in"] || p["in"];
                         if (paramType === 'body') {
                             requestParams[paramType].params.push({
@@ -131,14 +131,13 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                         else {
                             requestParams[paramType].params.push(paramPath);
                         }
-                        // if (p.schema) {
-                        //   const name = paramPath.split('.').pop();
-                        //   requestParams.body.interfaceName = name;
-                        //   requestParams.body.name = name;
-                        // }
                     }
                     catch (e) {
-                        console.error(e);
+                        console.error('There was an error parsing a path and its referenced definitions, please check it is correct within the provided API specfication file'.red.bold);
+                        console.error('The path provided was: '.red + paramPath.red.bold);
+                        console.error('This is typically a result of a definition not defined in the index.'.red);
+                        console.error(parameterObject);
+                        throw e;
                     }
                 }
             });
