@@ -192,6 +192,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 2:
                         apiObject = _a.sent();
                         apiObject.interfaces = apiObject.interfaces.sort(function (a, b) { return (a.name > b.name) ? 1 : -1; });
+                        apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
                         return [2 /*return*/, apiObject];
                 }
             });

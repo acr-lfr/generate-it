@@ -167,6 +167,7 @@ class OpenAPIBundler {
     apiObject = await this.injectDefinitionInterfaces(apiObject);
     apiObject = await this.injectParameterInterfaces(apiObject, config);
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
+    apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
     return apiObject;
   }
 
