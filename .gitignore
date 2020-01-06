@@ -10,7 +10,6 @@ node_modules
 
 # Generated
 coverage/
-testserver/
 jest/
 .DS_Store
 npm-debug.log

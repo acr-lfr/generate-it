@@ -74,7 +74,7 @@ var FileWalker = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.files[FileTypeCheck_1["default"].OPERATION_INDEX]) return [3 /*break*/, 2];
-                        return [4 /*yield*/, GenerateOperation_1["default"].file(this.files[FileTypeCheck_1["default"].OPERATION_INDEX].generationDataObject, [], 'index', true, {
+                        return [4 /*yield*/, GenerateOperation_1["default"].file(this.files[FileTypeCheck_1["default"].OPERATION_INDEX].generationDataObject, [], 'index', FileTypeCheck_1["default"].OPERATION_INDEX, true, {
                                 operationFiles: this.files[FileTypeCheck_1["default"].OPERATION].files
                             })];
                     case 1:
@@ -144,7 +144,7 @@ var FileWalker = /** @class */ (function () {
                         _b = this.files;
                         _c = fileType;
                         _d = {};
-                        return [4 /*yield*/, GenerateOperation_1["default"].files(generationDataObject)];
+                        return [4 /*yield*/, GenerateOperation_1["default"].files(generationDataObject, fileType)];
                     case 7:
                         _b[_c] = (_d.files = _e.sent(),
                             _d.generationDataObject = generationDataObject,

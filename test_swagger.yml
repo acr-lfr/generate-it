@@ -121,6 +121,7 @@ paths:
           description: Invalid Identifier supplied
         '404':
           description: Round not found
+      x-passRequest: true
 parameters:
   pathId:
     in: path
@@ -172,6 +173,13 @@ definitions:
         type: number
       lat:
         type: number
+  JwtAccess:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
   WeatherFull:
     allOf:
       - $ref: '#/definitions/Weather'

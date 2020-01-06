@@ -2,17 +2,17 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var ucFirst_1 = tslib_1.__importDefault(require("./ucFirst"));
-function addType(withType, pathObject, requestType) {
+function addType(withType, pathObject, requestType, forceType) {
     if (!withType) {
         return '';
     }
-    if (requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
+    if (!forceType && requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
         if (requestType === 'body') {
             return ': ' + ucFirst_1["default"](pathObject['x-request-definitions'][requestType].params[0].name);
         }
         return ': ' + pathObject['x-request-definitions'][requestType].name;
     }
-    return ': any';
+    return ': ' + ((forceType) ? forceType : 'any');
 }
 /**
  * Provides parameters for controller and domain functions.
@@ -23,7 +23,7 @@ function addType(withType, pathObject, requestType) {
  * @param pathNameChange
  * @returns {string}
  */
-exports["default"] = (function (pathObject, withType, withPrefix, pathNameChange) {
+function default_1(pathObject, withType, withPrefix, pathNameChange) {
     if (withType === void 0) { withType = false; }
     if (pathNameChange === void 0) { pathNameChange = 'path'; }
     if (!pathObject) {
@@ -47,6 +47,9 @@ exports["default"] = (function (pathObject, withType, withPrefix, pathNameChange
             params.push('files' + addType(withType, pathObject, 'formData'));
         }
     }
+    var helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
+    var fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
+    var stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
     if (pathObject.security) {
         var push_1 = false;
         pathObject.security.forEach(function (security) {
@@ -57,15 +60,26 @@ exports["default"] = (function (pathObject, withType, withPrefix, pathNameChange
             });
         });
         if (push_1) {
-            params.push('jwtData' + addType(withType, pathObject));
+            if (fileType === 'STUB') {
+                params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined));
+            }
+            else {
+                params.push('jwtData' + addType(withType, pathObject));
+            }
         }
     }
     if (pathObject['x-passRequest']) {
-        params.push('req' + addType(withType, pathObject));
+        if (fileType === 'STUB') {
+            params.push('req' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined));
+        }
+        else {
+            params.push('req' + addType(withType, pathObject));
+        }
     }
     params.sort();
     if (withPrefix) {
         params = params.map(function (p) { return (p === 'req') ? 'req' : 'req.' + p; });
     }
     return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
-});
+}
+exports["default"] = default_1;

@@ -59,6 +59,7 @@ class TemplateFetchURL {
    * @return {boolean}
    */
   public gitCacheExists (cachePath: string) {
+    console.log('Checking for path: ' + cachePath);
     return fs.existsSync(cachePath);
   }
 
@@ -85,6 +86,9 @@ class TemplateFetchURL {
     if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
       console.log('Template cache already found and bypass update true: ' + url);
       return cacheDirectory;
+    }
+    if (dontUpdateTplCache) {
+      console.log('dontUpdateTplCache was true however the cache of the templates did not already exist.');
     }
     try {
       if (this.gitCacheExists(cacheDirectory) && !urlParts.b) {
@@ -154,6 +158,7 @@ template version tag: ${tplTag}
     const semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
     return semver.test(input);
   }
+
   /**
    * Returns the last tag from a given git repo
    * @param cacheDirectory - The git directory
@@ -165,6 +170,7 @@ template version tag: ${tplTag}
     process.chdir(cwd);
     return tag.outputString.trim();
   }
+
   /**
    * Ensure the current version and tpl tag semver will work together
    * @param packageVersion
