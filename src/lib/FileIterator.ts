@@ -57,6 +57,7 @@ class FileWalker {
         this.files[FileTypeCheck.OPERATION_INDEX].generationDataObject,
         [],
         'index',
+        FileTypeCheck.OPERATION_INDEX,
         true,
         {
           operationFiles: this.files[FileTypeCheck.OPERATION].files,
@@ -123,7 +124,7 @@ class FileWalker {
 
     if ((this.config.mockServer && fileType === FileTypeCheck.MOCK) || fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION) {
       this.files[fileType] = {
-        files: await GenerateOperation.files(generationDataObject),
+        files: await GenerateOperation.files(generationDataObject, fileType),
         generationDataObject,
       };
     }

@@ -29,13 +29,20 @@ class NodegenRc {
    * @return {{nodegenDir}|*}
    */
   public validate (localNodegenPath: string) {
-    const nodegenRcOject = fs.readJsonSync(localNodegenPath);
+    let nodegenRcOject: any;
+    try {
+      nodegenRcOject = fs.readJsonSync(localNodegenPath);
+    } catch (e) {
+      console.log('Failed to parse .nodegenrc file:' + localNodegenPath);
+      throw e;
+    }
     if (!nodegenRcOject.nodegenDir) {
       throw new Error('Missing .nodegenrc attribute: nodegenDir');
     }
     if (!nodegenRcOject.nodegenMockDir) {
       throw new Error('Missing .nodegenrc attribute: nodegenMockDir');
     }
+    console.log(nodegenRcOject);
     return nodegenRcOject;
   }
 }

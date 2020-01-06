@@ -7,13 +7,13 @@ import NamingUtils from '@/lib/helpers/NamingUtils';
 import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
+import { TemplateVariables } from '@/interfaces/TemplateVariables';
 
 class GenerateOperation {
   /**
    * Groups all http verbs for each path to then generate each operation file
-   * @param config
    */
-  public async files (config: GenerateOperationFileConfig) {
+  public async files (config: GenerateOperationFileConfig, fileType: string) {
     const files: any = {};
     // Iterate over all path
     // pathProperties = all the http verbs and their contents
@@ -33,7 +33,7 @@ class GenerateOperation {
     for (let i = 0; i < filesKeys.length; ++i) {
       const operationNameItem = filesKeys[i];
       const operation = files[operationNameItem];
-      await this.file(config, operation, operationNameItem);
+      await this.file(config, operation, operationNameItem, fileType);
     }
     return files;
   }
@@ -43,6 +43,7 @@ class GenerateOperation {
    * @param config
    * @param operation
    * @param operationName
+   * @param fileType
    * @param verbose
    * @param additionalTplContent
    */
@@ -50,6 +51,7 @@ class GenerateOperation {
     config: GenerateOperationFileConfig,
     operation: any,
     operationName: string,
+    fileType: string,
     verbose = false,
     additionalTplContent: any = {},
   ) {
@@ -62,7 +64,7 @@ class GenerateOperation {
 
     const renderedContent = TemplateRenderer.load(
       data.toString(),
-      this.templateVariables(operationName, operation, config, additionalTplContent, verbose),
+      this.templateVariables(operationName, operation, config, additionalTplContent, verbose, fileType),
       ext,
     );
 
@@ -85,10 +87,20 @@ class GenerateOperation {
    * @param config
    * @param additionalTplContent
    * @param verbose
+   * @param fileType
    */
-  public templateVariables (operationName: string, operation: any, config: GenerateOperationFileConfig, additionalTplContent: any = {}, verbose: boolean = false) {
+  public templateVariables (
+    operationName: string,
+    operation: any,
+    config: GenerateOperationFileConfig,
+    additionalTplContent: any = {},
+    verbose: boolean = false,
+    fileType: string,
+  ): TemplateVariables {
     return {
       operation_name: _.camelCase(operationName.replace(/[}{]/g, '')),
+      fileType,
+      config,
       operations: operation,
       swagger: config.data.swagger,
       mockServer: config.mockServer || false,

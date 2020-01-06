@@ -67,6 +67,7 @@ var TemplateFetchURL = /** @class */ (function () {
      * @return {boolean}
      */
     TemplateFetchURL.prototype.gitCacheExists = function (cachePath) {
+        console.log('Checking for path: ' + cachePath);
         return fs_extra_1["default"].existsSync(cachePath);
     };
     TemplateFetchURL.prototype.extractTagOrBranch = function (url) {
@@ -97,6 +98,9 @@ var TemplateFetchURL = /** @class */ (function () {
                         if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
                             console.log('Template cache already found and bypass update true: ' + url);
                             return [2 /*return*/, cacheDirectory];
+                        }
+                        if (dontUpdateTplCache) {
+                            console.log('dontUpdateTplCache was true however the cache of the templates did not already exist.');
                         }
                         _a.label = 2;
                     case 2:

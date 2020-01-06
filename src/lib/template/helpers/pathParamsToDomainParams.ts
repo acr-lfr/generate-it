@@ -1,16 +1,16 @@
 import ucFirst from '@/lib/template/helpers/ucFirst';
 
-function addType (withType: boolean, pathObject: any, requestType?: string) {
+function addType (withType: boolean, pathObject: any, requestType?: string, forceType?: string) {
   if (!withType) {
     return '';
   }
-  if (requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
+  if (!forceType && requestType && pathObject['x-request-definitions'] && pathObject['x-request-definitions'][requestType]) {
     if (requestType === 'body') {
       return ': ' + ucFirst(pathObject['x-request-definitions'][requestType].params[0].name);
     }
     return ': ' + pathObject['x-request-definitions'][requestType].name;
   }
-  return ': any';
+  return ': ' + ((forceType) ? forceType : 'any');
 }
 
 /**
@@ -22,7 +22,7 @@ function addType (withType: boolean, pathObject: any, requestType?: string) {
  * @param pathNameChange
  * @returns {string}
  */
-export default (pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') => {
+export default function (pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') {
   if (!pathObject) {
     return '';
   }
@@ -44,6 +44,9 @@ export default (pathObject: any, withType: boolean = false, withPrefix?: string,
       params.push('files' + addType(withType, pathObject, 'formData'));
     }
   }
+  const helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
+  const fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
+  const stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
   if (pathObject.security) {
     let push = false;
     pathObject.security.forEach((security: any) => {
@@ -54,15 +57,35 @@ export default (pathObject: any, withType: boolean = false, withPrefix?: string,
       });
     });
     if (push) {
-      params.push('jwtData' + addType(withType, pathObject));
+      if (fileType === 'STUB') {
+        params.push(
+          'jwtData' + addType(
+          withType,
+          pathObject,
+          undefined,
+          (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined),
+        );
+      } else {
+        params.push('jwtData' + addType(withType, pathObject));
+      }
     }
   }
   if (pathObject['x-passRequest']) {
-    params.push('req' + addType(withType, pathObject));
+    if (fileType === 'STUB') {
+      params.push(
+        'req' + addType(
+        withType,
+        pathObject,
+        undefined,
+        (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined),
+      );
+    } else {
+      params.push('req' + addType(withType, pathObject));
+    }
   }
   params.sort();
   if (withPrefix) {
     params = params.map((p: string) => (p === 'req') ? 'req' : 'req.' + p);
   }
   return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
-};
+}

@@ -17,14 +17,25 @@ var packageJson = {
     }
 };
 var tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
+var clearTestServer = function () {
+    // return;
+    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), 'testserver'));
+    for (var i = 0; i < names.length; ++i) {
+        if (names[i] !== '.openapi-nodegen') {
+            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'testserver', names[i]));
+        }
+    }
+    var compare = path_1["default"].join(process.cwd(), 'testserver/.openapi-nodegen/cache/compare');
+    if (fs_extra_1["default"].pathExistsSync(compare)) {
+        fs_extra_1["default"].removeSync(compare);
+    }
+};
 describe('e2e testing', function () {
     beforeAll(function () {
-        fs_extra_1["default"].removeSync(testServerPath);
-        fs_extra_1["default"].ensureDirSync(testServerPath);
-        fs_extra_1["default"].writeJsonSync(path_1["default"].join(testServerPath, 'package.json'), packageJson, { spaces: 2 });
+        clearTestServer();
     });
     afterAll(function () {
-        return fs_extra_1["default"].removeSync(testServerPath);
+        clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -35,7 +46,7 @@ describe('e2e testing', function () {
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
                     return [4 /*yield*/, openapiNodegen_1["default"]({
                             dontRunComparisonTool: false,
-                            dontUpdateTplCache: false,
+                            dontUpdateTplCache: true,
                             mockServer: true,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
@@ -60,12 +71,12 @@ describe('e2e testing', function () {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    // remove a servive file which should then be copied back over
+                    // remove a survive file which should then be copied back over
                     fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'testserver/src/services/HttpHeadersCacheService.ts'));
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
                     return [4 /*yield*/, openapiNodegen_1["default"]({
                             dontRunComparisonTool: false,
-                            dontUpdateTplCache: false,
+                            dontUpdateTplCache: true,
                             mockServer: true,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
@@ -91,22 +102,23 @@ describe('e2e testing', function () {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['testserver/src/domains/RainDomain.ts', 'd2bc7e72ec26206b99fea20db5c9ba1f'],
+                        ['testserver/src/domains/RainDomain.ts', 'e2532eaea403ddd12b078813f5d791a9'],
+                        ['testserver/src/domains/WeatherDomain.ts', 'c535af2b16ae22dc4e5d8e64f789f9b2'],
                         // Check complex interface (INTERFACE file)
                         ['testserver/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)
-                        ['testserver/src/http/nodegen/interfaces/index.ts', 'bc7ff6b28707bd67f3f7a35f8b5d10f7'],
+                        ['testserver/src/http/nodegen/interfaces/index.ts', '5b9eaa0f0be87b03467473b6c094424b'],
                         // Check the security definition files (OTHER file)
                         ['testserver/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
                         // Check the generated routes files (OPERATION file)
-                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', 'aa1a436614b0ee23e764ea0620407841'],
+                        ['testserver/src/http/nodegen/routes/rainRoutes.ts', '7a0d269931ec99a5e3f1d85ee71f01d0'],
                         ['testserver/src/http/nodegen/routes/weatherRoutes.ts', 'df058e2bd376253104f0c7c9501a72c9'],
                         // Check the output transformers (OPERATION file)
                         ['testserver/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
                         // Check dynamic docker file (OTHER file)
                         ['testserver/docker-compose.yml', 'd553b06bbfc2fb3e9f4fa92dd293b4c1'],
                         // Check git ignore was copied over (OTHER file)
-                        ['testserver/.gitignore', 'f4f0aea2df6293d79666f3c7c622d45c'],
+                        ['testserver/.gitignore', '7603a99efa78b3faf4ff493cf1cb0fb7'],
                         // Check the deleted service file was reinjected
                         ['testserver/src/services/HttpHeadersCacheService.ts', '144cd39920fd8e042a57f83628479979'],
                     ];

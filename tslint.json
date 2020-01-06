@@ -1,7 +1,7 @@
 {
   "extends": "tslint:recommended",
   "linterOptions": {
-    "exclude": ["src/http/nodegen/**/*", "src/domains/__mocks__/**/*"]
+    "exclude": ["testserver"]
   },
   "rules": {
     "object-literal-shorthand": false,
