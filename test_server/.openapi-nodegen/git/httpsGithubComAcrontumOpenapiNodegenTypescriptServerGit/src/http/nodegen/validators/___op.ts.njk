@@ -1,0 +1,13 @@
+import {Joi} from 'celebrate'
+
+export default {
+  {% for operation in operations -%}
+    {% for method, path in operation.path -%}
+      {% if isValidMethod(method) %}
+  {{ path.operationId }}: {
+    {{paramsValidation(path.parameters)}}
+  },
+      {% endif %}
+    {%- endfor %}
+  {%- endfor %}
+}
