@@ -1,0 +1,30 @@
+import express = require('express')
+import config from '../../config'
+{% for endpoint in endpoints -%}
+{% if(endsWith(swagger.basePath, '/')) -%}
+
+import {{prettifyRouteName(endpoint)}}Routes from './routes/{{prettifyRouteName(endpoint)}}Routes'
+{% else -%}
+
+import {{prettifyRouteName(endpoint)}}Routes from './routes/{{prettifyRouteName(endpoint)}}Routes'
+{% endif -%}
+{% endfor -%}
+import swaggerRoutes from './routes/swaggerRoutes'
+
+export default function (app: express.Application) {
+  {% for endpoint in endpoints -%}
+    {% if(endsWith(swagger.basePath, '/')) %}
+  app.use('{{swagger.basePath}}{{endpoint}}', {{prettifyRouteName(endpoint)}}Routes())
+    {% else %}
+  app.use('{{swagger.basePath}}/{{endpoint}}', {{prettifyRouteName(endpoint)}}Routes())
+    {% endif %}
+  {%- endfor %}
+
+  if (config.env === 'develop') {
+    {% if(endsWith(swagger.basePath, '/')) %}
+    app.use('{{ swagger.basePath }}swagger', swaggerRoutes())
+    {% else %}
+    app.use('{{ swagger.basePath }}/swagger', swaggerRoutes())
+    {% endif %}
+  }
+}
