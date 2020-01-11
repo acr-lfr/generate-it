@@ -47,7 +47,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   const renderedContent = TemplateRenderer.load(content, {
     package: config.package,
     swagger: config.data.swagger,
-    definitions: Object.keys(config.data.swagger.definitions),
+    definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
     endpoints,
     additionalTplObject,
   });

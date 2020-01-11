@@ -177,6 +177,9 @@ class OpenAPIBundler {
    * @return apiObject
    */
   public async injectDefinitionInterfaces (apiObject: any): Promise<any> {
+    if (!apiObject.definitions) { // edge case for api's without any definitions defined.
+      return apiObject;
+    }
     const defKeys = Object.keys(apiObject.definitions);
     for (let i = 0; i < defKeys.length; ++i) {
       const definitionObject = apiObject.definitions[defKeys[i]];

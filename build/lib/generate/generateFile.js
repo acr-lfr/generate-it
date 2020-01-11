@@ -46,7 +46,7 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
     var renderedContent = TemplateRenderer_1["default"].load(content, {
         package: config.package,
         swagger: config.data.swagger,
-        definitions: Object.keys(config.data.swagger.definitions),
+        definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
         endpoints: endpoints,
         additionalTplObject: additionalTplObject
     });
