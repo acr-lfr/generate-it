@@ -1,6 +1,6 @@
 {
   "name": "openapi-nodegen",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "licence": "MIT",
   "main": "./build/openapiNodegen.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "install:githooks": "cp ./githooks/* .git/hooks",
     "test": "npm run lint && npm run test:unit",
-    "test:unit": "npm run build && jest",
+    "test:unit": "npm run build && jest --runInBand",
     "test:unit:single": "jest --collect-coverage false",
     "lint": "tslint --project tsconfig.json --fix",
     "lint:fix": "tslint --project tsconfig.json --fix",

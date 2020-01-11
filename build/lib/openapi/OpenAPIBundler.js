@@ -209,6 +209,9 @@ var OpenAPIBundler = /** @class */ (function () {
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
+                        if (!apiObject.definitions) { // edge case for api's without any definitions defined.
+                            return [2 /*return*/, apiObject];
+                        }
                         defKeys = Object.keys(apiObject.definitions);
                         i = 0;
                         _d.label = 1;

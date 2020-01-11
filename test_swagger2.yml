@@ -1,0 +1,75 @@
+swagger: '2.0'
+info:
+  description: User management
+  version: 1.0.0
+  title: smith_user_management_swagger
+  contact:
+    email: info@acrontum.de
+  license:
+    name: private
+    url: 'https://www.acrontum.de'
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/vnd.api+json
+host: bob-smith-user-management-default.bob-smith.lan
+basePath: /user-management/
+securityDefinitions:
+  jwt:
+    type: apiKey
+    name: Authorization
+    in: header
+parameters:
+  pathBSiz:
+    in: path
+    name: bSized
+    type: string
+    description: The BSiz of the user
+    required: true
+    x-example: BS987
+paths:
+  /admin/health:
+    get:
+      tags:
+        - admin
+      summary: Service health check
+      operationId: adminHealthGet
+      description: |
+        Service health check
+      responses:
+        '200':
+          description: Success response
+        '404':
+          description: Not found
+  '/auth/{bSized}/whitelist':
+    post:
+      tags:
+        - auth
+      summary: Add bSized to whitelist
+      operationId: authBsizedWhitelistPost
+      description: |
+        Add bSized to whitelist
+      parameters:
+        - $ref: '#/parameters/pathBSiz'
+      responses:
+        '200':
+          description: BSiz added to the white list
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - auth
+      summary: Delete bSized from the whitelist
+      operationId: authBsizedWhitelistDelete
+      description: |
+        Delete bSized from the whitelist
+      parameters:
+        - $ref: '#/parameters/pathBSiz'
+      responses:
+        '200':
+          description: BSiz deleted from the white list
+        '404':
+          description: Not found
