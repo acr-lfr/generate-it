@@ -1,6 +1,6 @@
 import ucFirst from '@/lib/template/helpers/ucFirst';
 
-function addType (withType: boolean, pathObject: any, requestType?: string, forceType?: string) {
+function addType (withType: boolean, pathObject: any, requestType?: string, forceType?: string, forceTypeOptional?: boolean) {
   if (!withType) {
     return '';
   }
@@ -10,7 +10,7 @@ function addType (withType: boolean, pathObject: any, requestType?: string, forc
     }
     return ': ' + pathObject['x-request-definitions'][requestType].name;
   }
-  return ': ' + ((forceType) ? forceType : 'any');
+  return ': ' + ((forceType) ? forceType + (forceTypeOptional ? ' | undefined' : '') : 'any');
 }
 
 /**
@@ -49,6 +49,7 @@ export default function (pathObject: any, withType: boolean = false, withPrefix?
   const stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
   if (pathObject.security) {
     let push = false;
+    pathObject.security = pathObject.security || [];
     pathObject.security.forEach((security: any) => {
       Object.keys(security).forEach((key) => {
         if (key.toLowerCase().includes('jwt')) {
@@ -56,15 +57,16 @@ export default function (pathObject: any, withType: boolean = false, withPrefix?
         }
       });
     });
-    if (push) {
+    if (push || pathObject['x-passThruWithoutJWT']) {
       if (fileType === 'STUB') {
         params.push(
           'jwtData' + addType(
           withType,
           pathObject,
           undefined,
-          (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined),
-        );
+          (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
+          (!!pathObject['x-passThruWithoutJWT']),
+        ));
       } else {
         params.push('jwtData' + addType(withType, pathObject));
       }
@@ -77,8 +79,8 @@ export default function (pathObject: any, withType: boolean = false, withPrefix?
         withType,
         pathObject,
         undefined,
-        (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined),
-      );
+        (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined,
+      ));
     } else {
       params.push('req' + addType(withType, pathObject));
     }

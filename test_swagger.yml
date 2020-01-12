@@ -78,7 +78,7 @@ paths:
       security:
         - apiKeyAdmin: []
         - jwtToken: []
-      x-passThruWithJWT: true
+      x-passThruWithoutJWT: true
   /rain/:
     get:
       tags:
