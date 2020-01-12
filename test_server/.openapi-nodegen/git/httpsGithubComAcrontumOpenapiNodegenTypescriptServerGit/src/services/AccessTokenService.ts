@@ -9,6 +9,10 @@ interface JwtDetails {
   sessionData: any;
 }
 
+export interface ValidateRequestOptions {
+  passThruWithoutJWT: boolean
+}
+
 class AccessTokenService {
   /**
    * Used by the validateRequest method
@@ -38,8 +42,9 @@ class AccessTokenService {
    * @param res
    * @param next
    * @param headerNames
+   * @param options
    */
-  public validateRequest (req: NodegenRequest, res: express.Response, next: express.NextFunction, headerNames: string[]) {
+  public validateRequest (req: NodegenRequest, res: express.Response, next: express.NextFunction, headerNames: string[], options?: ValidateRequestOptions) {
     let jwtToken: string;
     let apiKey: string;
     for (let i = 0; i < headerNames.length; ++i) {
@@ -60,6 +65,9 @@ class AccessTokenService {
     }
 
     if (!jwtToken && !apiKey) {
+      if (options && options.passThruWithoutJWT) {
+        return next();
+      }
       return this.denyRequest(
         res,
         'No token to parse',
@@ -78,11 +86,11 @@ class AccessTokenService {
         .catch(() => {
           this.denyRequest(res);
         });
-    } else if(config.apiKey === apiKey) {
+    } else if (config.apiKey === apiKey) {
       // verify the access token
       next();
     } else {
-      this.denyRequest(res)
+      this.denyRequest(res);
     }
   }
 

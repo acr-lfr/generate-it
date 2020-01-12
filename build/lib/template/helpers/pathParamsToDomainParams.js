@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var ucFirst_1 = tslib_1.__importDefault(require("./ucFirst"));
-function addType(withType, pathObject, requestType, forceType) {
+function addType(withType, pathObject, requestType, forceType, forceTypeOptional) {
     if (!withType) {
         return '';
     }
@@ -12,7 +12,7 @@ function addType(withType, pathObject, requestType, forceType) {
         }
         return ': ' + pathObject['x-request-definitions'][requestType].name;
     }
-    return ': ' + ((forceType) ? forceType : 'any');
+    return ': ' + ((forceType) ? forceType + (forceTypeOptional ? ' | undefined' : '') : 'any');
 }
 /**
  * Provides parameters for controller and domain functions.
@@ -52,6 +52,7 @@ function default_1(pathObject, withType, withPrefix, pathNameChange) {
     var stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
     if (pathObject.security) {
         var push_1 = false;
+        pathObject.security = pathObject.security || [];
         pathObject.security.forEach(function (security) {
             Object.keys(security).forEach(function (key) {
                 if (key.toLowerCase().includes('jwt')) {
@@ -59,9 +60,9 @@ function default_1(pathObject, withType, withPrefix, pathNameChange) {
                 }
             });
         });
-        if (push_1) {
+        if (push_1 || pathObject['x-passThruWithoutJWT']) {
             if (fileType === 'STUB') {
-                params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined));
+                params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined, (!!pathObject['x-passThruWithoutJWT'])));
             }
             else {
                 params.push('jwtData' + addType(withType, pathObject));
