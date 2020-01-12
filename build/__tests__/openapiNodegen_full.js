@@ -26,7 +26,7 @@ describe('e2e testing', function () {
         exports.clearTestServer();
     });
     afterAll(function () {
-        // clearTestServer();
+        exports.clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
