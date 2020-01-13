@@ -109,6 +109,10 @@ class OpenAPIInjectInterfaceNaming {
         name: _.upperFirst(generateOperationId(_.upperFirst(method), path)),
         params: [],
       },
+      formData: {
+        name: _.upperFirst(generateOperationId(_.upperFirst(method) + 'FormData', path)),
+        params: [],
+      },
       headers: {
         name: _.upperFirst(generateOperationId(_.upperFirst(method) + 'Headers', path)),
         params: [],
@@ -127,8 +131,8 @@ class OpenAPIInjectInterfaceNaming {
         if (p.$ref || (p.schema && p.schema.$ref)) {
           const paramPath = this.convertRefToOjectPath(p.$ref || p.schema.$ref);
           const parameterObject = _.get(this.apiObject, paramPath);
+          const paramType = parameterObject.in || p.in;
           try {
-            const paramType = parameterObject.in || p.in;
             if (paramType === 'body') {
               requestParams[paramType].params.push({
                 name: p.name,
@@ -142,6 +146,8 @@ class OpenAPIInjectInterfaceNaming {
             console.error('The path provided was: '.red + paramPath.red.bold);
             console.error('This is typically a result of a definition not defined in the index.'.red);
             console.error(parameterObject);
+            console.error(paramPath, parameterObject, 'The full API object:');
+            console.error(this.apiObject);
             throw e;
           }
         }
