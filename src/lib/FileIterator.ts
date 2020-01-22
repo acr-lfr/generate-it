@@ -25,7 +25,6 @@ class FileWalker {
     this.isFirstRun = providedIsFirstRun;
     const targetDir = this.config.targetDir;
     const templatesDir = this.config.templates;
-    fs.copySync(this.config.swaggerFilePath, path.resolve(targetDir, 'dredd', 'swagger.yml'));
     return new Promise((resolve, reject) => {
       walk.walk(templatesDir, {
         followLinks: false,
