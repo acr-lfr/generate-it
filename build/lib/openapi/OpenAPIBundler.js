@@ -21,16 +21,16 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.bundle = function (filePath, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var content, startTime, filepath, e_1, e_2, e_3;
+            var content, startTime, e_1, e_2, e_3;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         startTime = new Date().getTime();
                         logTimeDiff_1["default"](0, 0);
                         try {
-                            filepath = path_1["default"].resolve(__dirname, filePath);
                             console.log('Reading file: ' + filePath);
                             content = fs_extra_1["default"].readFileSync(filePath);
+                            this.copyInputFileToProject(filePath, config.targetDir);
                         }
                         catch (e) {
                             console.error('Can not load the content of the Swagger specification file');
@@ -129,6 +129,16 @@ var OpenAPIBundler = /** @class */ (function () {
                 }
             });
         });
+    };
+    /**
+     * Writes a copy of the input swagger file to the root of the project
+     * @param filepath
+     * @param targetDir
+     */
+    OpenAPIBundler.prototype.copyInputFileToProject = function (filepath, targetDir) {
+        var saveTo = path_1["default"].join(targetDir, 'openapi-nodegen-api-file.yml');
+        console.log('Writing the input yml file to: ' + saveTo);
+        fs_extra_1["default"].copyFileSync(filepath, saveTo);
     };
     /**
      * JSON load and parse a .json file or .y(a)ml file

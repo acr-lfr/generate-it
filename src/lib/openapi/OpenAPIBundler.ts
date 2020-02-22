@@ -24,9 +24,9 @@ class OpenAPIBundler {
     logTimeDiff(0, 0);
 
     try {
-      const filepath = path.resolve(__dirname, filePath);
       console.log('Reading file: ' + filePath);
       content = fs.readFileSync(filePath);
+      this.copyInputFileToProject(filePath, config.targetDir);
     } catch (e) {
       console.error('Can not load the content of the Swagger specification file');
       console.log(filePath);
@@ -117,6 +117,17 @@ class OpenAPIBundler {
     return JSON.parse(JSON.stringify(
       this.pathEndpointInjection(content),
     ));
+  }
+
+  /**
+   * Writes a copy of the input swagger file to the root of the project
+   * @param filepath
+   * @param targetDir
+   */
+  public copyInputFileToProject (filepath: string, targetDir: string): void {
+    const saveTo = path.join(targetDir, 'openapi-nodegen-api-file.yml');
+    console.log('Writing the input yml file to: ' + saveTo);
+    fs.copyFileSync(filepath, saveTo);
   }
 
   /**
