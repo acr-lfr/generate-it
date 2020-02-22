@@ -38,8 +38,8 @@
   ],
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^4.1.0",
-    "compare-versions": "^3.5.1",
+    "commander": "^4.1.1",
+    "compare-versions": "^3.6.0",
     "deepmerge": "^4.2.2",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.4",
@@ -60,24 +60,24 @@
     "word-wrap": "^1.2.3"
   },
   "devDependencies": {
-    "@types/fs-extra": "^5.0.4",
+    "@types/fs-extra": "^8.1.0",
     "@types/inquirer": "^6.5.0",
-    "@types/jest": "^24.9.1",
+    "@types/jest": "^25.1.3",
     "@types/js-yaml": "^3.12.2",
     "@types/json-schema": "^7.0.4",
-    "@types/lodash": "^4.14.119",
+    "@types/lodash": "^4.14.149",
     "@types/nunjucks": "^3.1.3",
     "@types/prettier": "^1.19.0",
     "@types/walk": "^2.3.0",
     "@types/yamljs": "^0.2.30",
     "@zerollup/ts-transform-paths": "^1.7.11",
-    "codecov": "^3.6.2",
+    "codecov": "^3.6.5",
     "eslint": "^6.8.0",
-    "hasha": "^5.1.0",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.3.0",
-    "tslint": "^5.20.1",
+    "hasha": "^5.2.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "tslint": "^6.0.0",
     "ttypescript": "^1.5.10",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   }
 }
