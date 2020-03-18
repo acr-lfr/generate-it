@@ -10,6 +10,7 @@ var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAl
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var logTimeDiff_1 = tslib_1.__importDefault(require("../../utils/logTimeDiff"));
 var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
+var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -215,19 +216,25 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.injectDefinitionInterfaces = function (apiObject) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var defKeys, i, definitionObject, _a, _b, _c, e_4;
+            var toWalk, defKeys, i, definitionObject, _a, _b, _c, e_4;
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        if (!apiObject.definitions) { // edge case for api's without any definitions defined.
+                        // edge case for api's without any definitions or component schemas
+                        if (ApiIs_1["default"].swagger(apiObject) && !apiObject.definitions
+                            || ApiIs_1["default"].openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
                             return [2 /*return*/, apiObject];
                         }
-                        defKeys = Object.keys(apiObject.definitions);
+                        toWalk = (ApiIs_1["default"].swagger(apiObject)) ? apiObject.definitions : (ApiIs_1["default"].openapi3(apiObject)) ? apiObject.components.schemas : {};
+                        defKeys = Object.keys(toWalk);
                         i = 0;
                         _d.label = 1;
                     case 1:
                         if (!(i < defKeys.length)) return [3 /*break*/, 6];
-                        definitionObject = apiObject.definitions[defKeys[i]];
+                        definitionObject = (ApiIs_1["default"].swagger(apiObject)) ?
+                            apiObject.definitions[defKeys[i]] :
+                            (ApiIs_1["default"].openapi3(apiObject)) ?
+                                apiObject.components.schemas[defKeys[i]] : {};
                         _d.label = 2;
                     case 2:
                         _d.trys.push([2, 4, , 5]);

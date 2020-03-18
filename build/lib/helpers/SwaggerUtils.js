@@ -88,19 +88,46 @@ var SwaggerUtils = /** @class */ (function () {
     };
     /**
      * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
-     * @param {Object} requestParams
+     * @param {Object} pathObject
      * @return {string|void}
      */
-    SwaggerUtils.prototype.createJoiValidation = function (requestParams) {
+    SwaggerUtils.prototype.createJoiValidation = function (pathObject) {
         var _this = this;
-        if (!requestParams) {
+        var requestParams = pathObject.parameters;
+        if (!requestParams && !pathObject.requestBody) {
             return;
+        }
+        if (pathObject.requestBody) {
+            try {
+                var schema = pathObject.requestBody.content['application/json'].schema;
+                requestParams = requestParams || [];
+                requestParams.push({
+                    "in": 'body',
+                    name: pathObject.operationId + 'PostBody',
+                    required: pathObject.requestBody.required,
+                    schema: schema
+                });
+            }
+            catch (e) {
+                console.error('Please pass body objects by reference to a component', e);
+                throw e;
+            }
         }
         var paramsTypes = {
             body: requestParams.filter(function (param) { return param["in"] === 'body'; }),
             params: requestParams.filter(function (param) { return param["in"] === 'path'; }),
             query: requestParams.filter(function (param) { return param["in"] === 'query'; })
         };
+        for (var key in paramsTypes.params) {
+            if (paramsTypes.params[key].schema) {
+                paramsTypes.params[key].type = paramsTypes.params[key].schema.type;
+            }
+        }
+        for (var key in paramsTypes.query) {
+            if (paramsTypes.query[key].schema) {
+                paramsTypes.query[key].type = paramsTypes.query[key].schema.type;
+            }
+        }
         var validationText = '';
         Object.keys(paramsTypes).forEach(function (paramTypeKey) {
             if (paramsTypes[paramTypeKey].length === 0) {

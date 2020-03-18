@@ -5,7 +5,7 @@ export default {
     {% for method, path in operation.path -%}
       {% if isValidMethod(method) %}
   {{ path.operationId }}: {
-    {{paramsValidation(path.parameters)}}
+    {{paramsValidation(method, path)}}
   },
       {% endif %}
     {%- endfor %}

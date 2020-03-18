@@ -9,6 +9,7 @@ import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptIn
 import logTimeDiff from '@/utils/logTimeDiff';
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
+import ApiIs from '@/lib/helpers/ApiIs';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -188,12 +189,19 @@ class OpenAPIBundler {
    * @return apiObject
    */
   public async injectDefinitionInterfaces (apiObject: any): Promise<any> {
-    if (!apiObject.definitions) { // edge case for api's without any definitions defined.
+    // edge case for api's without any definitions or component schemas
+    if (ApiIs.swagger(apiObject) && !apiObject.definitions
+      || ApiIs.openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
       return apiObject;
     }
-    const defKeys = Object.keys(apiObject.definitions);
+    const toWalk = (ApiIs.swagger(apiObject)) ? apiObject.definitions : (ApiIs.openapi3(apiObject)) ? apiObject.components.schemas : {};
+    const defKeys = Object.keys(toWalk);
     for (let i = 0; i < defKeys.length; ++i) {
-      const definitionObject = apiObject.definitions[defKeys[i]];
+      const definitionObject =
+        (ApiIs.swagger(apiObject)) ?
+          apiObject.definitions[defKeys[i]] :
+          (ApiIs.openapi3(apiObject)) ?
+            apiObject.components.schemas[defKeys[i]] : {};
       try {
         apiObject.interfaces.push({
           name: defKeys[i],

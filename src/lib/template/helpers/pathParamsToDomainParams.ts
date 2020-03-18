@@ -1,4 +1,5 @@
 import ucFirst from '@/lib/template/helpers/ucFirst';
+import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 
 function addType (withType: boolean, pathObject: any, requestType?: string, forceType?: string, forceTypeOptional?: boolean) {
   if (!withType) {
@@ -16,16 +17,20 @@ function addType (withType: boolean, pathObject: any, requestType?: string, forc
 /**
  * Provides parameters for controller and domain functions.
  * Will auto inject the req.jwtData if the path has a security attribute.
+ * @param method
  * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
  * @param pathNameChange
  * @returns {string}
  */
-export default function (pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') {
+export default function (method: string, pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') {
   if (!pathObject) {
     return '';
   }
+  // for OA3 only this is expected where the body cannot be in the parameters
+  pathObject = oa3toOa2Body(method, pathObject);
+
   let params: string[] = [];
   if (pathObject.parameters) {
     if (pathObject.parameters.some((p: any) => p.in === 'query')) {
@@ -66,7 +71,7 @@ export default function (pathObject: any, withType: boolean = false, withPrefix?
           undefined,
           (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
           (!!pathObject['x-passThruWithoutJWT']),
-        ));
+          ));
       } else {
         params.push('jwtData' + addType(withType, pathObject));
       }
@@ -80,7 +85,7 @@ export default function (pathObject: any, withType: boolean = false, withPrefix?
         pathObject,
         undefined,
         (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined,
-      ));
+        ));
     } else {
       params.push('req' + addType(withType, pathObject));
     }
