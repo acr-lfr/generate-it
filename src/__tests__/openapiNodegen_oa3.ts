@@ -73,19 +73,19 @@ describe('e2e testing', () => {
     // C) Something broke when building the said files
     const filePaths = [
       // Check generated domains (STUB file)
-      ['test_server/src/domains/WeatherDomain.ts', 'd2f37f3bb2c18fcf6d48be988f24f0ae'],
+      ['test_server/src/domains/WeatherDomain.ts', 'dbfef2c0a7d8bdcd7c0549c530675f21'],
       // Check complex interface (INTERFACE file)
-      ['test_server/src/http/nodegen/interfaces/WeatherPost.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
+      ['test_server/src/http/nodegen/interfaces/WeatherPost.ts', 'fbe8cf7a8f93f34bb646d564223f854f'],
       // Check the interface index file (OTHER file)
-      ['test_server/src/http/nodegen/interfaces/index.ts', 'f0061a1da5262bcacf7d9e3522306879'],
+      ['test_server/src/http/nodegen/interfaces/index.ts', 'a46c50a6c7f1a58da526a18aec2d875e'],
       // Check the security definition files (OTHER file)
-      ['test_server/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
+      ['test_server/src/http/nodegen/security/definitions.ts', '9fe31e21af71374e62bcb49bb2d40567'],
       // Check the generated routes files (OPERATION file)
-      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '8ee7e187b208000c3458f21607312a0a'],
+      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'ae018ac9cc87624c7bc8c3400d7d6d57'],
       // Check the output transformers (OPERATION file)
-      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
+      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '273e4308cdd6ebad57cdac5f1893e8f3'],
       // Check dynamic docker file (OTHER file)
-      ['test_server/docker-compose.yml', 'd553b06bbfc2fb3e9f4fa92dd293b4c1'],
+      ['test_server/docker-compose.yml', '77046129af45b9b24ced9969ba669acd'],
       // Check git ignore was copied over (OTHER file)
       ['test_server/.gitignore', '7603a99efa78b3faf4ff493cf1cb0fb7'],
       // Check the deleted service file was reinjected
