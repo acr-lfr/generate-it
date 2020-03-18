@@ -48,14 +48,14 @@ var params = [{
         ]
     }];
 test('Returns joi with 2 required params', function () {
-    expect(SwaggerUtils_1["default"].createJoiValidation([params[0]])).toBe('body: {password:Joi.string().required(),newPassword:Joi.string().required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
+    expect(SwaggerUtils_1["default"].createJoiValidation({ parameters: [params[0]] })).toBe('body: {password:Joi.string().required(),newPassword:Joi.string().required(),newPasswordConfirm:Joi.string().allow(\'\'),},');
 });
 test('openapi3 query request param', function () {
-    expect(SwaggerUtils_1["default"].createJoiValidation([params[1]])).toBe('query: {limit:Joi.number().integer(),},');
+    expect(SwaggerUtils_1["default"].createJoiValidation({ parameters: [params[1]] })).toBe('query: {limit:Joi.number().integer(),},');
 });
 test('openapi2 enums', function () {
-    expect(SwaggerUtils_1["default"].createJoiValidation([params[3]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
+    expect(SwaggerUtils_1["default"].createJoiValidation({ parameters: [params[3]] })).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
 });
 test('openapi3 enums', function () {
-    expect(SwaggerUtils_1["default"].createJoiValidation([params[2]])).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
+    expect(SwaggerUtils_1["default"].createJoiValidation({ parameters: [params[2]] })).toBe('query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},');
 });

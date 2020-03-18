@@ -1,3 +1,5 @@
+import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
+
 class SwaggerUtils {
   /**
    * Converts a sub-section of a definition
@@ -82,10 +84,13 @@ class SwaggerUtils {
 
   /**
    * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
-   * @param {Object} requestParams
+   * @param method
+   * @param {Object} pathObject
    * @return {string|void}
    */
-  public createJoiValidation (requestParams: any) {
+  public createJoiValidation (method: string, pathObject: any) {
+    pathObject = oa3toOa2Body(method, pathObject);
+    let requestParams = pathObject.parameters;
     if (!requestParams) {
       return;
     }
@@ -94,6 +99,16 @@ class SwaggerUtils {
       params: requestParams.filter((param: any) => param.in === 'path'),
       query: requestParams.filter((param: any) => param.in === 'query'),
     };
+    for (const key in paramsTypes.params) {
+      if (paramsTypes.params[key].schema) {
+        paramsTypes.params[key].type = paramsTypes.params[key].schema.type;
+      }
+    }
+    for (const key in paramsTypes.query) {
+      if (paramsTypes.query[key].schema) {
+        paramsTypes.query[key].type = paramsTypes.query[key].schema.type;
+      }
+    }
 
     let validationText = '';
 

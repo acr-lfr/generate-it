@@ -50,7 +50,7 @@ const params = [{
 
 test('Returns joi with 2 required params', () => {
   expect(
-    SwaggerUtils.createJoiValidation([params[0]]),
+    SwaggerUtils.createJoiValidation({parameters: [params[0]]}),
   ).toBe(
     'body: {password:Joi.string().required(),newPassword:Joi.string().required(),newPasswordConfirm:Joi.string().allow(\'\'),},',
   );
@@ -58,7 +58,7 @@ test('Returns joi with 2 required params', () => {
 
 test('openapi3 query request param', () => {
   expect(
-    SwaggerUtils.createJoiValidation([params[1]]),
+    SwaggerUtils.createJoiValidation({parameters: [params[1]]}),
   ).toBe(
     'query: {limit:Joi.number().integer(),},',
   );
@@ -66,7 +66,7 @@ test('openapi3 query request param', () => {
 
 test('openapi2 enums', () => {
   expect(
-    SwaggerUtils.createJoiValidation([params[3]]),
+    SwaggerUtils.createJoiValidation({parameters: [params[3]]}),
   ).toBe(
     'query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},',
   );
@@ -74,7 +74,7 @@ test('openapi2 enums', () => {
 
 test('openapi3 enums', () => {
   expect(
-    SwaggerUtils.createJoiValidation([params[2]]),
+    SwaggerUtils.createJoiValidation({parameters: [params[2]]}),
   ).toBe(
     'query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},',
   );

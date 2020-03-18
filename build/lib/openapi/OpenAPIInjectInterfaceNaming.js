@@ -4,6 +4,7 @@ var tslib_1 = require("tslib");
 var generateOperationId_1 = tslib_1.__importDefault(require("../generate/generateOperationId"));
 var openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTypeToTypscriptType"));
 var _ = tslib_1.__importStar(require("lodash"));
+var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
     function OpenAPIInjectInterfaceNaming(jsObject, passedConfig) {
         this.apiObject = jsObject;
@@ -15,7 +16,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      */
     OpenAPIInjectInterfaceNaming.prototype.inject = function () {
         if (this.isOpenAPI3()) {
-            throw new Error('Currently openApi 3 is not supported');
+            return this.swaggerPathIterator(true);
         }
         if (this.isSwagger()) {
             return this.swaggerPathIterator(true);
@@ -26,7 +27,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      */
     OpenAPIInjectInterfaceNaming.prototype.mergeParameters = function () {
         if (this.isOpenAPI3()) {
-            throw new Error('Currently openApi 3 is not supported');
+            return this.swaggerPathIterator(false);
         }
         if (this.isSwagger()) {
             return this.swaggerPathIterator(false);
@@ -50,14 +51,21 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @return {boolean}
      */
     OpenAPIInjectInterfaceNaming.prototype.isSwagger = function () {
-        return !!(this.apiObject.swagger && this.apiObject.swagger === '2.0');
+        return ApiIs_1["default"].swagger(this.apiObject);
     };
     /**
      * True is apiobject is openapi
      * @return {boolean}
      */
     OpenAPIInjectInterfaceNaming.prototype.isOpenAPI3 = function () {
-        return !!(this.apiObject.openapi);
+        return ApiIs_1["default"].openapi3(this.apiObject);
+    };
+    /**
+     * True is apiobject is openapi
+     * @return {boolean}
+     */
+    OpenAPIInjectInterfaceNaming.prototype.isAsyncAPI2 = function () {
+        return ApiIs_1["default"].asyncapi2(this.apiObject);
     };
     /**
      * Injects x-[request|response]-definitions into the main object
@@ -71,7 +79,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
         Object.keys(this.apiObject.paths).forEach(function (path) {
             Object.keys(_this.apiObject.paths[path]).forEach(function (method) {
                 if (fromInject) {
-                    _this.swaggerXInjector(path, method);
+                    _this.xRequestInjector(path, method);
                 }
                 else {
                     _this.mergeSwaggerInjectedParameters(path, method);
@@ -85,8 +93,8 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @param {string} path - Path of api
      * @param {string} method - Method of path to x inject to
      */
-    OpenAPIInjectInterfaceNaming.prototype.swaggerXInjector = function (path, method) {
-        this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromSwaggerpaths(path, method);
+    OpenAPIInjectInterfaceNaming.prototype.xRequestInjector = function (path, method) {
+        this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromAPIPaths(path, method);
         this.apiObject.paths[path][method]['x-response-definitions'] = this.injectFromSwaggerResponse(path, method);
     };
     /**
@@ -95,7 +103,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @param method
      * @return {{headers: [], path: [], query: [], body: []}}
      */
-    OpenAPIInjectInterfaceNaming.prototype.injectFromSwaggerpaths = function (path, method) {
+    OpenAPIInjectInterfaceNaming.prototype.injectFromAPIPaths = function (path, method) {
         var _this = this;
         var requestParams = {
             body: {
@@ -169,7 +177,12 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                 else {
                     var name_1 = parameterObject.name;
                     name_1 += (!parameterObject.required) ? '?' : '';
-                    requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
+                    if (_this.isSwagger()) {
+                        requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
+                    }
+                    else if (_this.isOpenAPI3()) {
+                        requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.schema.type);
+                    }
                 }
             });
             if (!clear) {
@@ -204,11 +217,40 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @return {{'200': null}}
      */
     OpenAPIInjectInterfaceNaming.prototype.injectFromSwaggerResponse = function (path, method) {
+        if (this.isOpenAPI3()) {
+            return this.injectFromOA3Response(path, method);
+        }
+        if (this.isSwagger()) {
+            return this.injectFromOA2Response(path, method);
+        }
+    };
+    OpenAPIInjectInterfaceNaming.prototype.injectFromOA2Response = function (path, method) {
         var response = {};
         var pathResponses = this.apiObject.paths[path][method].responses || false;
         if (pathResponses && pathResponses['200'] && pathResponses['200'].schema && pathResponses['200'].schema.$ref) {
             try {
                 var responseInterface = this.convertRefToOjectPath(pathResponses['200'].schema.$ref).split('.').pop();
+                if (responseInterface) {
+                    response['200'] = responseInterface;
+                }
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+        return response;
+    };
+    OpenAPIInjectInterfaceNaming.prototype.injectFromOA3Response = function (path, method) {
+        var response = {};
+        var pathResponses = this.apiObject.paths[path][method].responses || false;
+        if (pathResponses
+            && pathResponses['200']
+            && pathResponses['200'].content
+            && pathResponses['200'].content['application/json']
+            && pathResponses['200'].content['application/json'].schema
+            && pathResponses['200'].content['application/json'].schema.$ref) {
+            try {
+                var responseInterface = this.convertRefToOjectPath(pathResponses['200'].content['application/json'].schema.$ref).split('.').pop();
                 if (responseInterface) {
                     response['200'] = responseInterface;
                 }
