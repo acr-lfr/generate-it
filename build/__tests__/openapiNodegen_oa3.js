@@ -4,6 +4,7 @@ var tslib_1 = require("tslib");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var openapiNodegen_1 = tslib_1.__importDefault(require("../openapiNodegen"));
+var hasha_1 = tslib_1.__importDefault(require("hasha"));
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
 exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
@@ -25,7 +26,7 @@ describe('e2e testing', function () {
         exports.clearTestServer();
     });
     afterAll(function () {
-        // clearTestServer();
+        exports.clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -86,45 +87,58 @@ describe('e2e testing', function () {
         });
     }); });
     it('Should have the correct file hashes', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-        var filePaths;
+        var filePaths, mismatched, i, filePath, fileHash, hash, wrong;
         return tslib_1.__generator(this, function (_a) {
-            filePaths = [
-                // Check generated domains (STUB file)
-                ['test_server/src/domains/RainDomain.ts', '7584c82ac5fb910925e4b6e3c8d4f15a'],
-                ['test_server/src/domains/WeatherDomain.ts', '117df52aa0fd5658648ba01fd0e138bb'],
-                // Check complex interface (INTERFACE file)
-                ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
-                // Check the interface index file (OTHER file)
-                ['test_server/src/http/nodegen/interfaces/index.ts', 'f0061a1da5262bcacf7d9e3522306879'],
-                // Check the security definition files (OTHER file)
-                ['test_server/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
-                // Check the generated routes files (OPERATION file)
-                ['test_server/src/http/nodegen/routes/rainRoutes.ts', '7ffe349f155e86fa023f742238cc6aed'],
-                ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '8ee7e187b208000c3458f21607312a0a'],
-                // Check the output transformers (OPERATION file)
-                ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
-                // Check dynamic docker file (OTHER file)
-                ['test_server/docker-compose.yml', 'd553b06bbfc2fb3e9f4fa92dd293b4c1'],
-                // Check git ignore was copied over (OTHER file)
-                ['test_server/.gitignore', '7603a99efa78b3faf4ff493cf1cb0fb7'],
-                // Check the deleted service file was reinjected
-                ['test_server/src/services/HttpHeadersCacheService.ts', '144cd39920fd8e042a57f83628479979'],
-            ];
-            // const mismatched: string[] = [];
-            // for (let i = 0; i < filePaths.length; ++i) {
-            //   const filePath = filePaths[i][0];
-            //   const fileHash = filePaths[i][1];
-            //   const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
-            //   if (hash !== fileHash) {
-            //     const wrong = `Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`;
-            //     mismatched.push(wrong);
-            //   }
-            // }
-            // if (mismatched.length > 0) {
-            //   done(mismatched);
-            // } else {
-            done();
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    filePaths = [
+                        // Check generated domains (STUB file)
+                        ['test_server/src/domains/WeatherDomain.ts', 'dbfef2c0a7d8bdcd7c0549c530675f21'],
+                        // Check complex interface (INTERFACE file)
+                        ['test_server/src/http/nodegen/interfaces/WeatherPost.ts', 'fbe8cf7a8f93f34bb646d564223f854f'],
+                        // Check the interface index file (OTHER file)
+                        ['test_server/src/http/nodegen/interfaces/index.ts', 'a46c50a6c7f1a58da526a18aec2d875e'],
+                        // Check the security definition files (OTHER file)
+                        ['test_server/src/http/nodegen/security/definitions.ts', '9fe31e21af71374e62bcb49bb2d40567'],
+                        // Check the generated routes files (OPERATION file)
+                        ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'ae018ac9cc87624c7bc8c3400d7d6d57'],
+                        // Check the output transformers (OPERATION file)
+                        ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '273e4308cdd6ebad57cdac5f1893e8f3'],
+                        // Check dynamic docker file (OTHER file)
+                        ['test_server/docker-compose.yml', '77046129af45b9b24ced9969ba669acd'],
+                        // Check git ignore was copied over (OTHER file)
+                        ['test_server/.gitignore', '7603a99efa78b3faf4ff493cf1cb0fb7'],
+                        // Check the deleted service file was reinjected
+                        ['test_server/src/services/HttpHeadersCacheService.ts', '144cd39920fd8e042a57f83628479979'],
+                    ];
+                    mismatched = [];
+                    i = 0;
+                    _a.label = 1;
+                case 1:
+                    if (!(i < filePaths.length)) return [3 /*break*/, 4];
+                    filePath = filePaths[i][0];
+                    fileHash = filePaths[i][1];
+                    return [4 /*yield*/, hasha_1["default"].fromFile(path_1["default"].join(process.cwd(), filePath), { algorithm: 'md5' })];
+                case 2:
+                    hash = _a.sent();
+                    if (hash !== fileHash) {
+                        wrong = "Hash mis-match for file " + filePath + ". Expected hash " + fileHash + " but got " + hash;
+                        mismatched.push(wrong);
+                    }
+                    _a.label = 3;
+                case 3:
+                    ++i;
+                    return [3 /*break*/, 1];
+                case 4:
+                    if (mismatched.length > 0) {
+                        console.log(mismatched);
+                        done(mismatched);
+                    }
+                    else {
+                        done();
+                    }
+                    return [2 /*return*/];
+            }
         });
     }); });
 });

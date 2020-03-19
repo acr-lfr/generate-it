@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var ucFirst_1 = tslib_1.__importDefault(require("./ucFirst"));
+var oa3toOa2Body_1 = tslib_1.__importDefault(require("../../openapi/oa3toOa2Body"));
 function addType(withType, pathObject, requestType, forceType, forceTypeOptional) {
     if (!withType) {
         return '';
@@ -17,18 +18,21 @@ function addType(withType, pathObject, requestType, forceType, forceTypeOptional
 /**
  * Provides parameters for controller and domain functions.
  * Will auto inject the req.jwtData if the path has a security attribute.
+ * @param method
  * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
  * @param pathNameChange
  * @returns {string}
  */
-function default_1(pathObject, withType, withPrefix, pathNameChange) {
+function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
     if (withType === void 0) { withType = false; }
     if (pathNameChange === void 0) { pathNameChange = 'path'; }
     if (!pathObject) {
         return '';
     }
+    // for OA3 only this is expected where the body cannot be in the parameters
+    pathObject = oa3toOa2Body_1["default"](method, pathObject);
     var params = [];
     if (pathObject.parameters) {
         if (pathObject.parameters.some(function (p) { return p["in"] === 'query'; })) {
