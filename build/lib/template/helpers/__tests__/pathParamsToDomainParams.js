@@ -11,7 +11,7 @@ describe('With req prefix', function () {
                 },
             ]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false, 'req');
+        var output = pathParamsToDomainParams_1["default"]('get', testObject, false, 'req');
         expect(output).toBe('req.query');
     });
     it('Should return req.body/path/query', function () {
@@ -28,7 +28,7 @@ describe('With req prefix', function () {
                 },
             ]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false, 'req');
+        var output = pathParamsToDomainParams_1["default"]('post', testObject, false, 'req');
         expect(output).toBe('req.body, req.path, req.query');
     });
     it('Should return req.body/path/query with req', function () {
@@ -46,7 +46,7 @@ describe('With req prefix', function () {
             ],
             'x-passRequest': true
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false, 'req');
+        var output = pathParamsToDomainParams_1["default"]('post', testObject, false, 'req');
         expect(output).toBe('req.body, req.path, req.query, req');
     });
 });
@@ -62,7 +62,7 @@ describe('Without req prefix', function () {
                     token: 1
                 }]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false);
+        var output = pathParamsToDomainParams_1["default"]('get', testObject, false);
         expect(output).toBe('query');
     });
     it('Should return req.query and security', function () {
@@ -76,7 +76,7 @@ describe('Without req prefix', function () {
                     jwttoken: 1
                 }]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false);
+        var output = pathParamsToDomainParams_1["default"]('get', testObject, false);
         expect(output).toBe('jwtData, query');
     });
     it('Should return req.query', function () {
@@ -87,7 +87,7 @@ describe('Without req prefix', function () {
                 },
             ]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false);
+        var output = pathParamsToDomainParams_1["default"]('get', testObject, false);
         expect(output).toBe('query');
     });
     it('Should return req.body/path/query', function () {
@@ -104,7 +104,7 @@ describe('Without req prefix', function () {
                 },
             ]
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false);
+        var output = pathParamsToDomainParams_1["default"]('post', testObject, false);
         expect(output).toBe('body, path, query');
     });
     it('Should return req.body/path/query with req', function () {
@@ -122,7 +122,7 @@ describe('Without req prefix', function () {
             ],
             'x-passRequest': true
         };
-        var output = pathParamsToDomainParams_1["default"](testObject, false);
+        var output = pathParamsToDomainParams_1["default"]('put', testObject, false);
         expect(output).toBe('body, path, query, req');
     });
 });

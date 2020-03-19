@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
+var oa3toOa2Body_1 = tslib_1.__importDefault(require("../openapi/oa3toOa2Body"));
 var SwaggerUtils = /** @class */ (function () {
     function SwaggerUtils() {
     }
@@ -88,30 +89,16 @@ var SwaggerUtils = /** @class */ (function () {
     };
     /**
      * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
+     * @param method
      * @param {Object} pathObject
      * @return {string|void}
      */
-    SwaggerUtils.prototype.createJoiValidation = function (pathObject) {
+    SwaggerUtils.prototype.createJoiValidation = function (method, pathObject) {
         var _this = this;
+        pathObject = oa3toOa2Body_1["default"](method, pathObject);
         var requestParams = pathObject.parameters;
-        if (!requestParams && !pathObject.requestBody) {
+        if (!requestParams) {
             return;
-        }
-        if (pathObject.requestBody) {
-            try {
-                var schema = pathObject.requestBody.content['application/json'].schema;
-                requestParams = requestParams || [];
-                requestParams.push({
-                    "in": 'body',
-                    name: pathObject.operationId + 'PostBody',
-                    required: pathObject.requestBody.required,
-                    schema: schema
-                });
-            }
-            catch (e) {
-                console.error('Please pass body objects by reference to a component', e);
-                throw e;
-            }
         }
         var paramsTypes = {
             body: requestParams.filter(function (param) { return param["in"] === 'body'; }),

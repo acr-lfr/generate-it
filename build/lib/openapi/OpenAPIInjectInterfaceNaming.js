@@ -5,6 +5,7 @@ var generateOperationId_1 = tslib_1.__importDefault(require("../generate/generat
 var openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTypeToTypscriptType"));
 var _ = tslib_1.__importStar(require("lodash"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
+var oa3toOa2Body_1 = tslib_1.__importDefault(require("./oa3toOa2Body"));
 var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
     function OpenAPIInjectInterfaceNaming(jsObject, passedConfig) {
         this.apiObject = jsObject;
@@ -15,12 +16,10 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @return {{paths}|module.exports.apiObject|{}}
      */
     OpenAPIInjectInterfaceNaming.prototype.inject = function () {
-        if (this.isOpenAPI3()) {
+        if (this.isSwagger() || this.isOpenAPI3()) {
             return this.swaggerPathIterator(true);
         }
-        if (this.isSwagger()) {
-            return this.swaggerPathIterator(true);
-        }
+        throw new Error('Unrecognised input format');
     };
     /**
      * Merges the injected request params into single interface objects
@@ -127,6 +126,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                 params: []
             }
         };
+        this.apiObject.paths[path][method] = oa3toOa2Body_1["default"](method, this.apiObject.paths[path][method]);
         if (this.apiObject.paths[path][method].parameters) {
             this.apiObject.paths[path][method].parameters.forEach(function (p) {
                 if (p.$ref || (p.schema && p.schema.$ref)) {

@@ -7,6 +7,9 @@ var ApiIs = /** @class */ (function () {
         return !!(apiObject.swagger && apiObject.swagger[0] === '2'
             || apiObject.openapi && apiObject.openapi[0] === '2');
     };
+    ApiIs.prototype.openapi2 = function (apiObject) {
+        return this.swagger(apiObject);
+    };
     ApiIs.prototype.openapi3 = function (apiObject) {
         return !!(apiObject.openapi && apiObject.openapi[0] === '3');
     };

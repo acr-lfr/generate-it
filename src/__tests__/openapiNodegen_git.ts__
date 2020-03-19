@@ -6,7 +6,7 @@ jest.setTimeout(60 * 1000); // in milliseconds
 
 const testServerName = 'test_server_2';
 const testServerPath = path.join(process.cwd(), testServerName);
-export const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
+export const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git#4.4.2';
 export const clearTestServer = () => {
   fs.removeSync(testServerName);
 };
