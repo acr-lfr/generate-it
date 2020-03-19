@@ -18,4 +18,4 @@ export default (method: string, fullPathMethod: any): any => {
     console.error('Please pass body objects by reference to a component', e);
     throw e;
   }
-}
+};

@@ -90,7 +90,7 @@ class SwaggerUtils {
    */
   public createJoiValidation (method: string, pathObject: any) {
     pathObject = oa3toOa2Body(method, pathObject);
-    let requestParams = pathObject.parameters;
+    const requestParams = pathObject.parameters;
     if (!requestParams) {
       return;
     }

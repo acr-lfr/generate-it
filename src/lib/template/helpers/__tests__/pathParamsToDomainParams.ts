@@ -9,7 +9,7 @@ describe('With req prefix', () => {
         },
       ],
     };
-    const output = pathParamsToDomainParams(testObject, false, 'req');
+    const output = pathParamsToDomainParams('get', testObject, false, 'req');
     expect(
       output,
     ).toBe(
@@ -31,7 +31,7 @@ describe('With req prefix', () => {
         },
       ],
     };
-    const output = pathParamsToDomainParams(testObject, false, 'req');
+    const output = pathParamsToDomainParams('post', testObject, false, 'req');
     expect(
       output,
     ).toBe(
@@ -54,7 +54,7 @@ describe('With req prefix', () => {
       ],
       'x-passRequest': true,
     };
-    const output = pathParamsToDomainParams(testObject, false, 'req');
+    const output = pathParamsToDomainParams('post', testObject, false, 'req');
     expect(
       output,
     ).toBe(
@@ -75,7 +75,7 @@ describe('Without req prefix', () => {
         token: 1,
       }],
     };
-    const output = pathParamsToDomainParams(testObject, false);
+    const output = pathParamsToDomainParams('get', testObject, false);
     expect(
       output,
     ).toBe(
@@ -93,7 +93,7 @@ describe('Without req prefix', () => {
         jwttoken: 1,
       }],
     };
-    const output = pathParamsToDomainParams(testObject, false);
+    const output = pathParamsToDomainParams('get', testObject, false);
     expect(
       output,
     ).toBe(
@@ -108,7 +108,7 @@ describe('Without req prefix', () => {
         },
       ],
     };
-    const output = pathParamsToDomainParams(testObject, false);
+    const output = pathParamsToDomainParams('get', testObject, false);
     expect(
       output,
     ).toBe(
@@ -130,7 +130,7 @@ describe('Without req prefix', () => {
         },
       ],
     };
-    const output = pathParamsToDomainParams(testObject, false);
+    const output = pathParamsToDomainParams('post', testObject, false);
     expect(
       output,
     ).toBe(
@@ -153,7 +153,7 @@ describe('Without req prefix', () => {
       ],
       'x-passRequest': true,
     };
-    const output = pathParamsToDomainParams(testObject, false);
+    const output = pathParamsToDomainParams('put', testObject, false);
     expect(
       output,
     ).toBe(

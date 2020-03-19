@@ -22,7 +22,7 @@ class OpenAPIInjectInterfaceNaming {
     if (this.isSwagger() || this.isOpenAPI3()) {
       return this.swaggerPathIterator(true);
     }
-    throw new Error('Unrecognised input format')
+    throw new Error('Unrecognised input format');
   }
 
   /**
