@@ -81,14 +81,14 @@ describe('e2e testing', function () {
                     filePaths = [
                         // Check generated domains (STUB file)
                         ['test_server/src/domains/AdminDomain.ts', 'c35bbf396d58fb025bbb6a87bd0db710'],
-                        ['test_server/src/domains/AuthDomain.ts', 'e5a6d8f324a10e37cca008ae74108a1c'],
+                        ['test_server/src/domains/AuthDomain.ts', 'afcd4847afbe8c46650407aaaa3c28ab'],
                         // Check the interface index file (OTHER file)
                         ['test_server/src/http/nodegen/interfaces/index.ts', '108b13afd431e1d848c7c214abaa3418'],
                         // Check the generated routes files (OPERATION file)
-                        ['test_server/src/http/nodegen/routes/adminRoutes.ts', 'e9ddb2ea044a34adfb024213df51d88c'],
-                        ['test_server/src/http/nodegen/routes/authRoutes.ts', '92ddb270ea5a6df79888ee1dd208d784'],
+                        ['test_server/src/http/nodegen/routes/adminRoutes.ts', '1ec1ba6d7a8a7a565a1857fa4923e5b4'],
+                        ['test_server/src/http/nodegen/routes/authRoutes.ts', '34de0cd68a5b15f9304f32a1053f3c4e'],
                         // Check the output transformers (OPERATION file)
-                        ['test_server/src/http/nodegen/transformOutputs/authTransformOutput.ts', '7198aaa6028e58c086377b802e9e4ea2'],
+                        ['test_server/src/http/nodegen/transformOutputs/authTransformOutput.ts', '427a7c83471309303feb8c5ba169e3a9'],
                     ];
                     mismatched = [];
                     i = 0;
