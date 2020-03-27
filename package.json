@@ -1,6 +1,6 @@
 {
   "name": "openapi-nodegen",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "An OpenAPI 2/3 code generator for Node.js",
   "author": "Acrontum GmbH",
   "license": "MIT",
@@ -50,7 +50,7 @@
     "lodash": "^4.17.15",
     "md5-file": "^4.0.0",
     "nunjucks": "^3.2.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.2",
     "progress": "^2.0.3",
     "project-name-generator": "^2.1.7",
     "quicktype": "^15.0.222",

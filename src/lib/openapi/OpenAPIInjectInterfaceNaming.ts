@@ -121,7 +121,7 @@ class OpenAPIInjectInterfaceNaming {
         name: _.upperFirst(generateOperationId(_.upperFirst(method) + 'FormData', path)),
         params: [],
       },
-      headers: {
+      header: {
         name: _.upperFirst(generateOperationId(_.upperFirst(method) + 'Headers', path)),
         params: [],
       },
@@ -180,7 +180,7 @@ class OpenAPIInjectInterfaceNaming {
         if (requestType === 'body') {
           // make object from body
         } else {
-          let name = parameterObject.name;
+          let name = '\'' + parameterObject.name + '\'';
           name += (!parameterObject.required) ? '?' : '';
           if (this.isSwagger()) {
             requestObject[name] = openApiTypeToTypscriptType(parameterObject.type);

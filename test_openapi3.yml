@@ -23,6 +23,8 @@ paths:
       summary: weather data
       description: Get the latest temperatures
       operationId: weatherGet
+      parameters:
+        - $ref: '#/components/parameters/headerSearchId'
       responses:
         '200':
           description: Successful fetch
@@ -111,6 +113,13 @@ components:
         type: integer
       required: true
       description: Numeric ID of object to fetch
+    headerSearchId:
+      in: header
+      name: Search-Id
+      schema:
+        type: string
+      description: Unique search id
+      x-example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
   schemas:
     GenericSearchMeta:
       type: object

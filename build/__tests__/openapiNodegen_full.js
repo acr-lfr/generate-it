@@ -93,19 +93,19 @@ describe('e2e testing', function () {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['test_server/src/domains/RainDomain.ts', '7584c82ac5fb910925e4b6e3c8d4f15a'],
-                        ['test_server/src/domains/WeatherDomain.ts', '117df52aa0fd5658648ba01fd0e138bb'],
+                        ['test_server/src/domains/RainDomain.ts', 'beb9022f71e25cc0bdab122dd27d8705'],
+                        ['test_server/src/domains/WeatherDomain.ts', 'b9d7ef33839dc8a9819c5b685964d248'],
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)
-                        ['test_server/src/http/nodegen/interfaces/index.ts', 'f0061a1da5262bcacf7d9e3522306879'],
+                        ['test_server/src/http/nodegen/interfaces/index.ts', 'c85c34035af23b2e94b69bf974f79e01'],
                         // Check the security definition files (OTHER file)
                         ['test_server/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
                         // Check the generated routes files (OPERATION file)
-                        ['test_server/src/http/nodegen/routes/rainRoutes.ts', '7ffe349f155e86fa023f742238cc6aed'],
-                        ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '8ee7e187b208000c3458f21607312a0a'],
+                        ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'ec2aa15071f032d0175e2ce953d1d9c4'],
+                        ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'da295cca2afbd1924d7c3a829be017f3'],
                         // Check the output transformers (OPERATION file)
-                        ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '14d4332f20b73acc928509109f55d781'],
+                        ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '4aa51bd321328186343834ac287f1cca'],
                         // Check dynamic docker file (OTHER file)
                         ['test_server/docker-compose.yml', 'd553b06bbfc2fb3e9f4fa92dd293b4c1'],
                         // Check git ignore was copied over (OTHER file)

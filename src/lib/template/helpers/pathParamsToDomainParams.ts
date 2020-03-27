@@ -42,8 +42,8 @@ export default function (method: string, pathObject: any, withType: boolean = fa
     if (pathObject.parameters.some((p: any) => p.in === 'body')) {
       params.push('body' + addType(withType, pathObject, 'body'));
     }
-    if (pathObject.parameters.some((p: any) => p.in === 'headers')) {
-      params.push('headers' + addType(withType, pathObject, 'headers'));
+    if (pathObject.parameters.some((p: any) => p.in === 'header')) {
+      params.push('headers' + addType(withType, pathObject, 'header'));
     }
     if (pathObject.parameters.some((p: any) => p.in === 'formData')) {
       params.push('files' + addType(withType, pathObject, 'formData'));

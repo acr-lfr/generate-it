@@ -8,7 +8,7 @@ export default function (operations: any) {
       const path = operation.path[pathKey];
       if (isValidMethod(pathKey)) {
         // Inject the request parameter interfaces
-        ['query', 'path', 'body', 'headers', 'formData'].forEach((requestType) => {
+        ['query', 'path', 'body', 'header', 'formData'].forEach((requestType) => {
           if (path['x-request-definitions'][requestType]) {
             if (path['x-request-definitions'][requestType].interfaceName) {
               if (imports.indexOf(path['x-request-definitions'][requestType].interfaceName) === -1) {

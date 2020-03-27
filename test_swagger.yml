@@ -42,6 +42,7 @@ paths:
         - $ref: '#/parameters/queryId'
         - $ref: '#/parameters/queryLat'
         - $ref: '#/parameters/queryLon'
+        - $ref: '#/parameters/headerSearchId'
       responses:
         '200':
           description: successful operation
@@ -192,6 +193,12 @@ parameters:
     type: number
     description: |
       Needs to be paired with lat
+  headerSearchId:
+    in: header
+    name: Search-Id
+    type: string
+    description: Unique search id
+    x-example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
 definitions:
   Coord:
     type: object

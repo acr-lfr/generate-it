@@ -13,6 +13,7 @@ exports["default"] = (function (content, ext) {
         endOfLine: 'auto',
         semi: true,
         singleQuote: true,
-        parser: ext === 'ts' ? 'typescript' : 'babel'
+        parser: ext === 'ts' ? 'typescript' : 'babel',
+        quoteProps: 'consistent'
     });
 });

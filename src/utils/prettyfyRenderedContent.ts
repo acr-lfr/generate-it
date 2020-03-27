@@ -12,5 +12,6 @@ export default (content: string, ext: string) => {
     semi: true,
     singleQuote: true,
     parser: ext === 'ts' ? 'typescript' : 'babel',
+    quoteProps: 'consistent'
   });
 };

@@ -113,7 +113,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                 name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'FormData', path)),
                 params: []
             },
-            headers: {
+            header: {
                 name: _.upperFirst(generateOperationId_1["default"](_.upperFirst(method) + 'Headers', path)),
                 params: []
             },
@@ -175,7 +175,7 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                     // make object from body
                 }
                 else {
-                    var name_1 = parameterObject.name;
+                    var name_1 = '\'' + parameterObject.name + '\'';
                     name_1 += (!parameterObject.required) ? '?' : '';
                     if (_this.isSwagger()) {
                         requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
