@@ -1,12 +1,12 @@
 {
-  "name": "openapi-nodegen",
-  "version": "5.0.1",
-  "description": "An OpenAPI 2/3 code generator for Node.js",
+  "name": "generate-it",
+  "version": "5.1.1",
+  "description": "Generate socket and html consumers and clients from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
   "main": "./build/openapiNodegen.js",
   "bin": {
-    "openapi-nodegen": "./build/cli.js"
+    "generate-it": "./build/cli.js"
   },
   "scripts": {
     "install:githooks": "cp ./githooks/* .git/hooks",
@@ -23,19 +23,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/acrontum/openapi-nodegen"
+    "url": "https://github.com/acrontum/generate-it"
   },
   "keywords": [
+    "asyncapi",
     "swagger",
     "openapi",
-    "rest",
-    "TypeScript",
-    "es6",
-    "es7",
-    "es2015",
-    "node.js",
+    "node",
     "codegen",
-    "generator"
+    "generator",
+    "generate-it"
   ],
   "dependencies": {
     "colors": "^1.4.0",
