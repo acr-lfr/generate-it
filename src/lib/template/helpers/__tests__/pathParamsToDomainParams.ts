@@ -35,7 +35,7 @@ describe('With req prefix', () => {
     expect(
       output,
     ).toBe(
-      'req.body, req.path, req.query',
+      'req.body, req.pathParams, req.query',
     );
   });
 
@@ -58,7 +58,7 @@ describe('With req prefix', () => {
     expect(
       output,
     ).toBe(
-      'req.body, req.path, req.query, req',
+      'req.body, req.pathParams, req.query, req',
     );
   });
 });
@@ -134,7 +134,7 @@ describe('Without req prefix', () => {
     expect(
       output,
     ).toBe(
-      'body, path, query',
+      'body, pathParams, query',
     );
   });
 
@@ -157,7 +157,7 @@ describe('Without req prefix', () => {
     expect(
       output,
     ).toBe(
-      'body, path, query, req',
+      'body, pathParams, query, req',
     );
   });
 });

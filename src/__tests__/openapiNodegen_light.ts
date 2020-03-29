@@ -39,7 +39,6 @@ describe('e2e testing', () => {
       // remove a survive file which should then be copied back over
       fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
       const ymlPath = path.join(process.cwd(), 'test_swagger2.yml');
-      console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW');
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
@@ -63,7 +62,7 @@ describe('e2e testing', () => {
     const filePaths = [
       // Check generated domains (STUB file)
       ['test_server/src/domains/AdminDomain.ts', 'c35bbf396d58fb025bbb6a87bd0db710'],
-      ['test_server/src/domains/AuthDomain.ts', 'afcd4847afbe8c46650407aaaa3c28ab'],
+      ['test_server/src/domains/AuthDomain.ts', '368214999a8394393ad4bf4d99e6a2c1'],
       // Check the interface index file (OTHER file)
       ['test_server/src/http/nodegen/interfaces/index.ts', '108b13afd431e1d848c7c214abaa3418'],
       // Check the generated routes files (OPERATION file)

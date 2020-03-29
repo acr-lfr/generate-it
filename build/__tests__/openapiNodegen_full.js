@@ -94,7 +94,7 @@ describe('e2e testing', function () {
                     filePaths = [
                         // Check generated domains (STUB file)
                         ['test_server/src/domains/RainDomain.ts', 'beb9022f71e25cc0bdab122dd27d8705'],
-                        ['test_server/src/domains/WeatherDomain.ts', 'b9d7ef33839dc8a9819c5b685964d248'],
+                        ['test_server/src/domains/WeatherDomain.ts', '06dfee4e1059bb197297cfe3c9f72216'],
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)

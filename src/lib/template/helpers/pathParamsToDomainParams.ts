@@ -21,10 +21,10 @@ function addType (withType: boolean, pathObject: any, requestType?: string, forc
  * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
- * @param pathNameChange
+ * @param pathNameChange - Defaults to "pathParams" so as not to collide with the node path lib
  * @returns {string}
  */
-export default function (method: string, pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'path') {
+export default function (method: string, pathObject: any, withType: boolean = false, withPrefix?: string, pathNameChange: string = 'pathParams') {
   if (!pathObject) {
     return '';
   }

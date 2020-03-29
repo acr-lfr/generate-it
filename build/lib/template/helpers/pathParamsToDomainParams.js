@@ -22,12 +22,12 @@ function addType(withType, pathObject, requestType, forceType, forceTypeOptional
  * @param pathObject The full value of the path object
  * @param {boolean | object} withType If true will inject the typescript type any
  * @param {boolean} withPrefix
- * @param pathNameChange
+ * @param pathNameChange - Defaults to "pathParams" so as not to collide with the node path lib
  * @returns {string}
  */
 function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
     if (withType === void 0) { withType = false; }
-    if (pathNameChange === void 0) { pathNameChange = 'path'; }
+    if (pathNameChange === void 0) { pathNameChange = 'pathParams'; }
     if (!pathObject) {
         return '';
     }
