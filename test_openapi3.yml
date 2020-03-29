@@ -25,6 +25,7 @@ paths:
       operationId: weatherGet
       parameters:
         - $ref: '#/components/parameters/headerSearchId'
+        - $ref: '#/components/parameters/pathId'
       responses:
         '200':
           description: Successful fetch
@@ -80,6 +81,8 @@ paths:
       summary: weather data
       description: Create a new weather record.
       operationId: weatherIdPut
+      parameters:
+        - $ref: '#/components/parameters/pathId'
       requestBody:
         description: Optional description in *Markdown*
         required: true
