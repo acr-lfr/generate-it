@@ -8,7 +8,7 @@ var path_1 = tslib_1.__importDefault(require("path"));
 var commander_1 = tslib_1.__importDefault(require("./commander"));
 var openapiNodegen_1 = tslib_1.__importDefault(require("./openapiNodegen"));
 var cli_1 = require("./constants/cli");
-var cli = commander_1["default"]();
+var cli = commander_1["default"](process.argv);
 console.log(("Provided arguments look ok, preceding to build the http layer and any stub files " + cli_1.LINEBREAK).yellow);
 var config = {
     verbose: cli.program.verbose || false,

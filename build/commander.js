@@ -6,7 +6,7 @@ var commander_1 = tslib_1.__importDefault(require("commander"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var commanderParseOutput_1 = tslib_1.__importDefault(require("./commanderParseOutput"));
 var packageInfo = require('../package.json');
-exports["default"] = (function () {
+exports["default"] = (function (inputArgsArray) {
     var swaggerFile;
     commander_1["default"]
         .version(packageInfo.version)
@@ -22,7 +22,7 @@ exports["default"] = (function () {
         .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', '1')
         .option('-v, --verbose', 'Outputs verbose logging')
         .option('--very-verbose', 'Outputs very verbose logging')
-        .parse(process.argv);
+        .parse(inputArgsArray);
     if (!swaggerFile) {
         throw new Error('> Path to Swagger file not provided.'.red);
     }
