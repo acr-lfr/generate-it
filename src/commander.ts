@@ -5,9 +5,8 @@ import commanderParseOutput from '@/commanderParseOutput';
 
 const packageInfo = require('../package.json');
 
-export default () => {
+export default (inputArgsArray: string[]) => {
   let swaggerFile: any;
-
   program
     .version(packageInfo.version)
     .arguments('<swaggerFile>')
@@ -22,7 +21,7 @@ export default () => {
     .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', '1')
     .option('-v, --verbose', 'Outputs verbose logging')
     .option('--very-verbose', 'Outputs very verbose logging')
-    .parse(process.argv);
+    .parse(inputArgsArray);
 
   if (!swaggerFile) {
     throw new Error('> Path to Swagger file not provided.'.red);

@@ -52,6 +52,7 @@ describe('e2e testing', function () {
                     // remove a survive file which should then be copied back over
                     fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger2.yml');
+                    console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW');
                     return [4 /*yield*/, openapiNodegen_1["default"]({
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,

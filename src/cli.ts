@@ -7,7 +7,7 @@ import openapiNodegen from './openapiNodegen';
 import { LINEBREAK } from '@/constants/cli';
 import Config from '@/interfaces/Config';
 
-const cli = cliInput();
+const cli = cliInput(process.argv);
 
 console.log(`Provided arguments look ok, preceding to build the http layer and any stub files ${LINEBREAK}`.yellow);
 
@@ -24,7 +24,6 @@ const config: Config = {
   ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
   mockServer: cli.program.mocked || false,
 };
-
 const question = `Continuing will replace the entire http layer:`.green + `
 - ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost.
 - Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.
