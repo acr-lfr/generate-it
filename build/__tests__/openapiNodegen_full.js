@@ -3,7 +3,7 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
-var openapiNodegen_1 = tslib_1.__importDefault(require("../openapiNodegen"));
+var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var hasha_1 = tslib_1.__importDefault(require("hasha"));
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
@@ -35,7 +35,7 @@ describe('e2e testing', function () {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
-                    return [4 /*yield*/, openapiNodegen_1["default"]({
+                    return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
                             mockServer: true,
@@ -65,7 +65,7 @@ describe('e2e testing', function () {
                     // remove a survive file which should then be copied back over
                     fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
-                    return [4 /*yield*/, openapiNodegen_1["default"]({
+                    return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
                             mockServer: true,

@@ -14,12 +14,18 @@ exports["default"] = (function (program, args, verbose) {
         var outputString = '';
         var outputErrorString = '';
         command.stdout.on('data', function (data) {
+            if (verbose) {
+                console.log('NORMAL');
+            }
             if (verbose && data !== '') {
                 console.log(String(data));
             }
             outputString += String(data);
         });
         command.stderr.on('data', function (data) {
+            if (verbose) {
+                console.log('ERROR');
+            }
             if (verbose && data !== '') {
                 console.log(String(data));
             }

@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import openapiNodegen from '@/openapiNodegen';
+import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
 
 jest.setTimeout(60 * 1000); // in milliseconds

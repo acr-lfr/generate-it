@@ -23,6 +23,9 @@ export default (program: string, args: string[] = [], verbose: boolean = false):
     let outputString = '';
     let outputErrorString = '';
     command.stdout.on('data', function (data: any) {
+      if (verbose) {
+        console.log('NORMAL');
+      }
       if (verbose && data !== '') {
         console.log(String(data));
       }
@@ -30,6 +33,9 @@ export default (program: string, args: string[] = [], verbose: boolean = false):
     });
 
     command.stderr.on('data', function (data: any) {
+      if (verbose) {
+        console.log('ERROR');
+      }
       if (verbose && data !== '') {
         console.log(String(data));
       }
