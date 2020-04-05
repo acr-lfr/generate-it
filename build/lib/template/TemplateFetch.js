@@ -230,6 +230,7 @@ var TemplateFetchURL = /** @class */ (function () {
      * @param tplTag
      */
     TemplateFetchURL.prototype.packageAndTplVersionOK = function (packageVersion, tplTag) {
+        // simple check on the major versions only.. ie the 1st char of the string
         if (Number(packageVersion[0]) > Number(tplTag[0])) {
             return false;
         }

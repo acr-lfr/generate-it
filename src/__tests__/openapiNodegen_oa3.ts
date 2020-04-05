@@ -1,6 +1,5 @@
-import fs from 'fs-extra';
 import path from 'path';
-import openapiNodegen from '@/openapiNodegen';
+import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
 import { clearTestServer, tplUrl } from '@/__tests__/openapiNodegen_full';
 
