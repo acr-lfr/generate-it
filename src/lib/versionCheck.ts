@@ -5,7 +5,8 @@ import inquirer from 'inquirer';
 
 const https = require('https');
 
-export default () => {
+export default (thisVersion: string) => {
+  console.log('Checking generate-it version');
   return new Promise((resolve, reject) => {
     https.get('https://raw.githubusercontent.com/acrontum/generate-it/master/package.json', (res: IncomingMessage) => {
       let a = '';
@@ -14,7 +15,6 @@ export default () => {
       });
       res.on('close', () => {
         const remoteVersion = (JSON.parse(a)).version;
-        const thisVersion = require('../../package.json').version;
         if (semver.lt(thisVersion, remoteVersion)) {
           const error = 'WARNING: The version you are running, ' + thisVersion.bold + ', is' + ' OUTDATED!'.bold;
           console.log(error.red);
@@ -28,11 +28,14 @@ export default () => {
           inquirer.prompt(questions)
             .then((answers: any) => {
               if (answers.installConfirm) {
-                const smiley = '    (☉ ϖ ☉)   '.red.bold;
-                console.log(smiley + 'Continuing with the unsafe version... you have chosen... poorly... something bad is likely going to happen to your code.'.red);
+                const smiley = '   :-| 😬😬   '.red.bold;
+                console.log(smiley + 'Ok.. Continuing with the outdated version...'.red);
+                setTimeout(() => console.log(smiley + 'Best of luck...'.red), 1000);
+                setTimeout(() => resolve(), 3000);
               } else {
                 const smiley = '    (^‿^)    '.green.bold;
-                console.log(smiley + 'You have chosen... wisely. Update and be happy.'.green);
+                console.log(smiley + 'Great choice! Update generate-it and be happy.'.green);
+                return reject();
               }
             })
             .catch((e: any) => {
@@ -48,8 +51,9 @@ export default () => {
         }
       });
     }).on('error', (e: Error) => {
-      console.log('Not internet connection, could not check the version is not outdated:');
-      console.error(e.message);
+      console.log('Not internet connection, could not check the version is not outdated:' + e.message);
+      console.log('Continuing to build...');
+      return resolve();
     });
   });
 };
