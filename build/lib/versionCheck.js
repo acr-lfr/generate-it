@@ -5,7 +5,8 @@ require("colors");
 var semver_1 = tslib_1.__importDefault(require("semver"));
 var inquirer_1 = tslib_1.__importDefault(require("inquirer"));
 var https = require('https');
-exports["default"] = (function () {
+exports["default"] = (function (thisVersion) {
+    console.log('Checking generate-it version');
     return new Promise(function (resolve, reject) {
         https.get('https://raw.githubusercontent.com/acrontum/generate-it/master/package.json', function (res) {
             var a = '';
@@ -14,7 +15,6 @@ exports["default"] = (function () {
             });
             res.on('close', function () {
                 var remoteVersion = (JSON.parse(a)).version;
-                var thisVersion = require('../../package.json').version;
                 if (semver_1["default"].lt(thisVersion, remoteVersion)) {
                     var error = 'WARNING: The version you are running, ' + thisVersion.bold + ', is' + ' OUTDATED!'.bold;
                     console.log(error.red);
@@ -28,12 +28,15 @@ exports["default"] = (function () {
                     inquirer_1["default"].prompt(questions)
                         .then(function (answers) {
                         if (answers.installConfirm) {
-                            var smiley = '    (☉ ϖ ☉)   '.red.bold;
-                            console.log(smiley + 'Continuing with the unsafe version... you have chosen... poorly... something bad is likely going to happen to your code.'.red);
+                            var smiley_1 = '   :-| 😬😬   '.red.bold;
+                            console.log(smiley_1 + 'Ok.. Continuing with the outdated version...'.red);
+                            setTimeout(function () { return console.log(smiley_1 + 'Best of luck...'.red); }, 1000);
+                            setTimeout(function () { return resolve(); }, 3000);
                         }
                         else {
                             var smiley = '    (^‿^)    '.green.bold;
-                            console.log(smiley + 'You have chosen... wisely. Update and be happy.'.green);
+                            console.log(smiley + 'Great choice! Update generate-it and be happy.'.green);
+                            return reject();
                         }
                     })["catch"](function (e) {
                         console.error(e);
@@ -49,8 +52,9 @@ exports["default"] = (function () {
                 }
             });
         }).on('error', function (e) {
-            console.log('Not internet connection, could not check the version is not outdated:');
-            console.error(e.message);
+            console.log('Not internet connection, could not check the version is not outdated:' + e.message);
+            console.log('Continuing to build...');
+            return resolve();
         });
     });
 });

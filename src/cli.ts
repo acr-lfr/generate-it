@@ -12,7 +12,7 @@ process.on('unhandledRejection', (err) => {
   console.error(err);
 });
 
-versionCheck().then(() => {
+versionCheck(require('../package.json').version).then(() => {
   const cli = cliInput(process.argv);
   console.log(`Provided cli args look ok, preceding to build the http layer and any stub files... ${LINEBREAK}`.yellow);
   const config: Config = {
@@ -48,7 +48,7 @@ Are you sure you wish to continue?
       if (answers.installConfirm) {
         console.log(`${LINEBREAK}Starting the generation...${LINEBREAK}`);
         generateIt(config).then(() => {
-          console.log(`${LINEBREAK}Done! ✨`.green);
+          console.log(`${LINEBREAK}Done! ☺`.green.bold);
           console.log(`${LINEBREAK}Your API files have been output here: `.yellow + cli.program.output.magenta + `.`.green.bold);
         }).catch(async (err: any) => {
           console.error('Something went wrong:'.red);
@@ -62,7 +62,6 @@ Are you sure you wish to continue?
     .catch((e: any) => {
       console.error(e);
     });
-}).catch((e) => {
-  console.log(e);
+}).catch(() => {
+  console.log('Generation cancelled.'.red);
 });
-

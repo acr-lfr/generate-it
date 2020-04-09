@@ -12,7 +12,7 @@ var versionCheck_1 = tslib_1.__importDefault(require("./lib/versionCheck"));
 process.on('unhandledRejection', function (err) {
     console.error(err);
 });
-versionCheck_1["default"]().then(function () {
+versionCheck_1["default"](require('../package.json').version).then(function () {
     var cli = commander_1["default"](process.argv);
     console.log(("Provided cli args look ok, preceding to build the http layer and any stub files... " + cli_1.LINEBREAK).yellow);
     var config = {
@@ -40,7 +40,7 @@ versionCheck_1["default"]().then(function () {
         if (answers.installConfirm) {
             console.log(cli_1.LINEBREAK + "Starting the generation..." + cli_1.LINEBREAK);
             generateIt_1["default"](config).then(function () {
-                console.log((cli_1.LINEBREAK + "Done! \u2728").green);
+                console.log((cli_1.LINEBREAK + "Done! \u263A").green.bold);
                 console.log((cli_1.LINEBREAK + "Your API files have been output here: ").yellow + cli.program.output.magenta + ".".green.bold);
             })["catch"](function (err) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
                 return tslib_1.__generator(this, function (_a) {
@@ -57,6 +57,6 @@ versionCheck_1["default"]().then(function () {
     })["catch"](function (e) {
         console.error(e);
     });
-})["catch"](function (e) {
-    console.log(e);
+})["catch"](function () {
+    console.log('Generation cancelled.'.red);
 });
