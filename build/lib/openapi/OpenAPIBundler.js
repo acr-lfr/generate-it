@@ -294,8 +294,16 @@ var OpenAPIBundler = /** @class */ (function () {
                         if (!(k < xRequestDefinitionsKeys.length)) return [3 /*break*/, 7];
                         paramType = xRequestDefinitionsKeys[k];
                         if (!(paramType === 'body')) return [3 /*break*/, 5];
-                        param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
-                        param.name = ucFirst_1["default"](param.name);
+                        param = void 0;
+                        try {
+                            param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
+                            param.name = ucFirst_1["default"](param.name);
+                        }
+                        catch (e) {
+                            console.error('Error with a body request parameter:');
+                            console.error(apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType]);
+                            throw e;
+                        }
                         _a = thisMethodXRequestionDefinitions[paramType];
                         return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](param.name, JSON.stringify(_.get(apiObject, param.path)))];
                     case 4:

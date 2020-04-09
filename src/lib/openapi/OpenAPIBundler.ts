@@ -247,8 +247,15 @@ class OpenAPIBundler {
 
           // handle request body
           if (paramType === 'body') {
-            const param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
-            param.name = ucFirst(param.name);
+            let param;
+            try {
+              param = apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType].params[0];
+              param.name = ucFirst(param.name);
+            } catch (e) {
+              console.error('Error with a body request parameter:');
+              console.error(apiObject.paths[thisPath][thisMethod]['x-request-definitions'][paramType]);
+              throw e;
+            }
             thisMethodXRequestionDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
               param.name,
               JSON.stringify(_.get(
