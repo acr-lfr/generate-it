@@ -6,13 +6,17 @@ import cliInput from './commander';
 import generateIt from './generateIt';
 import { LINEBREAK } from '@/constants/cli';
 import Config from '@/interfaces/Config';
-import versionCheck from '@/lib/versionCheck';
+import versionCheck from 'npm-tool-version-check';
 
 process.on('unhandledRejection', (err) => {
   console.error(err);
 });
 
-versionCheck(require('../package.json').version).then(() => {
+versionCheck(
+  require('../package.json').version,
+  'https://raw.githubusercontent.com/acrontum/generate-it/master/package.json',
+  'Generate It'
+).then(() => {
   const cli = cliInput(process.argv);
   console.log(`Provided cli args look ok, preceding to build the http layer and any stub files... ${LINEBREAK}`.yellow);
   const config: Config = {
@@ -64,4 +68,5 @@ Are you sure you wish to continue?
     });
 }).catch(() => {
   console.log('Generation cancelled.'.red);
+  process.exit(0);
 });
