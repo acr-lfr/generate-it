@@ -8,11 +8,11 @@ var path_1 = tslib_1.__importDefault(require("path"));
 var commander_1 = tslib_1.__importDefault(require("./commander"));
 var generateIt_1 = tslib_1.__importDefault(require("./generateIt"));
 var cli_1 = require("./constants/cli");
-var versionCheck_1 = tslib_1.__importDefault(require("./lib/versionCheck"));
+var npm_tool_version_check_1 = tslib_1.__importDefault(require("npm-tool-version-check"));
 process.on('unhandledRejection', function (err) {
     console.error(err);
 });
-versionCheck_1["default"](require('../package.json').version).then(function () {
+npm_tool_version_check_1["default"](require('../package.json').version, 'https://raw.githubusercontent.com/acrontum/generate-it/master/package.json', 'Generate It').then(function () {
     var cli = commander_1["default"](process.argv);
     console.log(("Provided cli args look ok, preceding to build the http layer and any stub files... " + cli_1.LINEBREAK).yellow);
     var config = {
@@ -59,4 +59,5 @@ versionCheck_1["default"](require('../package.json').version).then(function () {
     });
 })["catch"](function () {
     console.log('Generation cancelled.'.red);
+    process.exit(0);
 });
