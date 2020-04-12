@@ -18,7 +18,8 @@ class GenerateOperation {
     // Iterate over all path
     // pathProperties = all the http verbs and their contents
     // pathName = the full path after the basepath
-    each(config.data.swagger.paths, (pathProperties, pathName) => {
+    const iteratable = config.data.swagger.paths || config.data.swagger.channels;
+    each(iteratable, (pathProperties, pathName) => {
       const operationName = pathProperties.endpointName;
       files[operationName] = files[operationName] || [];
       pathName = pathName.replace(/}/g, '').replace(/{/g, ':');

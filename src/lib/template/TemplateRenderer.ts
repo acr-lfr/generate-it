@@ -5,6 +5,7 @@ import arrayContains from '@/lib/template/helpers/arrayContains';
 import celebrateImport from '@/lib/template/helpers/celebrateImport';
 import celebrateRoute from '@/lib/template/helpers/celebrateRoute';
 import endsWith from '@/lib/template/helpers/endsWith';
+import getContext from '@/lib/template/helpers/getContext';
 import getSecurityNames from '@/lib/template/helpers/getSecurityNames';
 import importInterfaces from '@/lib/template/helpers/importInterfaces';
 import inline from '@/lib/template/helpers/inline';
@@ -71,6 +72,7 @@ class TemplateRenderer {
     env.addGlobal('celebrateImport', celebrateImport);
     env.addGlobal('celebrateRoute', celebrateRoute);
     env.addGlobal('endsWith', endsWith);
+    env.addGlobal('getContext', getContext);
     env.addGlobal('getSecurityNames', getSecurityNames);
     env.addGlobal('importInterfaces', importInterfaces);
     env.addGlobal('inline', inline);

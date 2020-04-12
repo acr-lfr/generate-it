@@ -19,8 +19,11 @@ class OpenAPIInjectInterfaceNaming {
    * @return {{paths}|module.exports.apiObject|{}}
    */
   public inject () {
-    if (this.isSwagger() || this.isOpenAPI3()) {
+    if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return this.swaggerPathIterator(true);
+    }
+    if (this.isAsyncAPI2()) {
+      return this.asyncChannelIterator(true);
     }
     throw new Error('Unrecognised input format');
   }
@@ -29,12 +32,13 @@ class OpenAPIInjectInterfaceNaming {
    * Merges the injected request params into single interface objects
    */
   public mergeParameters () {
-    if (this.isOpenAPI3()) {
+    if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return this.swaggerPathIterator(false);
     }
-    if (this.isSwagger()) {
-      return this.swaggerPathIterator(false);
+    if (this.isAsyncAPI2()) {
+      return this.asyncChannelIterator(false);
     }
+    throw new Error('Unrecognised input format');
   }
 
   /**
@@ -49,22 +53,6 @@ class OpenAPIInjectInterfaceNaming {
       }
     });
     return pathParts.join('.');
-  }
-
-  /**
-   * True is apiobject is swagger
-   * @return {boolean}
-   */
-  public isSwagger () {
-    return ApiIs.swagger(this.apiObject);
-  }
-
-  /**
-   * True is apiobject is openapi
-   * @return {boolean}
-   */
-  public isOpenAPI3 () {
-    return ApiIs.openapi3(this.apiObject);
   }
 
   /**
@@ -86,7 +74,7 @@ class OpenAPIInjectInterfaceNaming {
     Object.keys(this.apiObject.paths).forEach((path) => {
       Object.keys(this.apiObject.paths[path]).forEach((method) => {
         if (fromInject) {
-          this.xRequestInjector(path, method);
+          this.openApiXRequestInjector(path, method);
         } else {
           this.mergeSwaggerInjectedParameters(path, method);
         }
@@ -95,12 +83,42 @@ class OpenAPIInjectInterfaceNaming {
     return this.apiObject;
   }
 
+  public asyncChannelIterator (fromInject: boolean) {
+    if (!this.apiObject.channels) {
+      throw new Error('No paths found to iterate over');
+    }
+    Object.keys(this.apiObject.channels).forEach((channel) => {
+      if (fromInject) {
+        this.asyncXRequestInjector(channel);
+      } else {
+        // this.mergeAsyncInjectedParameters(channel);
+      }
+    });
+    return this.apiObject;
+  }
+
+  asyncXRequestInjector (channel: string) {
+    if(this.apiObject.channels.publish){
+      this.apiObject.channels[channel].publish['x-request-definitions'] = this.injectFromAPIChannels(channel);
+    }
+    if(this.apiObject.channels.subscribe){
+      this.apiObject.channels[channel].subscribe['x-request-definitions'] = this.injectFromAPIChannels(channel);
+      this.apiObject.channels[channel].subscribe['x-response-definitions'] = this.injectFromSwaggerResponse(channel);
+    }
+  }
+  public injectDefinitionsFromAPIChannels(channel: string){
+
+  }
+  public injectFromAPIChannels(channel: string){
+
+  }
+
   /**
    * Injects param/definition paths
    * @param {string} path - Path of api
    * @param {string} method - Method of path to x inject to
    */
-  public xRequestInjector (path: string, method: string) {
+  public openApiXRequestInjector (path: string, method: string) {
     this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromAPIPaths(path, method);
     this.apiObject.paths[path][method]['x-response-definitions'] = this.injectFromSwaggerResponse(path, method);
   }
@@ -165,6 +183,10 @@ class OpenAPIInjectInterfaceNaming {
     return requestParams;
   }
 
+  mergeAsyncInjectedParameters (channel: string, method: string) {
+
+  }
+
   /**
    * Inject the interfaces for query|path|header paramters and leave the path to the body definition
    * @param path
@@ -182,9 +204,9 @@ class OpenAPIInjectInterfaceNaming {
         } else {
           let name = '\'' + parameterObject.name + '\'';
           name += (!parameterObject.required) ? '?' : '';
-          if (this.isSwagger()) {
+          if (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) {
             requestObject[name] = openApiTypeToTypscriptType(parameterObject.type);
-          } else if (this.isOpenAPI3()) {
+          } else if (ApiIs.openapi3(this.apiObject)) {
             requestObject[name] = openApiTypeToTypscriptType(parameterObject.schema.type);
           }
         }
@@ -222,10 +244,10 @@ class OpenAPIInjectInterfaceNaming {
    * @return {{'200': null}}
    */
   public injectFromSwaggerResponse (path: string, method: string) {
-    if (this.isOpenAPI3()) {
+    if (ApiIs.openapi3(this.apiObject)) {
       return this.injectFromOA3Response(path, method);
     }
-    if (this.isSwagger()) {
+    if (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) {
       return this.injectFromOA2Response(path, method);
     }
   }
