@@ -13,6 +13,9 @@ var ApiIs = /** @class */ (function () {
     ApiIs.prototype.openapi3 = function (apiObject) {
         return !!(apiObject.openapi && apiObject.openapi[0] === '3');
     };
+    ApiIs.prototype.isOpenAPIorSwagger = function (apiObject) {
+        return this.openapi3(apiObject) || this.openapi2(apiObject) || this.swagger(apiObject);
+    };
     ApiIs.prototype.asyncapi2 = function (apiObject) {
         return !!(apiObject.asyncapi && apiObject.asyncapi[0] === '2');
     };

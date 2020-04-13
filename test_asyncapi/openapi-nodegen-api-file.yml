@@ -8,7 +8,7 @@ info:
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
 defaultContentType: application/json
 channels:
-  ms_auth.connection.updated:
+  ms_auth-connection-updated:
     description: When a connection is updated
     parameters:
       updatedId:
@@ -18,13 +18,13 @@ channels:
       message:
         contentType: application/json
         payload:
-          $ref: '#/components/schemas/ms_auth.cache.connection'
+          $ref: '#/components/schemas/ms_auth-cache-connection'
     subscribe:
-      operationId: ms_auth.connection.updated.subscribe
+      operationId: ms_auth-connection-updated-subscribe
       message:
         contentType: application/json
         payload:
-          $ref: '#/components/schemas/ms_auth.cache.connection'
+          $ref: '#/components/schemas/ms_auth-cache-connection'
 components:
   parameters:
     updatedId:
@@ -32,7 +32,7 @@ components:
       schema:
         type: string
   schemas:
-    ms_auth.cache.connection:
+    ms_auth-cache-connection:
       type: object
       properties:
         username:

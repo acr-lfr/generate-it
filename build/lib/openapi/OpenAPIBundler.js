@@ -8,7 +8,6 @@ var YAML = tslib_1.__importStar(require("js-yaml"));
 var OpenAPIInjectInterfaceNaming_1 = tslib_1.__importDefault(require("./OpenAPIInjectInterfaceNaming"));
 var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAllOfs"));
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
-var logTimeDiff_1 = tslib_1.__importDefault(require("../../utils/logTimeDiff"));
 var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var RefParser = require('json-schema-ref-parser');
@@ -22,109 +21,35 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.bundle = function (filePath, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var content, startTime, e_1, e_2, e_3;
+            var content;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        startTime = new Date().getTime();
-                        logTimeDiff_1["default"](0, 0);
-                        try {
-                            console.log('Reading file: ' + filePath);
-                            content = fs_extra_1["default"].readFileSync(filePath);
-                            this.copyInputFileToProject(filePath, config.targetDir);
-                        }
-                        catch (e) {
-                            console.error('Can not load the content of the Swagger specification file');
-                            console.log(filePath);
-                            throw e;
-                        }
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        try {
-                            console.log('Parsing file contents');
-                            content = this.parseContent(content);
-                        }
-                        catch (e) {
-                            console.error('Can not parse the content of the Swagger specification file');
-                            global.verboseLogging(content);
-                            throw e;
-                        }
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        try {
-                            console.log('Injecting path interface names');
-                            content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).inject();
-                        }
-                        catch (e) {
-                            console.error('Cannot inject interface naming for:');
-                            global.verboseLogging(JSON.stringify(content, undefined, 2));
-                            throw e;
-                        }
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        _a.label = 1;
+                        console.log('Reading file: ' + filePath);
+                        content = fs_extra_1["default"].readFileSync(filePath);
+                        this.copyInputFileToProject(filePath, config.targetDir);
+                        console.log('Parsing file contents');
+                        content = this.parseContent(content);
+                        console.log('Injecting path interface names');
+                        return [4 /*yield*/, (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).inject()];
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        content = _a.sent();
                         console.log('De-referencing object');
                         return [4 /*yield*/, this.dereference(content)];
                     case 2:
                         content = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_1 = _a.sent();
-                        console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
-                        global.verboseLogging(JSON.stringify(content, undefined, 2));
-                        throw e_1;
-                    case 4:
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        try {
-                            console.log('Calculating all request definitions to interface relations');
-                            content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters();
-                        }
-                        catch (e) {
-                            console.error('Can not merge the request paramters to build the interfaces:');
-                            global.verboseLogging(JSON.stringify(content, undefined, 2));
-                            throw e;
-                        }
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        try {
-                            console.log('Resolving all allOf references');
-                            content = openApiResolveAllOfs_1["default"](content);
-                        }
-                        catch (e) {
-                            console.error('Could not resolve of allOfs');
-                            global.verboseLogging(JSON.stringify(content, undefined, 2));
-                            throw e;
-                        }
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        _a.label = 5;
-                    case 5:
-                        _a.trys.push([5, 7, , 8]);
+                        console.log('Calculating all request definitions to interface relations');
+                        content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters();
+                        console.log('Resolving all allOf references');
+                        content = openApiResolveAllOfs_1["default"](content);
                         console.log('Injecting interface texts');
                         return [4 /*yield*/, this.injectInterfaces(content, config)];
-                    case 6:
+                    case 3:
                         content = _a.sent();
-                        return [3 /*break*/, 8];
-                    case 7:
-                        e_2 = _a.sent();
-                        console.error(e_2);
-                        console.error('Cannot inject the interfaces: ');
-                        global.verboseLogging(JSON.stringify(content, undefined, 2));
-                        throw e_2;
-                    case 8:
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
-                        _a.label = 9;
-                    case 9:
-                        _a.trys.push([9, 11, , 12]);
                         console.log('Bundling the full object');
                         return [4 /*yield*/, this.bundleObject(content)];
-                    case 10:
+                    case 4:
                         content = _a.sent();
-                        return [3 /*break*/, 12];
-                    case 11:
-                        e_3 = _a.sent();
-                        console.error('Cannot bundle the object:');
-                        throw e_3;
-                    case 12:
-                        global.verboseLogging(content);
-                        logTimeDiff_1["default"](startTime, new Date().getTime());
                         console.log('Injecting the endpoint names');
                         return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content)))];
                 }
@@ -199,9 +124,12 @@ var OpenAPIBundler = /** @class */ (function () {
                         return [4 /*yield*/, this.injectDefinitionInterfaces(apiObject)];
                     case 1:
                         apiObject = _a.sent();
+                        if (!(ApiIs_1["default"].swagger(apiObject) || ApiIs_1["default"].openapi2(apiObject))) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.injectParameterInterfaces(apiObject, config)];
                     case 2:
                         apiObject = _a.sent();
+                        _a.label = 3;
+                    case 3:
                         apiObject.interfaces = apiObject.interfaces.sort(function (a, b) { return (a.name > b.name) ? 1 : -1; });
                         apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
                         return [2 /*return*/, apiObject];
@@ -216,7 +144,7 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.injectDefinitionInterfaces = function (apiObject) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var toWalk, defKeys, i, definitionObject, _a, _b, _c, e_4;
+            var toWalk, defKeys, i, definitionObject, _a, _b, _c, e_1;
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -225,7 +153,7 @@ var OpenAPIBundler = /** @class */ (function () {
                             || ApiIs_1["default"].openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
                             return [2 /*return*/, apiObject];
                         }
-                        toWalk = (ApiIs_1["default"].swagger(apiObject)) ? apiObject.definitions : (ApiIs_1["default"].openapi3(apiObject)) ? apiObject.components.schemas : {};
+                        toWalk = (ApiIs_1["default"].swagger(apiObject)) ? apiObject.definitions : (ApiIs_1["default"].openapi3(apiObject) || ApiIs_1["default"].asyncapi2(apiObject)) ? apiObject.components.schemas : {};
                         defKeys = Object.keys(toWalk);
                         i = 0;
                         _d.label = 1;
@@ -233,7 +161,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         if (!(i < defKeys.length)) return [3 /*break*/, 6];
                         definitionObject = (ApiIs_1["default"].swagger(apiObject)) ?
                             apiObject.definitions[defKeys[i]] :
-                            (ApiIs_1["default"].openapi3(apiObject)) ?
+                            (ApiIs_1["default"].openapi3(apiObject) || ApiIs_1["default"].asyncapi2(apiObject)) ?
                                 apiObject.components.schemas[defKeys[i]] : {};
                         _d.label = 2;
                     case 2:
@@ -248,9 +176,9 @@ var OpenAPIBundler = /** @class */ (function () {
                                 _c)]);
                         return [3 /*break*/, 5];
                     case 4:
-                        e_4 = _d.sent();
+                        e_1 = _d.sent();
                         console.log(defKeys[i]);
-                        console.log(e_4);
+                        console.log(e_1);
                         throw new Error('Could not generate the interface text for the above object');
                     case 5:
                         ++i;

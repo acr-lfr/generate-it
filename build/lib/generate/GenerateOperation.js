@@ -17,15 +17,13 @@ var GenerateOperation = /** @class */ (function () {
      */
     GenerateOperation.prototype.files = function (config, fileType) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var files, filesKeys, i, operationNameItem, operation;
+            var files, iteratable, filesKeys, i, operationNameItem, operation;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         files = {};
-                        // Iterate over all path
-                        // pathProperties = all the http verbs and their contents
-                        // pathName = the full path after the basepath
-                        lodash_1.each(config.data.swagger.paths, function (pathProperties, pathName) {
+                        iteratable = config.data.swagger.paths || config.data.swagger.channels;
+                        lodash_1.each(iteratable, function (pathProperties, pathName) {
                             var operationName = pathProperties.endpointName;
                             files[operationName] = files[operationName] || [];
                             pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
