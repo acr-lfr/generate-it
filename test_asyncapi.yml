@@ -8,19 +8,36 @@ info:
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
 defaultContentType: application/json
 channels:
-  ms_auth-connection-updated:
-    description: When a connection is updated
+  msAuthConnectionDeleted:
+    description: When a connection is deleted
     parameters:
       updatedId:
         $ref: '#/components/parameters/updatedId'
     publish:
-      operationId: ms_auth.connection.updated.publish
+      operationId: msAuthConnectionDeletedPublish
       message:
         contentType: application/json
         payload:
           $ref: '#/components/schemas/ms_auth-cache-connection'
     subscribe:
-      operationId: ms_auth-connection-updated-subscribe
+      operationId: msAuthConnectionDeletedSubscribe
+      message:
+        contentType: application/json
+        payload:
+          $ref: '#/components/schemas/ms_auth-cache-connection'
+  msAuthConnectionUpdated:
+    description: When a connection is updated
+    parameters:
+      updatedId:
+        $ref: '#/components/parameters/updatedId'
+    publish:
+      operationId: msAuthConnectionUpdatedPublish
+      message:
+        contentType: application/json
+        payload:
+          $ref: '#/components/schemas/ms_auth-cache-connection'
+    subscribe:
+      operationId: msAuthConnectionUpdatedSubscribe
       message:
         contentType: application/json
         payload:

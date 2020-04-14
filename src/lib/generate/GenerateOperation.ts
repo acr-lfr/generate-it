@@ -8,18 +8,26 @@ import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
+import {OperationsContainer,  Operations } from '@/interfaces/Operations';
 
 class GenerateOperation {
   /**
    * Groups all http verbs for each path to then generate each operation file
    */
   public async files (config: GenerateOperationFileConfig, fileType: string) {
-    const files: any = {};
     // Iterate over all path
     // pathProperties = all the http verbs and their contents
     // pathName = the full path after the basepath
-    const iteratable = config.data.swagger.paths || config.data.swagger.channels;
-    each(iteratable, (pathProperties, pathName) => {
+    if (config.data.swagger.paths) {
+      return this.openapiFiles(config, fileType);
+    } else if (config.data.swagger.channels) {
+      return this.asyncApiFiles(config, fileType);
+    }
+  }
+
+  public async openapiFiles (config: GenerateOperationFileConfig, fileType: string) {
+    const files: OperationsContainer = {};
+    each(config.data.swagger.paths, (pathProperties, pathName) => {
       const operationName = pathProperties.endpointName;
       files[operationName] = files[operationName] || [];
       pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
@@ -30,9 +38,24 @@ class GenerateOperation {
       });
     });
 
-    const filesKeys = Object.keys(files);
-    for (let i = 0; i < filesKeys.length; ++i) {
-      const operationNameItem = filesKeys[i];
+    for (const operationNameItem in files) {
+      const operation = files[operationNameItem];
+      await this.file(config, operation, operationNameItem, fileType);
+    }
+    return files;
+  }
+
+  public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
+    const files: OperationsContainer = {};
+    each(config.data.swagger.channels, (channelProperties, channelName) => {
+      files[channelName] = files[channelName] || [];
+      files[channelName].push({
+        channel_name: channelName,
+        channel: channelProperties,
+      });
+    });
+
+    for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);
     }
@@ -41,16 +64,10 @@ class GenerateOperation {
 
   /**
    * Generate an operation file
-   * @param config
-   * @param operation
-   * @param operationName
-   * @param fileType
-   * @param verbose
-   * @param additionalTplContent
    */
   public async file (
     config: GenerateOperationFileConfig,
-    operation: any,
+    operations: Operations,
     operationName: string,
     fileType: string,
     verbose = false,
@@ -65,7 +82,7 @@ class GenerateOperation {
 
     const renderedContent = TemplateRenderer.load(
       data.toString(),
-      this.templateVariables(operationName, operation, config, additionalTplContent, verbose, fileType),
+      this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType),
       ext,
     );
 
@@ -83,16 +100,10 @@ class GenerateOperation {
 
   /**
    * Returns the template variables
-   * @param operationName
-   * @param operation
-   * @param config
-   * @param additionalTplContent
-   * @param verbose
-   * @param fileType
    */
   public templateVariables (
     operationName: string,
-    operation: any,
+    operations: Operations,
     config: GenerateOperationFileConfig,
     additionalTplContent: any = {},
     verbose: boolean = false,
@@ -102,7 +113,7 @@ class GenerateOperation {
       operation_name: _.camelCase(operationName.replace(/[}{]/g, '')),
       fileType,
       config,
-      operations: operation,
+      operations,
       swagger: config.data.swagger,
       mockServer: config.mockServer || false,
       verbose,

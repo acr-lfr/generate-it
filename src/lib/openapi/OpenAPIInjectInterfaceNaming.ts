@@ -140,7 +140,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param action
    */
   public injectRequestDefinitionsFromChannels (channel: string, action: string): object {
-    let requestParams: any = {
+    const requestParams: any = {
       [action]: {
         name: _.upperFirst(),
         params: [],
@@ -149,7 +149,7 @@ class OpenAPIInjectInterfaceNaming {
     if (!this.apiObject.channels[channel].parameters) {
       return {};
     }
-    for (let key in this.apiObject.channels[channel].parameters) {
+    for (const key in this.apiObject.channels[channel].parameters) {
       const p = this.apiObject.channels[channel].parameters[key];
       requestParams[action].params.push(
         this.convertRefToOjectPath(p.$ref || p.schema.$ref)
