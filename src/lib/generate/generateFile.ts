@@ -17,7 +17,6 @@ import generateFileDoWrite from '@/lib/generate/generateFileDoWrite';
  * @return {Promise}
  */
 export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additionalTplObject: any = {}, nodegenDir: string) => {
-
   const templatesDir = config.templates_dir;
   const targetDir = config.targetDir;
   const fileName = config.file_name;
@@ -31,12 +30,15 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   if (!generateFileDoWrite(isFirstRun, templatePath, root, nodegenDir)) {
     return;
   }
+
   // This could be a new file in the templates, ensure the dir structure is present before preceding
   fs.ensureFileSync(templatePath);
   global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
+
   const content = fs.readFileSync(loadFilePath, 'utf8');
   const endpoints: string[] = [];
-  if (fileName.startsWith('routesImporter')) {
+
+  if (fileName.match(/^.*Importer/)) {
     _.each(config.data.swagger.paths, (operationPath) => {
       const operationName = operationPath.endpointName;
       if (!endpoints.includes(operationName)) {
@@ -44,6 +46,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
       }
     });
   }
+
   const renderedContent = TemplateRenderer.load(content, {
     package: config.package,
     swagger: config.data.swagger,
@@ -51,9 +54,11 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     endpoints,
     additionalTplObject,
   });
+
   const generatedPath = path.resolve(
     targetDir,
     path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
   );
+
   return fs.writeFileSync(generatedPath, renderedContent, 'utf8');
 };

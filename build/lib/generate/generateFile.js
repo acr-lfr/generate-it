@@ -35,7 +35,7 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
     global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
     var content = fs_extra_1["default"].readFileSync(loadFilePath, 'utf8');
     var endpoints = [];
-    if (fileName.startsWith('routesImporter')) {
+    if (fileName.match(/^.*Importer/)) {
         _.each(config.data.swagger.paths, function (operationPath) {
             var operationName = operationPath.endpointName;
             if (!endpoints.includes(operationName)) {
