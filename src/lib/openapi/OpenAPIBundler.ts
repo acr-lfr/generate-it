@@ -44,6 +44,9 @@ class OpenAPIBundler {
     console.log('Injecting interface texts');
     content = await this.injectInterfaces(content, config);
 
+    console.log('Injecting operationId array');
+    content.operationIds = await this.fetchOperationIdsArray(content);
+
     console.log('Bundling the full object');
     content = await this.bundleObject(content);
 
@@ -99,6 +102,31 @@ class OpenAPIBundler {
         circular: 'ignore',
       },
     });
+  }
+
+  /**
+   * Returns a simple array of uniqueOperationids from either asyncApi or swagger/openapi
+   * @param yamlObject
+   */
+  public fetchOperationIdsArray (yamlObject: any): string[] {
+    let ids = [];
+    if (yamlObject.paths) {
+      for (let pathMethod in yamlObject.paths) {
+        if (yamlObject.paths[pathMethod].operationId) {
+          ids.push(yamlObject.paths[pathMethod].operationId);
+        }
+      }
+    } else if (yamlObject.channels) {
+      for (let channel in yamlObject.channels) {
+        if(yamlObject.channels[channel].subscribe){
+          ids.push(yamlObject.channels[channel].subscribe.operationId);
+        }
+        if(yamlObject.channels[channel].publish){
+          ids.push(yamlObject.channels[channel].publish.operationId);
+        }
+      }
+    }
+    return ids;
   }
 
   /**

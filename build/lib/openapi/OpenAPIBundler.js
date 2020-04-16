@@ -21,9 +21,9 @@ var OpenAPIBundler = /** @class */ (function () {
      */
     OpenAPIBundler.prototype.bundle = function (filePath, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var content;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
+            var content, _a;
+            return tslib_1.__generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         console.log('Reading file: ' + filePath);
                         content = fs_extra_1["default"].readFileSync(filePath);
@@ -33,11 +33,11 @@ var OpenAPIBundler = /** @class */ (function () {
                         console.log('Injecting path interface names');
                         return [4 /*yield*/, (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).inject()];
                     case 1:
-                        content = _a.sent();
+                        content = _b.sent();
                         console.log('De-referencing object');
                         return [4 /*yield*/, this.dereference(content)];
                     case 2:
-                        content = _a.sent();
+                        content = _b.sent();
                         console.log('Calculating all request definitions to interface relations');
                         content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters();
                         console.log('Resolving all allOf references');
@@ -45,11 +45,16 @@ var OpenAPIBundler = /** @class */ (function () {
                         console.log('Injecting interface texts');
                         return [4 /*yield*/, this.injectInterfaces(content, config)];
                     case 3:
-                        content = _a.sent();
+                        content = _b.sent();
+                        console.log('Injecting operationId array');
+                        _a = content;
+                        return [4 /*yield*/, this.fetchOperationIdsArray(content)];
+                    case 4:
+                        _a.operationIds = _b.sent();
                         console.log('Bundling the full object');
                         return [4 /*yield*/, this.bundleObject(content)];
-                    case 4:
-                        content = _a.sent();
+                    case 5:
+                        content = _b.sent();
                         console.log('Injecting the endpoint names');
                         return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content)))];
                 }
@@ -108,6 +113,31 @@ var OpenAPIBundler = /** @class */ (function () {
                     })];
             });
         });
+    };
+    /**
+     * Returns a simple array of uniqueOperationids from either asyncApi or swagger/openapi
+     * @param yamlObject
+     */
+    OpenAPIBundler.prototype.fetchOperationIdsArray = function (yamlObject) {
+        var ids = [];
+        if (yamlObject.paths) {
+            for (var pathMethod in yamlObject.paths) {
+                if (yamlObject.paths[pathMethod].operationId) {
+                    ids.push(yamlObject.paths[pathMethod].operationId);
+                }
+            }
+        }
+        else if (yamlObject.channels) {
+            for (var channel in yamlObject.channels) {
+                if (yamlObject.channels[channel].subscribe) {
+                    ids.push(yamlObject.channels[channel].subscribe.operationId);
+                }
+                if (yamlObject.channels[channel].publish) {
+                    ids.push(yamlObject.channels[channel].publish.operationId);
+                }
+            }
+        }
+        return ids;
     };
     /**
      * Iterates over the paths, methods and their calculated x-request-definitions to calculate the interface content.
