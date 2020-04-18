@@ -8,14 +8,14 @@ import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
-import {OperationsContainer,  Operations } from '@/interfaces/Operations';
+import { OperationsContainer, Operations } from '@/interfaces/Operations';
 
 class GenerateOperation {
   /**
    * Groups all http verbs for each path to then generate each operation file
    */
   public async files (config: GenerateOperationFileConfig, fileType: string) {
-    // Iterate over all path
+    // Iterate over all paths
     // pathProperties = all the http verbs and their contents
     // pathName = the full path after the basepath
     if (config.data.swagger.paths) {
@@ -47,13 +47,23 @@ class GenerateOperation {
 
   public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
-    each(config.data.swagger.channels, (channelProperties, channelName) => {
-      files[channelName] = files[channelName] || [];
-      files[channelName].push({
-        channel_name: channelName,
-        channel: channelProperties,
-      });
-    });
+    for (let channelName in config.data.swagger.channels) {
+      const channel = config.data.swagger.channels[channelName];
+      if (channel.subscribe) {
+        files[channel.subscribe.operationId] = [{
+          channel: channel.subscribe,
+          channelDescription: channel.description || '',
+          channelName
+        }];
+      }
+      if (channel.publish) {
+        files[channel.publish.operationId] = [{
+          channel: channel.publish,
+          channelDescription: channel.description || '',
+          channelName
+        }];
+      }
+    }
 
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
@@ -79,7 +89,7 @@ class GenerateOperation {
     const ext = NamingUtils.getFileExt(config.file_name);
     const newFilename = NamingUtils.fixRouteName(NamingUtils.generateOperationSuffix(subDir, operationName, ext));
     const targetFile = path.resolve(config.targetDir, subDir, newFilename);
-
+    fs.ensureDirSync(path.resolve(config.targetDir, subDir));
     const renderedContent = TemplateRenderer.load(
       data.toString(),
       this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType),
@@ -116,6 +126,7 @@ class GenerateOperation {
       operations,
       swagger: config.data.swagger,
       mockServer: config.mockServer || false,
+      nodegenRc: config.data.nodegenRc,
       verbose,
       ...additionalTplContent,
     };

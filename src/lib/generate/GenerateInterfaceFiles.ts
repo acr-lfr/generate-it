@@ -36,6 +36,7 @@ class GenerateInterfaceFiles {
       {
         definitionName,
         definitionInterfaceText: interfaceText,
+        nodegenRc: this.config.data.nodegenRc
       },
       ext,
     );

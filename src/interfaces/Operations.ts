@@ -2,7 +2,8 @@ export interface Operation {
   path_name?: string;
   path?: any;
   subresource?: string;
-  channel_name?: string;
+  channelDescription?: string;
+  channelName?: string;
   channel?: any;
 }
 

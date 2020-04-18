@@ -34,7 +34,8 @@ var GenerateInterfaceFiles = /** @class */ (function () {
         var targetFile = path_1["default"].resolve(this.config.targetDir, subdir, newFilename);
         var content = TemplateRenderer_1["default"].load(data.toString(), {
             definitionName: definitionName,
-            definitionInterfaceText: interfaceText
+            definitionInterfaceText: interfaceText,
+            nodegenRc: this.config.data.nodegenRc
         }, ext);
         var moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
         if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs_extra_1["default"].existsSync(targetFile)) {

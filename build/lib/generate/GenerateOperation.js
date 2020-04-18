@@ -18,7 +18,7 @@ var GenerateOperation = /** @class */ (function () {
     GenerateOperation.prototype.files = function (config, fileType) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                // Iterate over all path
+                // Iterate over all paths
                 // pathProperties = all the http verbs and their contents
                 // pathName = the full path after the basepath
                 if (config.data.swagger.paths) {
@@ -71,18 +71,28 @@ var GenerateOperation = /** @class */ (function () {
     };
     GenerateOperation.prototype.asyncApiFiles = function (config, fileType) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var files, _a, _b, _i, operationNameItem, operation;
+            var files, channelName, channel, _a, _b, _i, operationNameItem, operation;
             return tslib_1.__generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         files = {};
-                        lodash_1.each(config.data.swagger.channels, function (channelProperties, channelName) {
-                            files[channelName] = files[channelName] || [];
-                            files[channelName].push({
-                                channel_name: channelName,
-                                channel: channelProperties
-                            });
-                        });
+                        for (channelName in config.data.swagger.channels) {
+                            channel = config.data.swagger.channels[channelName];
+                            if (channel.subscribe) {
+                                files[channel.subscribe.operationId] = [{
+                                        channel: channel.subscribe,
+                                        channelDescription: channel.description || '',
+                                        channelName: channelName
+                                    }];
+                            }
+                            if (channel.publish) {
+                                files[channel.publish.operationId] = [{
+                                        channel: channel.publish,
+                                        channelDescription: channel.description || '',
+                                        channelName: channelName
+                                    }];
+                            }
+                        }
                         _a = [];
                         for (_b in files)
                             _a.push(_b);
@@ -121,6 +131,7 @@ var GenerateOperation = /** @class */ (function () {
                         ext = NamingUtils_1["default"].getFileExt(config.file_name);
                         newFilename = NamingUtils_1["default"].fixRouteName(NamingUtils_1["default"].generateOperationSuffix(subDir, operationName, ext));
                         targetFile = path_1["default"].resolve(config.targetDir, subDir, newFilename);
+                        fs_extra_1["default"].ensureDirSync(path_1["default"].resolve(config.targetDir, subDir));
                         renderedContent = TemplateRenderer_1["default"].load(data.toString(), this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType), ext);
                         if (!(FileTypeCheck_1["default"].isStubFile(config.file_name) && fs_extra_1["default"].existsSync(targetFile))) return [3 /*break*/, 2];
                         return [4 /*yield*/, GeneratedComparison_1["default"].generateComparisonFile(targetFile, config.targetDir, subDir, newFilename, renderedContent)];
@@ -138,7 +149,7 @@ var GenerateOperation = /** @class */ (function () {
         if (verbose === void 0) { verbose = false; }
         return tslib_1.__assign({ operation_name: lodash_1["default"].camelCase(operationName.replace(/[}{]/g, '')), fileType: fileType,
             config: config,
-            operations: operations, swagger: config.data.swagger, mockServer: config.mockServer || false, verbose: verbose }, additionalTplContent);
+            operations: operations, swagger: config.data.swagger, mockServer: config.mockServer || false, nodegenRc: config.data.nodegenRc, verbose: verbose }, additionalTplContent);
     };
     return GenerateOperation;
 }());

@@ -1,0 +1,52 @@
+import { QWrapperDomain } from 'q-wrapper';
+import { QWrapperSettings } from 'q-wrapper/lib/models';
+import { Message as amqMessage } from 'amqplib/callback_api';
+import * as operationIds from './operationIds';
+import eventBus from '@/utils/eventBus';
+
+class RabbitMQService {
+  private qWrapper: QWrapperDomain;
+
+  public async setup (qWrapperSettings: QWrapperSettings): Promise<void> {
+    this.qWrapper = new QWrapperDomain(qWrapperSettings);
+    await this.qWrapper.initialize();
+    this.listenForInternalAppEvents();
+  }
+
+  public listenForInternalAppEvents () {
+{% for channelName, channelObj in swagger.channels -%}{% if channelObj.publish -%}
+    {% set channelId = _.toUpper(channelObj.publish.operationId) -%}
+  console.log('EVENT ');
+  eventBus.on( operationIds.{{ channelId }}, (payload: any) => this.qWrapper.sendToExchange(payload, operationIds.{{ channelId }}));
+{% endif -%}{% endfor -%}
+    }
+
+  public listenForRabbitMQ (): void {
+    this.qWrapper.consume((message: amqMessage) => {
+      switch (message.fields.routingKey) {
+    {% for channelName, channelObj in swagger.channels -%}
+      {% if _.indexOf(nodegenRc.helpers.channelOpIdsIgnore, channelObj.publish.operationId) == -1 -%}
+        {% set channelId = _.toUpper(channelObj.subscribe.operationId) -%}
+          case operationIds.{{ channelId }}: {
+            // Start doing something with the message...
+            // Return a response
+            return {
+              processed: true,
+              requeue: false
+            }
+          }
+      {% endif -%}
+    {% endfor -%}
+        default:
+          return {
+            processed: true,
+            requeue: false
+          }
+      }
+    });
+  }
+}
+
+export default new RabbitMQService();
+
+const a = {{ getContext() | dump }}

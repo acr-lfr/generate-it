@@ -37,7 +37,13 @@ class TemplateRenderer {
    * @param configRcFile Fully qualified path to .openapi-nodegenrc file   *
    * @return {*}
    */
-  public load (inputString: string, customVars = {}, ext?: string, additionalHelpers = {}, configRcFile = '') {
+  public load (
+    inputString: string,
+    customVars = {},
+    ext?: string,
+    additionalHelpers = {},
+    configRcFile = '',
+  ) {
     this.nunjucksSetup(additionalHelpers, configRcFile);
     const content = this.stripCharacters(
       nunjucks.renderString(inputString, customVars),

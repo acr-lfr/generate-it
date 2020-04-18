@@ -6,9 +6,6 @@
     "stub": {
       "jwtType": "JwtAccess",
       "requestType": "NodegenRequest"
-    },
-    "channelOpIdsIgnore": [
-      "msAuthConnectionDeletedPublish"
-    ]
+    }
   }
 }
