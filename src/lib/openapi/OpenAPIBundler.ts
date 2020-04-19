@@ -138,8 +138,11 @@ class OpenAPIBundler {
   public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
-    if (ApiIs.swagger(apiObject) || ApiIs.openapi2(apiObject) || ApiIs.openapi3(apiObject)) {
+    if (ApiIs.isOpenAPIorSwagger(apiObject)) {
       apiObject = await this.injectParameterInterfaces(apiObject, config);
+    } else if (ApiIs.asyncapi2(apiObject)) {
+      // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
+      // TODO this was left as not required for rabbitmq
     }
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
     apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
@@ -184,8 +187,6 @@ class OpenAPIBundler {
 
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
-   * @param apiObject
-   * @param config
    */
   public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
     // iterate over paths with for loop so can use await later

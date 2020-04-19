@@ -154,12 +154,18 @@ var OpenAPIBundler = /** @class */ (function () {
                         return [4 /*yield*/, this.injectDefinitionInterfaces(apiObject)];
                     case 1:
                         apiObject = _a.sent();
-                        if (!(ApiIs_1["default"].swagger(apiObject) || ApiIs_1["default"].openapi2(apiObject) || ApiIs_1["default"].openapi3(apiObject))) return [3 /*break*/, 3];
+                        if (!ApiIs_1["default"].isOpenAPIorSwagger(apiObject)) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.injectParameterInterfaces(apiObject, config)];
                     case 2:
                         apiObject = _a.sent();
-                        _a.label = 3;
+                        return [3 /*break*/, 4];
                     case 3:
+                        if (ApiIs_1["default"].asyncapi2(apiObject)) {
+                            // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
+                            // TODO this was left as not required for rabbitmq
+                        }
+                        _a.label = 4;
+                    case 4:
                         apiObject.interfaces = apiObject.interfaces.sort(function (a, b) { return (a.name > b.name) ? 1 : -1; });
                         apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
                         return [2 /*return*/, apiObject];
@@ -220,8 +226,6 @@ var OpenAPIBundler = /** @class */ (function () {
     };
     /**
      * Iterates over all path generating interface texts from the json schema in the request definitions
-     * @param apiObject
-     * @param config
      */
     OpenAPIBundler.prototype.injectParameterInterfaces = function (apiObject, config) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
