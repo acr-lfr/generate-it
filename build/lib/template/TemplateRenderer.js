@@ -5,9 +5,9 @@ var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var nunjucks_1 = tslib_1.__importDefault(require("nunjucks"));
 var lodash_1 = tslib_1.__importDefault(require("lodash"));
 var arrayContains_1 = tslib_1.__importDefault(require("./helpers/arrayContains"));
-var celebrateImport_1 = tslib_1.__importDefault(require("./helpers/celebrateImport"));
-var celebrateRoute_1 = tslib_1.__importDefault(require("./helpers/celebrateRoute"));
 var endsWith_1 = tslib_1.__importDefault(require("./helpers/endsWith"));
+var getChannelOperationIds_1 = tslib_1.__importDefault(require("./helpers/getChannelOperationIds"));
+var getContext_1 = tslib_1.__importDefault(require("./helpers/getContext"));
 var getSecurityNames_1 = tslib_1.__importDefault(require("./helpers/getSecurityNames"));
 var importInterfaces_1 = tslib_1.__importDefault(require("./helpers/importInterfaces"));
 var inline_1 = tslib_1.__importDefault(require("./helpers/inline"));
@@ -71,9 +71,9 @@ var TemplateRenderer = /** @class */ (function () {
             }
         }
         env.addGlobal('arrayContains', arrayContains_1["default"]);
-        env.addGlobal('celebrateImport', celebrateImport_1["default"]);
-        env.addGlobal('celebrateRoute', celebrateRoute_1["default"]);
         env.addGlobal('endsWith', endsWith_1["default"]);
+        env.addGlobal('getChannelPublishOperationIds', getChannelOperationIds_1["default"]);
+        env.addGlobal('getContext', getContext_1["default"]);
         env.addGlobal('getSecurityNames', getSecurityNames_1["default"]);
         env.addGlobal('importInterfaces', importInterfaces_1["default"]);
         env.addGlobal('inline', inline_1["default"]);

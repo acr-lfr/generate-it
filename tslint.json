@@ -4,6 +4,7 @@
     "exclude": ["testserver"]
   },
   "rules": {
+    "forin": false,
     "object-literal-shorthand": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,

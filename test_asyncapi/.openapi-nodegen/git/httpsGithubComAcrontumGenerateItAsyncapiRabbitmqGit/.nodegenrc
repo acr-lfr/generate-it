@@ -1,0 +1,8 @@
+{
+  "nodegenDir": "generated",
+  "nodegenMockDir": "/__mocks__",
+  "nodegenType": "server",
+  "asyncApi": {
+    "stubChannelType": "subscribe"
+  }
+}

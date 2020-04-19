@@ -24,7 +24,9 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
     var fileName = config.file_name;
     var root = config.root;
     // const data = config.data
-    var loadFilePath = (fileName !== 'package.json.njk') ? path_1["default"].resolve(root, fileName) : path_1["default"].resolve(process.cwd(), 'package.json');
+    var loadFilePath = (fileName !== 'package.json.njk') ?
+        path_1["default"].resolve(root, fileName) :
+        path_1["default"].resolve(process.cwd(), 'package.json');
     var templatePath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, fileName)));
     // should write or not
     if (!generateFileDoWrite_1["default"](isFirstRun, templatePath, root, nodegenDir)) {
@@ -48,7 +50,8 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
         swagger: config.data.swagger,
         definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
         endpoints: endpoints,
-        additionalTplObject: additionalTplObject
+        additionalTplObject: additionalTplObject,
+        nodegenRc: config.data.nodegenRc
     });
     var generatedPath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, NamingUtils_1["default"].stripNjkExtension(fileName))));
     return fs_extra_1["default"].writeFileSync(generatedPath, renderedContent, 'utf8');

@@ -21,98 +21,34 @@ class OpenAPIBundler {
    */
   public async bundle (filePath: string, config: Config) {
     let content;
-    const startTime = new Date().getTime();
-    logTimeDiff(0, 0);
 
-    try {
-      console.log('Reading file: ' + filePath);
-      content = fs.readFileSync(filePath);
-      this.copyInputFileToProject(filePath, config.targetDir);
-    } catch (e) {
-      console.error('Can not load the content of the Swagger specification file');
-      console.log(filePath);
-      throw e;
-    }
+    console.log('Reading file: ' + filePath);
+    content = fs.readFileSync(filePath);
+    this.copyInputFileToProject(filePath, config.targetDir);
 
-    logTimeDiff(startTime, new Date().getTime());
+    console.log('Parsing file contents');
+    content = this.parseContent(content);
 
-    try {
-      console.log('Parsing file contents');
-      content = this.parseContent(content);
-    } catch (e) {
-      console.error('Can not parse the content of the Swagger specification file');
-      global.verboseLogging(content);
-      throw e;
-    }
+    console.log('Injecting path interface names');
+    content = await (new OpenAPIInjectInterfaceNaming(content, config)).inject();
 
-    logTimeDiff(startTime, new Date().getTime());
+    console.log('De-referencing object');
+    content = await this.dereference(content);
 
-    try {
-      console.log('Injecting path interface names');
-      content = (new OpenAPIInjectInterfaceNaming(content, config)).inject();
-    } catch (e) {
-      console.error('Cannot inject interface naming for:');
-      global.verboseLogging(JSON.stringify(content, undefined, 2));
-      throw e;
-    }
+    console.log('Calculating all request definitions to interface relations');
+    content = (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
 
-    logTimeDiff(startTime, new Date().getTime());
+    console.log('Resolving all allOf references');
+    content = openApiResolveAllOfs(content);
 
-    try {
-      console.log('De-referencing object');
-      content = await this.dereference(content);
-    } catch (e) {
-      console.error('Can not dereference the JSON obtained from the content of the Swagger specification file:');
-      global.verboseLogging(JSON.stringify(content, undefined, 2));
-      throw e;
-    }
+    console.log('Injecting interface texts');
+    content = await this.injectInterfaces(content, config);
 
-    logTimeDiff(startTime, new Date().getTime());
+    console.log('Injecting operationId array');
+    content.operationIds = await this.fetchOperationIdsArray(content);
 
-    try {
-      console.log('Calculating all request definitions to interface relations');
-      content = (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
-    } catch (e) {
-      console.error('Can not merge the request paramters to build the interfaces:');
-      global.verboseLogging(JSON.stringify(content, undefined, 2));
-      throw e;
-    }
-
-    logTimeDiff(startTime, new Date().getTime());
-
-    try {
-      console.log('Resolving all allOf references');
-      content = openApiResolveAllOfs(content);
-    } catch (e) {
-      console.error('Could not resolve of allOfs');
-      global.verboseLogging(JSON.stringify(content, undefined, 2));
-      throw e;
-    }
-
-    logTimeDiff(startTime, new Date().getTime());
-
-    try {
-      console.log('Injecting interface texts');
-      content = await this.injectInterfaces(content, config);
-    } catch (e) {
-      console.error(e);
-      console.error('Cannot inject the interfaces: ');
-      global.verboseLogging(JSON.stringify(content, undefined, 2));
-      throw e;
-    }
-
-    logTimeDiff(startTime, new Date().getTime());
-
-    try {
-      console.log('Bundling the full object');
-      content = await this.bundleObject(content);
-    } catch (e) {
-      console.error('Cannot bundle the object:');
-      throw e;
-    }
-    global.verboseLogging(content);
-
-    logTimeDiff(startTime, new Date().getTime());
+    console.log('Bundling the full object');
+    content = await this.bundleObject(content);
 
     console.log('Injecting the endpoint names');
     return JSON.parse(JSON.stringify(
@@ -169,6 +105,31 @@ class OpenAPIBundler {
   }
 
   /**
+   * Returns a simple array of uniqueOperationids from either asyncApi or swagger/openapi
+   * @param yamlObject
+   */
+  public fetchOperationIdsArray (yamlObject: any): string[] {
+    const ids = [];
+    if (yamlObject.paths) {
+      for (const pathMethod in yamlObject.paths) {
+        if (yamlObject.paths[pathMethod].operationId) {
+          ids.push(yamlObject.paths[pathMethod].operationId);
+        }
+      }
+    } else if (yamlObject.channels) {
+      for (const channel in yamlObject.channels) {
+        if (yamlObject.channels[channel].subscribe) {
+          ids.push(yamlObject.channels[channel].subscribe.operationId);
+        }
+        if (yamlObject.channels[channel].publish) {
+          ids.push(yamlObject.channels[channel].publish.operationId);
+        }
+      }
+    }
+    return ids;
+  }
+
+  /**
    * Iterates over the paths, methods and their calculated x-request-definitions to calculate the interface content.
    * @param apiObject Dereference'd' object
    * @param config
@@ -177,7 +138,12 @@ class OpenAPIBundler {
   public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
-    apiObject = await this.injectParameterInterfaces(apiObject, config);
+    if (ApiIs.isOpenAPIorSwagger(apiObject)) {
+      apiObject = await this.injectParameterInterfaces(apiObject, config);
+    } else if (ApiIs.asyncapi2(apiObject)) {
+      // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
+      // TODO this was left as not required for rabbitmq
+    }
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
     apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
     return apiObject;
@@ -194,13 +160,13 @@ class OpenAPIBundler {
       || ApiIs.openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
       return apiObject;
     }
-    const toWalk = (ApiIs.swagger(apiObject)) ? apiObject.definitions : (ApiIs.openapi3(apiObject)) ? apiObject.components.schemas : {};
+    const toWalk = (ApiIs.swagger(apiObject)) ? apiObject.definitions : (ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)) ? apiObject.components.schemas : {};
     const defKeys = Object.keys(toWalk);
     for (let i = 0; i < defKeys.length; ++i) {
       const definitionObject =
         (ApiIs.swagger(apiObject)) ?
           apiObject.definitions[defKeys[i]] :
-          (ApiIs.openapi3(apiObject)) ?
+          (ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)) ?
             apiObject.components.schemas[defKeys[i]] : {};
       try {
         apiObject.interfaces.push({
@@ -221,8 +187,6 @@ class OpenAPIBundler {
 
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
-   * @param apiObject
-   * @param config
    */
   public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
     // iterate over paths with for loop so can use await later

@@ -8,15 +8,16 @@ var hasha_1 = tslib_1.__importDefault(require("hasha"));
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
 exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
-exports.clearTestServer = function () {
+exports.clearTestServer = function (dir) {
+    if (dir === void 0) { dir = 'test_server'; }
     // return;
-    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), 'test_server'));
+    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), dir));
     for (var i = 0; i < names.length; ++i) {
         if (names[i] !== '.openapi-nodegen') {
-            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'test_server', names[i]));
+            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), dir, names[i]));
         }
     }
-    var compare = path_1["default"].join(process.cwd(), 'test_server/.openapi-nodegen/cache');
+    var compare = path_1["default"].join(process.cwd(), dir, '/.openapi-nodegen/cache');
     if (fs_extra_1["default"].pathExistsSync(compare)) {
         fs_extra_1["default"].removeSync(compare);
     }

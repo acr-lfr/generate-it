@@ -1,0 +1,3 @@
+{% for opId in swagger.operationIds -%}
+export const {{ _.toUpper(opId) }} = '{{ opId }}';
+{% endfor %}

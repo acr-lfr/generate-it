@@ -23,7 +23,10 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   const root = config.root;
 
   // const data = config.data
-  const loadFilePath = (fileName !== 'package.json.njk') ? path.resolve(root, fileName) : path.resolve(process.cwd(), 'package.json');
+  const loadFilePath = (fileName !== 'package.json.njk') ?
+    path.resolve(root, fileName) :
+    path.resolve(process.cwd(), 'package.json');
+
   const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
 
   // should write or not
@@ -53,6 +56,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
     endpoints,
     additionalTplObject,
+    nodegenRc: config.data.nodegenRc
   });
 
   const generatedPath = path.resolve(
