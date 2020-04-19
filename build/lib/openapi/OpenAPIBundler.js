@@ -154,7 +154,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         return [4 /*yield*/, this.injectDefinitionInterfaces(apiObject)];
                     case 1:
                         apiObject = _a.sent();
-                        if (!(ApiIs_1["default"].swagger(apiObject) || ApiIs_1["default"].openapi2(apiObject))) return [3 /*break*/, 3];
+                        if (!(ApiIs_1["default"].swagger(apiObject) || ApiIs_1["default"].openapi2(apiObject) || ApiIs_1["default"].openapi3(apiObject))) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.injectParameterInterfaces(apiObject, config)];
                     case 2:
                         apiObject = _a.sent();

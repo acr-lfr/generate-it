@@ -12,7 +12,7 @@ describe('e2e testing', () => {
     clearTestServer();
   });
   afterAll(() => {
-    // clearTestServer();
+    clearTestServer();
   });
 
   it('Should build without error', async (done) => {

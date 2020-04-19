@@ -138,7 +138,7 @@ class OpenAPIBundler {
   public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
-    if (ApiIs.swagger(apiObject) || ApiIs.openapi2(apiObject)) {
+    if (ApiIs.swagger(apiObject) || ApiIs.openapi2(apiObject) || ApiIs.openapi3(apiObject)) {
       apiObject = await this.injectParameterInterfaces(apiObject, config);
     }
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
