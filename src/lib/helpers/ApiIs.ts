@@ -12,6 +12,10 @@ class ApiIs {
     return !!(apiObject.openapi && apiObject.openapi[0] === '3');
   }
 
+  isOpenAPIorSwagger (apiObject: any) {
+    return this.openapi3(apiObject) || this.openapi2(apiObject) || this.swagger(apiObject);
+  }
+
   asyncapi2 (apiObject: any) {
     return !!(apiObject.asyncapi && apiObject.asyncapi[0] === '2');
   }

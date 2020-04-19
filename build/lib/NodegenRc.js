@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var tslib_1 = require("tslib");
-var fs = require('fs-extra');
-var path = require('path');
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+var path_1 = tslib_1.__importDefault(require("path"));
 var NodegenRc = /** @class */ (function () {
     function NodegenRc() {
     }
@@ -17,16 +17,16 @@ var NodegenRc = /** @class */ (function () {
             return tslib_1.__generator(this, function (_a) {
                 base = targetDir;
                 rcName = '.nodegenrc';
-                localPath = path.join(base, rcName);
-                if (fs.pathExistsSync(localPath)) {
+                localPath = path_1["default"].join(base, rcName);
+                if (fs_extra_1["default"].pathExistsSync(localPath)) {
                     return [2 /*return*/, this.validate(localPath)];
                 }
                 else {
-                    tplRcFilePath = path.join(tplDir, rcName);
-                    if (!fs.pathExistsSync(tplRcFilePath)) {
+                    tplRcFilePath = path_1["default"].join(tplDir, rcName);
+                    if (!fs_extra_1["default"].pathExistsSync(tplRcFilePath)) {
                         throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
                     }
-                    fs.copySync(tplRcFilePath, localPath);
+                    fs_extra_1["default"].copySync(tplRcFilePath, localPath);
                     return [2 /*return*/, this.validate(localPath)];
                 }
                 return [2 /*return*/];
@@ -41,7 +41,7 @@ var NodegenRc = /** @class */ (function () {
     NodegenRc.prototype.validate = function (localNodegenPath) {
         var nodegenRcOject;
         try {
-            nodegenRcOject = fs.readJsonSync(localNodegenPath);
+            nodegenRcOject = fs_extra_1["default"].readJsonSync(localNodegenPath);
         }
         catch (e) {
             console.log('Failed to parse .nodegenrc file:' + localNodegenPath);
@@ -50,10 +50,6 @@ var NodegenRc = /** @class */ (function () {
         if (!nodegenRcOject.nodegenDir) {
             throw new Error('Missing .nodegenrc attribute: nodegenDir');
         }
-        if (!nodegenRcOject.nodegenMockDir) {
-            throw new Error('Missing .nodegenrc attribute: nodegenMockDir');
-        }
-        console.log(nodegenRcOject);
         return nodegenRcOject;
     };
     return NodegenRc;

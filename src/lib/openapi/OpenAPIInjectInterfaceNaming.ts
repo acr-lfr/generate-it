@@ -18,9 +18,12 @@ class OpenAPIInjectInterfaceNaming {
    * Merges the parameter namings into the path objects
    * @return {{paths}|module.exports.apiObject|{}}
    */
-  public inject () {
-    if (this.isSwagger() || this.isOpenAPI3()) {
+  public async inject () {
+    if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return this.swaggerPathIterator(true);
+    }
+    if (this.isAsyncAPI2()) {
+      return this.asyncChannelIterator(true);
     }
     throw new Error('Unrecognised input format');
   }
@@ -29,12 +32,13 @@ class OpenAPIInjectInterfaceNaming {
    * Merges the injected request params into single interface objects
    */
   public mergeParameters () {
-    if (this.isOpenAPI3()) {
+    if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return this.swaggerPathIterator(false);
     }
-    if (this.isSwagger()) {
-      return this.swaggerPathIterator(false);
+    if (this.isAsyncAPI2()) {
+      return this.asyncChannelIterator(false);
     }
+    throw new Error('Unrecognised input format');
   }
 
   /**
@@ -43,28 +47,17 @@ class OpenAPIInjectInterfaceNaming {
    */
   public convertRefToOjectPath (ref: string): string {
     const pathParts: string[] = [];
-    ref.split('/').forEach((part) => {
+    const refParts = ref.split('/');
+    for (let i = 0; i < refParts.length; ++i) {
+      const part = refParts[i];
       if (part !== '#') {
+        if (part.indexOf('.') !== -1) {
+          throw new Error('Component or definition using . found, please do not use a period for namespacing for now.');
+        }
         pathParts.push(part);
       }
-    });
+    }
     return pathParts.join('.');
-  }
-
-  /**
-   * True is apiobject is swagger
-   * @return {boolean}
-   */
-  public isSwagger () {
-    return ApiIs.swagger(this.apiObject);
-  }
-
-  /**
-   * True is apiobject is openapi
-   * @return {boolean}
-   */
-  public isOpenAPI3 () {
-    return ApiIs.openapi3(this.apiObject);
   }
 
   /**
@@ -86,13 +79,103 @@ class OpenAPIInjectInterfaceNaming {
     Object.keys(this.apiObject.paths).forEach((path) => {
       Object.keys(this.apiObject.paths[path]).forEach((method) => {
         if (fromInject) {
-          this.xRequestInjector(path, method);
+          this.openApiXRequestInjector(path, method);
         } else {
-          this.mergeSwaggerInjectedParameters(path, method);
+          this.mergeSwaggerInjectedParameters('paths', path, method);
         }
       });
     });
     return this.apiObject;
+  }
+
+  public asyncChannelIterator (fromInject: boolean) {
+    if (!this.apiObject.channels) {
+      throw new Error('No paths found to iterate over');
+    }
+    Object.keys(this.apiObject.channels).forEach((channel) => {
+      if (fromInject) {
+        this.asyncXRequestInjector(channel);
+      } else {
+        if (this.apiObject.channels[channel].subscribe) {
+          this.mergeSwaggerInjectedParameters('channels', channel, 'subscribe');
+        }
+        if (this.apiObject.channels[channel].publish) {
+          this.mergeSwaggerInjectedParameters('channels', channel, 'publish');
+        }
+      }
+    });
+    return this.apiObject;
+  }
+
+  /**
+   * Injects the request and response object refs
+   * @param channel
+   */
+  public asyncXRequestInjector (channel: string) {
+    if (this.apiObject.channels[channel].publish) {
+      this.apiObject.channels[channel].publish['x-request-definitions'] = this.injectRequestDefinitionsFromChannels(
+        channel,
+        'publish'
+      );
+      this.apiObject.channels[channel].publish['x-response-definitions'] = this.injectResponseDefinitionsFromChannels(
+        channel,
+        'publish'
+      );
+    }
+    if (this.apiObject.channels[channel].subscribe) {
+      this.apiObject.channels[channel].subscribe['x-request-definitions'] = this.injectRequestDefinitionsFromChannels(
+        channel,
+        'subscribe'
+      );
+      this.apiObject.channels[channel].subscribe['x-response-definitions'] = this.injectResponseDefinitionsFromChannels(
+        channel,
+        'subscribe'
+      );
+    }
+  }
+
+  /**
+   * Injects the parameter paths to the subscribe/publish channels
+   * @param channel
+   * @param action
+   */
+  public injectRequestDefinitionsFromChannels (channel: string, action: string): object {
+    const requestParams: any = {
+      [action]: {
+        name: _.upperFirst(),
+        params: [],
+      }
+    };
+    if (!this.apiObject.channels[channel].parameters) {
+      return {};
+    }
+    for (const key in this.apiObject.channels[channel].parameters) {
+      const p = this.apiObject.channels[channel].parameters[key];
+      requestParams[action].params.push(
+        this.convertRefToOjectPath(p.$ref || p.schema.$ref)
+      );
+    }
+    return requestParams;
+  }
+
+  /**
+   * Injects the object reference to the x-response-definitions
+   * @param channel
+   * @param action
+   */
+  public injectResponseDefinitionsFromChannels (channel: string, action: string) {
+    let response: any = {};
+    const pathResponses = this.apiObject.channels[channel][action].message || false;
+    if (pathResponses && pathResponses.payload && pathResponses.payload.$ref) {
+      let responseInterface = this.convertRefToOjectPath(
+        pathResponses.payload.$ref
+      );
+      responseInterface = responseInterface.split('.').pop();
+      if (responseInterface) {
+        response = responseInterface;
+      }
+    }
+    return response;
   }
 
   /**
@@ -100,7 +183,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param {string} path - Path of api
    * @param {string} method - Method of path to x inject to
    */
-  public xRequestInjector (path: string, method: string) {
+  public openApiXRequestInjector (path: string, method: string) {
     this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromAPIPaths(path, method);
     this.apiObject.paths[path][method]['x-response-definitions'] = this.injectFromSwaggerResponse(path, method);
   }
@@ -167,14 +250,15 @@ class OpenAPIInjectInterfaceNaming {
 
   /**
    * Inject the interfaces for query|path|header paramters and leave the path to the body definition
+   * @param action
    * @param path
    * @param method
    */
-  public mergeSwaggerInjectedParameters (path: string, method: string) {
-    Object.keys(this.apiObject.paths[path][method]['x-request-definitions']).forEach((requestType) => {
+  public mergeSwaggerInjectedParameters (action: string, path: string, method: string) {
+    Object.keys(this.apiObject[action][path][method]['x-request-definitions']).forEach((requestType) => {
       const requestObject: any = {};
       let clear = true;
-      this.apiObject.paths[path][method]['x-request-definitions'][requestType].params.forEach((requestPath: any) => {
+      this.apiObject[action][path][method]['x-request-definitions'][requestType].params.forEach((requestPath: any) => {
         const parameterObject = _.get(this.apiObject, requestPath);
         clear = false;
         if (requestType === 'body') {
@@ -182,20 +266,20 @@ class OpenAPIInjectInterfaceNaming {
         } else {
           let name = '\'' + parameterObject.name + '\'';
           name += (!parameterObject.required) ? '?' : '';
-          if (this.isSwagger()) {
+          if (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) {
             requestObject[name] = openApiTypeToTypscriptType(parameterObject.type);
-          } else if (this.isOpenAPI3()) {
+          } else if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
             requestObject[name] = openApiTypeToTypscriptType(parameterObject.schema.type);
           }
         }
       });
       if (!clear) {
-        const name = this.apiObject.paths[path][method]['x-request-definitions'][requestType].name;
-        this.apiObject.paths[path][method]['x-request-definitions'][requestType].interfaceText = {
+        const name = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
+        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = {
           outputString: this.objectToInterfaceString(requestObject, name),
         };
       } else {
-        delete this.apiObject.paths[path][method]['x-request-definitions'][requestType];
+        delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }
     });
   }
@@ -222,10 +306,10 @@ class OpenAPIInjectInterfaceNaming {
    * @return {{'200': null}}
    */
   public injectFromSwaggerResponse (path: string, method: string) {
-    if (this.isOpenAPI3()) {
+    if (ApiIs.openapi3(this.apiObject)) {
       return this.injectFromOA3Response(path, method);
     }
-    if (this.isSwagger()) {
+    if (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) {
       return this.injectFromOA2Response(path, method);
     }
   }
@@ -235,7 +319,11 @@ class OpenAPIInjectInterfaceNaming {
     const pathResponses = this.apiObject.paths[path][method].responses || false;
     if (pathResponses && pathResponses['200'] && pathResponses['200'].schema && pathResponses['200'].schema.$ref) {
       try {
-        const responseInterface = this.convertRefToOjectPath(pathResponses['200'].schema.$ref).split('.').pop();
+        const responseInterface = this.convertRefToOjectPath(
+          pathResponses['200'].schema.$ref
+        )
+          .split('.')
+          .pop();
         if (responseInterface) {
           response['200'] = responseInterface;
         }

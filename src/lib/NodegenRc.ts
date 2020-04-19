@@ -1,5 +1,6 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
+import NodegenRcInterface from '../interfaces/NodegenRc';
 
 class NodegenRc {
   /**
@@ -7,7 +8,7 @@ class NodegenRc {
    * @param {string} tplDir - The tpl directory
    * @param targetDir
    */
-  public async fetch (tplDir: string, targetDir: string) {
+  public async fetch (tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
     const base = targetDir;
     const rcName = '.nodegenrc';
     const localPath = path.join(base, rcName);
@@ -28,7 +29,7 @@ class NodegenRc {
    * @param localNodegenPath
    * @return {{nodegenDir}|*}
    */
-  public validate (localNodegenPath: string) {
+  public validate (localNodegenPath: string): NodegenRcInterface {
     let nodegenRcOject: any;
     try {
       nodegenRcOject = fs.readJsonSync(localNodegenPath);
@@ -39,10 +40,6 @@ class NodegenRc {
     if (!nodegenRcOject.nodegenDir) {
       throw new Error('Missing .nodegenrc attribute: nodegenDir');
     }
-    if (!nodegenRcOject.nodegenMockDir) {
-      throw new Error('Missing .nodegenrc attribute: nodegenMockDir');
-    }
-    console.log(nodegenRcOject);
     return nodegenRcOject;
   }
 }
