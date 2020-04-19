@@ -74,7 +74,7 @@ describe('e2e testing', () => {
     const filePaths = [
       // Check generated domains (STUB file)
       ['test_server/src/domains/RainDomain.ts', 'beb9022f71e25cc0bdab122dd27d8705'],
-      ['test_server/src/domains/WeatherDomain.ts', '06dfee4e1059bb197297cfe3c9f72216'],
+      ['test_server/src/domains/WeatherDomain.ts', 'd23dbeef2ed5a39ce404382f837d48af'],
       // Check complex interface (INTERFACE file)
       ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
       // Check the interface index file (OTHER file)
@@ -82,8 +82,8 @@ describe('e2e testing', () => {
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'c14f49726b33f9ee55074fa0bc496bf5'],
       // Check the generated routes files (OPERATION file)
-      ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'ec2aa15071f032d0175e2ce953d1d9c4'],
-      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'da295cca2afbd1924d7c3a829be017f3'],
+      ['test_server/src/http/nodegen/routes/rainRoutes.ts', '1daffde5e74df981a416f3de3b6a99ac'],
+      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'b9b87e6ba21c0867730efafe064c6cdf'],
       // Check the output transformers (OPERATION file)
       ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '4aa51bd321328186343834ac287f1cca'],
       // Check dynamic docker file (OTHER file)
