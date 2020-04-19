@@ -109,19 +109,19 @@ class OpenAPIBundler {
    * @param yamlObject
    */
   public fetchOperationIdsArray (yamlObject: any): string[] {
-    let ids = [];
+    const ids = [];
     if (yamlObject.paths) {
-      for (let pathMethod in yamlObject.paths) {
+      for (const pathMethod in yamlObject.paths) {
         if (yamlObject.paths[pathMethod].operationId) {
           ids.push(yamlObject.paths[pathMethod].operationId);
         }
       }
     } else if (yamlObject.channels) {
-      for (let channel in yamlObject.channels) {
-        if(yamlObject.channels[channel].subscribe){
+      for (const channel in yamlObject.channels) {
+        if (yamlObject.channels[channel].subscribe) {
           ids.push(yamlObject.channels[channel].subscribe.operationId);
         }
-        if(yamlObject.channels[channel].publish){
+        if (yamlObject.channels[channel].publish) {
           ids.push(yamlObject.channels[channel].publish.operationId);
         }
       }

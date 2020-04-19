@@ -9,6 +9,7 @@ import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
 import { OperationsContainer, Operations } from '@/interfaces/Operations';
+import includeChannelAction from '@/utils/includeChannelAction';
 
 class GenerateOperation {
   /**
@@ -47,24 +48,18 @@ class GenerateOperation {
 
   public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
-    for (let channelName in config.data.swagger.channels) {
+    for (const channelName in config.data.swagger.channels) {
       const channel = config.data.swagger.channels[channelName];
-      if (channel.subscribe) {
-        files[channel.subscribe.operationId] = [{
-          channel: channel.subscribe,
-          channelDescription: channel.description || '',
-          channelName
-        }];
-      }
-      if (channel.publish) {
-        files[channel.publish.operationId] = [{
-          channel: channel.publish,
-          channelDescription: channel.description || '',
-          channelName
-        }];
-      }
+      ['publish', 'subscribe'].forEach((action: string) => {
+        if (includeChannelAction(config.data.nodegenRc, action, channel)) {
+          files[channel[action].operationId] = [{
+            channelSubscribe: channel[action],
+            channelDescription: channel.description || '',
+            channelName
+          }];
+        }
+      });
     }
-
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);
@@ -90,9 +85,10 @@ class GenerateOperation {
     const newFilename = NamingUtils.fixRouteName(NamingUtils.generateOperationSuffix(subDir, operationName, ext));
     const targetFile = path.resolve(config.targetDir, subDir, newFilename);
     fs.ensureDirSync(path.resolve(config.targetDir, subDir));
+    const tplVars = this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType);
     const renderedContent = TemplateRenderer.load(
       data.toString(),
-      this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType),
+      tplVars,
       ext,
     );
 

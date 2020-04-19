@@ -2,9 +2,8 @@ import fs from 'fs-extra';
 import nunjucks from 'nunjucks';
 import _ from 'lodash';
 import arrayContains from '@/lib/template/helpers/arrayContains';
-import celebrateImport from '@/lib/template/helpers/celebrateImport';
-import celebrateRoute from '@/lib/template/helpers/celebrateRoute';
 import endsWith from '@/lib/template/helpers/endsWith';
+import getChannelPublishOperationIds from '@/lib/template/helpers/getChannelOperationIds';
 import getContext from '@/lib/template/helpers/getContext';
 import getSecurityNames from '@/lib/template/helpers/getSecurityNames';
 import importInterfaces from '@/lib/template/helpers/importInterfaces';
@@ -75,9 +74,8 @@ class TemplateRenderer {
     }
 
     env.addGlobal('arrayContains', arrayContains);
-    env.addGlobal('celebrateImport', celebrateImport);
-    env.addGlobal('celebrateRoute', celebrateRoute);
     env.addGlobal('endsWith', endsWith);
+    env.addGlobal('getChannelPublishOperationIds', getChannelPublishOperationIds);
     env.addGlobal('getContext', getContext);
     env.addGlobal('getSecurityNames', getSecurityNames);
     env.addGlobal('importInterfaces', importInterfaces);

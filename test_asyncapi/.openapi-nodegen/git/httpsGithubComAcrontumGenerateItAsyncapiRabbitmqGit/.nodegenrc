@@ -2,10 +2,7 @@
   "nodegenDir": "generated",
   "nodegenMockDir": "/__mocks__",
   "nodegenType": "server",
-  "helpers": {
-    "stub": {
-      "jwtType": "JwtAccess",
-      "requestType": "NodegenRequest"
-    }
+  "asyncApi": {
+    "stubChannelType": "subscribe"
   }
 }

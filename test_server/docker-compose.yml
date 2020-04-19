@@ -1,0 +1,28 @@
+version: "3"
+
+# virtual volume
+volumes:
+  build:
+
+services:
+  watcher-service:
+    image: "${IMAGE_PREFIX}watcher-image:${IMAGE_TAG:-latest}"
+    depends_on:
+      - boats-service
+    volumes:
+      - .:/code
+      - build:/code/build
+    command: watch
+
+  boats-service:
+    image: "${IMAGE_PREFIX}boats-image:${IMAGE_TAG:-latest}"
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8000"
+    volumes:
+      - build:/code/build
+    networks:boats
+      - default
+    command: dev

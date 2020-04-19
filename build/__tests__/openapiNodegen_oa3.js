@@ -12,7 +12,7 @@ describe('e2e testing', function () {
         openapiNodegen_full_1.clearTestServer();
     });
     afterAll(function () {
-        openapiNodegen_full_1.clearTestServer();
+        // clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;

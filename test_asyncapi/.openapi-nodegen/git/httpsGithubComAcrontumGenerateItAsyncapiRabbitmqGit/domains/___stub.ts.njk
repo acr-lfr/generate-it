@@ -1,1 +1,11 @@
-// heell
+import { {{ operations[0].channelSubscribe['x-response-definitions'] }} } from '../generated/interfaces';
+
+/**
+ * {{ operations[0].channelSubscribe.operationId }}
+ * {{ operations[0].channelDescription }}
+ */
+{% if operations[0].channelSubscribe -%}
+export default async (payload: {{ operations[0].channelSubscribe['x-response-definitions'] }}): Promise<void> => {
+  // add your own business logic here
+}
+{% endif %}

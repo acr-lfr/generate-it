@@ -5,3 +5,8 @@ var nodegenType;
     nodegenType["Server"] = "server";
     nodegenType["Client"] = "client";
 })(nodegenType || (nodegenType = {}));
+var stubChannelType;
+(function (stubChannelType) {
+    stubChannelType["Publish"] = "publish";
+    stubChannelType["Subscribe"] = "subscribe";
+})(stubChannelType || (stubChannelType = {}));

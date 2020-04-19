@@ -1,0 +1,11 @@
+{
+  "nodegenDir": "nodegen",
+  "nodegenMockDir": "/__mocks__",
+  "nodegenType": "server",
+  "helpers": {
+    "stub": {
+      "jwtType": "JwtAccess",
+      "requestType": "NodegenRequest"
+    }
+  }
+}
