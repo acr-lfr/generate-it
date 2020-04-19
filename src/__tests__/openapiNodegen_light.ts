@@ -66,8 +66,8 @@ describe('e2e testing', () => {
       // Check the interface index file (OTHER file)
       ['test_server/src/http/nodegen/interfaces/index.ts', '108b13afd431e1d848c7c214abaa3418'],
       // Check the generated routes files (OPERATION file)
-      ['test_server/src/http/nodegen/routes/adminRoutes.ts', '1ec1ba6d7a8a7a565a1857fa4923e5b4'],
-      ['test_server/src/http/nodegen/routes/authRoutes.ts', '34de0cd68a5b15f9304f32a1053f3c4e'],
+      ['test_server/src/http/nodegen/routes/adminRoutes.ts', '9b5faa8c5b7fb22cfc03e25a5548e475'],
+      ['test_server/src/http/nodegen/routes/authRoutes.ts', '92bdcb7e196d2f6dca97dbe8e2a5ad55'],
       // Check the output transformers (OPERATION file)
       ['test_server/src/http/nodegen/transformOutputs/authTransformOutput.ts', '427a7c83471309303feb8c5ba169e3a9'],
     ];
