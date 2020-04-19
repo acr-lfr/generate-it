@@ -3,17 +3,19 @@
 
 Generate-It is a tool to generate RESTful servers/clients without Java.
 
-Change your APIs yml and simply (re)Generate-It, your business logic is safe and sound.. but the http layer is regenerated in seconds.
+Generate-It is a tool to generate Event Handle layer for servers/clients without Java, eg RabbitMQ.
 
-Here is an example: generate-it is parsing an openapi file using a [typescript sever tpl git repo](https://github.com/acrontum/openapi-nodegen-typescript-server) (checkout the gihub page to see the structure of the generated code):
+Change your APIs yml and simply (re)Generate-It, your business logic is safe and sound.. but the http/channel layer is regenerated in seconds.
+
+Here is an example: generate-it is parsing an **OpenAPI** file using a [typescript sever tpl git repo](https://github.com/acrontum/openapi-nodegen-typescript-server):
 ```
 generate-it openapi.yml --template https://github.com/acrontum/openapi-nodegen-typescript-server.git
 ```
 
-> This tool used to be called `openapi-nodegen`
-
-> coming soon async-api support for event based architecture, eg sockets and rabbit-mq
-
+Here is an example: generate-it is parsing an **AsyncAPI** file using a [typescript RabbitMQ tpl git repo](https://github.com/acrontum/generate-it-asyncapi-rabbitmq) which is designed to work with the TypeScript server:
+```
+generate-it asyncapi.yml --template https://github.com/acrontum/generate-it-asyncapi-rabbitmq.git
+```
 ___
 
 Full [documentation](https://acrontum.github.io/generate-it/) hosted on github pages..
