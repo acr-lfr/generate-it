@@ -21,13 +21,14 @@ var objLength_1 = tslib_1.__importDefault(require("./helpers/objLength"));
 var paramsOutputReducer_1 = tslib_1.__importDefault(require("./helpers/paramsOutputReducer"));
 var paramsValidation_1 = tslib_1.__importDefault(require("./helpers/paramsValidation"));
 var pathParamsToDomainParams_1 = tslib_1.__importDefault(require("./helpers/pathParamsToDomainParams"));
+var pathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/pathsHasParamsToValidate"));
+var pathMethodsHaveAttr_1 = tslib_1.__importDefault(require("./helpers/pathMethodsHaveAttr"));
 var prettifyRouteName_1 = tslib_1.__importDefault(require("./helpers/prettifyRouteName"));
+var prettyfyRenderedContent_1 = tslib_1.__importDefault(require("../../utils/prettyfyRenderedContent"));
+var operationsPathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/operationsPathsHasParamsToValidate"));
 var ucFirst_1 = tslib_1.__importDefault(require("./helpers/ucFirst"));
 var urlPathJoin_1 = tslib_1.__importDefault(require("./helpers/urlPathJoin"));
 var validMethods_1 = tslib_1.__importDefault(require("./helpers/validMethods"));
-var prettyfyRenderedContent_1 = tslib_1.__importDefault(require("../../utils/prettyfyRenderedContent"));
-var operationsPathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/operationsPathsHasParamsToValidate"));
-var pathsHasParamsToValidate_1 = tslib_1.__importDefault(require("./helpers/pathsHasParamsToValidate"));
 var TemplateRenderer = /** @class */ (function () {
     function TemplateRenderer() {
     }
@@ -89,6 +90,7 @@ var TemplateRenderer = /** @class */ (function () {
         env.addGlobal('operationsPathsHasParamsToValidate', operationsPathsHasParamsToValidate_1["default"]);
         env.addGlobal('paramsValidation', paramsValidation_1["default"]);
         env.addGlobal('pathsHasParamsToValidate', pathsHasParamsToValidate_1["default"]);
+        env.addGlobal('pathMethodsHaveAttr', pathMethodsHaveAttr_1["default"]);
         env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams_1["default"]);
         env.addGlobal('prettifyRouteName', prettifyRouteName_1["default"]);
         env.addGlobal('ucFirst', ucFirst_1["default"]);
