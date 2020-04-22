@@ -41,6 +41,6 @@ function default_1(operations) {
         });
     });
     imports.sort();
-    return imports;
+    return (new Set(imports)).keys();
 }
 exports["default"] = default_1;
