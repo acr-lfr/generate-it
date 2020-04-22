@@ -37,6 +37,7 @@ export default function (operations: any) {
       }
     });
   });
+
   imports.sort();
-  return imports;
+  return (new Set(imports)).keys();
 }
