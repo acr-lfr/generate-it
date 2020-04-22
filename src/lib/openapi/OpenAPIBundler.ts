@@ -51,9 +51,12 @@ class OpenAPIBundler {
     content = await this.bundleObject(content);
 
     console.log('Injecting the endpoint names');
-    return JSON.parse(JSON.stringify(
-      this.pathEndpointInjection(content),
-    ));
+    content = this.pathEndpointInjection(content);
+
+    console.log('Trimming multi-line descriptions');
+    content = this.trimMethodDescriptions(content);
+
+    return JSON.parse(JSON.stringify(content));
   }
 
   /**
@@ -257,6 +260,24 @@ class OpenAPIBundler {
     apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
     return apiObject;
   }
+
+  /**
+   * Trim description fields from path methods
+   * @param obj
+   * @param recurse
+   * @return apiObject
+   */
+  public trimMethodDescriptions (apiObject: any, recurse: boolean = false) {
+    _.each(apiObject.paths, (pathObject: any) => {
+      _.each(pathObject, (methodObject: any) => {
+        if (methodObject?.description) {
+          methodObject.description = methodObject.description.trim();
+        }
+      })
+    });
+
+    return apiObject;
+  };
 }
 
 export default new OpenAPIBundler();

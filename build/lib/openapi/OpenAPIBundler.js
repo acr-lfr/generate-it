@@ -56,7 +56,10 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 5:
                         content = _b.sent();
                         console.log('Injecting the endpoint names');
-                        return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content)))];
+                        content = this.pathEndpointInjection(content);
+                        console.log('Trimming multi-line descriptions');
+                        content = this.trimMethodDescriptions(content);
+                        return [2 /*return*/, JSON.parse(JSON.stringify(content))];
                 }
             });
         });
@@ -308,6 +311,24 @@ var OpenAPIBundler = /** @class */ (function () {
         apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
         return apiObject;
     };
+    /**
+     * Trim description fields from path methods
+     * @param obj
+     * @param recurse
+     * @return apiObject
+     */
+    OpenAPIBundler.prototype.trimMethodDescriptions = function (apiObject, recurse) {
+        if (recurse === void 0) { recurse = false; }
+        _.each(apiObject.paths, function (pathObject) {
+            _.each(pathObject, function (methodObject) {
+                if (methodObject === null || methodObject === void 0 ? void 0 : methodObject.description) {
+                    methodObject.description = methodObject.description.trim();
+                }
+            });
+        });
+        return apiObject;
+    };
+    ;
     return OpenAPIBundler;
 }());
 exports["default"] = new OpenAPIBundler();
