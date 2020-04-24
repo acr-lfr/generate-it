@@ -2,14 +2,15 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var TemplateFetch_1 = tslib_1.__importDefault(require("../TemplateFetch"));
 var repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 var camelCaseUrl = '';
 describe('calculateLocalDirectoryFromUrl should return valid directory', function () {
     it('camelcase a url and map to directory', function () {
-        var tagertDir = path_1["default"].join(process.cwd(), '/bob/');
-        var directory = TemplateFetch_1["default"].calculateLocalDirectoryFromUrl(repoUrl, tagertDir);
-        camelCaseUrl = path_1["default"].join(tagertDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
+        var targetDir = path_1["default"].join(process.cwd(), '/bob/');
+        var directory = TemplateFetch_1["default"].calculateLocalDirectoryFromUrl(repoUrl, targetDir);
+        camelCaseUrl = path_1["default"].join(targetDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
         expect(directory).toBe(camelCaseUrl);
     });
 });
@@ -56,4 +57,32 @@ describe('semver check', function () {
         expect(TemplateFetch_1["default"].isSemVer('100a')).toBe(false);
         expect(TemplateFetch_1["default"].isSemVer('a')).toBe(false);
     });
+});
+describe('local folder structure', function () {
+    var srcRoot = path_1["default"].join(process.cwd(), '/bob');
+    var testDir = path_1["default"].join('one', 'two', 'three');
+    var src = path_1["default"].join(srcRoot, testDir);
+    var dest = './.bob-out';
+    afterAll(function () {
+        fs_extra_1["default"].removeSync(srcRoot);
+        fs_extra_1["default"].removeSync(dest);
+    });
+    it('accepts a local folder', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+        var cacheDirectory, testFile;
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    fs_extra_1["default"].ensureDirSync(src);
+                    fs_extra_1["default"].writeJsonSync(path_1["default"].join(src, 'test.json'), { hello: 'world' });
+                    cacheDirectory = TemplateFetch_1["default"].calculateLocalDirectoryFromUrl(srcRoot, dest);
+                    return [4 /*yield*/, TemplateFetch_1["default"].resolveTemplateType(srcRoot, dest, false)];
+                case 1:
+                    _a.sent();
+                    testFile = path_1["default"].join(process.cwd(), cacheDirectory, testDir, 'test.json');
+                    expect(fs_extra_1["default"].existsSync(testFile)).toBe(true);
+                    expect(require(testFile).hello).toBe('world');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });

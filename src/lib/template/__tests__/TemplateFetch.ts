@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs-extra';
 import TemplateFetch from '../TemplateFetch';
 
 const repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
@@ -6,9 +7,9 @@ let camelCaseUrl = '';
 
 describe('calculateLocalDirectoryFromUrl should return valid directory', () => {
   it('camelcase a url and map to directory', () => {
-    const tagertDir = path.join(process.cwd(), '/bob/');
-    const directory = TemplateFetch.calculateLocalDirectoryFromUrl(repoUrl, tagertDir);
-    camelCaseUrl = path.join(tagertDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
+    const targetDir = path.join(process.cwd(), '/bob/');
+    const directory = TemplateFetch.calculateLocalDirectoryFromUrl(repoUrl, targetDir);
+    camelCaseUrl = path.join(targetDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
     expect(directory).toBe(camelCaseUrl);
   });
 });
@@ -47,5 +48,28 @@ describe('semver check', () => {
     expect(TemplateFetch.isSemVer('1.00a')).toBe(false);
     expect(TemplateFetch.isSemVer('100a')).toBe(false);
     expect(TemplateFetch.isSemVer('a')).toBe(false);
+  });
+});
+
+describe('local folder structure', () => {
+  const srcRoot = path.join(process.cwd(), '/bob');
+  const testDir = path.join('one', 'two', 'three');
+  const src = path.join(srcRoot, testDir);
+  const dest = './.bob-out';
+
+  afterAll(() => {
+    fs.removeSync(srcRoot);
+    fs.removeSync(dest);
+  });
+
+  it('accepts a local folder', async () => {
+    fs.ensureDirSync(src);
+    fs.writeJsonSync(path.join(src, 'test.json'), { hello: 'world' });
+
+    const cacheDirectory = TemplateFetch.calculateLocalDirectoryFromUrl(srcRoot, dest);
+    await TemplateFetch.resolveTemplateType(srcRoot, dest, false);
+    const testFile = path.join(process.cwd(), cacheDirectory, testDir, 'test.json');
+    expect(fs.existsSync(testFile)).toBe(true);
+    expect(require(testFile).hello).toBe('world');
   });
 });

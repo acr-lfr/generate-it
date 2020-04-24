@@ -71,6 +71,59 @@ class TemplateFetchURL {
   }
 
   /**
+   * cp -R
+   * https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js
+   * @param src
+   * @param dest
+   */
+  public copyRecursiveSync (src: string, dest: string) {
+    const exists = fs.existsSync(src);
+    const stats = exists && fs.statSync(src);
+    const isDirectory = exists && stats.isDirectory();
+    if (isDirectory) {
+      fs.ensureDirSync(dest);
+      fs.readdirSync(src).forEach(childItemName => this.copyRecursiveSync(
+        path.join(src, childItemName),
+        path.join(dest, childItemName),
+      ));
+    } else {
+      fs.copyFile(src, dest);
+    }
+  }
+
+  /**
+   * Use local folders
+   * @param url - path to template source dir
+   * @param targetGitCacheDir
+   * @param dontUpdateTplCache
+   * @return {Promise<string>}
+   */
+  public async localDirectoryCopy (url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
+    const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
+    const urlParts = this.getUrlParts(url);
+
+    if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
+      console.log('Template cache already found and bypass update true: ' + url);
+      return cacheDirectory;
+    }
+    if (dontUpdateTplCache) {
+      console.log('dontUpdateTplCache was true however the cache of the templates did not already exist.');
+    }
+
+    try {
+      if (this.gitCacheExists(cacheDirectory)) {
+        this.cleanSingleCacheDir(cacheDirectory);
+      }
+      this.copyRecursiveSync(url, cacheDirectory);
+    } catch (e) {
+      console.error('Could not copy the folders!');
+      this.cleanSingleCacheDir(cacheDirectory);
+      throw e;
+    }
+    return cacheDirectory;
+  }
+
+  /**
    * Fetches the contents of a gitFetch url to the local cache
    * @param {string} url - Url to fetch via gitFetch
    * @param targetGitCacheDir
@@ -233,6 +286,8 @@ template version tag: ${tplTag}
   public async resolveTemplateType (input: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
     if (input.substring(0, 8) === 'https://') {
       return await this.gitFetch(input, targetGitCacheDir, dontUpdateTplCache);
+    } else if (fs.existsSync(path.resolve(input))) {
+      return await this.localDirectoryCopy(input, targetGitCacheDir, dontUpdateTplCache);
     } else {
       throw new Error('The provided helpers argument must be a valid https url');
     }

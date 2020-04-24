@@ -77,6 +77,60 @@ var TemplateFetchURL = /** @class */ (function () {
         }
     };
     /**
+     * cp -R
+     * https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js
+     * @param src
+     * @param dest
+     */
+    TemplateFetchURL.prototype.copyRecursiveSync = function (src, dest) {
+        var _this = this;
+        var exists = fs_extra_1["default"].existsSync(src);
+        var stats = exists && fs_extra_1["default"].statSync(src);
+        var isDirectory = exists && stats.isDirectory();
+        if (isDirectory) {
+            fs_extra_1["default"].ensureDirSync(dest);
+            fs_extra_1["default"].readdirSync(src).forEach(function (childItemName) { return _this.copyRecursiveSync(path_1["default"].join(src, childItemName), path_1["default"].join(dest, childItemName)); });
+        }
+        else {
+            fs_extra_1["default"].copyFile(src, dest);
+        }
+    };
+    /**
+     * Use local folders
+     * @param url - path to template source dir
+     * @param targetGitCacheDir
+     * @param dontUpdateTplCache
+     * @return {Promise<string>}
+     */
+    TemplateFetchURL.prototype.localDirectoryCopy = function (url, targetGitCacheDir, dontUpdateTplCache) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var cacheDirectory, urlParts;
+            return tslib_1.__generator(this, function (_a) {
+                cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
+                urlParts = this.getUrlParts(url);
+                if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
+                    console.log('Template cache already found and bypass update true: ' + url);
+                    return [2 /*return*/, cacheDirectory];
+                }
+                if (dontUpdateTplCache) {
+                    console.log('dontUpdateTplCache was true however the cache of the templates did not already exist.');
+                }
+                try {
+                    if (this.gitCacheExists(cacheDirectory)) {
+                        this.cleanSingleCacheDir(cacheDirectory);
+                    }
+                    this.copyRecursiveSync(url, cacheDirectory);
+                }
+                catch (e) {
+                    console.error('Could not copy the folders!');
+                    this.cleanSingleCacheDir(cacheDirectory);
+                    throw e;
+                }
+                return [2 /*return*/, cacheDirectory];
+            });
+        });
+    };
+    /**
      * Fetches the contents of a gitFetch url to the local cache
      * @param {string} url - Url to fetch via gitFetch
      * @param targetGitCacheDir
@@ -302,7 +356,11 @@ var TemplateFetchURL = /** @class */ (function () {
                         if (!(input.substring(0, 8) === 'https://')) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.gitFetch(input, targetGitCacheDir, dontUpdateTplCache)];
                     case 1: return [2 /*return*/, _a.sent()];
-                    case 2: throw new Error('The provided helpers argument must be a valid https url');
+                    case 2:
+                        if (!fs_extra_1["default"].existsSync(path_1["default"].resolve(input))) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.localDirectoryCopy(input, targetGitCacheDir, dontUpdateTplCache)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                    case 4: throw new Error('The provided helpers argument must be a valid https url');
                 }
             });
         });
