@@ -1,0 +1,58 @@
+import path from 'path';
+import openapiNodegen from '@/generateIt';
+import hasha from 'hasha';
+import { clearTestServer, expectedPathHashes, tplUrl } from '@/__tests__/openapiNodegen_full';
+
+jest.setTimeout(60 * 1000); // in milliseconds
+
+const testServerPath = path.join(process.cwd(), 'test_server');
+
+describe('e2e testing', () => {
+  beforeAll(() => {
+    clearTestServer();
+  });
+  afterAll(() => {
+    clearTestServer();
+  });
+
+  it('Should build without error', async (done) => {
+    try {
+      const ymlPath = path.join(process.cwd(), 'test_openapi3.yml');
+      await openapiNodegen({
+        dontRunComparisonTool: false,
+        dontUpdateTplCache: true,
+        mockServer: true,
+        segmentsCount: 1,
+        swaggerFilePath: ymlPath,
+        targetDir: testServerPath,
+        template: tplUrl,
+      });
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('Should have the correct file hashes', async (done) => {
+    // If these tests fail the either:
+    // A) The test_swagger.yml has changed
+    // B) The tpl for the typescipt server has change
+    // C) Something broke when building the said files
+    const mismatched: string[] = [];
+    for (let i = 0; i < expectedPathHashes.length; ++i) {
+      const filePath = expectedPathHashes[i][0];
+      const fileHash = expectedPathHashes[i][1];
+      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
+      if (hash !== fileHash) {
+        const wrong = `Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`;
+        mismatched.push(wrong);
+      }
+    }
+    if (mismatched.length > 0) {
+      console.log(mismatched);
+      done(mismatched);
+    } else {
+      done();
+    }
+  });
+});
