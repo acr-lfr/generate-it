@@ -1,6 +1,6 @@
 import express = require('express');
 
-import NodegenRequest from '../interfaces/NodegenRequest'
+import NodegenRequest from '../../interfaces/NodegenRequest'
 
 /**
  * This will catch any error that is not first caught by any of the other error handlers

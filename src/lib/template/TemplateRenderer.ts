@@ -26,6 +26,7 @@ import operationsPathsHasParamsToValidate from '@/lib/template/helpers/operation
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import urlPathJoin from '@/lib/template/helpers/urlPathJoin';
 import validMethods from '@/lib/template/helpers/validMethods';
+import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
 
 class TemplateRenderer {
   /**
@@ -77,6 +78,7 @@ class TemplateRenderer {
     env.addGlobal('arrayContains', arrayContains);
     env.addGlobal('endsWith', endsWith);
     env.addGlobal('getChannelPublishOperationIds', getChannelPublishOperationIds);
+    env.addGlobal('getSingleSuccessResponse', getSingleSuccessResponse);
     env.addGlobal('getContext', getContext);
     env.addGlobal('getSecurityNames', getSecurityNames);
     env.addGlobal('importInterfaces', importInterfaces);

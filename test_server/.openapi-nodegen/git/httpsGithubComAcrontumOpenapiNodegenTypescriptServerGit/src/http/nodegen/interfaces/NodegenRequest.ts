@@ -1,7 +1,6 @@
-import express from 'express';
+import NodegenRequest from '@/http/interfaces/NodegenRequest';
 
-export default interface NodegenRequest extends express.Request {
-  jwtData: object;
-  originalToken: string;
-}
-
+/**
+ * @deprecated This is only now a proxy, please use http/interfaces/NodegenRequest directly. This proxy will be removed in the future.
+ */
+export default NodegenRequest;

@@ -1,3 +1,5 @@
+#.openapi-nodegen/git/
+
 # Logs
 logs
 *.log

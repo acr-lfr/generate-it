@@ -1,17 +1,15 @@
 openapi: 3.0.0
 info:
-  version: 1.4.1
-  title: boats
+  version: 1.0.0
+  title: openweathermap-swagger
   description: A sample API
   contact:
     name: Swagger API Team
     email: john@boats.io
-    url: 'https://github.com/johndcarmichael/boats/'
+    url: https://github.com/johndcarmichael/boats/
   license:
     name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
-servers:
-  - url: localhost
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
 tags:
   - name: weather
     description: Weather data
@@ -19,163 +17,292 @@ paths:
   /weather/:
     get:
       tags:
-        - Weather
-      summary: weather data
-      description: Get the latest temperatures
+        - weather
+      summary: Get weather
+      description: Query with varying content
       operationId: weatherGet
       parameters:
-        - $ref: '#/components/parameters/headerSearchId'
-        - $ref: '#/components/parameters/pathId'
+        - $ref: "#/components/parameters/queryAppId"
+        - $ref: "#/components/parameters/queryCountry"
+        - $ref: "#/components/parameters/queryId"
+        - $ref: "#/components/parameters/queryLat"
+        - $ref: "#/components/parameters/queryLon"
+        - $ref: "#/components/parameters/headerSearchId"
       responses:
-        '200':
-          description: Successful fetch
+        "200":
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Weathers'
-        '404':
-          description: Temp not found
-    post:
-      tags:
-        - Weather
-      summary: weather data
-      description: Create a new weather record.
-      operationId: weatherPost
-      requestBody:
-        description: Optional description in *Markdown*
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WeatherPost'
-      responses:
-        '200':
-          description: Successful temp creation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Weather'
-        '422':
-          description: Invalid form data provided
-  '/weather/id/{id}':
+                $ref: "#/components/schemas/Weather"
+        "400":
+          description: Invalid Identifier supplied
+        "404":
+          description: Round not found
+      security:
+        - apiKeyAdmin: []
+        - jwtToken: []
+      x-passRequest: true
+  "/weather/{id}":
     get:
       tags:
-        - Weather
-      summary: weather data
-      description: Get the latest temperatures
+        - weather
+      summary: Get weather
+      description: Query with varying content
       operationId: weatherIdGet
+      x-permission: getWeatherDetail
       parameters:
-        - $ref: '#/components/parameters/pathId'
+        - $ref: "#/components/parameters/pathId"
       responses:
-        '200':
-          description: Successful fetch
+        "200":
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Weather'
-        '404':
-          description: Temp not found
-    put:
+                $ref: "#/components/schemas/WeatherFull"
+        "400":
+          description: Invalid Identifier supplied
+        "404":
+          description: Round not found
+      security:
+        - apiKeyAdmin: []
+        - jwtToken: []
+      x-passThruWithoutJWT: true
+  /rain/:
+    get:
       tags:
-        - Weather
-      summary: weather data
-      description: Create a new weather record.
-      operationId: weatherIdPut
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: rainGet
       parameters:
-        - $ref: '#/components/parameters/pathId'
+        - $ref: "#/components/parameters/queryCountry"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Weather"
+        "400":
+          description: Invalid Identifier supplied
+        "404":
+          description: Round not found
+    post:
+      tags:
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: rainPost
       requestBody:
-        description: Optional description in *Markdown*
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WeatherPut'
+              $ref: "#/components/schemas/Coord"
+        required: true
       responses:
-        '200':
-          description: Successful temp creation
+        "200":
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Weather'
-        '422':
-          description: Invalid form data provided
+                $ref: "#/components/schemas/Weather"
+        "400":
+          description: Invalid Identifier supplied
+        "404":
+          description: Round not found
+      x-passRequest: true
+    put:
+      tags:
+        - weather
+      summary: Get weather
+      description: Query with varying content
+      operationId: rainPut
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                image:
+                  description: An image to upload
+                  type: string
+                  format: binary
+              required:
+                - image
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Weather"
+        "400":
+          description: Invalid Identifier supplied
+        "404":
+          description: Round not found
+      x-passRequest: true
+servers:
+  - url: https://samples.openweathermap.org/data/2.5
 components:
   parameters:
-    queryOffset:
-      in: query
-      name: offset
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-      description: The number of items to skip before starting to collect the result set.
     pathId:
       in: path
       name: id
-      schema:
-        type: integer
       required: true
-      description: Numeric ID of object to fetch
+      schema:
+        type: string
+    queryAppId:
+      in: query
+      name: appid
+      required: true
+      description: |
+        Grab a free API key from here: https://openweathermap.org/price
+      schema:
+        type: string
+    queryCountry:
+      in: query
+      name: q
+      required: false
+      description: >
+        q city name and country code divided by comma, use ISO 3166 country
+        codes. for example: q=London,uk or just q=London
+      schema:
+        type: string
+    queryId:
+      in: query
+      name: id
+      required: false
+      description: >
+        City ID based on city.list.json.gz can be downloaded here
+        http://bulk.openweathermap.org/sample/
+      schema:
+        type: number
+    queryLat:
+      in: query
+      name: lat
+      required: false
+      description: |
+        Needs to be paired with lon
+      schema:
+        type: number
+    queryLon:
+      in: query
+      name: lon
+      required: false
+      description: |
+        Needs to be paired with lat
+      schema:
+        type: number
     headerSearchId:
       in: header
       name: Search-Id
+      description: Unique search id
+      example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
       schema:
         type: string
-      description: Unique search id
-      x-example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
+  securitySchemes:
+    jwtToken:
+      type: apiKey
+      name: Authorization
+      in: header
+    apiKeyAdmin:
+      type: apiKey
+      name: x-api-key
+      in: header
   schemas:
-    GenericSearchMeta:
+    Coord:
       type: object
       properties:
-        totalResultCount:
+        lon:
           type: number
-        offset:
+        lat:
           type: number
-        limit:
-          type: number
-    Weather:
+    JwtAccess:
       type: object
+      required:
+        - id
       properties:
         id:
-          type: integer
-        date:
           type: string
-          format: date
-        location:
-          type: string
-        cloudCoverPercentage:
-          type: integer
-        humidityPercentage:
-          type: integer
-        temperature:
-          type: number
-    Weathers:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/GenericSearchMeta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Weather'
-    WeatherPost:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        location:
-          type: string
-        cloudCoverPercentage:
-          type: integer
-        humidityPercentage:
-          type: integer
-        temperature:
-          type: number
-    WeatherPut:
+    WeatherFull:
       allOf:
-        - $ref: '#/components/schemas/WeatherPost'
+        - $ref: "#/components/schemas/Weather"
         - type: object
+          required:
+            - name
           properties:
             id:
-              type: integer
+              type: string
+            name:
+              type: string
+    Weather:
+      type: object
+      required:
+        - coord
+      properties:
+        coord:
+          $ref: "#/components/schemas/Coord"
+        weather:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              main:
+                type: string
+              description:
+                type: string
+              icon:
+                type: string
+        base:
+          type: string
+        main:
+          type: object
+          properties:
+            temp:
+              type: number
+            pressure:
+              type: number
+            humidity:
+              type: number
+            temp_min:
+              type: number
+            temp_max:
+              type: number
+            sea_level:
+              type: number
+            grnd_level:
+              type: number
+        wind:
+          type: object
+          properties:
+            speed:
+              type: number
+            deg:
+              type: number
+            clouds:
+              type: object
+              properties:
+                all:
+                  type: number
+        dt:
+          type: number
+        sys:
+          type: object
+          properties:
+            message:
+              type: number
+            country:
+              type: string
+            sunrise:
+              type: number
+            sunset:
+              type: number
+        id:
+          type: number
+        name:
+          type: string
+        cod:
+          type: number

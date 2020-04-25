@@ -1,6 +1,6 @@
 {
-  "nodegenDir": "nodegen",
-  "nodegenMockDir": "/__mocks__",
+  "nodegenDir": "src/http/nodegen",
+  "nodegenMockDir": "src/domains/__mocks__",
   "nodegenType": "server",
   "helpers": {
     "stub": {

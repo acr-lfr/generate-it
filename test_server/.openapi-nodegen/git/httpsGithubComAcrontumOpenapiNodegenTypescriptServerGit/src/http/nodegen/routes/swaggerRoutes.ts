@@ -1,25 +1,14 @@
 import { Router } from 'express';
-const expressAuthMiddle = require('express-auth-middle');
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import config from '../../../config';
+const expressAuthMiddle = require('express-auth-middle');
 
 export default () => {
   const router = Router({});
 
-  let swaggerFile = config.swaggerFile;
-  if (config.swaggerFile === 'latest') {
-    const recursive = require('recursive-readdir-sync');
-    // read the dir and get the latest file name in the dir.
-    let files = recursive('./dredd');
-    files.forEach((file: string) => {
-      if (path.extname(file) === '.yml') {
-        swaggerFile = file;
-      }
-    });
-  }
-  let doc = YAML.load(path.resolve(swaggerFile));
+  let doc = YAML.load(path.resolve('openapi-nodegen-api-file.yml'));
   // Middleware for basicauth and xauth
   router.use(
     expressAuthMiddle({
@@ -31,6 +20,7 @@ export default () => {
       challenge: 'Protected area',
     }),
   );
+
   router.use('/', (req: any, res: any, next: any) => {
     if (doc.swagger) {
       doc.host = req.get('host');

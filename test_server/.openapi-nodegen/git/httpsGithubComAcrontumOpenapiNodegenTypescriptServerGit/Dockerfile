@@ -18,6 +18,7 @@ FROM environment as runtime
 
 COPY --from=build /code/build /code/build
 COPY ./docker-entrypoint.sh /sbin/
+RUN chmod 755 /sbin/docker-entrypoint.sh
 
 ENTRYPOINT [ "/sbin/docker-entrypoint.sh" ]
 CMD "prod"

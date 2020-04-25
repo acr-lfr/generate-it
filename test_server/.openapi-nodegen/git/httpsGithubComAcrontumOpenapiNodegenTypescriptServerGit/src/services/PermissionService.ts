@@ -1,4 +1,4 @@
-import NodegenRequest from '@/http/nodegen/interfaces/NodegenRequest';
+import NodegenRequest from '@/http/interfaces/NodegenRequest';
 import express = require('express');
 import http401 from '@/http/nodegen/errors/401';
 

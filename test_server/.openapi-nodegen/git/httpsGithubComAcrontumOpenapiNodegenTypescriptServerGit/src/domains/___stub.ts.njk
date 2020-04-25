@@ -1,10 +1,7 @@
 import { {% for interface in importInterfaces(operations) -%}{{ interface }},{%- endfor %} } from '@/http/nodegen/interfaces';
-import {JwtAccess} from '@/http/nodegen/interfaces/JwtAccess';
-import NodegenRequest from '@/http/nodegen/interfaces/NodegenRequest';
-
-{% if mockServer %}
-import {{ ucFirst(operation_name) }}DomainMock from './__mocks__/{{ ucFirst(operation_name) }}DomainMock'
-{% endif %}
+{% if pathMethodsHaveAttr(operations, 'security') %}import {JwtAccess} from '@/http/nodegen/interfaces/JwtAccess';{% endif %}
+{% if pathMethodsHaveAttr(operations, 'x-passRequest') %}import NodegenRequest from '../http/interfaces/NodegenRequest';{% endif %}
+{% if mockServer %}import {{ ucFirst(operation_name) }}DomainMock from './__mocks__/{{ ucFirst(operation_name) }}DomainMock'{% endif %}
 
 class {{ ucFirst(operation_name) }}Domain {
   {% for op in operations -%}
@@ -13,9 +10,9 @@ class {{ ucFirst(operation_name) }}Domain {
   /**
    * Operation ID: {{ path.operationId }}
    * {% if path.summary %}Summary: {{ path.summary }}{% endif %}
-   * {% if path.description %}Description: {{ path.description }}{% endif %}
+   * {% if path.description %}Description: {{ path.description | trim }}{% endif %}
    */
-  public async {{ path.operationId }} ({{ pathParamsToDomainParams(method, path, true) }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
+  public async {{ path.operationId }} ({{ pathParamsToDomainParams(method, path, true, false, 'params') }}): Promise<{{ path['x-response-definitions']['200'] if path['x-response-definitions']['200'] else 'any' }}> {
     {% if mockServer %}
     return {{ ucFirst(operation_name) }}DomainMock.{{ path.operationId }}({{ pathParamsToDomainParams(method, path) }});
     {% else %}

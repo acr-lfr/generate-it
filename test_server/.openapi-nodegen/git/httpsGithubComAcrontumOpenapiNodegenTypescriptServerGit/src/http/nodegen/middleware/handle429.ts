@@ -1,6 +1,6 @@
 import http429 from '../errors/429';
 
-import NodegenRequest from '../interfaces/NodegenRequest';
+import NodegenRequest from '../../interfaces/NodegenRequest';
 import express = require('express');
 
 /**

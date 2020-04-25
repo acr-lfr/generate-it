@@ -1,4 +1,4 @@
-import NodegenRequest from '@/http/nodegen/interfaces/NodegenRequest';
+import NodegenRequest from '@/http/interfaces/NodegenRequest';
 import express = require('express');
 
 class HttpHeadersCacheService {

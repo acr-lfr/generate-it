@@ -5,8 +5,10 @@ volumes:
   build:
 
 services:
-  watcher-service:
+  {{ _.kebabCase(package.name) }}-watcher:
     image: "${IMAGE_PREFIX}watcher-image:${IMAGE_TAG:-latest}"
+    env_file:
+      - .env
     depends_on:
       - {{ _.kebabCase(package.name) }}-service
     volumes:
@@ -16,6 +18,8 @@ services:
 
   {{ _.kebabCase(package.name) }}-service:
     image: "${IMAGE_PREFIX}{{ _.kebabCase(package.name) }}-image:${IMAGE_TAG:-latest}"
+    env_file:
+      - .env
     build:
       dockerfile: Dockerfile
       context: .
@@ -23,6 +27,6 @@ services:
       - "8080:8000"
     volumes:
       - build:/code/build
-    networks:{{ _.kebabCase(package.name) }}
+    networks: {{ _.kebabCase(package.name) }}
       - default
     command: dev

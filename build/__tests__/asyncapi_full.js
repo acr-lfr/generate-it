@@ -3,16 +3,19 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
-var hasha_1 = tslib_1.__importDefault(require("hasha"));
 var openapiNodegen_full_1 = require("./openapiNodegen_full");
+var hasha_1 = tslib_1.__importDefault(require("hasha"));
+var hashElement = require('folder-hash').hashElement;
 jest.setTimeout(60 * 1000); // in milliseconds
-var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
+var serverDir = 'test_asyncapi';
+var testServerPath = path_1["default"].join(process.cwd(), serverDir);
+exports.tplUrl = 'https://github.com/acrontum/generate-it-asyncapi-rabbitmq.git';
 describe('e2e testing', function () {
     beforeAll(function () {
-        openapiNodegen_full_1.clearTestServer();
+        openapiNodegen_full_1.clearTestServer(serverDir);
     });
     afterAll(function () {
-        openapiNodegen_full_1.clearTestServer();
+        openapiNodegen_full_1.clearTestServer(serverDir);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -20,15 +23,15 @@ describe('e2e testing', function () {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    ymlPath = path_1["default"].join(process.cwd(), 'test_openapi3.yml');
+                    ymlPath = path_1["default"].join(process.cwd(), 'test_asyncapi.yml');
                     return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
-                            mockServer: true,
+                            mockServer: false,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
-                            template: openapiNodegen_full_1.tplUrl
+                            template: exports.tplUrl
                         })];
                 case 1:
                     _a.sent();
@@ -49,23 +52,9 @@ describe('e2e testing', function () {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['test_server/src/domains/WeatherDomain.ts', 'e416a1329f114e95e8f5b553cf1066db'],
-                        // Check complex interface (INTERFACE file)
-                        ['test_server/src/http/nodegen/interfaces/WeatherPost.ts', 'fbe8cf7a8f93f34bb646d564223f854f'],
-                        // Check the interface index file (OTHER file)
-                        ['test_server/src/http/nodegen/interfaces/index.ts', 'ee8731ab790e96c6932df9cc71fe6c3a'],
-                        // Check the security definition files (OTHER file)
-                        ['test_server/src/http/nodegen/security/definitions.ts', '9fe31e21af71374e62bcb49bb2d40567'],
-                        // Check the generated routes files (OPERATION file)
-                        ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'a7c5fd986a007e0782a40360476f073b'],
-                        // Check the output transformers (OPERATION file)
-                        ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', 'f1708e0d13ab42643a6a3a62b1652fd6'],
-                        // Check dynamic docker file (OTHER file)
-                        ['test_server/docker-compose.yml', '77046129af45b9b24ced9969ba669acd'],
-                        // Check git ignore was copied over (OTHER file)
-                        ['test_server/.gitignore', '7603a99efa78b3faf4ff493cf1cb0fb7'],
-                        // Check the deleted service file was reinjected
-                        ['test_server/src/services/HttpHeadersCacheService.ts', '144cd39920fd8e042a57f83628479979'],
+                        ['test_asyncapi/generated/channels.ts', 'f3fcb4b9fab361377a05fae8f1173759'],
+                        ['test_asyncapi/generated/domainIndex.ts', '700b6ad7d74985387c253293dfa0da07'],
+                        ['test_asyncapi/generated/operationIds.ts', '5c8c2e3b6d60b9562c97b713cf614a26'],
                     ];
                     mismatched = [];
                     i = 0;
@@ -87,12 +76,28 @@ describe('e2e testing', function () {
                     return [3 /*break*/, 1];
                 case 4:
                     if (mismatched.length > 0) {
-                        console.log(mismatched);
                         done(mismatched);
                     }
                     else {
                         done();
                     }
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should return the correct hash for the domain folder', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+        var options, domainPath, hash;
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = {
+                        files: { include: ['*.ts'] }
+                    };
+                    domainPath = path_1["default"].join(testServerPath, 'domains');
+                    return [4 /*yield*/, hashElement(domainPath, options)];
+                case 1:
+                    hash = _a.sent();
+                    expect(hash.hash).toBe('0GfdCxTaw49b2/iPsi5L7hrNV+c=');
                     return [2 /*return*/];
             }
         });

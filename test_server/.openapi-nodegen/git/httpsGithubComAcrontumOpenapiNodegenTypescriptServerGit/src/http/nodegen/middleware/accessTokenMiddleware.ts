@@ -1,5 +1,5 @@
 import AccessTokenService, { ValidateRequestOptions } from '@/services/AccessTokenService';
-import NodegenRequest from '../interfaces/NodegenRequest';
+import NodegenRequest from '../../interfaces/NodegenRequest';
 import express = require('express');
 
 export default (headerNames: string[], options?: ValidateRequestOptions) => {

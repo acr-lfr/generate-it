@@ -1,5 +1,5 @@
 import express = require('express');
-import NodegenRequest from '../interfaces/NodegenRequest';
+import NodegenRequest from '../../interfaces/NodegenRequest';
 
 const getQueries = (url: string) => {
   let queries: any = {};

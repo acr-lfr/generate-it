@@ -1,5 +1,5 @@
 import express = require('express');
-import NodegenRequest from '../interfaces/NodegenRequest';
+import NodegenRequest from '../../interfaces/NodegenRequest';
 
 /**
  * Default 404 handler for the express app

@@ -1,47 +1,73 @@
-import express from 'express';
-import Router from 'express-promise-router';
-import objectReduceByMap from 'object-reduce-by-map';
-{% if operationsPathsHasParamsToValidate(operations) %}import { celebrate } from 'celebrate';{% endif %}
-{% if pathMethodsHaveAttr(operations, 'x-permission') %}import permissionMiddleware from '../middleware/permissionMiddleware';{% endif %}
-{% if pathMethodsHaveAttr(operations, 'security') %}import accessTokenMiddleware from '../middleware/accessTokenMiddleware';{% endif %}
-import {{ _.camelCase(operation_name) }}Validators from '../validators/{{ prettifyRouteName(operation_name) }}Validators';
-import {{ ucFirst(operation_name) }}Domain from '../../../domains/{{ ucFirst(operation_name) }}Domain';
-import {{ _.camelCase(operation_name) }}TransformOutputs from '../transformOutputs/{{ operation_name }}TransformOutput';
+import express from 'express'
+import Router from 'express-promise-router'
+import objectReduceByMap from 'object-reduce-by-map'
 
-export default function () {
+{% if operationsPathsHasParamsToValidate(operations) %}import {celebrate} from 'celebrate'{% endif %}
+{% if pathMethodsHaveAttr(operations, 'security') %}import accessTokenMiddleware from '../middleware/accessTokenMiddleware'{% endif %}
+{% if pathMethodsHaveAttr(operations, 'x-cache') %}import apiCaching from '../middleware/apiCaching'{% endif %}
+{% if pathMethodsHaveAttr(operations, 'x-permission') %}import permissionMiddleware from '../middleware/permissionMiddleware'{% endif %}
+{% if pathMethodsHaveAttr(operations, 'x-worker') %}import WorkerService from '../../../services/WorkerService'{% endif %}
+import {{ _.camelCase(operation_name) }}Validators from'../validators/{{ prettifyRouteName(operation_name) }}Validators'
+import {{ucFirst(operation_name)}}Domain from '../../../domains/{{ucFirst(operation_name)}}Domain'
+import {{_.camelCase(operation_name)}}TransformOutputs from '../transformOutputs/{{operation_name}}TransformOutput'
+
+export default function() {
   const router = Router();
   {% for op in operations -%}
-  {% for method, path in op.path -%}
-  {% if isValidMethod(method) %}
+    {% for method, path in op.path -%}
+      {% if isValidMethod(method)%}
   /**
    * Operation ID: {{ path.operationId }}
-   * {% if path.summary %}Summary: {{ path.summary }}{% endif -%}
-   * {% if path.description %}Description: {{ path.description }}{% endif -%}
+   * {% if path.summary %}Summary: {{ path.summary }}{% endif %}
+   * {% if path.description %}Description: {{ path.description | trim }}{% endif %}
    */
-  {% set securityNames = getSecurityNames(path, swagger) %}
-  router.{{ method }}(
-    '{{ op.subresource }}',
-    {% if securityNames %}accessTokenMiddleware({{ securityNames }} {% if path['x-passThruWithoutJWT'] %}, {passThruWithoutJWT: true}{% endif %}), /* Validate request security tokens */{% endif %}
-    {% if path['x-permission'] %}permissionMiddleware('{{ path['x-permission'] }}'), /* Check permission of the incoming user */ {% endif %}
-    {% if pathsHasParamsToValidate(path) %}celebrate({{ _.camelCase(operation_name) }}Validators.{{ path.operationId }}), /* Finally, validate the request data and return validation errors */ {% endif %}
-    async (req: any, res: express.Response) => {
-      {% if not path.produces or path.produces and arrayContains('application/json', path.produces) %}
-      return res.json(
-        objectReduceByMap(
-          await {{ ucFirst(operation_name) }}Domain.{{ path.operationId }}({{ pathParamsToDomainParams(method, path, false, true, 'params') }}),
-          {{ _.camelCase(operation_name) }}TransformOutputs.{{ path.operationId }}
-        )
-      );
-      {% else %}
-      return res.download(
-        await {{ ucFirst(operation_name) }}Domain.{{ path.operationId }}({{ pathParamsToDomainParams(method, path, false, true, 'params') }})
+      {% set securityNames = getSecurityNames(path, swagger) %}
+      router.{{method}}(
+        '{{op.subresource}}',
+        {% if securityNames %}accessTokenMiddleware({{ securityNames }}  {% if path['x-passThruWithoutJWT'] %}, {passThruWithoutJWT: true}{% endif %}), /* Validate request security tokens */{% endif %}
+        {% if path['x-permission'] %}permissionMiddleware('{{ path['x-permission'] }}'), /* Check permission of the incoming user */ {% endif %}
+        {% if pathsHasParamsToValidate(path) %}celebrate({{ _.camelCase(operation_name) }}Validators.{{path.operationId}}), /* Validate the request data and return validation errors */ {% endif %}
+        {% if path['x-cache'] %}apiCaching({{_.camelCase(operation_name)}}TransformOutputs.{{path.operationId}}), /* Lastly, if x-cache is found, call the api cache middleware */ {% endif %}
+        async (req: any, res: express.Response) => {
+          {% if not path.produces or path.produces and arrayContains('application/json', path.produces) %}
+            {% if path['x-worker'] %}
+              return res.json(
+                objectReduceByMap(
+                  await WorkerService.handleRequestWithWorker(
+                    req,
+                    '{{ucFirst(operation_name)}}Domain',
+                    '{{path.operationId}}',
+                    [{{pathParamsToDomainParams(method, path, false, true, 'params')}}]
+                  ),
+                  {{_.camelCase(operation_name)}}TransformOutputs.{{path.operationId}}
+                )
+              );
+            {% else %}
+              {% if getSingleSuccessResponse(path.responses) %}
+                return res.status({{ getSingleSuccessResponse(path.responses) }}).json(
+              {% else %}
+                return res.json(
+              {% endif %}
+                objectReduceByMap(
+                  await {{ucFirst(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(method, path, false, true, 'params')}}),
+                  {{_.camelCase(operation_name)}}TransformOutputs.{{path.operationId}}
+                )
+              );
+            {% endif %}
+          {% elseif not path.produces or path.produces and arrayContains('image/', path.produces)%}
+            return res.sendFile(
+              await {{ucFirst(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(metod, path, false, true, 'params')}})
+            );
+          {% else %}
+            return res.download(
+              await {{ucFirst(operation_name)}}Domain.{{path.operationId}}({{pathParamsToDomainParams(method, path, false, true, 'params')}})
+            );
+          {% endif %}
+        }
       );
       {% endif %}
-    }
-  );
-  {%- endif %}
-  {%- endfor %}
+    {%- endfor %}
   {%- endfor %}
 
-  return router;
+  return router
 }

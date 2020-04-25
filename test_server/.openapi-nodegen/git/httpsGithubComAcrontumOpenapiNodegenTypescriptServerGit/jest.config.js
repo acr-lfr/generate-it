@@ -12,26 +12,32 @@ module.exports = {
     'src/services/*.{js,ts}',
     'src/utils/*.{js,ts}',
   ],
+  coverageDirectory: 'coverage',
+
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
   transformIgnorePatterns: [
     '/node_modules/',
+    '/build/'
+  ],
+
+  testMatch: [
+    '**/__tests__/*.spec.ts',
+  ],
+
+  testPathIgnorePatterns: [
+    '/node_modules/',
     '/build/',
   ],
+
+  testEnvironment: 'node',
+
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  testMatch: [
-    '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)',
-    '**/__tests__/*.spec.(js|jsx|ts|tsx)',
-  ],
 
   setupFilesAfterEnv: ['./jest.setup.js'],
 
-  testURL: 'http://localhost/',
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ]
+  testURL: 'http://localhost/'
 }

@@ -1,7 +1,7 @@
 import express = require('express');
 import http403 from '../errors/403';
 
-import NodegenRequest from '../interfaces/NodegenRequest';
+import NodegenRequest from '../../interfaces/NodegenRequest';
 
 /**
  * Required for if an unauthorised response should be thrown from a domain or controller

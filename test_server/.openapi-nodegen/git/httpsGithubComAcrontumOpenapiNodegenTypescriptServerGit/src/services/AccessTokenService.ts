@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import config from '../config';
-import NodegenRequest from '@/http/nodegen/interfaces/NodegenRequest';
+import NodegenRequest from '@/http/interfaces/NodegenRequest';
 import express = require('express');
 
 interface JwtDetails {
@@ -58,7 +58,7 @@ class AccessTokenService {
           break;
         } else {
           // This is a token but not JWT thus API key
-          apiKey = tokenParts[1];
+          apiKey = tokenRaw;
           break;
         }
       }
@@ -66,7 +66,7 @@ class AccessTokenService {
 
     if (!jwtToken && !apiKey) {
       if (options && options.passThruWithoutJWT) {
-        return next();
+        return next()
       }
       return this.denyRequest(
         res,
@@ -117,13 +117,17 @@ class AccessTokenService {
     });
   }
 
+  /**
+   * Verify a JWT and return its payload
+   * @param token
+   */
   public verifyJWT (token: string): Promise<any> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, config.jwtSecret, (err: any, data: any) => {
         if (err) {
           return reject(err);
         }
-        return resolve(data);
+        return resolve(data.data);
       });
     });
   }
