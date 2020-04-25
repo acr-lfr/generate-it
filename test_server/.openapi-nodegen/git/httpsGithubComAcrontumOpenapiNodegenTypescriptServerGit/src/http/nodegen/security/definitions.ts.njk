@@ -1,9 +1,0 @@
-export default {
-    {% for name, value in swagger.securityDefinitions %}
-  '{{ name }}': {
-      {% for subName, subValue in value -%}
-    '{{ subName }}': {{ subValue | dump }},
-      {% endfor %}
-  },
-    {%- endfor %}
-}

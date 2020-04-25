@@ -38,7 +38,7 @@ describe('e2e testing', function () {
                     ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
                     return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
-                            dontUpdateTplCache: true,
+                            dontUpdateTplCache: false,
                             mockServer: true,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
@@ -57,36 +57,25 @@ describe('e2e testing', function () {
             }
         });
     }); });
-    it('Should build again without error on top of the existing generation', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-        var ymlPath, e_2;
-        return tslib_1.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    // remove a survive file which should then be copied back over
-                    fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
-                    ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
-                    return [4 /*yield*/, generateIt_1["default"]({
-                            dontRunComparisonTool: false,
-                            dontUpdateTplCache: true,
-                            mockServer: true,
-                            segmentsCount: 1,
-                            swaggerFilePath: ymlPath,
-                            targetDir: testServerPath,
-                            template: exports.tplUrl
-                        })];
-                case 1:
-                    _a.sent();
-                    done();
-                    return [3 /*break*/, 3];
-                case 2:
-                    e_2 = _a.sent();
-                    done(e_2);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
+    // it('Should build again without error on top of the existing generation', async (done) => {
+    //   try {
+    //     // remove a survive file which should then be copied back over
+    //     fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
+    //     const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
+    //     await openapiNodegen({
+    //       dontRunComparisonTool: false,
+    //       dontUpdateTplCache: false,
+    //       mockServer: true,
+    //       segmentsCount: 1,
+    //       swaggerFilePath: ymlPath,
+    //       targetDir: testServerPath,
+    //       template: tplUrl,
+    //     });
+    //     done();
+    //   } catch (e) {
+    //     done(e);
+    //   }
+    // });
     it('Should have the correct file hashes', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var filePaths, mismatched, i, filePath, fileHash, hash, wrong;
         return tslib_1.__generator(this, function (_a) {
