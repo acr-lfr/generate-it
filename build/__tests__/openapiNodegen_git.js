@@ -7,7 +7,7 @@ var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerName = 'test_server_2';
 var testServerPath = path_1["default"].join(process.cwd(), testServerName);
-exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git#5.0.0';
+exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
 exports.clearTestServer = function () {
     fs_extra_1["default"].removeSync(testServerName);
 };
