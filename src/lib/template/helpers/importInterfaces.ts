@@ -63,6 +63,6 @@ export default function (operations: any, actions?: string[]) {
     return (new Set(imports)).keys();
   } catch (e) {
     console.log(e);
-    throw e
+    throw e;
   }
 }
