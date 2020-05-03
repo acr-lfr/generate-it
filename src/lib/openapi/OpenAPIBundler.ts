@@ -1,4 +1,3 @@
-import Config from '@/interfaces/Config';
 import * as _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
@@ -114,18 +113,24 @@ class OpenAPIBundler {
       for (const pathMethod in yamlObject.paths) {
         if (yamlObject.paths[pathMethod].operationId) {
           const id = yamlObject.paths[pathMethod].operationId;
-          !ids.includes(id) && ids.push(id);
+          if (!ids.includes(id)) {
+            ids.push(id);
+          }
         }
       }
     } else if (yamlObject.channels) {
       for (const channel in yamlObject.channels) {
         if (yamlObject.channels[channel].subscribe) {
           const subid = yamlObject.channels[channel].subscribe.operationId;
-          !ids.includes(subid) && ids.push(subid);
+          if (!ids.includes(subid)) {
+            ids.push(subid);
+          }
         }
         if (yamlObject.channels[channel].publish) {
           const pubid = yamlObject.channels[channel].publish.operationId;
-          !ids.includes(pubid) && ids.push(pubid);
+          if (!ids.includes(pubid)) {
+            ids.push(pubid);
+          }
         }
       }
     }
@@ -142,7 +147,7 @@ class OpenAPIBundler {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
     if (ApiIs.isOpenAPIorSwagger(apiObject)) {
-      apiObject = await this.injectParameterInterfaces(apiObject, config);
+      apiObject = await this.injectParameterInterfaces(apiObject);
     } else if (ApiIs.asyncapi2(apiObject)) {
       // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
       // TODO this was left as not required for rabbitmq
@@ -191,7 +196,7 @@ class OpenAPIBundler {
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
    */
-  public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
+  public async injectParameterInterfaces (apiObject: any) {
     // iterate over paths with for loop so can use await later
     const pathsKeys = Object.keys(apiObject.paths);
     for (let i = 0; i < pathsKeys.length; ++i) {

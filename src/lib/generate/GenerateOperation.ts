@@ -31,7 +31,6 @@ class GenerateOperation {
     each(config.data.swagger.paths, (pathProperties, pathName) => {
       const operationName = pathProperties.endpointName;
       if (includeOperationName(operationName, config.data.nodegenRc)) {
-        console.log('building the operation for swagger');
         files[operationName] = files[operationName] || [];
         pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
         files[operationName].push({
@@ -54,7 +53,6 @@ class GenerateOperation {
     each(config.data.swagger.channels, (pathProperties, pathName) => {
       const operationName = pathProperties.endpointName;
       if (includeOperationName(operationName, config.data.nodegenRc)) {
-        console.log('building the operation for asyncapi');
         files[operationName] = files[operationName] || [];
         files[operationName].push({
           channelName: pathName,
@@ -89,11 +87,17 @@ class GenerateOperation {
     const targetFile = path.resolve(config.targetDir, subDir, newFilename);
     fs.ensureDirSync(path.resolve(config.targetDir, subDir));
     const tplVars = this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType);
-    const renderedContent = TemplateRenderer.load(
-      data.toString(),
-      tplVars,
-      ext,
-    );
+    let renderedContent = '';
+    try {
+      renderedContent = TemplateRenderer.load(
+        data.toString(),
+        tplVars,
+        ext,
+      );
+    } catch (e) {
+      console.log(targetFile);
+      throw new Error(e);
+    }
 
     if (FileTypeCheck.isStubFile(config.file_name) && fs.existsSync(targetFile)) {
       return await GeneratedComparison.generateComparisonFile(
