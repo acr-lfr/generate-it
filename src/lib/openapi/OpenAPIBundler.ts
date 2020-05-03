@@ -6,10 +6,10 @@ import * as YAML from 'js-yaml';
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
-import logTimeDiff from '@/utils/logTimeDiff';
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
+import includeOperationName from '@/lib/helpers/includeOperationName';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -19,7 +19,7 @@ class OpenAPIBundler {
    * @param filePath
    * @param config
    */
-  public async bundle (filePath: string, config: Config) {
+  public async bundle (filePath: string, config: ConfigExtendedBase) {
     let content;
 
     console.log('Reading file: ' + filePath);
@@ -52,7 +52,7 @@ class OpenAPIBundler {
 
     console.log('Injecting the endpoint names');
     return JSON.parse(JSON.stringify(
-      this.pathEndpointInjection(content),
+      this.pathEndpointInjection(content, config),
     ));
   }
 
@@ -109,20 +109,23 @@ class OpenAPIBundler {
    * @param yamlObject
    */
   public fetchOperationIdsArray (yamlObject: any): string[] {
-    const ids = [];
+    const ids: string[] = [];
     if (yamlObject.paths) {
       for (const pathMethod in yamlObject.paths) {
         if (yamlObject.paths[pathMethod].operationId) {
-          ids.push(yamlObject.paths[pathMethod].operationId);
+          const id = yamlObject.paths[pathMethod].operationId;
+          !ids.includes(id) && ids.push(id);
         }
       }
     } else if (yamlObject.channels) {
       for (const channel in yamlObject.channels) {
         if (yamlObject.channels[channel].subscribe) {
-          ids.push(yamlObject.channels[channel].subscribe.operationId);
+          const subid = yamlObject.channels[channel].subscribe.operationId;
+          !ids.includes(subid) && ids.push(subid);
         }
         if (yamlObject.channels[channel].publish) {
-          ids.push(yamlObject.channels[channel].publish.operationId);
+          const pubid = yamlObject.channels[channel].publish.operationId;
+          !ids.includes(pubid) && ids.push(pubid);
         }
       }
     }
@@ -246,15 +249,19 @@ class OpenAPIBundler {
 
   /**
    * Injects the end-points into each path object
-   * @param apiObject
    */
-  public pathEndpointInjection (apiObject: any) {
+  public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
-    _.each(apiObject.paths, (pathObject: any, pathName: string) => {
-      pathObject.endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+    _.each(apiObject.channels || apiObject.paths, (pathObject: any, pathName: string) => {
+      const endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+      if (includeOperationName(endpointName, config.nodegenRc)) {
+        pathObject.endpointName = endpointName;
+      }
     });
 
-    apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
+    apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {
+      return typeof item === 'string';
+    });
     return apiObject;
   }
 }

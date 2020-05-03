@@ -1,53 +1,48 @@
 asyncapi: 2.0.0
 info:
-  title: Streetlights API
-  version: 1.0.0
-  description: G2 RabbitMQ routing keys
+  title: boats
+  version: 1.0.1
+  description: >-
+    Beautiful Open / Async Template System - Write less yaml with BOATS and
+    Nunjucks.
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
 defaultContentType: application/json
 channels:
-  msAuthConnectionDeleted:
-    description: When a connection is deleted
-    parameters:
-      updatedId:
-        $ref: '#/components/parameters/updatedId'
+  /ms-auth/cache-connection:
+    description: >-
+      When a new connection change occurs the new cache values are emitted in
+      the payload
     publish:
-      operationId: msAuthConnectionDeletedPublish
+      operationId: msAuthCacheConnection
       message:
         contentType: application/json
         payload:
           $ref: '#/components/schemas/MsAuthCacheConnection'
     subscribe:
-      operationId: msAuthConnectionDeletedSubscribe
+      operationId: msAuthCacheConnection
       message:
         contentType: application/json
         payload:
           $ref: '#/components/schemas/MsAuthCacheConnection'
-  msAuthConnectionUpdated:
-    description: When a connection is updated
-    parameters:
-      updatedId:
-        $ref: '#/components/parameters/updatedId'
+  /ms-image/cache-user:
+    description: >-
+      When a new connection change occurs the new cache values are emitted in
+      the payload
     publish:
-      operationId: msAuthConnectionUpdatedPublish
+      operationId: msAuthCacheUser
       message:
         contentType: application/json
         payload:
-          $ref: '#/components/schemas/MsAuthCacheConnection'
+          $ref: '#/components/schemas/MsAuthCacheUser'
     subscribe:
-      operationId: msAuthConnectionUpdatedSubscribe
+      operationId: msAuthCacheUser
       message:
         contentType: application/json
         payload:
-          $ref: '#/components/schemas/MsAuthCacheConnection'
+          $ref: '#/components/schemas/MsAuthCacheUser'
 components:
-  parameters:
-    updatedId:
-      description: ID String
-      schema:
-        type: string
   schemas:
     MsAuthCacheConnection:
       type: object
@@ -66,3 +61,10 @@ components:
                 type: string
               username:
                 type: string
+    MsAuthCacheUser:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string

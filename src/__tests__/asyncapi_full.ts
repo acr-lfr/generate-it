@@ -1,11 +1,24 @@
 import path from 'path';
 import openapiNodegen from '@/generateIt';
-import { clearTestServer } from '@/__tests__/openapiNodegen_full';
 import hasha from 'hasha';
-
+import fs from 'fs-extra';
 const {hashElement} = require('folder-hash');
 
 jest.setTimeout(60 * 1000); // in milliseconds
+
+export const clearTestServer = (dir: string = 'test_server') => {
+  // return;
+  const names = fs.readdirSync(path.join(process.cwd(), dir));
+  for (let i = 0; i < names.length; ++i) {
+    if (names[i] !== '.openapi-nodegen') {
+      fs.removeSync(path.join(process.cwd(), dir, names[i]));
+    }
+  }
+  const compare = path.join(process.cwd(), dir, '/.openapi-nodegen/cache');
+  if (fs.pathExistsSync(compare)) {
+    fs.removeSync(compare);
+  }
+};
 
 const serverDir = 'test_asyncapi';
 const testServerPath = path.join(process.cwd(), serverDir);
@@ -42,10 +55,10 @@ describe('e2e testing', () => {
     // C) Something broke when building the said files
     const filePaths = [
       // Check generated domains (STUB file)
-      ['test_asyncapi/generated/channels.ts', 'f3fcb4b9fab361377a05fae8f1173759'],
-      ['test_asyncapi/generated/domainIndex.ts', '700b6ad7d74985387c253293dfa0da07'],
-
-      ['test_asyncapi/generated/operationIds.ts', '5c8c2e3b6d60b9562c97b713cf614a26'],
+      ['test_asyncapi/generated/channels/MsAuthChannel.ts', 'b61559c72d3a8e20103977b467c70650'],
+      ['test_asyncapi/generated/channels/channelExporter.ts', '58f977b01f5263b361b4bf7faeb1e33c'],
+      ['test_asyncapi/generated/operationIds.ts', '2740d3cfa39128578eab114927ea65c9'],
+      ['test_asyncapi/generated/RabbitMQService.ts', '97aa04cf142c0d8fe4be1ace639ce518'],
     ];
     const mismatched: string[] = [];
     for (let i = 0; i < filePaths.length; ++i) {
@@ -69,6 +82,6 @@ describe('e2e testing', () => {
     };
     const domainPath = path.join(testServerPath, 'domains');
     const hash = await hashElement(domainPath, options);
-    expect(hash.hash).toBe('0GfdCxTaw49b2/iPsi5L7hrNV+c=');
+    expect(hash.hash).toBe('8O/PYgVzBv/0i3Ok7xVZEb3W3eY=');
   });
 });

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run all tests before rebasing
+npm run lint || exit 1
+npm run test || exit 1

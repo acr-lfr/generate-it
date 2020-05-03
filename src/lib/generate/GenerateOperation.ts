@@ -9,7 +9,7 @@ import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
 import { OperationsContainer, Operations } from '@/interfaces/Operations';
-import includeChannelAction from '@/utils/includeChannelAction';
+import includeOperationName from '@/lib/helpers/includeOperationName';
 
 class GenerateOperation {
   /**
@@ -30,13 +30,16 @@ class GenerateOperation {
     const files: OperationsContainer = {};
     each(config.data.swagger.paths, (pathProperties, pathName) => {
       const operationName = pathProperties.endpointName;
-      files[operationName] = files[operationName] || [];
-      pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
-      files[operationName].push({
-        path_name: pathName,
-        path: pathProperties,
-        subresource: generateSubresourceName(pathName, operationName),
-      });
+      if (includeOperationName(operationName, config.data.nodegenRc)) {
+        console.log('building the operation for swagger');
+        files[operationName] = files[operationName] || [];
+        pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
+        files[operationName].push({
+          path_name: pathName,
+          path: pathProperties,
+          subresource: generateSubresourceName(pathName, operationName),
+        });
+      }
     });
 
     for (const operationNameItem in files) {
@@ -48,18 +51,18 @@ class GenerateOperation {
 
   public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
-    for (const channelName in config.data.swagger.channels) {
-      const channel = config.data.swagger.channels[channelName];
-      ['publish', 'subscribe'].forEach((action: string) => {
-        if (includeChannelAction(config.data.nodegenRc, action, channel)) {
-          files[channel[action].operationId] = [{
-            channelSubscribe: channel[action],
-            channelDescription: channel.description || '',
-            channelName
-          }];
-        }
-      });
-    }
+    each(config.data.swagger.channels, (pathProperties, pathName) => {
+      const operationName = pathProperties.endpointName;
+      if (includeOperationName(operationName, config.data.nodegenRc)) {
+        console.log('building the operation for asyncapi');
+        files[operationName] = files[operationName] || [];
+        files[operationName].push({
+          channelName: pathName,
+          channel: pathProperties,
+          subresource: generateSubresourceName(pathName, operationName),
+        });
+      }
+    });
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);

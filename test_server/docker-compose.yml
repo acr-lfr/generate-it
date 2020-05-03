@@ -1,0 +1,32 @@
+version: "3"
+
+# virtual volume
+volumes:
+  build:
+
+services:
+  openweathermap-swagger-watcher:
+    image: "${IMAGE_PREFIX}watcher-image:${IMAGE_TAG:-latest}"
+    env_file:
+      - .env
+    depends_on:
+      - openweathermap-swagger-service
+    volumes:
+      - .:/code
+      - build:/code/build
+    command: watch
+
+  openweathermap-swagger-service:
+    image: "${IMAGE_PREFIX}openweathermap-swagger-image:${IMAGE_TAG:-latest}"
+    env_file:
+      - .env
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8000"
+    volumes:
+      - build:/code/build
+    networks: openweathermap-swagger
+      - default
+    command: dev

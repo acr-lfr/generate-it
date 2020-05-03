@@ -1,22 +1,13 @@
-enum nodegenType {
-  Server = 'server',
-  Client = 'client',
-}
-enum stubChannelType {
-  Publish = 'publish',
-  Subscribe = 'subscribe',
-}
 export default interface NodegenRc {
   nodegenDir: string;
   nodegenMockDir?: string;
-  nodegenType: nodegenType;
+  nodegenType: string;
   interfaceStyle?: string;
   helpers?: {
+    operationNames?: {
+      include?: string[],
+      exclude?: string[],
+    },
     [helperName: string]: any
-  };
-  asyncApi?: {
-    includedOperationIds?: string[];
-    excludedOperationIds?: string[];
-    stubChannelType: string[];
   };
 }
