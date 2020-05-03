@@ -6,7 +6,6 @@ var nunjucks_1 = tslib_1.__importDefault(require("nunjucks"));
 var lodash_1 = tslib_1.__importDefault(require("lodash"));
 var arrayContains_1 = tslib_1.__importDefault(require("./helpers/arrayContains"));
 var endsWith_1 = tslib_1.__importDefault(require("./helpers/endsWith"));
-var getChannelOperationIds_1 = tslib_1.__importDefault(require("./helpers/getChannelOperationIds"));
 var getContext_1 = tslib_1.__importDefault(require("./helpers/getContext"));
 var getSecurityNames_1 = tslib_1.__importDefault(require("./helpers/getSecurityNames"));
 var importInterfaces_1 = tslib_1.__importDefault(require("./helpers/importInterfaces"));
@@ -30,6 +29,7 @@ var ucFirst_1 = tslib_1.__importDefault(require("./helpers/ucFirst"));
 var urlPathJoin_1 = tslib_1.__importDefault(require("./helpers/urlPathJoin"));
 var validMethods_1 = tslib_1.__importDefault(require("./helpers/validMethods"));
 var getSingleSuccessResponse_1 = tslib_1.__importDefault(require("./helpers/getSingleSuccessResponse"));
+var consoleLog_1 = tslib_1.__importDefault(require("./helpers/consoleLog"));
 var TemplateRenderer = /** @class */ (function () {
     function TemplateRenderer() {
     }
@@ -73,8 +73,8 @@ var TemplateRenderer = /** @class */ (function () {
             }
         }
         env.addGlobal('arrayContains', arrayContains_1["default"]);
+        env.addGlobal('consoleLog', consoleLog_1["default"]);
         env.addGlobal('endsWith', endsWith_1["default"]);
-        env.addGlobal('getChannelPublishOperationIds', getChannelOperationIds_1["default"]);
         env.addGlobal('getSingleSuccessResponse', getSingleSuccessResponse_1["default"]);
         env.addGlobal('getContext', getContext_1["default"]);
         env.addGlobal('getSecurityNames', getSecurityNames_1["default"]);

@@ -9,7 +9,7 @@ var NamingUtils_1 = tslib_1.__importDefault(require("../helpers/NamingUtils"));
 var TemplateRenderer_1 = tslib_1.__importDefault(require("../template/TemplateRenderer"));
 var FileTypeCheck_1 = tslib_1.__importDefault(require("../FileTypeCheck"));
 var GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
-var includeChannelAction_1 = tslib_1.__importDefault(require("../../utils/includeChannelAction"));
+var includeOperationName_1 = tslib_1.__importDefault(require("../helpers/includeOperationName"));
 var GenerateOperation = /** @class */ (function () {
     function GenerateOperation() {
     }
@@ -41,13 +41,15 @@ var GenerateOperation = /** @class */ (function () {
                         files = {};
                         lodash_1.each(config.data.swagger.paths, function (pathProperties, pathName) {
                             var operationName = pathProperties.endpointName;
-                            files[operationName] = files[operationName] || [];
-                            pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
-                            files[operationName].push({
-                                path_name: pathName,
-                                path: pathProperties,
-                                subresource: generateSubresourceName_1["default"](pathName, operationName)
-                            });
+                            if (includeOperationName_1["default"](operationName, config.data.nodegenRc)) {
+                                files[operationName] = files[operationName] || [];
+                                pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
+                                files[operationName].push({
+                                    path_name: pathName,
+                                    path: pathProperties,
+                                    subresource: generateSubresourceName_1["default"](pathName, operationName)
+                                });
+                            }
                         });
                         _a = [];
                         for (_b in files)
@@ -72,26 +74,22 @@ var GenerateOperation = /** @class */ (function () {
     };
     GenerateOperation.prototype.asyncApiFiles = function (config, fileType) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var files, _loop_1, channelName, _a, _b, _i, operationNameItem, operation;
+            var files, _a, _b, _i, operationNameItem, operation;
             return tslib_1.__generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         files = {};
-                        _loop_1 = function (channelName) {
-                            var channel = config.data.swagger.channels[channelName];
-                            ['publish', 'subscribe'].forEach(function (action) {
-                                if (includeChannelAction_1["default"](config.data.nodegenRc, action, channel)) {
-                                    files[channel[action].operationId] = [{
-                                            channelSubscribe: channel[action],
-                                            channelDescription: channel.description || '',
-                                            channelName: channelName
-                                        }];
-                                }
-                            });
-                        };
-                        for (channelName in config.data.swagger.channels) {
-                            _loop_1(channelName);
-                        }
+                        lodash_1.each(config.data.swagger.channels, function (pathProperties, pathName) {
+                            var operationName = pathProperties.endpointName;
+                            if (includeOperationName_1["default"](operationName, config.data.nodegenRc)) {
+                                files[operationName] = files[operationName] || [];
+                                files[operationName].push({
+                                    channelName: pathName,
+                                    channel: pathProperties,
+                                    subresource: generateSubresourceName_1["default"](pathName, operationName)
+                                });
+                            }
+                        });
                         _a = [];
                         for (_b in files)
                             _a.push(_b);
@@ -132,7 +130,14 @@ var GenerateOperation = /** @class */ (function () {
                         targetFile = path_1["default"].resolve(config.targetDir, subDir, newFilename);
                         fs_extra_1["default"].ensureDirSync(path_1["default"].resolve(config.targetDir, subDir));
                         tplVars = this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType);
-                        renderedContent = TemplateRenderer_1["default"].load(data.toString(), tplVars, ext);
+                        renderedContent = '';
+                        try {
+                            renderedContent = TemplateRenderer_1["default"].load(data.toString(), tplVars, ext);
+                        }
+                        catch (e) {
+                            console.log(targetFile);
+                            throw new Error(e);
+                        }
                         if (!(FileTypeCheck_1["default"].isStubFile(config.file_name) && fs_extra_1["default"].existsSync(targetFile))) return [3 /*break*/, 2];
                         return [4 /*yield*/, GeneratedComparison_1["default"].generateComparisonFile(targetFile, config.targetDir, subDir, newFilename, renderedContent)];
                     case 1: return [2 /*return*/, _a.sent()];

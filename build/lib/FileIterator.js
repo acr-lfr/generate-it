@@ -23,7 +23,6 @@ var FileWalker = /** @class */ (function () {
         var _this = this;
         this.config = providedConfig;
         this.isFirstRun = providedIsFirstRun;
-        var targetDir = this.config.targetDir;
         var templatesDir = this.config.templates;
         return new Promise(function (resolve, reject) {
             walk_1["default"].walk(templatesDir, {

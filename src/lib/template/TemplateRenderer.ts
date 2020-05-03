@@ -3,7 +3,6 @@ import nunjucks from 'nunjucks';
 import _ from 'lodash';
 import arrayContains from '@/lib/template/helpers/arrayContains';
 import endsWith from '@/lib/template/helpers/endsWith';
-import getChannelPublishOperationIds from '@/lib/template/helpers/getChannelOperationIds';
 import getContext from '@/lib/template/helpers/getContext';
 import getSecurityNames from '@/lib/template/helpers/getSecurityNames';
 import importInterfaces from '@/lib/template/helpers/importInterfaces';
@@ -27,6 +26,7 @@ import ucFirst from '@/lib/template/helpers/ucFirst';
 import urlPathJoin from '@/lib/template/helpers/urlPathJoin';
 import validMethods from '@/lib/template/helpers/validMethods';
 import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
+import consoleLog from '@/lib/template/helpers/consoleLog';
 
 class TemplateRenderer {
   /**
@@ -76,8 +76,8 @@ class TemplateRenderer {
     }
 
     env.addGlobal('arrayContains', arrayContains);
+    env.addGlobal('consoleLog', consoleLog);
     env.addGlobal('endsWith', endsWith);
-    env.addGlobal('getChannelPublishOperationIds', getChannelPublishOperationIds);
     env.addGlobal('getSingleSuccessResponse', getSingleSuccessResponse);
     env.addGlobal('getContext', getContext);
     env.addGlobal('getSecurityNames', getSecurityNames);

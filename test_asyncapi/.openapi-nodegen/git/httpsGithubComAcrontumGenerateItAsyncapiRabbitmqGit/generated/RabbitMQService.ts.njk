@@ -1,0 +1,27 @@
+import { amqMessage } from 'amqplib/callback_api';
+import { QWrapperDomain } from 'q-wrapper';
+import { QWrapperSettings } from 'q-wrapper/lib/models';
+{% for endpoint in endpoints -%}
+{% set channelDomain = ucFirst(prettifyRouteName(endpoint)) + 'Channel' -%}
+import {{ channelDomain }} from './channels/{{ ucFirst(prettifyRouteName(endpoint)) }}Channel';
+{% endfor -%}
+
+
+class RabbitMQService {
+  private qWrapper: QWrapperDomain;
+
+  public async setup (qWrapperSettings: QWrapperSettings): Promise<void> {
+    this.qWrapper = new QWrapperDomain(qWrapperSettings);
+    await this.qWrapper.initialize();
+    this.bindChannels()
+  }
+
+  public bindChannels () {
+    {% for endpoint in endpoints -%}
+    {% set channelDomain = ucFirst(prettifyRouteName(endpoint)) + 'Channel' -%}
+    {{ channelDomain }}.publish(this.qWrapper);
+    {{ channelDomain }}.subscribe(this.qWrapper);
+    {% endfor -%}
+  }
+}
+export default new RabbitMQService();

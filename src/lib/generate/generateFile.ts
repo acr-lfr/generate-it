@@ -39,22 +39,12 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
 
   const content = fs.readFileSync(loadFilePath, 'utf8');
-  const endpoints: string[] = [];
-
-  if (fileName.match(/^.*Importer/)) {
-    _.each(config.data.swagger.paths, (operationPath) => {
-      const operationName = operationPath.endpointName;
-      if (!endpoints.includes(operationName)) {
-        endpoints.push(operationName);
-      }
-    });
-  }
 
   const renderedContent = TemplateRenderer.load(content, {
     package: config.package,
     swagger: config.data.swagger,
+    endpoints: config.data.swagger.endpoints,
     definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
-    endpoints,
     additionalTplObject,
     nodegenRc: config.data.nodegenRc
   });

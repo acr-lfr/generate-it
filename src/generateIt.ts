@@ -26,7 +26,7 @@ export default async (config: Config): Promise<boolean> => {
   logTimeDiff(startTime, (new Date()).getTime(), true);
 
   console.log('Preparing openapi object...'.green.bold);
-    const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, config);
+    const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, extendedConfig);
   logTimeDiff(startTime, (new Date()).getTime(), true);
 
   console.log(`Printing full object to the .openapi-nodegen directory`.green.bold);

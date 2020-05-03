@@ -4,8 +4,7 @@ export interface Operation {
   subresource?: string;
   channelDescription?: string;
   channelName?: string;
-  channelPublish?: any;
-  channelSubscribe?: any;
+  channel?: any;
 }
 
 export type Operations = Operation[];

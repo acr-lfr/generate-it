@@ -1,4 +1,3 @@
-import Config from '@/interfaces/Config';
 import * as _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
@@ -6,10 +5,10 @@ import * as YAML from 'js-yaml';
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
-import logTimeDiff from '@/utils/logTimeDiff';
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
+import includeOperationName from '@/lib/helpers/includeOperationName';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -19,7 +18,7 @@ class OpenAPIBundler {
    * @param filePath
    * @param config
    */
-  public async bundle (filePath: string, config: Config) {
+  public async bundle (filePath: string, config: ConfigExtendedBase) {
     let content;
 
     console.log('Reading file: ' + filePath);
@@ -52,7 +51,7 @@ class OpenAPIBundler {
 
     console.log('Injecting the endpoint names');
     return JSON.parse(JSON.stringify(
-      this.pathEndpointInjection(content),
+      this.pathEndpointInjection(content, config),
     ));
   }
 
@@ -109,20 +108,29 @@ class OpenAPIBundler {
    * @param yamlObject
    */
   public fetchOperationIdsArray (yamlObject: any): string[] {
-    const ids = [];
+    const ids: string[] = [];
     if (yamlObject.paths) {
       for (const pathMethod in yamlObject.paths) {
         if (yamlObject.paths[pathMethod].operationId) {
-          ids.push(yamlObject.paths[pathMethod].operationId);
+          const id = yamlObject.paths[pathMethod].operationId;
+          if (!ids.includes(id)) {
+            ids.push(id);
+          }
         }
       }
     } else if (yamlObject.channels) {
       for (const channel in yamlObject.channels) {
         if (yamlObject.channels[channel].subscribe) {
-          ids.push(yamlObject.channels[channel].subscribe.operationId);
+          const subid = yamlObject.channels[channel].subscribe.operationId;
+          if (!ids.includes(subid)) {
+            ids.push(subid);
+          }
         }
         if (yamlObject.channels[channel].publish) {
-          ids.push(yamlObject.channels[channel].publish.operationId);
+          const pubid = yamlObject.channels[channel].publish.operationId;
+          if (!ids.includes(pubid)) {
+            ids.push(pubid);
+          }
         }
       }
     }
@@ -139,7 +147,7 @@ class OpenAPIBundler {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
     if (ApiIs.isOpenAPIorSwagger(apiObject)) {
-      apiObject = await this.injectParameterInterfaces(apiObject, config);
+      apiObject = await this.injectParameterInterfaces(apiObject);
     } else if (ApiIs.asyncapi2(apiObject)) {
       // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
       // TODO this was left as not required for rabbitmq
@@ -188,7 +196,7 @@ class OpenAPIBundler {
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
    */
-  public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
+  public async injectParameterInterfaces (apiObject: any) {
     // iterate over paths with for loop so can use await later
     const pathsKeys = Object.keys(apiObject.paths);
     for (let i = 0; i < pathsKeys.length; ++i) {
@@ -246,15 +254,19 @@ class OpenAPIBundler {
 
   /**
    * Injects the end-points into each path object
-   * @param apiObject
    */
-  public pathEndpointInjection (apiObject: any) {
+  public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
-    _.each(apiObject.paths, (pathObject: any, pathName: string) => {
-      pathObject.endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+    _.each(apiObject.channels || apiObject.paths, (pathObject: any, pathName: string) => {
+      const endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+      if (includeOperationName(endpointName, config.nodegenRc)) {
+        pathObject.endpointName = endpointName;
+      }
     });
 
-    apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
+    apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {
+      return typeof item === 'string';
+    });
     return apiObject;
   }
 }

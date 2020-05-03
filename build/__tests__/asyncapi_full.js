@@ -3,19 +3,33 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
-var openapiNodegen_full_1 = require("./openapiNodegen_full");
 var hasha_1 = tslib_1.__importDefault(require("hasha"));
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var hashElement = require('folder-hash').hashElement;
 jest.setTimeout(60 * 1000); // in milliseconds
+exports.clearTestServer = function (dir) {
+    if (dir === void 0) { dir = 'test_server'; }
+    // return;
+    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), dir));
+    for (var i = 0; i < names.length; ++i) {
+        if (names[i] !== '.openapi-nodegen') {
+            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), dir, names[i]));
+        }
+    }
+    var compare = path_1["default"].join(process.cwd(), dir, '/.openapi-nodegen/cache');
+    if (fs_extra_1["default"].pathExistsSync(compare)) {
+        fs_extra_1["default"].removeSync(compare);
+    }
+};
 var serverDir = 'test_asyncapi';
 var testServerPath = path_1["default"].join(process.cwd(), serverDir);
 exports.tplUrl = 'https://github.com/acrontum/generate-it-asyncapi-rabbitmq.git';
 describe('e2e testing', function () {
     beforeAll(function () {
-        openapiNodegen_full_1.clearTestServer(serverDir);
+        exports.clearTestServer(serverDir);
     });
     afterAll(function () {
-        openapiNodegen_full_1.clearTestServer(serverDir);
+        exports.clearTestServer(serverDir);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -52,9 +66,10 @@ describe('e2e testing', function () {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['test_asyncapi/generated/channels.ts', 'f3fcb4b9fab361377a05fae8f1173759'],
-                        ['test_asyncapi/generated/domainIndex.ts', '700b6ad7d74985387c253293dfa0da07'],
-                        ['test_asyncapi/generated/operationIds.ts', '5c8c2e3b6d60b9562c97b713cf614a26'],
+                        ['test_asyncapi/generated/channels/MsAuthChannel.ts', 'b61559c72d3a8e20103977b467c70650'],
+                        ['test_asyncapi/generated/channels/channelExporter.ts', '58f977b01f5263b361b4bf7faeb1e33c'],
+                        ['test_asyncapi/generated/operationIds.ts', '2740d3cfa39128578eab114927ea65c9'],
+                        ['test_asyncapi/generated/RabbitMQService.ts', '97aa04cf142c0d8fe4be1ace639ce518'],
                     ];
                     mismatched = [];
                     i = 0;
@@ -97,7 +112,7 @@ describe('e2e testing', function () {
                     return [4 /*yield*/, hashElement(domainPath, options)];
                 case 1:
                     hash = _a.sent();
-                    expect(hash.hash).toBe('0GfdCxTaw49b2/iPsi5L7hrNV+c=');
+                    expect(hash.hash).toBe('8O/PYgVzBv/0i3Ok7xVZEb3W3eY=');
                     return [2 /*return*/];
             }
         });

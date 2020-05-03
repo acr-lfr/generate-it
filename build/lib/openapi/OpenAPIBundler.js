@@ -10,6 +10,7 @@ var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAl
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
+var includeOperationName_1 = tslib_1.__importDefault(require("../helpers/includeOperationName"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -56,7 +57,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 5:
                         content = _b.sent();
                         console.log('Injecting the endpoint names');
-                        return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content)))];
+                        return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content, config)))];
                 }
             });
         });
@@ -123,17 +124,26 @@ var OpenAPIBundler = /** @class */ (function () {
         if (yamlObject.paths) {
             for (var pathMethod in yamlObject.paths) {
                 if (yamlObject.paths[pathMethod].operationId) {
-                    ids.push(yamlObject.paths[pathMethod].operationId);
+                    var id = yamlObject.paths[pathMethod].operationId;
+                    if (!ids.includes(id)) {
+                        ids.push(id);
+                    }
                 }
             }
         }
         else if (yamlObject.channels) {
             for (var channel in yamlObject.channels) {
                 if (yamlObject.channels[channel].subscribe) {
-                    ids.push(yamlObject.channels[channel].subscribe.operationId);
+                    var subid = yamlObject.channels[channel].subscribe.operationId;
+                    if (!ids.includes(subid)) {
+                        ids.push(subid);
+                    }
                 }
                 if (yamlObject.channels[channel].publish) {
-                    ids.push(yamlObject.channels[channel].publish.operationId);
+                    var pubid = yamlObject.channels[channel].publish.operationId;
+                    if (!ids.includes(pubid)) {
+                        ids.push(pubid);
+                    }
                 }
             }
         }
@@ -155,7 +165,7 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 1:
                         apiObject = _a.sent();
                         if (!ApiIs_1["default"].isOpenAPIorSwagger(apiObject)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.injectParameterInterfaces(apiObject, config)];
+                        return [4 /*yield*/, this.injectParameterInterfaces(apiObject)];
                     case 2:
                         apiObject = _a.sent();
                         return [3 /*break*/, 4];
@@ -227,7 +237,7 @@ var OpenAPIBundler = /** @class */ (function () {
     /**
      * Iterates over all path generating interface texts from the json schema in the request definitions
      */
-    OpenAPIBundler.prototype.injectParameterInterfaces = function (apiObject, config) {
+    OpenAPIBundler.prototype.injectParameterInterfaces = function (apiObject) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var pathsKeys, i, thisPath, thisPathsMethods, j, thisMethod, thisMethodXRequestionDefinitions, xRequestDefinitionsKeys, k, paramType, param, _a;
             return tslib_1.__generator(this, function (_b) {
@@ -298,14 +308,18 @@ var OpenAPIBundler = /** @class */ (function () {
     };
     /**
      * Injects the end-points into each path object
-     * @param apiObject
      */
-    OpenAPIBundler.prototype.pathEndpointInjection = function (apiObject) {
+    OpenAPIBundler.prototype.pathEndpointInjection = function (apiObject, config) {
         apiObject.basePath = apiObject.basePath || '';
-        _.each(apiObject.paths, function (pathObject, pathName) {
-            pathObject.endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+        _.each(apiObject.channels || apiObject.paths, function (pathObject, pathName) {
+            var endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+            if (includeOperationName_1["default"](endpointName, config.nodegenRc)) {
+                pathObject.endpointName = endpointName;
+            }
         });
-        apiObject.endpoints = _.uniq(_.map(apiObject.paths, 'endpointName'));
+        apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter(function (item) {
+            return typeof item === 'string';
+        });
         return apiObject;
     };
     return OpenAPIBundler;

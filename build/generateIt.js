@@ -33,7 +33,7 @@ exports["default"] = (function (config) { return tslib_1.__awaiter(void 0, void 
                 extendedConfig = _a.sent();
                 logTimeDiff_1["default"](startTime, (new Date()).getTime(), true);
                 console.log('Preparing openapi object...'.green.bold);
-                return [4 /*yield*/, OpenAPIBundler_1["default"].bundle(config.swaggerFilePath, config)];
+                return [4 /*yield*/, OpenAPIBundler_1["default"].bundle(config.swaggerFilePath, extendedConfig)];
             case 3:
                 apiObject = _a.sent();
                 logTimeDiff_1["default"](startTime, (new Date()).getTime(), true);

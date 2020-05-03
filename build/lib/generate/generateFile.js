@@ -4,7 +4,6 @@ var tslib_1 = require("tslib");
 var NamingUtils_1 = tslib_1.__importDefault(require("../helpers/NamingUtils"));
 var TemplateRenderer_1 = tslib_1.__importDefault(require("../template/TemplateRenderer"));
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
-var _ = tslib_1.__importStar(require("lodash"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateFileDoWrite_1 = tslib_1.__importDefault(require("./generateFileDoWrite"));
 /**
@@ -36,20 +35,11 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
     fs_extra_1["default"].ensureFileSync(templatePath);
     global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
     var content = fs_extra_1["default"].readFileSync(loadFilePath, 'utf8');
-    var endpoints = [];
-    if (fileName.match(/^.*Importer/)) {
-        _.each(config.data.swagger.paths, function (operationPath) {
-            var operationName = operationPath.endpointName;
-            if (!endpoints.includes(operationName)) {
-                endpoints.push(operationName);
-            }
-        });
-    }
     var renderedContent = TemplateRenderer_1["default"].load(content, {
         package: config.package,
         swagger: config.data.swagger,
+        endpoints: config.data.swagger.endpoints,
         definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
-        endpoints: endpoints,
         additionalTplObject: additionalTplObject,
         nodegenRc: config.data.nodegenRc
     });

@@ -23,7 +23,6 @@ class FileWalker {
   public walk (providedIsFirstRun: boolean, providedConfig: ConfigExtendedBase) {
     this.config = providedConfig;
     this.isFirstRun = providedIsFirstRun;
-    const targetDir = this.config.targetDir;
     const templatesDir = this.config.templates;
     return new Promise((resolve, reject) => {
       walk.walk(templatesDir, {
