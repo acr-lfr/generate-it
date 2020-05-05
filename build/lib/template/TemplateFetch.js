@@ -185,8 +185,8 @@ var TemplateFetchURL = /** @class */ (function () {
                     case 2:
                         tplTag = _a;
                         if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
-                            console.log('IMPORTANT! The openapi-nodegen version template tagged version issue.'.red.bold);
-                            console.log("\nThe openapi-nodegen version must be greater or equal to the semver of the template tag but within the same major version.\nYou are current using:\nopenapi-nodegen: " + pkVersion + "\ntemplate version tag: " + tplTag + "\n");
+                            console.log('IMPORTANT! There is a genetate-it & template tagged version error.'.red.bold);
+                            console.log("\nThe" + "generate-it".bold + ("version must be greater or equal to the semver of the template tag but within the same major version.\nYou are currently using the following version:\ngenerate-it: " + pkVersion + "\ntemplate version tag: " + tplTag + "\n"));
                             console.log('Aborting'.red.bold);
                             process.exit(0);
                         }
