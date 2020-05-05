@@ -137,11 +137,11 @@ class TemplateFetchURL {
     const pkVersion = require('../../../package.json').version;
     const tplTag = tagBranch || await this.getTplTag(cacheDirectory);
     if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
-      console.log('IMPORTANT! The openapi-nodegen version template tagged version issue.'.red.bold);
+      console.log('IMPORTANT! There is a genetate-it & template tagged version error.'.red.bold);
       console.log(`
-The openapi-nodegen version must be greater or equal to the semver of the template tag but within the same major version.
-You are current using:
-openapi-nodegen: ${pkVersion}
+The` + `generate-it`.bold + `version must be greater or equal to the semver of the template tag but within the same major version.
+You are currently using the following version:
+generate-it: ${pkVersion}
 template version tag: ${tplTag}
 `);
 
