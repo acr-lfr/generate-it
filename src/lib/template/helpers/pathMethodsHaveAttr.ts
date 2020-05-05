@@ -4,7 +4,7 @@ import isValidMethod from '@/lib/template/helpers/isValidMethod';
 
 export default (operations: Operations, attr: string, nestedPath?: string): boolean => {
   let found = false;
-  for (let key in operations) {
+  for (const key in operations) {
     const op: Operation = operations[key];
     for (const method in op.path) {
       if (isValidMethod(method)) {

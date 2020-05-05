@@ -80,7 +80,7 @@ const a = {
     'x-response-definitions': { '200': 'ImageModel' },
   },
   endpointName: 'image',
-}
+};
 interface PathObject {
   [method: string]: {
     tags?: string[],
@@ -105,5 +105,5 @@ interface PathObject {
     security: [{
       [name: string]: any[]
     }]
-  }
+  };
 }
