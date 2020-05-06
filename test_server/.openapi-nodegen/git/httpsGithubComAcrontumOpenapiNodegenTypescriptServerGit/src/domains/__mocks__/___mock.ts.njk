@@ -1,4 +1,5 @@
 import { mockItGenerator } from 'openapi-nodegen-mockers'
+{% if pathMethodsHaveAttr(operations, 'security') %}import {JwtAccess} from '@/http/nodegen/interfaces/JwtAccess';{% endif %}
 {% set interfaces = importInterfaces(operations) %}
 {% for interface in interfaces -%}
 import { {{ interface }} } from '@/http/nodegen/interfaces/{{ interface }}';

@@ -63,18 +63,14 @@ export default function (method: string, pathObject: any, withType: boolean = fa
       });
     });
     if (push || pathObject['x-passThruWithoutJWT']) {
-      if (fileType === 'STUB') {
-        params.push(
-          'jwtData' + addType(
-          withType,
-          pathObject,
-          undefined,
-          (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
-          (!!pathObject['x-passThruWithoutJWT']),
-          ));
-      } else {
-        params.push('jwtData' + addType(withType, pathObject));
-      }
+      params.push(
+        'jwtData' + addType(
+        withType,
+        pathObject,
+        undefined,
+        (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
+        (!!pathObject['x-passThruWithoutJWT']),
+        ));
     }
   }
   if (pathObject['x-passRequest']) {

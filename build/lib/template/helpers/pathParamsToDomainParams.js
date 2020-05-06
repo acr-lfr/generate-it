@@ -65,12 +65,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
             });
         });
         if (push_1 || pathObject['x-passThruWithoutJWT']) {
-            if (fileType === 'STUB') {
-                params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined, (!!pathObject['x-passThruWithoutJWT'])));
-            }
-            else {
-                params.push('jwtData' + addType(withType, pathObject));
-            }
+            params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined, (!!pathObject['x-passThruWithoutJWT'])));
         }
     }
     if (pathObject['x-passRequest']) {
