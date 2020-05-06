@@ -28,7 +28,7 @@ var SwaggerUtils = /** @class */ (function () {
             else {
                 validationText += 'Joi.' + type + '()';
             }
-            if (type === 'string' && !isRequired) {
+            if (type === 'string' && !isRequired && !param.minLength) {
                 validationText += ".allow('')";
             }
             if (param["default"]) {
@@ -43,17 +43,17 @@ var SwaggerUtils = /** @class */ (function () {
                 var enumValues = param["enum"] || param.schema["enum"];
                 validationText += '.valid([' + enumValues.map(function (e) { return "'" + e + "'"; }).join(', ') + '])';
             }
-            if (param.minLength) {
-                validationText += (param.minLength ? ".min(" + +param.minLength + ")" : '');
+            if (Number(param.minLength)) {
+                validationText += ".min(" + +param.minLength + ")";
             }
-            if (param.minimum) {
-                validationText += (param.minimum ? ".min(" + +param.minimum + ")" : '');
+            if (Number(param.minimum)) {
+                validationText += ".min(" + +param.minimum + ")";
             }
-            if (param.maxLength) {
-                validationText += (param.maxLength ? ".max(" + +param.maxLength + ")" : '');
+            if (Number(param.maxLength)) {
+                validationText += ".max(" + +param.maxLength + ")";
             }
-            if (param.maximum) {
-                validationText += (param.maximum ? ".max(" + +param.maximum + ")" : '');
+            if (Number(param.maximum)) {
+                validationText += ".max(" + +param.maximum + ")";
             }
             if (type === 'string' && param.pattern) {
                 validationText += (param.pattern ? ".regex(/" + param.pattern + "/)" : '');
@@ -66,11 +66,11 @@ var SwaggerUtils = /** @class */ (function () {
                 isFromArray: true
             });
             validationText += ')';
-            if (param.minItems) {
-                validationText += (param.minItems ? ".min(" + +param.minItems + ")" : '');
+            if (Number(param.minItems)) {
+                validationText += ".min(" + +param.minItems + ")";
             }
-            if (param.maxItems) {
-                validationText += (param.maxItems ? ".max(" + +param.maxItems + ")" : '');
+            if (Number(param.maxItems)) {
+                validationText += ".max(" + +param.maxItems + ")";
             }
             validationText += (isRequired ? '.required(),' : ',');
         }
