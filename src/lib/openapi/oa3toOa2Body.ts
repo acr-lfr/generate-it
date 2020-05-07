@@ -5,7 +5,13 @@ export default (method: string, fullPathMethod: any): any => {
     return fullPathMethod;
   }
   try {
-    const schema = fullPathMethod.requestBody.content['application/json'].schema;
+    let schema;
+    if (fullPathMethod.requestBody.content['application/json']) {
+      schema = fullPathMethod.requestBody.content['application/json'].schema;
+    }
+    if (fullPathMethod.requestBody.content['application/x-www-form-urlencoded']) {
+      schema = fullPathMethod.requestBody.content['application/x-www-form-urlencoded'].schema;
+    }
     fullPathMethod.parameters = fullPathMethod.parameters || [];
     fullPathMethod.parameters.push({
       in: 'body',
@@ -15,6 +21,7 @@ export default (method: string, fullPathMethod: any): any => {
     });
     return fullPathMethod;
   } catch (e) {
+    console.log(fullPathMethod);
     console.error('Please pass body objects by reference to a component', e);
     throw e;
   }
