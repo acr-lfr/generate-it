@@ -11,9 +11,9 @@ exports["default"] = (function (inputType) {
         case 'boolean':
             return 'boolean';
         case 'array':
-            return 'array';
+            return 'any[]';
         case 'object':
-            return 'object';
+            return 'any';
         default:
             return 'any';
     }
