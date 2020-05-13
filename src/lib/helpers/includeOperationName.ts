@@ -30,4 +30,6 @@ export default (operationName: string, nodegenRc: NodegenRc): boolean => {
   ) {
     return false;
   }
+
+  return false;
 };

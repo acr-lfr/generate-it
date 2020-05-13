@@ -10,6 +10,7 @@ import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
 import { OperationsContainer, Operations } from '@/interfaces/Operations';
 import includeOperationName from '@/lib/helpers/includeOperationName';
+import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
 
 class GenerateOperation {
   /**
@@ -59,6 +60,16 @@ class GenerateOperation {
           channel: pathProperties,
           subresource: generateSubresourceName(pathName, operationName),
         });
+      } else {
+        pathProperties = includeOperationNameAction(operationName, pathProperties, config.data.nodegenRc);
+        if (pathProperties) {
+          files[operationName] = files[operationName] || [];
+          files[operationName].push({
+            channelName: pathName,
+            channel: pathProperties,
+            subresource: generateSubresourceName(pathName, operationName),
+          });
+        }
       }
     });
     for (const operationNameItem in files) {

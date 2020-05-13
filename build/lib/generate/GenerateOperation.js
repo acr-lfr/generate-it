@@ -10,6 +10,7 @@ var TemplateRenderer_1 = tslib_1.__importDefault(require("../template/TemplateRe
 var FileTypeCheck_1 = tslib_1.__importDefault(require("../FileTypeCheck"));
 var GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
 var includeOperationName_1 = tslib_1.__importDefault(require("../helpers/includeOperationName"));
+var includeOperationNameAction_1 = tslib_1.__importDefault(require("../helpers/includeOperationNameAction"));
 var GenerateOperation = /** @class */ (function () {
     function GenerateOperation() {
     }
@@ -88,6 +89,17 @@ var GenerateOperation = /** @class */ (function () {
                                     channel: pathProperties,
                                     subresource: generateSubresourceName_1["default"](pathName, operationName)
                                 });
+                            }
+                            else {
+                                pathProperties = includeOperationNameAction_1["default"](operationName, pathProperties, config.data.nodegenRc);
+                                if (pathProperties) {
+                                    files[operationName] = files[operationName] || [];
+                                    files[operationName].push({
+                                        channelName: pathName,
+                                        channel: pathProperties,
+                                        subresource: generateSubresourceName_1["default"](pathName, operationName)
+                                    });
+                                }
                             }
                         });
                         _a = [];

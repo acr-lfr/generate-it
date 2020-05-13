@@ -7,6 +7,8 @@ export default interface NodegenRc {
     operationNames?: {
       include?: string[],
       exclude?: string[],
+      includePublish?: string[],
+      includeSubscribe?: string[]
     },
     [helperName: string]: any
   };

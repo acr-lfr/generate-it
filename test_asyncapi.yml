@@ -31,13 +31,13 @@ channels:
       When a new connection change occurs the new cache values are emitted in
       the payload
     publish:
-      operationId: msAuthCacheUser
+      operationId: msImageCacheUser
       message:
         contentType: application/json
         payload:
           $ref: '#/components/schemas/MsAuthCacheUser'
     subscribe:
-      operationId: msAuthCacheUser
+      operationId: msImageCacheUser
       message:
         contentType: application/json
         payload:

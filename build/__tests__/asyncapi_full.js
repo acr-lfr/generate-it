@@ -66,10 +66,10 @@ describe('e2e testing', function () {
                 case 0:
                     filePaths = [
                         // Check generated domains (STUB file)
-                        ['test_asyncapi/generated/channels/MsAuthChannel.ts', 'b61559c72d3a8e20103977b467c70650'],
-                        ['test_asyncapi/generated/channels/channelExporter.ts', '58f977b01f5263b361b4bf7faeb1e33c'],
-                        ['test_asyncapi/generated/operationIds.ts', '2740d3cfa39128578eab114927ea65c9'],
-                        ['test_asyncapi/generated/RabbitMQService.ts', '97aa04cf142c0d8fe4be1ace639ce518'],
+                        ['test_asyncapi/generated/channels/MsAuthChannel.ts', 'ea28254cdb902664f9ed0de58de67c6b'],
+                        ['test_asyncapi/generated/channels/channelExporter.ts', 'e092b2a17ba2d3d90970978a7cac2e59'],
+                        ['test_asyncapi/generated/operationIds.ts', '0183d24df0cdbeb122f0e78552a66c6c'],
+                        ['test_asyncapi/generated/RabbitMQService.ts', 'd9fd6e44d904f61e08c8d1b5db6efadf'],
                     ];
                     mismatched = [];
                     i = 0;
@@ -112,7 +112,7 @@ describe('e2e testing', function () {
                     return [4 /*yield*/, hashElement(domainPath, options)];
                 case 1:
                     hash = _a.sent();
-                    expect(hash.hash).toBe('8O/PYgVzBv/0i3Ok7xVZEb3W3eY=');
+                    expect(hash.hash).toBe('F2I3FeomBqkTdJn7hRIiSbEoELI=');
                     return [2 /*return*/];
             }
         });

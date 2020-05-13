@@ -259,9 +259,7 @@ class OpenAPIBundler {
     apiObject.basePath = apiObject.basePath || '';
     _.each(apiObject.channels || apiObject.paths, (pathObject: any, pathName: string) => {
       const endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
-      if (includeOperationName(endpointName, config.nodegenRc)) {
-        pathObject.endpointName = endpointName;
-      }
+      pathObject.endpointName = endpointName;
     });
 
     apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {

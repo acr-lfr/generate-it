@@ -9,15 +9,19 @@ import {{ DomainName }} from '../../domains/{{ DomainName }}'
 {% set ChannelName = ucFirst(operation_name) + 'Channel' -%}
 class {{ ChannelName }} {
   public publish (qWrapper: QWrapperDomain) {
-    {% for op in operations -%}{% for method, channel in op.channel -%}{% if method === 'publish' %}
-    {% set channelId = _.toUpper(channel.operationId) -%}
+    {% for op in operations -%}
+      {% for method, channel in op.channel -%}
+        {% if method === 'publish' %}
+          {% set channelId = _.toUpper(channel.operationId) -%}
     eventBus.on(operationIds.{{ channelId }}, (payload: any) => {
       console.log('EVENT ' + operationIds.{{ channelId }});
       qWrapper.sendToExchange(
         payload,
         operationIds.{{ channelId }});
     });
-    {% endif %}{% endfor -%}{% endfor -%}
+        {% endif %}
+      {% endfor -%}
+    {% endfor -%}
   }
 
   public subscribe (qWrapper: QWrapperDomain): void {
@@ -25,8 +29,10 @@ class {{ ChannelName }} {
       let processed = true;
       let requeue = false;
       switch (message.fields.routingKey) {
-        {% for op in operations -%}{% for method, channel in op.channel -%}{% if method === 'subscribe' %}
-        {% set channelId = _.toUpper(channel.operationId) -%}
+        {% for op in operations -%}
+          {% for method, channel in op.channel -%}
+            {% if method === 'subscribe' %}
+              {% set channelId = _.toUpper(channel.operationId) -%}
         case operationIds.{{ channelId }}: {
           try {
             await {{ DomainName}}.{{channel.operationId}}(message.content.toString());
@@ -40,7 +46,9 @@ class {{ ChannelName }} {
             requeue
           };
         }
-        {% endif %}{% endfor -%}{% endfor -%}
+            {% endif %}
+          {% endfor -%}
+        {% endfor -%}
         default:
           return {
             processed: true,

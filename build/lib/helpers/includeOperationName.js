@@ -20,4 +20,5 @@ exports["default"] = (function (operationName, nodegenRc) {
         nodegenRc.helpers.operationNames.exclude.includes(operationName)) {
         return false;
     }
+    return false;
 });

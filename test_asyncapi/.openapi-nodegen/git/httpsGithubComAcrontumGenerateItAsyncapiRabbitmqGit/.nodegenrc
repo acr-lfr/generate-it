@@ -4,7 +4,8 @@
   "nodegenType": "server",
   "helpers": {
     "operationNames": {
-      "include": ["ms-auth"]
+      "includePublish": ["ms-auth"],
+      "includeSubscribe": ["ms-image"]
     }
   }
 }
