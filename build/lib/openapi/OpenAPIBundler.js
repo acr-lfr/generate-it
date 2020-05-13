@@ -10,7 +10,6 @@ var openApiResolveAllOfs_1 = tslib_1.__importDefault(require("./openApiResolveAl
 var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
-var includeOperationName_1 = tslib_1.__importDefault(require("../helpers/includeOperationName"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -313,9 +312,7 @@ var OpenAPIBundler = /** @class */ (function () {
         apiObject.basePath = apiObject.basePath || '';
         _.each(apiObject.channels || apiObject.paths, function (pathObject, pathName) {
             var endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
-            if (includeOperationName_1["default"](endpointName, config.nodegenRc)) {
-                pathObject.endpointName = endpointName;
-            }
+            pathObject.endpointName = endpointName;
         });
         apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter(function (item) {
             return typeof item === 'string';

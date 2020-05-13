@@ -57,6 +57,17 @@ describe('includeOperationName', () => {
     expect(includeOperationName('ms-images', {
       'nodegenDir': 'generated',
       'nodegenMockDir': '/__mocks__',
+      'nodegenType': 'server',
+      'helpers': {
+        'operationNames': {}
+      }
+    })).toBe(false);
+  });
+
+  it('should return false', function () {
+    expect(includeOperationName('ms-images', {
+      'nodegenDir': 'generated',
+      'nodegenMockDir': '/__mocks__',
       'nodegenType': 'server'
     })).toBe(true);
   });
