@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.FUNCS_DIRS = exports.SHOULD_PLURAL = void 0;
 var tslib_1 = require("tslib");
 var lodash_1 = tslib_1.__importDefault(require("lodash"));
 exports.SHOULD_PLURAL = ['Route', 'TransformInputs', 'TransformOutputs', 'Validator'];

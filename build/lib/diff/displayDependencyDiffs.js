@@ -43,12 +43,24 @@ exports["default"] = (function (targetDir, templatesDir) {
         console.log('Please check your package json scripts are up to date, the tpl and local scripts differ:'.green);
         console.table(scriptsChanged);
     }
+    var buildQuickFix = function (deps) {
+        if (!deps)
+            return;
+        var commandParts = Object.entries(deps).reduce(function (installCmd, _a) {
+            var pkgName = _a[0], diff = _a[1];
+            var version = diff['Changed To'].replace(/[^0-9.]/, '');
+            return installCmd.concat(pkgName + "@" + version);
+        }, ['npm install']);
+        return commandParts.join(' ');
+    };
     if (Object.keys(dependenciesChanged).length > 1) {
         console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(dependenciesChanged);
+        console.log("Quick fix: \n" + buildQuickFix(dependenciesChanged) + "\n");
     }
     if (Object.keys(devDependenciesChanged).length > 1) {
         console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(devDependenciesChanged);
+        console.log("Quick fix: \n" + buildQuickFix(devDependenciesChanged) + "\n");
     }
 });
