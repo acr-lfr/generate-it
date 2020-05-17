@@ -68,7 +68,7 @@ test('openapi2 enums', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[3]]}),
   ).toBe(
-    'query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},',
+    'query: {sort:Joi.string().allow(\'\').valid(\'asc\', \'desc\'),},',
   );
 });
 
@@ -76,6 +76,6 @@ test('openapi3 enums', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[2]]}),
   ).toBe(
-    'query: {sort:Joi.string().allow(\'\').valid([\'asc\', \'desc\']),},',
+    'query: {sort:Joi.string().allow(\'\').valid(\'asc\', \'desc\'),},',
   );
 });

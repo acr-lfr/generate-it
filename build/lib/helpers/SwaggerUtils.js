@@ -41,7 +41,7 @@ var SwaggerUtils = /** @class */ (function () {
             }
             if (param["enum"] || (param.schema && param.schema["enum"])) {
                 var enumValues = param["enum"] || param.schema["enum"];
-                validationText += '.valid([' + enumValues.map(function (e) { return "'" + e + "'"; }).join(', ') + '])';
+                validationText += '.valid(' + enumValues.map(function (e) { return "'" + e + "'"; }).join(', ') + ')';
             }
             if (Number(param.minLength)) {
                 validationText += ".min(" + +param.minLength + ")";
