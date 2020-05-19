@@ -53,15 +53,15 @@ export default (targetDir: string, templatesDir: string) => {
   }
 
   if (Object.keys(scriptsChanged).length > 1) {
-    console.log('The following package.json scripts have been updated:'.green);
+    console.log('Please check your package json scripts are up to date, the tpl and local scripts differ:'.green);
     console.table(scriptsChanged);
   }
   if (Object.keys(dependenciesChanged).length > 1) {
-    console.log('The following package.json dependencies have been updated:'.green);
+    console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(dependenciesChanged);
   }
   if (Object.keys(devDependenciesChanged).length > 1) {
-    console.log('The following package.json devDependencies have been updated:'.green);
+    console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(devDependenciesChanged);
   }
 };
