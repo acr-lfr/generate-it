@@ -4,15 +4,15 @@ var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var hasha_1 = tslib_1.__importDefault(require("hasha"));
-var openapiNodegen_full_1 = require("./openapiNodegen_full");
+var helpers_1 = require("./helpers");
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
 describe('e2e testing', function () {
     beforeAll(function () {
-        openapiNodegen_full_1.clearTestServer();
+        helpers_1.clearTestServer();
     });
     afterAll(function () {
-        openapiNodegen_full_1.clearTestServer();
+        helpers_1.clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -28,7 +28,7 @@ describe('e2e testing', function () {
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
-                            template: openapiNodegen_full_1.tplUrl
+                            template: helpers_1.tplUrl
                         })];
                 case 1:
                     _a.sent();

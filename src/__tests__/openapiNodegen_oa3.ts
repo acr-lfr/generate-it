@@ -1,7 +1,7 @@
 import path from 'path';
 import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
-import { clearTestServer, tplUrl } from '@/__tests__/openapiNodegen_full';
+import { clearTestServer, tplUrl } from '@/__tests__/helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 

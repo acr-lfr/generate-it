@@ -8,15 +8,12 @@ jest.setTimeout(60 * 1000); // in milliseconds
 var testServerName = 'test_server_2';
 var testServerPath = path_1["default"].join(process.cwd(), testServerName);
 exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
-exports.clearTestServer = function () {
-    fs_extra_1["default"].removeSync(testServerName);
-};
 describe('e2e testing', function () {
     beforeAll(function () {
-        exports.clearTestServer();
+        fs_extra_1["default"].removeSync(testServerName);
     });
     afterAll(function () {
-        exports.clearTestServer();
+        fs_extra_1["default"].removeSync(testServerName);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;

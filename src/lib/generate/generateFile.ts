@@ -2,7 +2,6 @@ import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfi
 import NamingUtils from '@/lib/helpers/NamingUtils';
 import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import fs from 'fs-extra';
-import * as _ from 'lodash';
 import path from 'path';
 import generateFileDoWrite from '@/lib/generate/generateFileDoWrite';
 

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Run all tests before rebasing
+
+npm run lint || exit 1
+
+
+# Running the tests on all feature branch
+# is quite aggressive, if you turn this on
+# it may discourage developers from frequently
+# pushing code to a feature branch. The tests
+# will also be run by the CI tool.
+
+#npm run test || exit 1
