@@ -9,6 +9,6 @@ export default (isFirstRun: boolean, templatePath: string, rootTplFilePath: stri
   if (!fs.existsSync(NamingUtils.stripNjkExtension(templatePath))) {
     return true;
   }
-
-  return !!rootTplFilePath.includes(nodegenDir);
+  const rootTplFilePathCleaned = rootTplFilePath.replace('.openapi-nodegen', '');
+  return !!rootTplFilePathCleaned.includes(nodegenDir);
 };

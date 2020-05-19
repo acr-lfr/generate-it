@@ -5,29 +5,15 @@ var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var hasha_1 = tslib_1.__importDefault(require("hasha"));
+var helpers_1 = require("./helpers");
 jest.setTimeout(60 * 1000); // in milliseconds
 var testServerPath = path_1["default"].join(process.cwd(), 'test_server');
-exports.tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
-exports.clearTestServer = function (dir) {
-    if (dir === void 0) { dir = 'test_server'; }
-    // return;
-    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), dir));
-    for (var i = 0; i < names.length; ++i) {
-        if (names[i] !== '.openapi-nodegen') {
-            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), dir, names[i]));
-        }
-    }
-    var compare = path_1["default"].join(process.cwd(), dir, '/.openapi-nodegen/cache');
-    if (fs_extra_1["default"].pathExistsSync(compare)) {
-        fs_extra_1["default"].removeSync(compare);
-    }
-};
 describe('e2e testing', function () {
     beforeAll(function () {
-        exports.clearTestServer();
+        helpers_1.clearTestServer();
     });
     afterAll(function () {
-        exports.clearTestServer();
+        helpers_1.clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -43,7 +29,7 @@ describe('e2e testing', function () {
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
-                            template: exports.tplUrl
+                            template: helpers_1.tplUrl
                         })];
                 case 1:
                     _a.sent();
@@ -73,7 +59,7 @@ describe('e2e testing', function () {
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
-                            template: exports.tplUrl
+                            template: helpers_1.tplUrl
                         })];
                 case 1:
                     _a.sent();

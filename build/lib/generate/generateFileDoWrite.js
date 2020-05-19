@@ -10,5 +10,6 @@ exports["default"] = (function (isFirstRun, templatePath, rootTplFilePath, nodeg
     if (!fs_extra_1["default"].existsSync(NamingUtils_1["default"].stripNjkExtension(templatePath))) {
         return true;
     }
-    return !!rootTplFilePath.includes(nodegenDir);
+    var rootTplFilePathCleaned = rootTplFilePath.replace('.openapi-nodegen', '');
+    return !!rootTplFilePathCleaned.includes(nodegenDir);
 });

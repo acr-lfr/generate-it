@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import path from "path";
+import path from 'path';
 
 export const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
 export const tplClientServer = 'https://github.com/acrontum/openapi-nodegen-typescript-server-client.git';

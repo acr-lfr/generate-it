@@ -4,32 +4,18 @@ var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var hasha_1 = tslib_1.__importDefault(require("hasha"));
-var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var hashElement = require('folder-hash').hashElement;
+var helpers_1 = require("./helpers");
 jest.setTimeout(60 * 1000); // in milliseconds
-exports.clearTestServer = function (dir) {
-    if (dir === void 0) { dir = 'test_server'; }
-    // return;
-    var names = fs_extra_1["default"].readdirSync(path_1["default"].join(process.cwd(), dir));
-    for (var i = 0; i < names.length; ++i) {
-        if (names[i] !== '.openapi-nodegen') {
-            fs_extra_1["default"].removeSync(path_1["default"].join(process.cwd(), dir, names[i]));
-        }
-    }
-    var compare = path_1["default"].join(process.cwd(), dir, '/.openapi-nodegen/cache');
-    if (fs_extra_1["default"].pathExistsSync(compare)) {
-        fs_extra_1["default"].removeSync(compare);
-    }
-};
 var serverDir = 'test_asyncapi';
 var testServerPath = path_1["default"].join(process.cwd(), serverDir);
 exports.tplUrl = 'https://github.com/acrontum/generate-it-asyncapi-rabbitmq.git';
 describe('e2e testing', function () {
     beforeAll(function () {
-        exports.clearTestServer(serverDir);
+        helpers_1.clearTestServer(serverDir);
     });
     afterAll(function () {
-        exports.clearTestServer(serverDir);
+        helpers_1.clearTestServer(serverDir);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;

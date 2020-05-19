@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import openapiNodegen from '@/generateIt';
 import { tplUrl, tplClientServer, clearTestServer } from './helpers';
@@ -47,5 +48,20 @@ describe('e2e testing', () => {
     } catch (e) {
       done(e);
     }
+  });
+  it('should edit the client, regen and see the edit still present', async () => {
+    const checkPath = path.join(testClientPath, 'lib/HttpService.ts');
+    fs.writeFileSync(checkPath, '//', 'utf8');
+    await openapiNodegen({
+      dontRunComparisonTool: true,
+      dontUpdateTplCache: true,
+      mockServer: false,
+      segmentsCount: 1,
+      swaggerFilePath: ymlPath,
+      targetDir: testClientPath,
+      template: tplClientServer,
+    });
+    const templateStr = fs.readFileSync(checkPath).toString('utf8');
+    expect(templateStr).toBe('//');
   });
 });
