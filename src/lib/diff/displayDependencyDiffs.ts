@@ -1,6 +1,9 @@
 import 'colors';
 import fs from 'fs-extra';
 import path from 'path';
+import { suggestVersionUpgrade } from '../helpers/suggestVersionUpgrade';
+
+export const MISSING_MODULE = 'Not present on existing package.json, please add.';
 
 export default (targetDir: string, templatesDir: string) => {
   const packagJsonStr = 'package.json';
@@ -22,7 +25,7 @@ export default (targetDir: string, templatesDir: string) => {
   const devDependenciesChanged: any = {};
   const buildDiff = function (changed: string, from: string): any {
     this['Changed To'] = changed;
-    this.from = from || 'Not present on existing package.json, please add.';
+    this.from = from || MISSING_MODULE;
   };
 
   if (newJson.scripts) {
@@ -57,24 +60,22 @@ export default (targetDir: string, templatesDir: string) => {
     console.table(scriptsChanged);
   }
 
-  const buildQuickFix = (deps: { [pkg: string]: { 'Changed To': string; } }) => {
-    if (!deps) return;
-
-    const commandParts = Object.entries(deps).reduce((installCmd, [pkgName, diff]) => {
-      const version = diff['Changed To'].replace(/[^0-9.]/, '');
-      return installCmd.concat(`${pkgName}@${version}`);
-    }, ['npm install']);
-    return commandParts.join(' ');
-  }
-
   if (Object.keys(dependenciesChanged).length > 1) {
     console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(dependenciesChanged);
-    console.log(`Quick fix: \n${buildQuickFix(dependenciesChanged)}\n`);
+
+    const quickFix = suggestVersionUpgrade(dependenciesChanged, 'npm install');
+    if (quickFix) {
+      console.log(`Quick fix: \n${quickFix}\n`);
+    }
   }
   if (Object.keys(devDependenciesChanged).length > 1) {
     console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(devDependenciesChanged);
-    console.log(`Quick fix: \n${buildQuickFix(devDependenciesChanged)}\n`);
+
+    const quickFix = suggestVersionUpgrade(devDependenciesChanged, 'npm install --save-dev');
+    if (quickFix) {
+      console.log(`Quick fix: \n${quickFix}\n`);
+    }
   }
 };
