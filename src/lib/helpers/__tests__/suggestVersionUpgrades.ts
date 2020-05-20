@@ -82,13 +82,7 @@ describe('suggestVersionUpgrade', () => {
     };
 
     expect(suggestVersionUpgrade(jsonDiff, 'npm i -D')).toBe(
-      [
-        'npm i -D',
-        '@test/missing@1.19.0',
-        '@test/samever2@3.1.4-beta',
-        '@types/yamljs@0.2.31',
-        'typescript@3.9.2',
-      ].join(' ')
+      'npm i -D @test/missing@1.19.0 @test/samever2@3.1.4-beta @types/yamljs@0.2.31 typescript@3.9.2'
     );
   });
 });

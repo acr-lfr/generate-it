@@ -3,8 +3,6 @@ import fs from 'fs-extra';
 import path from 'path';
 import { suggestVersionUpgrade } from '../helpers/suggestVersionUpgrade';
 
-export const MISSING_MODULE = 'Not present on existing package.json, please add.';
-
 export default (targetDir: string, templatesDir: string) => {
   const packagJsonStr = 'package.json';
   const existing = JSON.parse(
@@ -25,7 +23,7 @@ export default (targetDir: string, templatesDir: string) => {
   const devDependenciesChanged: any = {};
   const buildDiff = function (changed: string, from: string): any {
     this['Changed To'] = changed;
-    this.from = from || MISSING_MODULE;
+    this.from = from || 'Not present on existing package.json, please add.';
   };
 
   if (newJson.scripts) {
@@ -69,6 +67,7 @@ export default (targetDir: string, templatesDir: string) => {
       console.log(`Quick fix: \n${quickFix}\n`);
     }
   }
+
   if (Object.keys(devDependenciesChanged).length > 1) {
     console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(devDependenciesChanged);

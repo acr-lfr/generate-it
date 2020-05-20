@@ -7,6 +7,9 @@ export interface DependancyDiff {
   };
 }
 
+// Technically, we accept non-semver formats in the npm packages and in some
+// cases our "versions" are just strings, so the regex on the site is overkill.
+// https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 const looksLikeAVersion = (v: string) =>
   !/[^0-9a-zA-Z.+-]/.test(v) && /\d/.test(v);
 
