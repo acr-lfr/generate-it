@@ -1,9 +1,12 @@
 "use strict";
 exports.__esModule = true;
+exports.MISSING_MODULE = void 0;
 var tslib_1 = require("tslib");
 require("colors");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
+var suggestVersionUpgrade_1 = require("../helpers/suggestVersionUpgrade");
+exports.MISSING_MODULE = 'Not present on existing package.json, please add.';
 exports["default"] = (function (targetDir, templatesDir) {
     var packagJsonStr = 'package.json';
     var existing = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(targetDir, packagJsonStr), { encoding: 'utf8' }));
@@ -13,7 +16,7 @@ exports["default"] = (function (targetDir, templatesDir) {
     var devDependenciesChanged = {};
     var buildDiff = function (changed, from) {
         this['Changed To'] = changed;
-        this.from = from || 'Not present on existing package.json, please add.';
+        this.from = from || exports.MISSING_MODULE;
     };
     if (newJson.scripts) {
         Object.keys(newJson.scripts).forEach(function (key) {
@@ -43,24 +46,20 @@ exports["default"] = (function (targetDir, templatesDir) {
         console.log('Please check your package json scripts are up to date, the tpl and local scripts differ:'.green);
         console.table(scriptsChanged);
     }
-    var buildQuickFix = function (deps) {
-        if (!deps)
-            return;
-        var commandParts = Object.entries(deps).reduce(function (installCmd, _a) {
-            var pkgName = _a[0], diff = _a[1];
-            var version = diff['Changed To'].replace(/[^0-9.]/, '');
-            return installCmd.concat(pkgName + "@" + version);
-        }, ['npm install']);
-        return commandParts.join(' ');
-    };
     if (Object.keys(dependenciesChanged).length > 1) {
         console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(dependenciesChanged);
-        console.log("Quick fix: \n" + buildQuickFix(dependenciesChanged) + "\n");
+        var quickFix = suggestVersionUpgrade_1.suggestVersionUpgrade(dependenciesChanged, 'npm install');
+        if (quickFix !== 'npm install') {
+            console.log("Quick fix: \n" + quickFix + "\n");
+        }
     }
     if (Object.keys(devDependenciesChanged).length > 1) {
         console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(devDependenciesChanged);
-        console.log("Quick fix: \n" + buildQuickFix(devDependenciesChanged) + "\n");
+        var quickFix = suggestVersionUpgrade_1.suggestVersionUpgrade(devDependenciesChanged, 'npm install --save-dev');
+        if (quickFix !== 'npm install --save-dev') {
+            console.log("Quick fix: \n" + quickFix + "\n");
+        }
     }
 });

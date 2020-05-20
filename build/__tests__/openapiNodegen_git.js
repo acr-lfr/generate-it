@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.clearTestServer = exports.tplUrl = void 0;
+exports.tplUrl = void 0;
 var tslib_1 = require("tslib");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
