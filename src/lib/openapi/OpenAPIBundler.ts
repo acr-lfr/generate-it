@@ -9,6 +9,7 @@ import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
 import includeOperationName from '@/lib/helpers/includeOperationName';
+import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -257,10 +258,14 @@ class OpenAPIBundler {
    */
   public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
-    _.each(apiObject.channels || apiObject.paths, (pathObject: any, pathName: string) => {
+    const objects = apiObject.channels || apiObject.paths;
+    for (const pathName in objects) {
+      const pathObject = objects[pathName];
       const endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
-      pathObject.endpointName = endpointName;
-    });
+      if (includeOperationNameAction(endpointName, pathObject, config.nodegenRc)) {
+        pathObject.endpointName = endpointName;
+      }
+    }
 
     apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {
       return typeof item === 'string';
