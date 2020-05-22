@@ -1,19 +1,19 @@
 "use strict";
 exports.__esModule = true;
-exports["default"] = (function (responses) {
-    if (responses['200']) {
-        if (responses['200'].schema) {
+exports["default"] = (function (input) {
+    if (input['200']) {
+        if (input['200'].schema) {
             // we are oa2
-            return responses['200'].schema;
+            return input['200'].schema;
         }
         else {
             // we are oa3
-            if (responses['200'].content && responses['200'].content['application/json']) {
-                if (responses['200'].content['application/json'].schema) {
-                    return responses['200'].content['application/json'].schema;
+            if (input['200'].content && input['200'].content['application/json']) {
+                if (input['200'].content['application/json'].schema) {
+                    return input['200'].content['application/json'].schema;
                 }
             }
         }
     }
-    return {};
+    return (input && input.schema) ? input.schema : {};
 });
