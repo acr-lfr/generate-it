@@ -42,6 +42,22 @@ channels:
         contentType: application/json
         payload:
           $ref: '#/components/schemas/MsAuthCacheUser'
+  /ms-item/delete-user:
+    description: >-
+      When a new connection change occurs the new cache values are emitted in
+      the payload
+    publish:
+      operationId: msImageCacheUser
+      message:
+        contentType: application/json
+        payload:
+          $ref: '#/components/schemas/MsAuthCacheUser'
+    subscribe:
+      operationId: msImageCacheUser
+      message:
+        contentType: application/json
+        payload:
+          $ref: '#/components/schemas/MsAuthCacheUser'
 components:
   schemas:
     MsAuthCacheConnection:
