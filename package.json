@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.8.3",
+  "version": "5.8.4",
   "description": "Generate it, socket and html consumers and clients from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
@@ -49,9 +49,8 @@
     "npm-tool-version-check": "^1.0.1",
     "nunjucks": "^3.2.1",
     "prettier": "^2.0.5",
-    "progress": "^2.0.3",
     "project-name-generator": "^2.1.7",
-    "quicktype": "^15.0.232",
+    "quicktype": "^15.0.235",
     "recursive-copy": "^2.0.10",
     "semver": "^7.3.2",
     "text-file-diff": "^1.1.2",
