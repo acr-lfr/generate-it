@@ -17,7 +17,8 @@ var TemplateFetchURL = /** @class */ (function () {
      * @param writeToFolder
      */
     TemplateFetchURL.prototype.writeGitIgnore = function (writeToFolder) {
-        fs_extra_1["default"].writeFileSync(path_1["default"].join(writeToFolder, '.gitignore'), "\n!.keep\n./*\n");
+        fs_extra_1["default"].ensureDirSync(writeToFolder);
+        fs_extra_1["default"].writeFileSync(path_1["default"].join(writeToFolder, '.gitignore'), "\n./*\n");
     };
     /**
      * Returns the folder to store the git repos in
