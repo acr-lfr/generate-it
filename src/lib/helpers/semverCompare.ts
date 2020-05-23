@@ -13,14 +13,14 @@ export const semverCompare = (versionA: string, versionB: string) => {
       return 0;
     }
     return +a1 - +b1;
-  }
+  };
 
   const preCmp = (a1: string, b1: string) => {
     if (!Number.isNaN(Number(a1)) && !Number.isNaN(Number(b1))) {
       return +a1 - +b1;
     }
     return a1.localeCompare(b1);
-  }
+  };
 
   for (let i = 0; i < coreA.length; ++i) {
     const n = coreCmp(coreA[i], coreB[i]);
