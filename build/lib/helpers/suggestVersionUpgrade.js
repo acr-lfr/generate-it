@@ -2,6 +2,9 @@
 exports.__esModule = true;
 exports.suggestVersionUpgrade = void 0;
 var semverCompare_1 = require("./semverCompare");
+// Technically, we accept non-semver formats in the npm packages and in some
+// cases our "versions" are just strings, so the regex on the site is overkill.
+// https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 var looksLikeAVersion = function (v) {
     return !/[^0-9a-zA-Z.+-]/.test(v) && /\d/.test(v);
 };

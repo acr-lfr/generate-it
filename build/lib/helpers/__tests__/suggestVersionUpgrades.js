@@ -65,13 +65,7 @@ describe('suggestVersionUpgrade', function () {
                 'jest': { 'Changed To': 'mocha', 'from': '25.2.1-bug-candidate' },
                 '@types/lodash': { 'Changed To': 'Not needed', 'from': 'Any version' }
             };
-            expect(suggestVersionUpgrade_1.suggestVersionUpgrade(jsonDiff, 'npm i -D')).toBe([
-                'npm i -D',
-                '@test/missing@1.19.0',
-                '@test/samever2@3.1.4-beta',
-                '@types/yamljs@0.2.31',
-                'typescript@3.9.2',
-            ].join(' '));
+            expect(suggestVersionUpgrade_1.suggestVersionUpgrade(jsonDiff, 'npm i -D')).toBe('npm i -D @test/missing@1.19.0 @test/samever2@3.1.4-beta @types/yamljs@0.2.31 typescript@3.9.2');
             return [2 /*return*/];
         });
     }); });

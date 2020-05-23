@@ -8,11 +8,22 @@ export const semverCompare = (versionA: string, versionB: string) => {
     .split('-')
     .map((s) => s.split('.'));
 
-  const partCmp = (a1: string, b1: string) =>
-    Number.isNaN(a1 + b1) ? 0 : +a1 - +b1 || a1.localeCompare(b1);
+  const coreCmp = (a1: string, b1: string) => {
+    if (Number.isNaN(Number(a1)) || Number.isNaN(Number(b1))) {
+      return 0;
+    }
+    return +a1 - +b1;
+  }
+
+  const preCmp = (a1: string, b1: string) => {
+    if (!Number.isNaN(Number(a1)) && !Number.isNaN(Number(b1))) {
+      return +a1 - +b1;
+    }
+    return a1.localeCompare(b1);
+  }
 
   for (let i = 0; i < coreA.length; ++i) {
-    const n = partCmp(coreA[i], coreB[i]);
+    const n = coreCmp(coreA[i], coreB[i]);
     if (n) return n;
   }
 
@@ -23,7 +34,7 @@ export const semverCompare = (versionA: string, versionB: string) => {
     if (preB.length === i) return 1;
     if (preA[i] === preB[i]) continue;
 
-    const n = partCmp(preA[i], preB[i]);
+    const n = preCmp(preA[i], preB[i]);
     if (n) return n;
   }
 
