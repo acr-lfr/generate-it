@@ -23,7 +23,7 @@ describe('e2e testing', () => {
       const ymlPath = path.join(process.cwd(), 'test_asyncapi.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
+        dontUpdateTplCache: false,
         mockServer: false,
         segmentsCount: 1,
         swaggerFilePath: ymlPath,

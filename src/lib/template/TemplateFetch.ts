@@ -10,8 +10,25 @@ import { GIT_DIRECTORY } from '@/constants/CachePaths';
 class TemplateFetchURL {
   public targetGitCacheDir: string;
 
+  /**
+   * Writes a gitnore file to the provided folder
+   * Used to write a gitignore to the parent git folder.
+   * @param writeToFolder
+   */
+  public writeGitIgnore (writeToFolder: string) {
+    fs.ensureDirSync(writeToFolder);
+    fs.writeFileSync(path.join(writeToFolder, '.gitignore'), `
+./*
+`);
+  }
+
+  /**
+   * Returns the folder to store the git repos in
+   * @param targetGitCacheDir
+   */
   public getCacheFolder (targetGitCacheDir: string) {
     this.targetGitCacheDir = path.join(targetGitCacheDir, GIT_DIRECTORY);
+    this.writeGitIgnore(this.targetGitCacheDir);
     return this.targetGitCacheDir;
   }
 

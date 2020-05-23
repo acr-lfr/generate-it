@@ -26,7 +26,7 @@ describe('e2e testing', function () {
                     ymlPath = path_1["default"].join(process.cwd(), 'test_asyncapi.yml');
                     return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
-                            dontUpdateTplCache: true,
+                            dontUpdateTplCache: false,
                             mockServer: false,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
