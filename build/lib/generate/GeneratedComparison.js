@@ -115,6 +115,11 @@ var GeneratedComparison = /** @class */ (function () {
         });
         console.table(logDiffs);
     };
+    /**
+     * Using the data in the config.json file, remove old cache files
+     * If the system has files not registered in the config, these files will remain untouched.
+     * @param targetParentDirectory
+     */
     GeneratedComparison.prototype.versionCleanup = function (targetParentDirectory) {
         var configPath = this.getCacheCompareConfigPath(targetParentDirectory);
         var json = this.getCacheCompareJson(configPath);
