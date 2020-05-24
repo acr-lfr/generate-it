@@ -1,6 +1,7 @@
 import 'colors';
 import fs from 'fs-extra';
 import path from 'path';
+import { suggestVersionUpgrade } from '../helpers/suggestVersionUpgrade';
 
 export default (targetDir: string, templatesDir: string) => {
   const packagJsonStr = 'package.json';
@@ -56,12 +57,24 @@ export default (targetDir: string, templatesDir: string) => {
     console.log('Please check your package json scripts are up to date, the tpl and local scripts differ:'.green);
     console.table(scriptsChanged);
   }
+
   if (Object.keys(dependenciesChanged).length > 1) {
     console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(dependenciesChanged);
+
+    const quickFix = suggestVersionUpgrade(dependenciesChanged, 'npm install');
+    if (quickFix) {
+      console.log(`Quick fix: \n${quickFix}\n`);
+    }
   }
+
   if (Object.keys(devDependenciesChanged).length > 1) {
     console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
     console.table(devDependenciesChanged);
+
+    const quickFix = suggestVersionUpgrade(devDependenciesChanged, 'npm install --save-dev');
+    if (quickFix) {
+      console.log(`Quick fix: \n${quickFix}\n`);
+    }
   }
 };

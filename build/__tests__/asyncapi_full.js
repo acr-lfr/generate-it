@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.tplUrl = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));

@@ -4,6 +4,7 @@ var tslib_1 = require("tslib");
 require("colors");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
+var suggestVersionUpgrade_1 = require("../helpers/suggestVersionUpgrade");
 exports["default"] = (function (targetDir, templatesDir) {
     var packagJsonStr = 'package.json';
     var existing = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(targetDir, packagJsonStr), { encoding: 'utf8' }));
@@ -46,9 +47,17 @@ exports["default"] = (function (targetDir, templatesDir) {
     if (Object.keys(dependenciesChanged).length > 1) {
         console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(dependenciesChanged);
+        var quickFix = suggestVersionUpgrade_1.suggestVersionUpgrade(dependenciesChanged, 'npm install');
+        if (quickFix) {
+            console.log("Quick fix: \n" + quickFix + "\n");
+        }
     }
     if (Object.keys(devDependenciesChanged).length > 1) {
         console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
         console.table(devDependenciesChanged);
+        var quickFix = suggestVersionUpgrade_1.suggestVersionUpgrade(devDependenciesChanged, 'npm install --save-dev');
+        if (quickFix) {
+            console.log("Quick fix: \n" + quickFix + "\n");
+        }
     }
 });
