@@ -1,16 +1,18 @@
-export default (responses: any) => {
-  if (responses['200']) {
-    if (responses['200'].schema) {
+export default (input: any) => {
+  if (input['200']) {
+    if (input['200'].schema) {
       // we are oa2
-      return responses['200'].schema;
+      return input['200'].schema;
     } else {
       // we are oa3
-      if (responses['200'].content && responses['200'].content['application/json']) {
-        if (responses['200'].content['application/json'].schema) {
-          return responses['200'].content['application/json'].schema;
+      if (input['200'].content && input['200'].content['application/json']) {
+        if (input['200'].content['application/json'].schema) {
+          return input['200'].content['application/json'].schema;
         }
       }
     }
   }
-  return {};
+  // We also check if the input contains any valid OA schema by looking for type or properties in the provided object
+  // The typical use case here if for async api payloads
+  return (input && (input.type || input.properties)) ? input : {};
 };

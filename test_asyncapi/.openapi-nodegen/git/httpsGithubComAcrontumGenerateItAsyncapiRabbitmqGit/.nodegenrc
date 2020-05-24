@@ -5,7 +5,7 @@
   "helpers": {
     "operationNames": {
       "includePublish": ["ms-auth"],
-      "includeSubscribe": ["ms-image"]
+      "includeSubscribe": ["ms-item"]
     }
   }
 }

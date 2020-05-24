@@ -11,8 +11,22 @@ var CachePaths_1 = require("../../constants/CachePaths");
 var TemplateFetchURL = /** @class */ (function () {
     function TemplateFetchURL() {
     }
+    /**
+     * Writes a gitnore file to the provided folder
+     * Used to write a gitignore to the parent git folder.
+     * @param writeToFolder
+     */
+    TemplateFetchURL.prototype.writeGitIgnore = function (writeToFolder) {
+        fs_extra_1["default"].ensureDirSync(writeToFolder);
+        fs_extra_1["default"].writeFileSync(path_1["default"].join(writeToFolder, '.gitignore'), "\n./*\n");
+    };
+    /**
+     * Returns the folder to store the git repos in
+     * @param targetGitCacheDir
+     */
     TemplateFetchURL.prototype.getCacheFolder = function (targetGitCacheDir) {
         this.targetGitCacheDir = path_1["default"].join(targetGitCacheDir, CachePaths_1.GIT_DIRECTORY);
+        this.writeGitIgnore(this.targetGitCacheDir);
         return this.targetGitCacheDir;
     };
     /**
