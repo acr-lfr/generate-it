@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.9.0",
+  "version": "5.9.1",
   "description": "Generate it, socket and html consumers and clients from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "build": "rm -fR ./build && ttsc -p .",
     "build:watch": "ttsc --watch -p .",
     "start": "node cli.js",
-    "prepublishOnly": "npm run lint && npm run test"
+    "prepublishOnly": "npm run test"
   },
   "repository": {
     "type": "git",
