@@ -4,12 +4,8 @@ export default interface NodegenRc {
   nodegenType: string;
   interfaceStyle?: string;
   helpers?: {
-    operationNames?: {
-      include?: string[],
-      exclude?: string[],
-      includePublish?: string[],
-      includeSubscribe?: string[]
-    },
+    publishOpIds?: string[],
+    subscribeOpIds?: string[],
     [helperName: string]: any
   };
 }

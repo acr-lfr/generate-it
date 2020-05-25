@@ -39,7 +39,7 @@ describe('e2e testing', () => {
     // B) The tpl for the typescipt server has change
     // C) Something broke when building the said files
     const expectedPathHashes = [
-      // Check generated domains (STUB file)
+      // Check rabbitMQ domains (STUB file)
       ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
       ['test_server/src/domains/WeatherDomain.ts', '6f7097720b51eeb4b2bbd073aeb49111'],
       // Check complex interface (INTERFACE file)
@@ -48,7 +48,7 @@ describe('e2e testing', () => {
       ['test_server/src/http/nodegen/interfaces/index.ts', '9ad805ef48dbfb2cceb12626d7ecfafb'],
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
-      // Check the generated routes files (OPERATION file)
+      // Check the rabbitMQ routes files (OPERATION file)
       ['test_server/src/http/nodegen/routes/rainRoutes.ts', '18d92a00b90852ff39e7cac9fff9aa8d'],
       ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '4c78b10fc990f7eb18886e1dac76f678'],
       // Check the output transformers (OPERATION file)

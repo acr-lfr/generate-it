@@ -14,7 +14,7 @@ export default (inputArgsArray: string[]) => {
       swaggerFile = path.resolve(swaggerFilePath);
     })
     .option('-m, --mocked', 'If passed, the domains will be configured to return dummy content.')
-    .option('-o, --output <outputDir>', 'directory where to put the generated files (defaults to current directory)', commanderParseOutput, process.cwd())
+    .option('-o, --output <outputDir>', 'directory where to put the rabbitMQ files (defaults to current directory)', commanderParseOutput, process.cwd())
     .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
     .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
     .option('--dont-run-comparison-tool', 'Skips the stub file comparison tool and version cleanup', false)
