@@ -15,7 +15,7 @@ describe('e2e testing', () => {
     clearTestServer(serverDir);
   });
   afterAll(() => {
-    // clearTestServer(serverDir);
+    clearTestServer(serverDir);
   });
 
   it('Should build without error', async (done) => {
@@ -23,7 +23,7 @@ describe('e2e testing', () => {
       const ymlPath = path.join(process.cwd(), 'test_asyncapi.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
-        dontUpdateTplCache: false,
+        dontUpdateTplCache: true,
         mockServer: false,
         segmentsCount: 1,
         swaggerFilePath: ymlPath,

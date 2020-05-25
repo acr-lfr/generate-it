@@ -1,1 +1,0 @@
-# generate-it-asyncapi-rabbitmq

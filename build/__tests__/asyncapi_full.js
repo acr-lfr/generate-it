@@ -15,7 +15,7 @@ describe('e2e testing', function () {
         helpers_1.clearTestServer(serverDir);
     });
     afterAll(function () {
-        // clearTestServer(serverDir);
+        helpers_1.clearTestServer(serverDir);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -26,7 +26,7 @@ describe('e2e testing', function () {
                     ymlPath = path_1["default"].join(process.cwd(), 'test_asyncapi.yml');
                     return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: false,
-                            dontUpdateTplCache: false,
+                            dontUpdateTplCache: true,
                             mockServer: false,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,

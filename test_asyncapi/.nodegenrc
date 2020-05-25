@@ -1,9 +1,0 @@
-{
-  "nodegenDir": "generated",
-  "nodegenMockDir": "/__mocks__",
-  "nodegenType": "server",
-  "helpers": {
-    "subscribeOpIds": ["msAuthCacheConnection"],
-    "publishOpIds": ["msImageCacheUser"]
-  }
-}
