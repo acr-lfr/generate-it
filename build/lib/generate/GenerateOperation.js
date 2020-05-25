@@ -10,7 +10,6 @@ var TemplateRenderer_1 = tslib_1.__importDefault(require("../template/TemplateRe
 var FileTypeCheck_1 = tslib_1.__importDefault(require("../FileTypeCheck"));
 var GeneratedComparison_1 = tslib_1.__importDefault(require("./GeneratedComparison"));
 var includeOperationName_1 = tslib_1.__importDefault(require("../helpers/includeOperationName"));
-var includeOperationNameAction_1 = tslib_1.__importDefault(require("../helpers/includeOperationNameAction"));
 var GenerateOperation = /** @class */ (function () {
     function GenerateOperation() {
     }
@@ -81,8 +80,9 @@ var GenerateOperation = /** @class */ (function () {
                     case 0:
                         files = {};
                         lodash_1.each(config.data.swagger.channels, function (pathProperties, pathName) {
-                            var operationName = pathProperties.endpointName;
-                            if (includeOperationName_1["default"](operationName, config.data.nodegenRc)) {
+                            var subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
+                            if (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)) {
+                                var operationName = pathProperties.subscribe.operationId;
                                 files[operationName] = files[operationName] || [];
                                 files[operationName].push({
                                     channelName: pathName,
@@ -90,18 +90,8 @@ var GenerateOperation = /** @class */ (function () {
                                     subresource: generateSubresourceName_1["default"](pathName, operationName)
                                 });
                             }
-                            else {
-                                pathProperties = includeOperationNameAction_1["default"](operationName, pathProperties, config.data.nodegenRc);
-                                if (pathProperties) {
-                                    files[operationName] = files[operationName] || [];
-                                    files[operationName].push({
-                                        channelName: pathName,
-                                        channel: pathProperties,
-                                        subresource: generateSubresourceName_1["default"](pathName, operationName)
-                                    });
-                                }
-                            }
                         });
+                        console.log(files);
                         _a = [];
                         for (_b in files)
                             _a.push(_b);
@@ -126,9 +116,10 @@ var GenerateOperation = /** @class */ (function () {
     /**
      * Generate an operation file
      */
-    GenerateOperation.prototype.file = function (config, operations, operationName, fileType, verbose, additionalTplContent) {
+    GenerateOperation.prototype.file = function (config, operations, operationName, fileType, verbose, additionalTplContent, toFunction) {
         if (verbose === void 0) { verbose = false; }
         if (additionalTplContent === void 0) { additionalTplContent = {}; }
+        if (toFunction === void 0) { toFunction = false; }
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var filePath, data, subDir, ext, newFilename, targetFile, tplVars, renderedContent;
             return tslib_1.__generator(this, function (_a) {

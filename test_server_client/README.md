@@ -1,6 +1,6 @@
 # openapi-nodegen typescript server template files
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- START doctoc rabbitMQ TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
@@ -17,7 +17,7 @@
     - [Tip 1 local api file pointer](#tip-1-local-api-file-pointer)
     - [Tip 2 for older versions of openapi-nodegen](#tip-2-for-older-versions-of-openapi-nodegen)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- END doctoc rabbitMQ TOC please keep comment here to allow auto update -->
 
 ## API Spec file helpers/features
 These templates inject into the code helpful elements depending on the provided api file.

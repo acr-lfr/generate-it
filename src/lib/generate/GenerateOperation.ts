@@ -52,26 +52,18 @@ class GenerateOperation {
   public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
     each(config.data.swagger.channels, (pathProperties, pathName) => {
-      const operationName = pathProperties.endpointName;
-      if (includeOperationName(operationName, config.data.nodegenRc)) {
+      const subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
+      if (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)) {
+        const operationName = pathProperties.subscribe.operationId;
         files[operationName] = files[operationName] || [];
         files[operationName].push({
           channelName: pathName,
           channel: pathProperties,
           subresource: generateSubresourceName(pathName, operationName),
         });
-      } else {
-        pathProperties = includeOperationNameAction(operationName, pathProperties, config.data.nodegenRc);
-        if (pathProperties) {
-          files[operationName] = files[operationName] || [];
-          files[operationName].push({
-            channelName: pathName,
-            channel: pathProperties,
-            subresource: generateSubresourceName(pathName, operationName),
-          });
-        }
       }
     });
+    console.log(files);
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);
@@ -89,6 +81,7 @@ class GenerateOperation {
     fileType: string,
     verbose = false,
     additionalTplContent: any = {},
+    toFunction = false
   ) {
     const filePath = path.join(config.root, config.file_name);
     const data = fs.readFileSync(filePath, 'utf8');

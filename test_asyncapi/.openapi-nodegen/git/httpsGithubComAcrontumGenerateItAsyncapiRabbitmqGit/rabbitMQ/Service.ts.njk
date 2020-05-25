@@ -1,0 +1,77 @@
+import { QWrapperDomain } from 'q-wrapper';
+import { QWrapperSettings } from 'q-wrapper/lib/models';
+import { Message as amqMessage } from 'amqplib/callback_api';
+import objectReduceByMap from 'object-reduce-by-map';
+import * as operationIds from './operationIds';
+import * as interfaces from './interfaces'
+{% for path, channel in swagger.channels -%}
+{% if channel.subscribe and _.includes(nodegenRc.helpers.subscribeOpIds, channel.subscribe.operationId) -%}
+import {{ channel.subscribe.operationId }}SubscribeHandle from '../subscribeHandles/{{ ucFirst(channel.subscribe.operationId) }}SubscribeHandle'
+{% endif -%}
+{% endfor %}
+
+class RabbitMQ {
+  private qWrapper: QWrapperDomain;
+
+  public async setup (qWrapperSettings: QWrapperSettings): Promise<void> {
+    this.qWrapper = new QWrapperDomain(qWrapperSettings);
+    await this.qWrapper.initialize();
+  }
+
+  {% for path, channel in swagger.channels -%}
+    {% if channel.publish and _.includes(nodegenRc.helpers.publishOpIds, channel.publish.operationId) -%}
+    {% set channelId = _.toUpper(channel.publish.operationId) -%}
+  /**
+   * Path: {{ path }} publish
+   * OperationID: {{ channel.publish.operationId }}
+   * Description: {{ channel.description }}
+   */
+  publish{{ ucFirst(channel.publish.operationId) }} (payload: interfaces.{{ channel.publish['x-response-definitions'] }} ): void {
+    this.qWrapper.sendToExchange(
+      objectReduceByMap(payload, {{ paramsOutputReducer(channel.publish.message.payload) }}),
+      operationIds.{{ channelId }}
+    );
+  }
+  {% endif %}{% endfor -%}
+
+  /**
+   * All subscribe events get handled in the respective subscribeHandles
+   * Each routing key is the operation id.
+   * For any routing key not subscribed to, the item from the is simply marked
+   * as processed for the queue this ms is bound to.
+   */
+  subscribe (): void {
+    this.qWrapper.consume(async (message: amqMessage) => {
+      switch (message.fields.routingKey) {
+        {% for path, channel in swagger.channels -%}
+        {% if channel.subscribe and _.includes(nodegenRc.helpers.subscribeOpIds, channel.subscribe.operationId) %}
+        {% set channelId = _.toUpper(channel.subscribe.operationId) -%}
+        case operationIds.{{ channelId }}: {
+          try {
+            await {{ channel.subscribe.operationId }}SubscribeHandle(
+              JSON.parse(message.content.toString())
+            );
+            return {
+              processed: true,
+              requeue: false
+            };
+          } catch (e) {
+            console.error(e);
+            return {
+              processed: false,
+              requeue: true
+            };
+          }
+        }
+        {% endif -%}
+        {% endfor -%}
+        default:
+          return {
+            processed: true,
+            requeue: false
+          };
+      }
+    });
+  }
+}
+export default new RabbitMQ();

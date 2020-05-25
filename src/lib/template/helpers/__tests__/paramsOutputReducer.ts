@@ -7,7 +7,7 @@ it('Example input response of mixed should return valid string', () => {
       schema: {
         type: 'object',
         properties: {
-          id: {type: 'string', description: 'UUID of the item, generated at the server'},
+          id: {type: 'string', description: 'UUID of the item, rabbitMQ at the server'},
           birthday: {type: 'string', format: 'date-time'},
           birthday2: {type: 'string', format: 'date'},
           dateAdded: {type: 'string', description: 'The date the item was added, added by the server'},

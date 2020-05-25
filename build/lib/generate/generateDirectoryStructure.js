@@ -11,7 +11,7 @@ var path_1 = tslib_1.__importDefault(require("path"));
  * Generates the directory structure.
  * @param  {Object}        config - Configuration options
  * @param  {Object|String} config.swagger - Swagger JSON or a string pointing to a Swagger file.
- * @param  {String}        config.targetDir - Absolute path to the directory where the files will be generated.
+ * @param  {String}        config.targetDir - Absolute path to the directory where the files will be rabbitMQ.
  * @param  {String}        config.templates - Absolute path to the templates that should be used.
  * @param  {Object}        config.nodegenRc - Absolute path to the templates that should be used.
  * @param  {String}        templatesDir - The absolute path the templates directory
