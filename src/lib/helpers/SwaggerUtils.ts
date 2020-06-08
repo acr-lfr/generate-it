@@ -52,7 +52,7 @@ class SwaggerUtils {
       if (type === 'string' && param.pattern) {
         validationText += (param.pattern ? `.regex(/${param.pattern}/)` : '');
       }
-      validationText += (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     } else if (type === 'array') {
       validationText += 'Joi.array().items(';
       validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
@@ -60,13 +60,17 @@ class SwaggerUtils {
       });
       validationText += ')';
 
+      if (options.paramTypeKey && options.paramTypeKey === 'query') {
+        validationText += '.single()';
+      }
+
       if (Number(param.minItems)) {
         validationText += `.min(${+param.minItems})`;
       }
       if (Number(param.maxItems)) {
         validationText += `.max(${+param.maxItems})`;
       }
-      validationText += (isRequired ? '.required(),' : ',');
+      validationText += (isRequired && !options.isFromArray ? '.required(),' : ',');
     } else if (param.properties || param.schema) {
       const properties = param.properties || param.schema.properties || {};
       validationText += 'Joi.object({';
@@ -75,9 +79,9 @@ class SwaggerUtils {
           name: propertyKey, ...properties[propertyKey],
         });
       });
-      validationText += '})' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     } else {
-      validationText += 'Joi.any()' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += 'Joi.any()' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     }
     return validationText;
   }
@@ -124,10 +128,11 @@ class SwaggerUtils {
               name: propertyKey, ...param.schema.properties[propertyKey],
             }, {
               requiredFields: param.schema.required,
+              paramTypeKey,
             });
           });
         } else if (param.type || (param.schema && param.schema.type)) {
-          validationText += this.pathParamsToJoi(param);
+          validationText += this.pathParamsToJoi(param, { paramTypeKey });
         }
       });
       validationText += '},';
