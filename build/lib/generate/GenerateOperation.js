@@ -91,7 +91,6 @@ var GenerateOperation = /** @class */ (function () {
                                 });
                             }
                         });
-                        console.log(files);
                         _a = [];
                         for (_b in files)
                             _a.push(_b);

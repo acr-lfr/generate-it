@@ -63,7 +63,6 @@ class GenerateOperation {
         });
       }
     });
-    console.log(files);
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);
