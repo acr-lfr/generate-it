@@ -58,7 +58,7 @@ var SwaggerUtils = /** @class */ (function () {
             if (type === 'string' && param.pattern) {
                 validationText += (param.pattern ? ".regex(/" + param.pattern + "/)" : '');
             }
-            validationText += (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+            validationText += (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
         }
         else if (type === 'array') {
             validationText += 'Joi.array().items(';
@@ -66,13 +66,16 @@ var SwaggerUtils = /** @class */ (function () {
                 isFromArray: true
             });
             validationText += ')';
+            if (options.paramTypeKey && options.paramTypeKey === 'query') {
+                validationText += '.single()';
+            }
             if (Number(param.minItems)) {
                 validationText += ".min(" + +param.minItems + ")";
             }
             if (Number(param.maxItems)) {
                 validationText += ".max(" + +param.maxItems + ")";
             }
-            validationText += (isRequired ? '.required(),' : ',');
+            validationText += (isRequired && !options.isFromArray ? '.required(),' : ',');
         }
         else if (param.properties || param.schema) {
             var properties_1 = param.properties || param.schema.properties || {};
@@ -80,10 +83,10 @@ var SwaggerUtils = /** @class */ (function () {
             Object.keys(properties_1).forEach(function (propertyKey) {
                 validationText += _this.pathParamsToJoi(tslib_1.__assign({ name: propertyKey }, properties_1[propertyKey]));
             });
-            validationText += '})' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+            validationText += '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
         }
         else {
-            validationText += 'Joi.any()' + (isRequired ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+            validationText += 'Joi.any()' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
         }
         return validationText;
     };
@@ -125,12 +128,13 @@ var SwaggerUtils = /** @class */ (function () {
                 if (param.schema && param.schema.properties) {
                     Object.keys(param.schema.properties).forEach(function (propertyKey) {
                         validationText += _this.pathParamsToJoi(tslib_1.__assign({ name: propertyKey }, param.schema.properties[propertyKey]), {
-                            requiredFields: param.schema.required
+                            requiredFields: param.schema.required,
+                            paramTypeKey: paramTypeKey
                         });
                     });
                 }
                 else if (param.type || (param.schema && param.schema.type)) {
-                    validationText += _this.pathParamsToJoi(param);
+                    validationText += _this.pathParamsToJoi(param, { paramTypeKey: paramTypeKey });
                 }
             });
             validationText += '},';
