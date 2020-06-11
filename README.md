@@ -18,7 +18,7 @@ generate-it asyncapi.yml --template https://github.com/acrontum/generate-it-asyn
 ```
 ___
 
-Full [documentation](https://acrontum.github.io/generate-it/) hosted on github pages..
+Full **[DOCUMENTATION](https://acrontum.github.io/generate-it/)** hosted on github pages..
 
 ___
 
