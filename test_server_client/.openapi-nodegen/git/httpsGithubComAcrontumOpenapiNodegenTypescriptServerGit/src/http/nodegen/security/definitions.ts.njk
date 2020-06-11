@@ -1,0 +1,10 @@
+export default {
+  {% set secDef = swagger.securityDefinitions if swagger.securityDefinitions else swagger.components.securitySchemes -%}
+  {% for name, value in secDef -%}
+  '{{ name }}': {
+    {% for subName, subValue in value -%}
+    '{{ subName }}': {{ subValue | dump }},
+    {% endfor -%}
+  },
+  {% endfor -%}
+};
