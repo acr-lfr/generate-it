@@ -1,0 +1,10 @@
+export default {
+  {% for op in operations -%}
+    {% for key, path in op.path -%}
+      {% if isValidMethod(key) %}
+  // {{path.operationId}}
+  {{path.operationId}}: {{ paramsOutputReducer(path.responses)}}
+      {% endif %}
+    {%- endfor %}
+  {%- endfor %}
+}

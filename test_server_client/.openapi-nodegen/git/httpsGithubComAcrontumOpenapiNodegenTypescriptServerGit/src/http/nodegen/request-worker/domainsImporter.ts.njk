@@ -1,0 +1,8 @@
+{% for endpoint in endpoints -%}
+import {{ucFirst(prettifyRouteName(endpoint))}}Domain from '@/domains/{{ucFirst(prettifyRouteName(endpoint))}}Domain';
+{% endfor -%}
+
+export {
+  {% for endpoint in endpoints -%}
+  {{ucFirst(prettifyRouteName(endpoint))}}Domain,
+  {% endfor %}};

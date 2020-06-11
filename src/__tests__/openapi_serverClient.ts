@@ -21,7 +21,7 @@ describe('e2e testing', () => {
     try {
       await openapiNodegen({
         dontRunComparisonTool: true,
-        dontUpdateTplCache: true,
+        dontUpdateTplCache: false,
         mockServer: false,
         segmentsCount: 1,
         swaggerFilePath: ymlPath,
