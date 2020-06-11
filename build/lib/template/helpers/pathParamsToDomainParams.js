@@ -52,9 +52,10 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
         }
     }
     var helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
+    var tplType = this.ctx && this.ctx.config.data.nodegenType;
     var fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
     var stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
-    if (pathObject.security) {
+    if (pathObject.security && tplType !== 'client') {
         var push_1 = false;
         pathObject.security = pathObject.security || [];
         pathObject.security.forEach(function (security) {
@@ -68,7 +69,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
             params.push('jwtData' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined, (!!pathObject['x-passThruWithoutJWT'])));
         }
     }
-    if (pathObject['x-passRequest']) {
+    if (pathObject['x-passRequest'] && tplType !== 'client') {
         if (fileType === 'STUB') {
             params.push('req' + addType(withType, pathObject, undefined, (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined));
         }
