@@ -1,7 +1,7 @@
 import 'colors';
 import * as fs from 'fs-extra';
 import path from 'path';
-import globalHelpers from '@/utils/globalHelpers';
+import globalHelpers from '@/lib/helpers/globalHelpers';
 import Config from '@/interfaces/Config';
 import ConfigMerger from '@/lib/ConfigMerger';
 import FileIterator from '@/lib/FileIterator';
@@ -9,7 +9,7 @@ import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import generateDirectoryStructure from '@/lib/generate/generateDirectoryStructure';
 import TemplateFetch from '@/lib/template/TemplateFetch';
 import OpenAPIBundler from '@/lib/openapi/OpenAPIBundler';
-import logTimeDiff from '@/utils/logTimeDiff';
+import logTimeDiff from '@/lib/helpers/logTimeDiff';
 
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.

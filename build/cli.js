@@ -4,7 +4,6 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 require("colors");
 var inquirer = tslib_1.__importStar(require("inquirer"));
-var path_1 = tslib_1.__importDefault(require("path"));
 var commander_1 = tslib_1.__importDefault(require("./commander"));
 var generateIt_1 = tslib_1.__importDefault(require("./generateIt"));
 var cli_1 = require("./constants/cli");
@@ -23,9 +22,9 @@ npm_tool_version_check_1["default"](require('../package.json').version, 'https:/
         swaggerFilePath: cli.swaggerFile,
         targetDir: cli.program.output,
         template: cli.program.template,
+        variables: cli.program.variables,
         segmentsCount: cli.program.segmentsCount,
-        handlebars_helper: cli.program.handlebars ? path_1["default"].resolve(process.cwd(), cli.program.handlebars) : undefined,
-        ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
+        handlebars_helper: undefined,
         mockServer: cli.program.mocked || false
     };
     var question = "Continuing will replace the entire http layer:".green + "\n- ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost.\n- Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.\n- See the manual for further information: https://acrontum.github.io/generate-it/\n- This message is of no concern for a 1st time run." + "\n\nAre you sure you wish to continue?\n".green;

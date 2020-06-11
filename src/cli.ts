@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import 'colors';
 import * as inquirer from 'inquirer';
-import path from 'path';
 import cliInput from './commander';
 import generateIt from './generateIt';
 import { LINEBREAK } from '@/constants/cli';
@@ -27,9 +26,9 @@ versionCheck(
     swaggerFilePath: cli.swaggerFile,
     targetDir: cli.program.output,
     template: cli.program.template,
+    variables: cli.program.variables,
     segmentsCount: cli.program.segmentsCount,
-    handlebars_helper: cli.program.handlebars ? path.resolve(process.cwd(), cli.program.handlebars) : undefined,
-    ignoredModules: cli.program.ignoredModules ? cli.program.ignoredModules.split(',') : [],
+    handlebars_helper: undefined, // todo add the ability to inject custom helpers, this will allow the extraction of Joi form the core
     mockServer: cli.program.mocked || false,
   };
   const question = `Continuing will replace the entire http layer:`.green + `

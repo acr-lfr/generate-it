@@ -5,6 +5,7 @@ require("colors");
 var commander_1 = tslib_1.__importDefault(require("commander"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var commanderParseOutput_1 = tslib_1.__importDefault(require("./commanderParseOutput"));
+var commanderCollectObject_1 = tslib_1.__importDefault(require("./commanderCollectObject"));
 var packageInfo = require('../package.json');
 exports["default"] = (function (inputArgsArray) {
     var swaggerFile;
@@ -19,7 +20,8 @@ exports["default"] = (function (inputArgsArray) {
         .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
         .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
         .option('--dont-run-comparison-tool', 'Skips the stub file comparison tool and version cleanup', false)
-        .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging', '1')
+        .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging (not supported yet)', '1')
+        .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectObject_1["default"], {})
         .option('-v, --verbose', 'Outputs verbose logging')
         .option('--very-verbose', 'Outputs very verbose logging')
         .parse(inputArgsArray);

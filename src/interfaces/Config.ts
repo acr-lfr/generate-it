@@ -8,6 +8,6 @@ export default interface Config {
   dontRunComparisonTool: boolean;
   segmentsCount: number;
   handlebars_helper?: any;
-  ignoredModules?: string[];
   mockServer: boolean;
+  variables?: any;
 }

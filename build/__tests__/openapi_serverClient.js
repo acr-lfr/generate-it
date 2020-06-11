@@ -6,15 +6,16 @@ var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var helpers_1 = require("./helpers");
 jest.setTimeout(60 * 1000); // in milliseconds
-var testServerPath = path_1["default"].join(process.cwd(), 'test_server_client');
+var dirName = 'test_server_client';
+var testServerPath = path_1["default"].join(process.cwd(), dirName);
 var testClientPath = path_1["default"].join(testServerPath, 'src/services/openweathermap');
 var ymlPath = path_1["default"].join(process.cwd(), 'test_swagger.yml');
 describe('e2e testing', function () {
     beforeAll(function () {
-        helpers_1.clearTestServer();
+        helpers_1.clearTestServer(dirName);
     });
     afterAll(function () {
-        // clearTestServer();
+        helpers_1.clearTestServer(dirName);
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var e_1;

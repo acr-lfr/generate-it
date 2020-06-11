@@ -115,10 +115,9 @@ var GenerateOperation = /** @class */ (function () {
     /**
      * Generate an operation file
      */
-    GenerateOperation.prototype.file = function (config, operations, operationName, fileType, verbose, additionalTplContent, toFunction) {
+    GenerateOperation.prototype.file = function (config, operations, operationName, fileType, verbose, additionalTplContent) {
         if (verbose === void 0) { verbose = false; }
         if (additionalTplContent === void 0) { additionalTplContent = {}; }
-        if (toFunction === void 0) { toFunction = false; }
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var filePath, data, subDir, ext, newFilename, targetFile, tplVars, renderedContent;
             return tslib_1.__generator(this, function (_a) {
@@ -154,9 +153,9 @@ var GenerateOperation = /** @class */ (function () {
     GenerateOperation.prototype.templateVariables = function (operationName, operations, config, additionalTplContent, verbose, fileType) {
         if (additionalTplContent === void 0) { additionalTplContent = {}; }
         if (verbose === void 0) { verbose = false; }
-        return tslib_1.__assign({ operation_name: lodash_1["default"].camelCase(operationName.replace(/[}{]/g, '')), fileType: fileType,
+        return tslib_1.__assign(tslib_1.__assign({ operation_name: lodash_1["default"].camelCase(operationName.replace(/[}{]/g, '')), fileType: fileType,
             config: config,
-            operations: operations, swagger: config.data.swagger, mockServer: config.mockServer || false, nodegenRc: config.data.nodegenRc, verbose: verbose }, additionalTplContent);
+            operations: operations, swagger: config.data.swagger, mockServer: config.mockServer || false, nodegenRc: config.data.nodegenRc, verbose: verbose }, additionalTplContent), config.data.variables);
     };
     return GenerateOperation;
 }());

@@ -35,14 +35,7 @@ exports["default"] = (function (config, isFirstRun, additionalTplObject, nodegen
     fs_extra_1["default"].ensureFileSync(templatePath);
     global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
     var content = fs_extra_1["default"].readFileSync(loadFilePath, 'utf8');
-    var renderedContent = TemplateRenderer_1["default"].load(content, {
-        package: config.package,
-        swagger: config.data.swagger,
-        endpoints: config.data.swagger.endpoints,
-        definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
-        additionalTplObject: additionalTplObject,
-        nodegenRc: config.data.nodegenRc
-    });
+    var renderedContent = TemplateRenderer_1["default"].load(content, tslib_1.__assign({ package: config.package, swagger: config.data.swagger, endpoints: config.data.swagger.endpoints, definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [], additionalTplObject: additionalTplObject, nodegenRc: config.data.nodegenRc }, config.data.variables));
     var generatedPath = path_1["default"].resolve(targetDir, path_1["default"].relative(templatesDir, path_1["default"].resolve(root, NamingUtils_1["default"].stripNjkExtension(fileName))));
     return fs_extra_1["default"].writeFileSync(generatedPath, renderedContent, 'utf8');
 });

@@ -1,5 +1,5 @@
 import 'colors';
-import commandRun from '@/utils/commandRun';
+import commandRun from '@/lib/helpers/commandRun';
 import fs from 'fs-extra';
 import path from 'path';
 import compareVersions from 'compare-versions';

@@ -20,7 +20,7 @@ import pathParamsToDomainParams from '@/lib/template/helpers/pathParamsToDomainP
 import pathsHasParamsToValidate from '@/lib/template/helpers/pathsHasParamsToValidate';
 import pathMethodsHaveAttr from '@/lib/template/helpers/pathMethodsHaveAttr';
 import prettifyRouteName from '@/lib/template/helpers/prettifyRouteName';
-import prettyfyRenderedContent from '@/utils/prettyfyRenderedContent';
+import prettyfyRenderedContent from '@/lib/helpers/prettyfyRenderedContent';
 import operationsPathsHasParamsToValidate from '@/lib/template/helpers/operationsPathsHasParamsToValidate';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import urlPathJoin from '@/lib/template/helpers/urlPathJoin';

@@ -13,7 +13,7 @@ describe('e2e testing', function () {
         helpers_1.clearTestServer();
     });
     afterAll(function () {
-        helpers_1.clearTestServer();
+        // clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -29,7 +29,10 @@ describe('e2e testing', function () {
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
-                            template: helpers_1.tplUrl
+                            template: helpers_1.tplUrl,
+                            variables: {
+                                name: 'Generate-it Typescript Server'
+                            }
                         })];
                 case 1:
                     _a.sent();
@@ -98,6 +101,7 @@ describe('e2e testing', function () {
                         // Check git ignore was copied over (OTHER file)
                         // Check the deleted service file was reinjected
                         ['test_server/src/services/HttpHeadersCacheService.ts', '2498e94e30b5e52f912ea8877573f889'],
+                        ['test_server/README.md', '58f081882201c8862ec53d581b149093'],
                     ];
                     mismatched = [];
                     i = 0;
