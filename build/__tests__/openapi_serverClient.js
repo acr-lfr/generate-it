@@ -25,7 +25,7 @@ describe('e2e testing', function () {
                     _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, generateIt_1["default"]({
                             dontRunComparisonTool: true,
-                            dontUpdateTplCache: true,
+                            dontUpdateTplCache: false,
                             mockServer: false,
                             segmentsCount: 1,
                             swaggerFilePath: ymlPath,
