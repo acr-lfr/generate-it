@@ -50,7 +50,7 @@ export default function (method: string, pathObject: any, withType: boolean = fa
     }
   }
   const helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
-  const tplType = this.ctx && this.ctx.config.data.nodegenType;
+  const tplType = this.ctx && this.ctx.config.data.nodegenRc.nodegenType;
   const fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
   const stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
   if (pathObject.security && tplType !== 'client') {
