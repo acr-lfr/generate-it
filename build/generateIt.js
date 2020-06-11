@@ -4,14 +4,14 @@ var tslib_1 = require("tslib");
 require("colors");
 var fs = tslib_1.__importStar(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
-var globalHelpers_1 = tslib_1.__importDefault(require("./utils/globalHelpers"));
+var globalHelpers_1 = tslib_1.__importDefault(require("./lib/helpers/globalHelpers"));
 var ConfigMerger_1 = tslib_1.__importDefault(require("./lib/ConfigMerger"));
 var FileIterator_1 = tslib_1.__importDefault(require("./lib/FileIterator"));
 var GeneratedComparison_1 = tslib_1.__importDefault(require("./lib/generate/GeneratedComparison"));
 var generateDirectoryStructure_1 = tslib_1.__importDefault(require("./lib/generate/generateDirectoryStructure"));
 var TemplateFetch_1 = tslib_1.__importDefault(require("./lib/template/TemplateFetch"));
 var OpenAPIBundler_1 = tslib_1.__importDefault(require("./lib/openapi/OpenAPIBundler"));
-var logTimeDiff_1 = tslib_1.__importDefault(require("./utils/logTimeDiff"));
+var logTimeDiff_1 = tslib_1.__importDefault(require("./lib/helpers/logTimeDiff"));
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
  * @return {Promise}

@@ -4,7 +4,7 @@ var tslib_1 = require("tslib");
 require("colors");
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
-var consoleHorizontalRule_1 = tslib_1.__importDefault(require("../../utils/consoleHorizontalRule"));
+var consoleHorizontalRule_1 = tslib_1.__importDefault(require("../helpers/consoleHorizontalRule"));
 var fileDiff_1 = tslib_1.__importDefault(require("../diff/fileDiff"));
 var CachePaths_1 = require("../../constants/CachePaths");
 var GeneratedComparison = /** @class */ (function () {

@@ -36,15 +36,11 @@ class GenerateInterfaceFiles {
       {
         definitionName,
         definitionInterfaceText: interfaceText,
-        nodegenRc: this.config.data.nodegenRc
+        nodegenRc: this.config.data.nodegenRc,
+        ...this.config.data.variables
       },
       ext,
     );
-
-    const moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
-    if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs.existsSync(targetFile)) {
-      throw new Error('file exists');
-    }
     fs.writeFileSync(targetFile, content, 'utf8');
     return true;
   }

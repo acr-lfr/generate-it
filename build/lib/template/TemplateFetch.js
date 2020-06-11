@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 require("colors");
-var commandRun_1 = tslib_1.__importDefault(require("../../utils/commandRun"));
+var commandRun_1 = tslib_1.__importDefault(require("../helpers/commandRun"));
 var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var compare_versions_1 = tslib_1.__importDefault(require("compare-versions"));

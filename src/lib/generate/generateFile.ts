@@ -45,7 +45,8 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     endpoints: config.data.swagger.endpoints,
     definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
     additionalTplObject,
-    nodegenRc: config.data.nodegenRc
+    nodegenRc: config.data.nodegenRc,
+    ...config.data.variables
   });
 
   const generatedPath = path.resolve(

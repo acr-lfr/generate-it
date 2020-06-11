@@ -6,7 +6,7 @@ import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import generateFile from '@/lib/generate/generateFile';
 import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
-import isFileToIngore from '@/utils/isFileToIngore';
+import isFileToIngore from '@/lib/helpers/isFileToIngore';
 import GenerateOperation from '@/lib/generate/GenerateOperation';
 
 class FileWalker {

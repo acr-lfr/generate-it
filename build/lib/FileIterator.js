@@ -7,7 +7,7 @@ var walk_1 = tslib_1.__importDefault(require("walk"));
 var FileTypeCheck_1 = tslib_1.__importDefault(require("./FileTypeCheck"));
 var generateFile_1 = tslib_1.__importDefault(require("./generate/generateFile"));
 var GenerateInterfaceFiles_1 = tslib_1.__importDefault(require("./generate/GenerateInterfaceFiles"));
-var isFileToIngore_1 = tslib_1.__importDefault(require("../utils/isFileToIngore"));
+var isFileToIngore_1 = tslib_1.__importDefault(require("./helpers/isFileToIngore"));
 var GenerateOperation_1 = tslib_1.__importDefault(require("./generate/GenerateOperation"));
 var FileWalker = /** @class */ (function () {
     function FileWalker() {

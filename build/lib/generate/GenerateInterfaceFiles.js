@@ -32,15 +32,7 @@ var GenerateInterfaceFiles = /** @class */ (function () {
         var ext = NamingUtils_1["default"].getFileExt(this.config.file_name);
         var newFilename = definitionName + '.' + ext;
         var targetFile = path_1["default"].resolve(this.config.targetDir, subdir, newFilename);
-        var content = TemplateRenderer_1["default"].load(data.toString(), {
-            definitionName: definitionName,
-            definitionInterfaceText: interfaceText,
-            nodegenRc: this.config.data.nodegenRc
-        }, ext);
-        var moduleType = subdir.substring(subdir.lastIndexOf('/') + 1);
-        if (this.config.data.ignoredModules && this.config.data.ignoredModules.includes(moduleType) && fs_extra_1["default"].existsSync(targetFile)) {
-            throw new Error('file exists');
-        }
+        var content = TemplateRenderer_1["default"].load(data.toString(), tslib_1.__assign({ definitionName: definitionName, definitionInterfaceText: interfaceText, nodegenRc: this.config.data.nodegenRc }, this.config.data.variables), ext);
         fs_extra_1["default"].writeFileSync(targetFile, content, 'utf8');
         return true;
     };

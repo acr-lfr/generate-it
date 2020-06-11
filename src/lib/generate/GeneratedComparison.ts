@@ -2,7 +2,7 @@ import 'colors';
 import fs from 'fs-extra';
 import path from 'path';
 
-import consoleHorizontalRule from '@/utils/consoleHorizontalRule';
+import consoleHorizontalRule from '@/lib/helpers/consoleHorizontalRule';
 import fileDiff from '@/lib/diff/fileDiff';
 import { COMPARE_DIRECTORY, MAX_CACHE_COUNT } from '@/constants/CachePaths';
 

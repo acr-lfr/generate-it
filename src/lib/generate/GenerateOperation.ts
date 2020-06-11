@@ -79,8 +79,7 @@ class GenerateOperation {
     operationName: string,
     fileType: string,
     verbose = false,
-    additionalTplContent: any = {},
-    toFunction = false
+    additionalTplContent: any = {}
   ) {
     const filePath = path.join(config.root, config.file_name);
     const data = fs.readFileSync(filePath, 'utf8');
@@ -135,6 +134,7 @@ class GenerateOperation {
       nodegenRc: config.data.nodegenRc,
       verbose,
       ...additionalTplContent,
+      ...config.data.variables,
     };
   }
 }

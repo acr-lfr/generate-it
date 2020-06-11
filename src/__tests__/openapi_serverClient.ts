@@ -4,16 +4,17 @@ import openapiNodegen from '@/generateIt';
 import { tplUrl, tplClientServer, clearTestServer } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
-const testServerPath = path.join(process.cwd(), 'test_server_client');
+const dirName = 'test_server_client';
+const testServerPath = path.join(process.cwd(), dirName);
 const testClientPath = path.join(testServerPath, 'src/services/openweathermap');
 const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
 
 describe('e2e testing', () => {
   beforeAll(() => {
-    clearTestServer();
+    clearTestServer(dirName);
   });
   afterAll(() => {
-    // clearTestServer();
+    clearTestServer(dirName);
   });
 
   it('Should build without error', async (done) => {

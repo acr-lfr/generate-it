@@ -12,7 +12,7 @@ describe('e2e testing', () => {
     clearTestServer();
   });
   afterAll(() => {
-    clearTestServer();
+    // clearTestServer();
   });
 
   it('Should build without error', async (done) => {
@@ -26,6 +26,9 @@ describe('e2e testing', () => {
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
         template: tplUrl,
+        variables: {
+          name: 'Generate-it Typescript Server'
+        }
       });
       done();
     } catch (e) {
@@ -79,6 +82,7 @@ describe('e2e testing', () => {
       // Check git ignore was copied over (OTHER file)
       // Check the deleted service file was reinjected
       ['test_server/src/services/HttpHeadersCacheService.ts', '2498e94e30b5e52f912ea8877573f889'],
+      ['test_server/README.md', '58f081882201c8862ec53d581b149093'],
     ];
 
     const mismatched: string[] = [];
