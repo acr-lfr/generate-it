@@ -52,7 +52,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
         }
     }
     var helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
-    var tplType = this.ctx && this.ctx.config.data.nodegenType;
+    var tplType = this.ctx && this.ctx.config.data.nodegenRc.nodegenType;
     var fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
     var stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
     if (pathObject.security && tplType !== 'client') {
