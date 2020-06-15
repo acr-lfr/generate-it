@@ -3,17 +3,22 @@ import fs from 'fs-extra';
 import path from 'path';
 import { suggestVersionUpgrade } from '../helpers/suggestVersionUpgrade';
 
-export default (targetDir: string, templatesDir: string) => {
-  const packagJsonStr = 'package.json';
+export default (targetDir: string, templatesDir: string): void => {
+  const packageJsonStr = 'package.json';
+  const targetPackageJson = path.join(targetDir, packageJsonStr);
+  if (!fs.pathExistsSync(targetPackageJson)) {
+    return;
+  }
+
   const existing = JSON.parse(
     fs.readFileSync(
-      path.join(targetDir, packagJsonStr),
+      targetPackageJson,
       {encoding: 'utf8'},
     ),
   );
   const newJson = JSON.parse(
     fs.readFileSync(
-      path.join(templatesDir, packagJsonStr + '.njk'),
+      path.join(templatesDir, packageJsonStr + '.njk'),
       'utf8',
     ),
   );

@@ -12,7 +12,7 @@ describe('e2e testing', () => {
     clearTestServer();
   });
   afterAll(() => {
-    // clearTestServer();
+    clearTestServer();
   });
 
   it('Should build without error', async (done) => {
@@ -67,7 +67,7 @@ describe('e2e testing', () => {
       ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
       ['test_server/src/domains/WeatherDomain.ts', '6f7097720b51eeb4b2bbd073aeb49111'],
       // Check complex interface (INTERFACE file)
-      ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
+      ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
       // Check the interface index file (OTHER file)
       ['test_server/src/http/nodegen/interfaces/index.ts', 'c85c34035af23b2e94b69bf974f79e01'],
       // Check the security definition files (OTHER file)
@@ -76,7 +76,9 @@ describe('e2e testing', () => {
       ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'e25f924a136fa7c9b367ea9c14a7087d'],
       ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'e2f5987fd26f02a201e9bdcba6edf06c'],
       // Check the output transformers (OPERATION file)
-      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '4aa51bd321328186343834ac287f1cca'],
+      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],
+      ['test_server/src/http/nodegen/interfaces/JwtAccess.ts', 'e5e4baabba301bed91746dc770035fe5'],
+      ['test_server/src/http/nodegen/interfaces/WeatherGetQuery.ts', 'f314eaadd0e58e47588860f6d3e2029b'],
       // Check dynamic docker file (OTHER file)
       ['test_server/docker-compose.yml', '779fd3809240f10dd84c8c070f0851d3'],
       // Check git ignore was copied over (OTHER file)

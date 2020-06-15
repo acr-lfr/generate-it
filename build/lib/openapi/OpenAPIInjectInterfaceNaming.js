@@ -6,6 +6,7 @@ var openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTyp
 var _ = tslib_1.__importStar(require("lodash"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var oa3toOa2Body_1 = tslib_1.__importDefault(require("./oa3toOa2Body"));
+var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../generate/generateTypeScriptInterfaceText"));
 var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
     function OpenAPIInjectInterfaceNaming(jsObject, passedConfig) {
         this.apiObject = jsObject;
@@ -18,13 +19,17 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
     OpenAPIInjectInterfaceNaming.prototype.inject = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                if (ApiIs_1["default"].isOpenAPIorSwagger(this.apiObject)) {
-                    return [2 /*return*/, this.swaggerPathIterator(true)];
+                switch (_a.label) {
+                    case 0:
+                        if (!ApiIs_1["default"].isOpenAPIorSwagger(this.apiObject)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.swaggerPathIterator(true)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        if (!this.isAsyncAPI2()) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.asyncChannelIterator(true)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                    case 4: throw new Error('Unrecognised input format');
                 }
-                if (this.isAsyncAPI2()) {
-                    return [2 /*return*/, this.asyncChannelIterator(true)];
-                }
-                throw new Error('Unrecognised input format');
             });
         });
     };
@@ -32,13 +37,21 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * Merges the injected request params into single interface objects
      */
     OpenAPIInjectInterfaceNaming.prototype.mergeParameters = function () {
-        if (ApiIs_1["default"].isOpenAPIorSwagger(this.apiObject)) {
-            return this.swaggerPathIterator(false);
-        }
-        if (this.isAsyncAPI2()) {
-            return this.asyncChannelIterator(false);
-        }
-        throw new Error('Unrecognised input format');
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!ApiIs_1["default"].isOpenAPIorSwagger(this.apiObject)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.swaggerPathIterator(false)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        if (!this.isAsyncAPI2()) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.asyncChannelIterator(false)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                    case 4: throw new Error('Unrecognised input format');
+                }
+            });
+        });
     };
     /**
      * @param {string} ref
@@ -70,41 +83,96 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @return {{paths}|module.exports.apiObject|{paths}|{}}
      */
     OpenAPIInjectInterfaceNaming.prototype.swaggerPathIterator = function (fromInject) {
-        var _this = this;
-        if (!this.apiObject.paths) {
-            throw new Error('No paths found to iterate over');
-        }
-        Object.keys(this.apiObject.paths).forEach(function (path) {
-            Object.keys(_this.apiObject.paths[path]).forEach(function (method) {
-                if (fromInject) {
-                    _this.openApiXRequestInjector(path, method);
-                }
-                else {
-                    _this.mergeSwaggerInjectedParameters('paths', path, method);
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var _a, _b, _i, path, _c, _d, _e, method;
+            return tslib_1.__generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0:
+                        if (!this.apiObject.paths) {
+                            throw new Error('No paths found to iterate over');
+                        }
+                        _a = [];
+                        for (_b in this.apiObject.paths)
+                            _a.push(_b);
+                        _i = 0;
+                        _f.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 7];
+                        path = _a[_i];
+                        if (!this.apiObject.paths.hasOwnProperty(path)) {
+                            return [3 /*break*/, 6];
+                        }
+                        _c = [];
+                        for (_d in this.apiObject.paths[path])
+                            _c.push(_d);
+                        _e = 0;
+                        _f.label = 2;
+                    case 2:
+                        if (!(_e < _c.length)) return [3 /*break*/, 6];
+                        method = _c[_e];
+                        if (!this.apiObject.paths[path].hasOwnProperty(method)) {
+                            return [3 /*break*/, 5];
+                        }
+                        if (!fromInject) return [3 /*break*/, 3];
+                        this.openApiXRequestInjector(path, method);
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, this.mergeSwaggerInjectedParameters('paths', path, method)];
+                    case 4:
+                        _f.sent();
+                        _f.label = 5;
+                    case 5:
+                        _e++;
+                        return [3 /*break*/, 2];
+                    case 6:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 7: return [2 /*return*/, this.apiObject];
                 }
             });
         });
-        return this.apiObject;
     };
     OpenAPIInjectInterfaceNaming.prototype.asyncChannelIterator = function (fromInject) {
-        var _this = this;
-        if (!this.apiObject.channels) {
-            throw new Error('No paths found to iterate over');
-        }
-        Object.keys(this.apiObject.channels).forEach(function (channel) {
-            if (fromInject) {
-                _this.asyncXRequestInjector(channel);
-            }
-            else {
-                if (_this.apiObject.channels[channel].subscribe) {
-                    _this.mergeSwaggerInjectedParameters('channels', channel, 'subscribe');
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var _a, _b, _i, channel;
+            return tslib_1.__generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!this.apiObject.channels) {
+                            throw new Error('No paths found to iterate over');
+                        }
+                        _a = [];
+                        for (_b in this.apiObject.channels)
+                            _a.push(_b);
+                        _i = 0;
+                        _c.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 7];
+                        channel = _a[_i];
+                        if (!this.apiObject.channels.hasOwnProperty(channel)) {
+                            return [3 /*break*/, 6];
+                        }
+                        if (!fromInject) return [3 /*break*/, 2];
+                        this.asyncXRequestInjector(channel);
+                        return [3 /*break*/, 6];
+                    case 2:
+                        if (!this.apiObject.channels[channel].subscribe) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.mergeSwaggerInjectedParameters('channels', channel, 'subscribe')];
+                    case 3:
+                        _c.sent();
+                        _c.label = 4;
+                    case 4:
+                        if (!this.apiObject.channels[channel].publish) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.mergeSwaggerInjectedParameters('channels', channel, 'publish')];
+                    case 5:
+                        _c.sent();
+                        _c.label = 6;
+                    case 6:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 7: return [2 /*return*/, this.apiObject];
                 }
-                if (_this.apiObject.channels[channel].publish) {
-                    _this.mergeSwaggerInjectedParameters('channels', channel, 'publish');
-                }
-            }
+            });
         });
-        return this.apiObject;
     };
     /**
      * Injects the request and response object refs
@@ -237,40 +305,86 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
      * @param method
      */
     OpenAPIInjectInterfaceNaming.prototype.mergeSwaggerInjectedParameters = function (action, path, method) {
-        var _this = this;
-        Object.keys(this.apiObject[action][path][method]['x-request-definitions']).forEach(function (requestType) {
-            var requestObject = {};
-            var clear = true;
-            _this.apiObject[action][path][method]['x-request-definitions'][requestType].params.forEach(function (requestPath) {
-                var parameterObject = _.get(_this.apiObject, requestPath);
-                clear = false;
-                if (requestType === 'body') {
-                    // make object from body
-                }
-                else {
-                    var name_1 = '\'' + parameterObject.name + '\'';
-                    name_1 += (!parameterObject.required) ? '?' : '';
-                    if (ApiIs_1["default"].swagger(_this.apiObject) || ApiIs_1["default"].openapi2(_this.apiObject)) {
-                        requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.type);
-                    }
-                    else if (ApiIs_1["default"].openapi3(_this.apiObject) || ApiIs_1["default"].asyncapi2(_this.apiObject)) {
-                        requestObject[name_1] = openApiTypeToTypscriptType_1["default"](parameterObject.schema.type);
-                    }
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var _loop_1, this_1, _a, _b, _i, requestType;
+            var _this = this;
+            return tslib_1.__generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _loop_1 = function (requestType) {
+                            var requestObject, clear, interfaceName, _a, _b;
+                            return tslib_1.__generator(this, function (_c) {
+                                switch (_c.label) {
+                                    case 0:
+                                        if (!this_1.apiObject[action][path][method]['x-request-definitions'].hasOwnProperty(requestType)) {
+                                            return [2 /*return*/, "continue"];
+                                        }
+                                        requestObject = {};
+                                        clear = true;
+                                        this_1.apiObject[action][path][method]['x-request-definitions'][requestType].params.forEach(function (requestPath) {
+                                            var parameterObject = _.get(_this.apiObject, requestPath);
+                                            clear = false;
+                                            if (requestType !== 'body') {
+                                                if (requestType === 'formData') {
+                                                    var name_1 = '\'' + parameterObject.name + '\'';
+                                                    name_1 += (!parameterObject.required) ? '?' : '';
+                                                    requestObject[name_1] = (ApiIs_1["default"].swagger(_this.apiObject) || ApiIs_1["default"].openapi2(_this.apiObject)) ?
+                                                        openApiTypeToTypscriptType_1["default"](parameterObject.type) :
+                                                        openApiTypeToTypscriptType_1["default"](parameterObject.schema.type);
+                                                }
+                                                else {
+                                                    var paramName = parameterObject.name;
+                                                    if (ApiIs_1["default"].openapi3(_this.apiObject) || ApiIs_1["default"].asyncapi2(_this.apiObject)) {
+                                                        // lift up the contents of schema
+                                                        parameterObject = tslib_1.__assign(tslib_1.__assign({}, parameterObject), parameterObject.schema);
+                                                    }
+                                                    requestObject[paramName] = parameterObject;
+                                                }
+                                            }
+                                        });
+                                        if (!!clear) return [3 /*break*/, 4];
+                                        interfaceName = this_1.apiObject[action][path][method]['x-request-definitions'][requestType].name;
+                                        _a = this_1.apiObject[action][path][method]['x-request-definitions'][requestType];
+                                        if (!(['body', 'formData'].includes(requestType))) return [3 /*break*/, 1];
+                                        _b = { outputString: this_1.objectToInterfaceString(requestObject, interfaceName) };
+                                        return [3 /*break*/, 3];
+                                    case 1: return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](interfaceName, JSON.stringify({ type: 'object', properties: requestObject }))];
+                                    case 2:
+                                        _b = _c.sent();
+                                        _c.label = 3;
+                                    case 3:
+                                        _a.interfaceText = _b;
+                                        return [3 /*break*/, 5];
+                                    case 4:
+                                        delete this_1.apiObject[action][path][method]['x-request-definitions'][requestType];
+                                        _c.label = 5;
+                                    case 5: return [2 /*return*/];
+                                }
+                            });
+                        };
+                        this_1 = this;
+                        _a = [];
+                        for (_b in this.apiObject[action][path][method]['x-request-definitions'])
+                            _a.push(_b);
+                        _i = 0;
+                        _c.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        requestType = _a[_i];
+                        return [5 /*yield**/, _loop_1(requestType)];
+                    case 2:
+                        _c.sent();
+                        _c.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [2 /*return*/];
                 }
             });
-            if (!clear) {
-                var name_2 = _this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
-                _this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = {
-                    outputString: _this.objectToInterfaceString(requestObject, name_2)
-                };
-            }
-            else {
-                delete _this.apiObject[action][path][method]['x-request-definitions'][requestType];
-            }
         });
     };
     /**
-     * Convert interface object to string
+     * Convert interface object to string (this is used for For
      * @param object
      * @param name
      * @return {string}
