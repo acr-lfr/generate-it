@@ -226,10 +226,19 @@ definitions:
           - Mars
   JwtAccess:
     type: object
-    required:
-      - id
+    description: >
+      This model will never be passed in this from the front and backend or vice
+      versa. This represents the payload of the access jwt token.
     properties:
+      firstName:
+        type: string
       id:
+        type: string
+      lastName:
+        type: string
+      username:
+        type: string
+      rid:
         type: string
   WeatherFull:
     allOf:
