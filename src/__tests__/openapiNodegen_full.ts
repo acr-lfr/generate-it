@@ -12,7 +12,7 @@ describe('e2e testing', () => {
     clearTestServer();
   });
   afterAll(() => {
-    // clearTestServer();
+    clearTestServer();
   });
 
   it('Should build without error', async (done) => {
@@ -69,7 +69,7 @@ describe('e2e testing', () => {
       // Check complex interface (INTERFACE file)
       ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
       // Check the interface index file (OTHER file)
-      ['test_server/src/http/nodegen/interfaces/index.ts', 'c85c34035af23b2e94b69bf974f79e01'],
+      ['test_server/src/http/nodegen/interfaces/index.ts', '2dea80dc1b9399bf4de6a61be62535e6'],
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
       // Check the rabbitMQ routes files (OPERATION file)
@@ -89,7 +89,7 @@ describe('e2e testing', () => {
     for (let i = 0; i < expectedPathHashes.length; ++i) {
       const filePath = expectedPathHashes[i][0];
       const fileHash = expectedPathHashes[i][1];
-      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
+      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), { algorithm: 'md5' });
       if (hash !== fileHash) {
         const wrong = `Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`;
         mismatched.push(wrong);

@@ -13,7 +13,7 @@ describe('e2e testing', function () {
         helpers_1.clearTestServer();
     });
     afterAll(function () {
-        // clearTestServer();
+        helpers_1.clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -88,7 +88,7 @@ describe('e2e testing', function () {
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)
-                        ['test_server/src/http/nodegen/interfaces/index.ts', 'c85c34035af23b2e94b69bf974f79e01'],
+                        ['test_server/src/http/nodegen/interfaces/index.ts', '2dea80dc1b9399bf4de6a61be62535e6'],
                         // Check the security definition files (OTHER file)
                         ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
                         // Check the rabbitMQ routes files (OPERATION file)
