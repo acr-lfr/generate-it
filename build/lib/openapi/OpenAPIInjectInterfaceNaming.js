@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var generateOperationId_1 = tslib_1.__importDefault(require("../generate/generateOperationId"));
+var openApiTypeToTypscriptType_1 = tslib_1.__importDefault(require("./openApiTypeToTypscriptType"));
 var _ = tslib_1.__importStar(require("lodash"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var oa3toOa2Body_1 = tslib_1.__importDefault(require("./oa3toOa2Body"));
@@ -311,9 +312,9 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _loop_1 = function (requestType) {
-                            var requestObject, clear, interfaceName, _a;
-                            return tslib_1.__generator(this, function (_b) {
-                                switch (_b.label) {
+                            var requestObject, clear, interfaceName, _a, _b;
+                            return tslib_1.__generator(this, function (_c) {
+                                switch (_c.label) {
                                     case 0:
                                         if (!this_1.apiObject[action][path][method]['x-request-definitions'].hasOwnProperty(requestType)) {
                                             return [2 /*return*/, "continue"];
@@ -324,25 +325,40 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                                             var parameterObject = _.get(_this.apiObject, requestPath);
                                             clear = false;
                                             if (requestType !== 'body') {
-                                                var paramName = '\'' + parameterObject.name + '\'';
-                                                if (ApiIs_1["default"].openapi3(_this.apiObject) || ApiIs_1["default"].asyncapi2(_this.apiObject)) {
-                                                    // lift up the contents of schema
-                                                    parameterObject = tslib_1.__assign(tslib_1.__assign({}, parameterObject), parameterObject.schema);
+                                                if (requestType === 'formData') {
+                                                    var name_1 = '\'' + parameterObject.name + '\'';
+                                                    name_1 += (!parameterObject.required) ? '?' : '';
+                                                    requestObject[name_1] = (ApiIs_1["default"].swagger(_this.apiObject) || ApiIs_1["default"].openapi2(_this.apiObject)) ?
+                                                        openApiTypeToTypscriptType_1["default"](parameterObject.type) :
+                                                        openApiTypeToTypscriptType_1["default"](parameterObject.schema.type);
                                                 }
-                                                requestObject[paramName] = parameterObject;
+                                                else {
+                                                    var paramName = parameterObject.name;
+                                                    if (ApiIs_1["default"].openapi3(_this.apiObject) || ApiIs_1["default"].asyncapi2(_this.apiObject)) {
+                                                        // lift up the contents of schema
+                                                        parameterObject = tslib_1.__assign(tslib_1.__assign({}, parameterObject), parameterObject.schema);
+                                                    }
+                                                    requestObject[paramName] = parameterObject;
+                                                }
                                             }
                                         });
-                                        if (!!clear) return [3 /*break*/, 2];
+                                        if (!!clear) return [3 /*break*/, 4];
                                         interfaceName = this_1.apiObject[action][path][method]['x-request-definitions'][requestType].name;
                                         _a = this_1.apiObject[action][path][method]['x-request-definitions'][requestType];
-                                        return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](interfaceName, requestObject)];
-                                    case 1:
-                                        _a.interfaceText = _b.sent();
+                                        if (!(['body', 'formData'].includes(requestType))) return [3 /*break*/, 1];
+                                        _b = { outputString: this_1.objectToInterfaceString(requestObject, interfaceName) };
                                         return [3 /*break*/, 3];
+                                    case 1: return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"](interfaceName, JSON.stringify({ type: 'object', properties: requestObject }))];
                                     case 2:
+                                        _b = _c.sent();
+                                        _c.label = 3;
+                                    case 3:
+                                        _a.interfaceText = _b;
+                                        return [3 /*break*/, 5];
+                                    case 4:
                                         delete this_1.apiObject[action][path][method]['x-request-definitions'][requestType];
-                                        _b.label = 3;
-                                    case 3: return [2 /*return*/];
+                                        _c.label = 5;
+                                    case 5: return [2 /*return*/];
                                 }
                             });
                         };
@@ -366,6 +382,20 @@ var OpenAPIInjectInterfaceNaming = /** @class */ (function () {
                 }
             });
         });
+    };
+    /**
+     * Convert interface object to string (this is used for For
+     * @param object
+     * @param name
+     * @return {string}
+     */
+    OpenAPIInjectInterfaceNaming.prototype.objectToInterfaceString = function (object, name) {
+        var text = "export interface " + name + " {\n  ";
+        var delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
+        Object.keys(object).forEach(function (key) {
+            text += key + ':' + object[key] + delim;
+        });
+        return text + '  \n } ';
     };
     /**
      * Injects the request interface naming for the response objects

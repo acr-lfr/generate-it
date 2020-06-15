@@ -275,27 +275,49 @@ class OpenAPIInjectInterfaceNaming {
         let parameterObject = _.get(this.apiObject, requestPath);
         clear = false;
         if (requestType !== 'body') {
-          const paramName = '\'' + parameterObject.name + '\'';
-          if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
-            // lift up the contents of schema
-            parameterObject = {
-              ...parameterObject,
-              ...parameterObject.schema
-            };
+          if (requestType === 'formData') {
+            let name = '\'' + parameterObject.name + '\'';
+            name += (!parameterObject.required) ? '?' : '';
+            requestObject[name] = (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) ?
+              openApiTypeToTypscriptType(parameterObject.type) :
+              openApiTypeToTypscriptType(parameterObject.schema.type);
+          } else {
+            const paramName = parameterObject.name;
+            if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
+              // lift up the contents of schema
+              parameterObject = {
+                ...parameterObject,
+                ...parameterObject.schema
+              };
+            }
+            requestObject[paramName] = parameterObject;
           }
-          requestObject[paramName] = parameterObject;
         }
       });
       if (!clear) {
         const interfaceName = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
-        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = await generateTypeScriptInterfaceText(
-          interfaceName,
-          requestObject
-        );
+        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = (['body', 'formData'].includes(requestType))
+          ? {outputString: this.objectToInterfaceString(requestObject, interfaceName)}
+          : await generateTypeScriptInterfaceText(interfaceName, JSON.stringify({type: 'object', properties: requestObject}));
       } else {
         delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }
     }
+  }
+
+  /**
+   * Convert interface object to string (this is used for For
+   * @param object
+   * @param name
+   * @return {string}
+   */
+  public objectToInterfaceString (object: any, name: string) {
+    let text = `export interface ${name} {\n  `;
+    const delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
+    Object.keys(object).forEach((key) => {
+      text += key + ':' + object[key] + delim;
+    });
+    return text + '  \n } ';
   }
 
   /**
