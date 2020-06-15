@@ -54,7 +54,7 @@ describe('e2e testing', function () {
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', '3b5de54103373a6f2e1d6945c0c1c66e'],
                         // Check the interface index file (OTHER file)
-                        ['test_server/src/http/nodegen/interfaces/index.ts', '9ad805ef48dbfb2cceb12626d7ecfafb'],
+                        ['test_server/src/http/nodegen/interfaces/index.ts', 'db175959c900708e577b790970f7fee0'],
                         // Check the security definition files (OTHER file)
                         ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
                         // Check the rabbitMQ routes files (OPERATION file)
