@@ -37,12 +37,13 @@ paths:
       produces:
         - application/json
       parameters:
-        - $ref: "#/parameters/queryAppId"
-        - $ref: "#/parameters/queryCountry"
-        - $ref: "#/parameters/queryId"
-        - $ref: "#/parameters/queryLat"
-        - $ref: "#/parameters/queryLon"
-        - $ref: "#/parameters/headerSearchId"
+        - $ref: '#/parameters/queryAppId'
+        - $ref: '#/parameters/queryCountry'
+        - $ref: '#/parameters/queryId'
+        - $ref: '#/parameters/queryPlanet'
+        - $ref: '#/parameters/queryLat'
+        - $ref: '#/parameters/queryLon'
+        - $ref: '#/parameters/headerSearchId'
       responses:
         "200":
           description: successful operation
@@ -194,6 +195,16 @@ parameters:
     type: number
     description: |
       Needs to be paired with lat
+  queryPlanet:
+    in: query
+    name: planet
+    required: false
+    type: string
+    description: |
+      Needs to be paired with lat
+    enum:
+      - Earth
+      - Mars
   headerSearchId:
     in: header
     name: Search-Id
@@ -216,6 +227,11 @@ definitions:
         type: number
       lat:
         type: number
+      planet:
+        type: string
+        enum:
+          - Earth
+          - Mars
   JwtAccess:
     type: object
     required:

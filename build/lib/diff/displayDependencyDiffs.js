@@ -6,9 +6,13 @@ var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var path_1 = tslib_1.__importDefault(require("path"));
 var suggestVersionUpgrade_1 = require("../helpers/suggestVersionUpgrade");
 exports["default"] = (function (targetDir, templatesDir) {
-    var packagJsonStr = 'package.json';
-    var existing = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(targetDir, packagJsonStr), { encoding: 'utf8' }));
-    var newJson = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(templatesDir, packagJsonStr + '.njk'), 'utf8'));
+    var packageJsonStr = 'package.json';
+    var targetPackageJson = path_1["default"].join(targetDir, packageJsonStr);
+    if (!fs_extra_1["default"].pathExistsSync(targetPackageJson)) {
+        return;
+    }
+    var existing = JSON.parse(fs_extra_1["default"].readFileSync(targetPackageJson, { encoding: 'utf8' }));
+    var newJson = JSON.parse(fs_extra_1["default"].readFileSync(path_1["default"].join(templatesDir, packageJsonStr + '.njk'), 'utf8'));
     var scriptsChanged = {};
     var dependenciesChanged = {};
     var devDependenciesChanged = {};
