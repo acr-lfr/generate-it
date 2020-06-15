@@ -4,6 +4,7 @@ import openApiTypeToTypscriptType from '@/lib/openapi/openApiTypeToTypscriptType
 import * as _ from 'lodash';
 import ApiIs from '@/lib/helpers/ApiIs';
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
+import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 
 class OpenAPIInjectInterfaceNaming {
   public config: any;
@@ -20,10 +21,10 @@ class OpenAPIInjectInterfaceNaming {
    */
   public async inject () {
     if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
-      return this.swaggerPathIterator(true);
+      return await this.swaggerPathIterator(true);
     }
     if (this.isAsyncAPI2()) {
-      return this.asyncChannelIterator(true);
+      return await this.asyncChannelIterator(true);
     }
     throw new Error('Unrecognised input format');
   }
@@ -31,12 +32,12 @@ class OpenAPIInjectInterfaceNaming {
   /**
    * Merges the injected request params into single interface objects
    */
-  public mergeParameters () {
+  public async mergeParameters () {
     if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
-      return this.swaggerPathIterator(false);
+      return await this.swaggerPathIterator(false);
     }
     if (this.isAsyncAPI2()) {
-      return this.asyncChannelIterator(false);
+      return await this.asyncChannelIterator(false);
     }
     throw new Error('Unrecognised input format');
   }
@@ -72,38 +73,47 @@ class OpenAPIInjectInterfaceNaming {
    * Injects x-[request|response]-definitions into the main object
    * @return {{paths}|module.exports.apiObject|{paths}|{}}
    */
-  public swaggerPathIterator (fromInject: boolean) {
+  public async swaggerPathIterator (fromInject: boolean) {
     if (!this.apiObject.paths) {
       throw new Error('No paths found to iterate over');
     }
-    Object.keys(this.apiObject.paths).forEach((path) => {
-      Object.keys(this.apiObject.paths[path]).forEach((method) => {
+    for (const path in this.apiObject.paths) {
+      if (!this.apiObject.paths.hasOwnProperty(path)) {
+        continue;
+      }
+      for (const method in this.apiObject.paths[path]) {
+        if (!this.apiObject.paths[path].hasOwnProperty(method)) {
+          continue;
+        }
         if (fromInject) {
           this.openApiXRequestInjector(path, method);
         } else {
-          this.mergeSwaggerInjectedParameters('paths', path, method);
+          await this.mergeSwaggerInjectedParameters('paths', path, method);
         }
-      });
-    });
+      }
+    }
     return this.apiObject;
   }
 
-  public asyncChannelIterator (fromInject: boolean) {
+  public async asyncChannelIterator (fromInject: boolean) {
     if (!this.apiObject.channels) {
       throw new Error('No paths found to iterate over');
     }
-    Object.keys(this.apiObject.channels).forEach((channel) => {
+    for (const channel in this.apiObject.channels) {
+      if (!this.apiObject.channels.hasOwnProperty(channel)) {
+        continue;
+      }
       if (fromInject) {
         this.asyncXRequestInjector(channel);
       } else {
         if (this.apiObject.channels[channel].subscribe) {
-          this.mergeSwaggerInjectedParameters('channels', channel, 'subscribe');
+          await this.mergeSwaggerInjectedParameters('channels', channel, 'subscribe');
         }
         if (this.apiObject.channels[channel].publish) {
-          this.mergeSwaggerInjectedParameters('channels', channel, 'publish');
+          await this.mergeSwaggerInjectedParameters('channels', channel, 'publish');
         }
       }
-    });
+    }
     return this.apiObject;
   }
 
@@ -254,49 +264,38 @@ class OpenAPIInjectInterfaceNaming {
    * @param path
    * @param method
    */
-  public mergeSwaggerInjectedParameters (action: string, path: string, method: string) {
-    Object.keys(this.apiObject[action][path][method]['x-request-definitions']).forEach((requestType) => {
+  public async mergeSwaggerInjectedParameters (action: string, path: string, method: string) {
+    for (const requestType in this.apiObject[action][path][method]['x-request-definitions']) {
+      if (!this.apiObject[action][path][method]['x-request-definitions'].hasOwnProperty(requestType)) {
+        continue;
+      }
       const requestObject: any = {};
       let clear = true;
       this.apiObject[action][path][method]['x-request-definitions'][requestType].params.forEach((requestPath: any) => {
-        const parameterObject = _.get(this.apiObject, requestPath);
+        let parameterObject = _.get(this.apiObject, requestPath);
         clear = false;
-        if (requestType === 'body') {
-          // make object from body
-        } else {
-          let name = '\'' + parameterObject.name + '\'';
-          name += (!parameterObject.required) ? '?' : '';
-          if (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) {
-            requestObject[name] = openApiTypeToTypscriptType(parameterObject.type);
-          } else if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
-            requestObject[name] = openApiTypeToTypscriptType(parameterObject.schema.type);
+        if (requestType !== 'body') {
+          const paramName = '\'' + parameterObject.name + '\'';
+          if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
+            // lift up the contents of schema
+            parameterObject = {
+              ...parameterObject,
+              ...parameterObject.schema
+            };
           }
+          requestObject[paramName] = parameterObject;
         }
       });
       if (!clear) {
-        const name = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
-        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = {
-          outputString: this.objectToInterfaceString(requestObject, name),
-        };
+        const interfaceName = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
+        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = await generateTypeScriptInterfaceText(
+          interfaceName,
+          requestObject
+        );
       } else {
         delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }
-    });
-  }
-
-  /**
-   * Convert interface object to string
-   * @param object
-   * @param name
-   * @return {string}
-   */
-  public objectToInterfaceString (object: any, name: string) {
-    let text = `export interface ${name} {\n  `;
-    const delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
-    Object.keys(object).forEach((key) => {
-      text += key + ':' + object[key] + delim;
-    });
-    return text + '  \n } ';
+    }
   }
 
   /**
