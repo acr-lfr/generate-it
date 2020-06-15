@@ -40,21 +40,23 @@ var OpenAPIBundler = /** @class */ (function () {
                     case 2:
                         content = _b.sent();
                         console.log('Calculating all request definitions to interface relations');
-                        content = (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters();
+                        return [4 /*yield*/, (new OpenAPIInjectInterfaceNaming_1["default"](content, config)).mergeParameters()];
+                    case 3:
+                        content = _b.sent();
                         console.log('Resolving all allOf references');
                         content = openApiResolveAllOfs_1["default"](content);
                         console.log('Injecting interface texts');
                         return [4 /*yield*/, this.injectInterfaces(content, config)];
-                    case 3:
+                    case 4:
                         content = _b.sent();
                         console.log('Injecting operationId array');
                         _a = content;
                         return [4 /*yield*/, this.fetchOperationIdsArray(content)];
-                    case 4:
+                    case 5:
                         _a.operationIds = _b.sent();
                         console.log('Bundling the full object');
                         return [4 /*yield*/, this.bundleObject(content)];
-                    case 5:
+                    case 6:
                         content = _b.sent();
                         console.log('Injecting the endpoint names');
                         return [2 /*return*/, JSON.parse(JSON.stringify(this.pathEndpointInjection(content, config)))];
@@ -171,7 +173,7 @@ var OpenAPIBundler = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         if (ApiIs_1["default"].asyncapi2(apiObject)) {
-                            // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
+                            // TODO complete the parameters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
                             // TODO this was left as not required for rabbitmq
                         }
                         _a.label = 4;

@@ -36,7 +36,7 @@ class OpenAPIBundler {
     content = await this.dereference(content);
 
     console.log('Calculating all request definitions to interface relations');
-    content = (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
+    content = await (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
 
     console.log('Resolving all allOf references');
     content = openApiResolveAllOfs(content);
@@ -150,7 +150,7 @@ class OpenAPIBundler {
     if (ApiIs.isOpenAPIorSwagger(apiObject)) {
       apiObject = await this.injectParameterInterfaces(apiObject);
     } else if (ApiIs.asyncapi2(apiObject)) {
-      // TODO complete the paramters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
+      // TODO complete the parameters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
       // TODO this was left as not required for rabbitmq
     }
     apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);

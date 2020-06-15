@@ -3,18 +3,28 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var cli_1 = require("../../constants/cli");
 var _a = require('quicktype/dist/quicktype-core'), InputData = _a.InputData, JSONSchemaInput = _a.JSONSchemaInput, JSONSchemaStore = _a.JSONSchemaStore, quicktype = _a.quicktype;
+var countNoOfMatches = function (name, line) {
+    var regex = new RegExp(name, 'gi');
+    return ((line || '').match(regex) || []).length;
+};
 exports["default"] = (function (name, schema) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
     var schemaInput, inputData, interfaceContent, interfaceReturnString;
-    return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return tslib_1.__generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 schemaInput = new JSONSchemaInput(new JSONSchemaStore());
                 return [4 /*yield*/, schemaInput.addSource({
-                        name: name,
-                        schema: schema
+                        name: 'Nodegen',
+                        schema: JSON.stringify({
+                            type: 'object',
+                            properties: (_a = {},
+                                _a[name] = schema ? JSON.parse(schema) : schema,
+                                _a)
+                        })
                     })];
             case 1:
-                _a.sent();
+                _b.sent();
                 inputData = new InputData();
                 inputData.addInput(schemaInput);
                 return [4 /*yield*/, quicktype({
@@ -26,9 +36,18 @@ exports["default"] = (function (name, schema) { return tslib_1.__awaiter(void 0,
                         }
                     })];
             case 2:
-                interfaceContent = _a.sent();
+                interfaceContent = _b.sent();
                 interfaceReturnString = '';
-                interfaceContent.lines.forEach(function (line) {
+                interfaceContent.lines.forEach(function (line, i) {
+                    if (i === 0 || i === 2) {
+                        return;
+                    }
+                    if (i === 1) {
+                        if (countNoOfMatches(name, line) === 2) {
+                            return;
+                        }
+                        line = 'export type ' + name + line.trim().replace(name + '?:', ' =');
+                    }
                     interfaceReturnString += line + cli_1.LINEBREAK;
                 });
                 return [2 /*return*/, {
