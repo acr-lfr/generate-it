@@ -211,6 +211,14 @@ components:
       name: x-api-key
       in: header
   schemas:
+    AdditionalProps:
+      type: object
+      additionalProperties:
+        type: string
+    ArrayProps:
+      type: array
+      items:
+        type: string
     Coord:
       type: object
       properties:

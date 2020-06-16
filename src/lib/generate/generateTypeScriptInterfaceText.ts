@@ -1,13 +1,26 @@
 import { LINEBREAK } from '@/constants/cli';
 import GenerateTypeScriptInterfaceText from '@/interfaces/GenerateTypeScriptInterfaceText';
 
-const {InputData, JSONSchemaInput, JSONSchemaStore, quicktype} = require('quicktype/dist/quicktype-core');
+const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
+
+
+
+
+const countNoOfMatches = (name: string, line: string): number => {
+  const regex = new RegExp(name, 'gi');
+  return ((line || '').match(regex) || []).length;
+};
 
 export default async (name: string, schema: string): Promise<GenerateTypeScriptInterfaceText> => {
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
   await schemaInput.addSource({
-    name,
-    schema: schema,
+    name: '___Nodegen',
+    schema: JSON.stringify({
+      type: 'object',
+      properties: {
+        [name]: schema ? JSON.parse(schema) : schema
+      }
+    }),
   });
 
   const inputData = new InputData();
@@ -23,7 +36,17 @@ export default async (name: string, schema: string): Promise<GenerateTypeScriptI
   });
 
   let interfaceReturnString = '';
-  interfaceContent.lines.forEach((line: string) => {
+  const skipUntil = interfaceContent.lines.findIndex((line: string) => line && line.includes(name + '?:'));
+  interfaceContent.lines.forEach((line: string, i: number) => {
+    if (i < skipUntil || i === skipUntil + 1) {
+      return;
+    }
+    if (i === skipUntil) {
+      if (countNoOfMatches(name, line) === 2) {
+        return;
+      }
+      line = 'export type ' + name + line.trim().replace(name + '?:', ' =');
+    }
     interfaceReturnString += line + LINEBREAK;
   });
   return {
