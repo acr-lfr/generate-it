@@ -88,7 +88,7 @@ describe('e2e testing', function () {
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
                         // Check the interface index file (OTHER file)
-                        ['test_server/src/http/nodegen/interfaces/index.ts', 'c85c34035af23b2e94b69bf974f79e01'],
+                        ['test_server/src/http/nodegen/interfaces/index.ts', '2dea80dc1b9399bf4de6a61be62535e6'],
                         // Check the security definition files (OTHER file)
                         ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
                         // Check the rabbitMQ routes files (OPERATION file)
@@ -96,6 +96,7 @@ describe('e2e testing', function () {
                         ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'e2f5987fd26f02a201e9bdcba6edf06c'],
                         // Check the output transformers (OPERATION file)
                         ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],
+                        ['test_server/src/http/nodegen/interfaces/JwtAccess.ts', 'e5e4baabba301bed91746dc770035fe5'],
                         ['test_server/src/http/nodegen/interfaces/WeatherGetQuery.ts', 'f314eaadd0e58e47588860f6d3e2029b'],
                         // Check dynamic docker file (OTHER file)
                         ['test_server/docker-compose.yml', '779fd3809240f10dd84c8c070f0851d3'],
