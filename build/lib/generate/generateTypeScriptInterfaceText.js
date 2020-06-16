@@ -8,14 +8,14 @@ var countNoOfMatches = function (name, line) {
     return ((line || '').match(regex) || []).length;
 };
 exports["default"] = (function (name, schema) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var schemaInput, inputData, interfaceContent, interfaceReturnString;
+    var schemaInput, inputData, interfaceContent, interfaceReturnString, skipUntil;
     var _a;
     return tslib_1.__generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 schemaInput = new JSONSchemaInput(new JSONSchemaStore());
                 return [4 /*yield*/, schemaInput.addSource({
-                        name: 'Nodegen',
+                        name: '___Nodegen',
                         schema: JSON.stringify({
                             type: 'object',
                             properties: (_a = {},
@@ -38,11 +38,12 @@ exports["default"] = (function (name, schema) { return tslib_1.__awaiter(void 0,
             case 2:
                 interfaceContent = _b.sent();
                 interfaceReturnString = '';
+                skipUntil = interfaceContent.lines.findIndex(function (line) { return line && line.includes(name + '?:'); });
                 interfaceContent.lines.forEach(function (line, i) {
-                    if (i === 0 || i === 2) {
+                    if (i < skipUntil || i === skipUntil + 1) {
                         return;
                     }
-                    if (i === 1) {
+                    if (i === skipUntil) {
                         if (countNoOfMatches(name, line) === 2) {
                             return;
                         }

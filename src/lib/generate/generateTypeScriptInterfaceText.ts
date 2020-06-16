@@ -14,7 +14,7 @@ const countNoOfMatches = (name: string, line: string): number => {
 export default async (name: string, schema: string): Promise<GenerateTypeScriptInterfaceText> => {
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
   await schemaInput.addSource({
-    name: 'Nodegen',
+    name: '___Nodegen',
     schema: JSON.stringify({
       type: 'object',
       properties: {
@@ -36,11 +36,12 @@ export default async (name: string, schema: string): Promise<GenerateTypeScriptI
   });
 
   let interfaceReturnString = '';
+  const skipUntil = interfaceContent.lines.findIndex((line: string) => line && line.includes(name + '?:'));
   interfaceContent.lines.forEach((line: string, i: number) => {
-    if (i === 0 || i === 2) {
+    if (i < skipUntil || i === skipUntil + 1) {
       return;
     }
-    if (i === 1) {
+    if (i === skipUntil) {
       if (countNoOfMatches(name, line) === 2) {
         return;
       }

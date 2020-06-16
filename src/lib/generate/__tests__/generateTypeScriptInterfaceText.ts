@@ -37,6 +37,20 @@ describe('generateTypeScriptInterfaceText', () => {
     expect(output.outputString.trim()).toBe('export type UserId = string[];');
   });
 
+  it('should convert an array schema with top level description to the correct type', async () => {
+    const output = await generateTypeScriptInterfaceText('NamibianCities', `
+    {
+      "type": "array",
+      "description": "Some weird very long description about Namibian cities",
+      "summary": "This is a summary about Namibian Cities",
+      "items": {
+        "type": "string"
+      }
+    }
+    `);
+    expect(output.outputString.trim()).toBe('export type NamibianCities = string[];');
+  });
+
   it('should convert an additionalProperties object schema to the correct type', async () => {
     const output = await generateTypeScriptInterfaceText('UserMap', `
     {

@@ -42,6 +42,18 @@ describe('generateTypeScriptInterfaceText', function () {
             }
         });
     }); });
+    it('should convert an array schema with top level description to the correct type', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+        var output;
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, generateTypeScriptInterfaceText_1["default"]('NamibianCities', "\n    {\n      \"type\": \"array\",\n      \"description\": \"Some weird very long description about Namibian cities\",\n      \"summary\": \"This is a summary about Namibian Cities\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n    ")];
+                case 1:
+                    output = _a.sent();
+                    expect(output.outputString.trim()).toBe('export type NamibianCities = string[];');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('should convert an additionalProperties object schema to the correct type', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var output;
         return tslib_1.__generator(this, function (_a) {
