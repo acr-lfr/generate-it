@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var lodash_1 = require("lodash");
 exports["default"] = (function (method, fullPathMethod) {
-    if (!fullPathMethod.requestBody) {
+    if (!fullPathMethod.requestBody || (Array.isArray(fullPathMethod.parameters) && fullPathMethod.parameters.some(function (param) { return param["in"] === 'body'; }))) {
         return fullPathMethod;
     }
     try {
