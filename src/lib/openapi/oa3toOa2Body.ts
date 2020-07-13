@@ -1,7 +1,7 @@
 import { startCase } from 'lodash';
 
 export default (method: string, fullPathMethod: any): any => {
-  if (!fullPathMethod.requestBody) {
+  if (!fullPathMethod.requestBody || (Array.isArray(fullPathMethod.parameters) && fullPathMethod.parameters.some((param: any) => param.in === 'body'))) {
     return fullPathMethod;
   }
   try {
