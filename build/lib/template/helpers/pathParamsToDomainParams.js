@@ -48,7 +48,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
             params.push('headers' + addType(withType, pathObject, 'header'));
         }
         if (pathObject.parameters.some(function (p) { return p["in"] === 'formData'; })) {
-            params.push('files' + addType(withType, pathObject, 'formData'));
+            params.push('formData' + addType(withType, pathObject, 'formData'));
         }
     }
     var helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
@@ -79,7 +79,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
     }
     params.sort();
     if (withPrefix) {
-        params = params.map(function (p) { return (p === 'req') ? 'req' : 'req.' + p; });
+        params = params.map(function (p) { return (p === 'req') ? 'req' : 'req.' + (p === 'formData' ? 'body' : p); });
     }
     return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
 }
