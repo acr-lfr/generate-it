@@ -1,4 +1,5 @@
 import { startCase } from 'lodash';
+import validMethods from '@/lib/template/helpers/validMethods';
 
 export default (method: string, fullPathMethod: any): any => {
   if (!fullPathMethod.requestBody || (Array.isArray(fullPathMethod.parameters) && fullPathMethod.parameters.some((param: any) => param.in === 'body'))) {
@@ -13,9 +14,10 @@ export default (method: string, fullPathMethod: any): any => {
       schema = fullPathMethod.requestBody.content['application/x-www-form-urlencoded'].schema;
     }
     fullPathMethod.parameters = fullPathMethod.parameters || [];
+    const addMethodToName = !validMethods().map(m => m.toLowerCase()).some(m => fullPathMethod.operationId.toLowerCase().endsWith(m))
     fullPathMethod.parameters.push({
       in: 'body',
-      name: fullPathMethod.operationId + startCase(method),
+      name: fullPathMethod.operationId + (addMethodToName ? startCase(method) : ''),
       required: fullPathMethod.requestBody.required,
       schema: schema
     });
