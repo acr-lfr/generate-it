@@ -48,7 +48,7 @@ function default_1(method, pathObject, withType, withPrefix, pathNameChange) {
             params.push('headers' + addType(withType, pathObject, 'header'));
         }
         if (pathObject.parameters.some(function (p) { return p["in"] === 'formData'; })) {
-            params.push('files' + addType(withType, pathObject, 'formData'));
+            params.push('body' + addType(withType, pathObject, 'formData'));
         }
     }
     var helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;

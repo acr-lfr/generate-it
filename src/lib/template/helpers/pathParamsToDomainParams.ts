@@ -46,7 +46,7 @@ export default function (method: string, pathObject: any, withType: boolean = fa
       params.push('headers' + addType(withType, pathObject, 'header'));
     }
     if (pathObject.parameters.some((p: any) => p.in === 'formData')) {
-      params.push('files' + addType(withType, pathObject, 'formData'));
+      params.push('body' + addType(withType, pathObject, 'formData'));
     }
   }
   const helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;

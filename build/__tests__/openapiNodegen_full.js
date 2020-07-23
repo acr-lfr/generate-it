@@ -12,9 +12,9 @@ describe('e2e testing', function () {
     beforeAll(function () {
         helpers_1.clearTestServer();
     });
-    afterAll(function () {
-        helpers_1.clearTestServer();
-    });
+    // afterAll(() => {
+    //   clearTestServer();
+    // });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
         return tslib_1.__generator(this, function (_a) {
@@ -92,7 +92,7 @@ describe('e2e testing', function () {
                         // Check the security definition files (OTHER file)
                         ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
                         // Check the rabbitMQ routes files (OPERATION file)
-                        ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'e25f924a136fa7c9b367ea9c14a7087d'],
+                        ['test_server/src/http/nodegen/routes/rainRoutes.ts', '0d81b9b22205107531b8c26adddcdb22'],
                         ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'e2f5987fd26f02a201e9bdcba6edf06c'],
                         // Check the output transformers (OPERATION file)
                         ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],

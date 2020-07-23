@@ -125,4 +125,15 @@ describe('Without req prefix', function () {
         var output = pathParamsToDomainParams_1["default"]('put', testObject, false);
         expect(output).toBe('body, pathParams, query, req');
     });
+    it('Should return body and files with formData', function () {
+        var testObject = {
+            parameters: [
+                {
+                    "in": 'formData'
+                },
+            ]
+        };
+        var output = pathParamsToDomainParams_1["default"]('get', testObject, false, 'req');
+        expect(output).toBe('req.body');
+    });
 });

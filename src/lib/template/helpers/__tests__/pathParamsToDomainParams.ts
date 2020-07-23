@@ -160,4 +160,20 @@ describe('Without req prefix', () => {
       'body, pathParams, query, req',
     );
   });
+
+  it('Should return body and files with formData', () => {
+    const testObject = {
+      parameters: [
+        {
+          in: 'formData',
+        },
+      ],
+    };
+    const output = pathParamsToDomainParams('get', testObject, false, 'req');
+    expect(
+      output,
+    ).toBe(
+      'req.body',
+    );
+  });
 });
