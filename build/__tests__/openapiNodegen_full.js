@@ -12,9 +12,9 @@ describe('e2e testing', function () {
     beforeAll(function () {
         helpers_1.clearTestServer();
     });
-    // afterAll(() => {
-    //   clearTestServer();
-    // });
+    afterAll(function () {
+        helpers_1.clearTestServer();
+    });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
         return tslib_1.__generator(this, function (_a) {

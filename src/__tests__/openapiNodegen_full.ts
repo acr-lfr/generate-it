@@ -11,9 +11,9 @@ describe('e2e testing', () => {
   beforeAll(() => {
     clearTestServer();
   });
-  // afterAll(() => {
-  //   clearTestServer();
-  // });
+  afterAll(() => {
+    clearTestServer();
+  });
 
   it('Should build without error', async (done) => {
     try {
