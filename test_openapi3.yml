@@ -22,28 +22,28 @@ paths:
       description: Query with varying content
       operationId: weatherGet
       parameters:
-        - $ref: "#/components/parameters/queryAppId"
-        - $ref: "#/components/parameters/queryCountry"
-        - $ref: "#/components/parameters/queryId"
-        - $ref: "#/components/parameters/queryLat"
-        - $ref: "#/components/parameters/queryLon"
-        - $ref: "#/components/parameters/headerSearchId"
+        - $ref: '#/components/parameters/queryAppId'
+        - $ref: '#/components/parameters/queryCountry'
+        - $ref: '#/components/parameters/queryId'
+        - $ref: '#/components/parameters/queryLat'
+        - $ref: '#/components/parameters/queryLon'
+        - $ref: '#/components/parameters/headerSearchId'
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Weather"
-        "400":
+                $ref: '#/components/schemas/Weather'
+        '400':
           description: Invalid Identifier supplied
-        "404":
+        '404':
           description: Round not found
       security:
         - apiKeyAdmin: []
         - jwtToken: []
       x-passRequest: true
-  "/weather/{id}":
+  '/weather/{id}':
     get:
       tags:
         - weather
@@ -52,17 +52,17 @@ paths:
       operationId: weatherIdGet
       x-permission: getWeatherDetail
       parameters:
-        - $ref: "#/components/parameters/pathId"
+        - $ref: '#/components/parameters/pathId'
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WeatherFull"
-        "400":
+                $ref: '#/components/schemas/WeatherFull'
+        '400':
           description: Invalid Identifier supplied
-        "404":
+        '404':
           description: Round not found
       security:
         - apiKeyAdmin: []
@@ -76,17 +76,17 @@ paths:
       description: Query with varying content
       operationId: rainGet
       parameters:
-        - $ref: "#/components/parameters/queryCountry"
+        - $ref: '#/components/parameters/queryCountry'
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Weather"
-        "400":
+                $ref: '#/components/schemas/Weather'
+        '400':
           description: Invalid Identifier supplied
-        "404":
+        '404':
           description: Round not found
     post:
       tags:
@@ -98,18 +98,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Coord"
+              $ref: '#/components/schemas/Coord'
         required: true
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Weather"
-        "400":
+                $ref: '#/components/schemas/Weather'
+        '400':
           description: Invalid Identifier supplied
-        "404":
+        '404':
           description: Round not found
       x-passRequest: true
     put:
@@ -131,17 +131,34 @@ paths:
               required:
                 - image
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Weather"
-        "400":
+                $ref: '#/components/schemas/Weather'
+        '400':
           description: Invalid Identifier supplied
-        "404":
+        '404':
           description: Round not found
       x-passRequest: true
+  /me/weather:
+    get:
+      tags:
+        - me
+      summary: Get my weather
+      operationId: getMyWeather
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Weather'
+        '404':
+          description: Round not found
+      security:
+        - apiToken: []
 servers:
   - url: https://samples.openweathermap.org/data/2.5
 components:
@@ -210,6 +227,9 @@ components:
       type: apiKey
       name: x-api-key
       in: header
+    apiToken:
+      type: http
+      scheme: bearer
   schemas:
     AdditionalProps:
       type: object
@@ -235,7 +255,7 @@ components:
           type: string
     WeatherFull:
       allOf:
-        - $ref: "#/components/schemas/Weather"
+        - $ref: '#/components/schemas/Weather'
         - type: object
           required:
             - name
@@ -250,7 +270,7 @@ components:
         - coord
       properties:
         coord:
-          $ref: "#/components/schemas/Coord"
+          $ref: '#/components/schemas/Coord'
         weather:
           type: array
           items:
