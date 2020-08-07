@@ -38,14 +38,14 @@ describe('e2e testing', () => {
     // B) The tpl for the typescipt server has change
     // C) Something broke when building the said files
     const expectedPathHashes = [
-      // Check rabbitMQ domains (STUB file)
+      // Check domains (STUB file)
       [
         'test_server/src/domains/domainsImporter.ts',
         '40c2afe0eb99354e208ba9833e9fbfd4',
       ],
       [
         'test_server/src/domains/WeatherDomain.ts',
-        '6f7097720b51eeb4b2bbd073aeb49111',
+        '30efe49b22921328e0be1ddc5c3e17a4',
       ],
       // Check complex interface (INTERFACE file)
       [
