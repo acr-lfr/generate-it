@@ -3,14 +3,16 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 var TemplateFetch_1 = tslib_1.__importDefault(require("../TemplateFetch"));
+var fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
 var repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 var camelCaseUrl = '';
 describe('calculateLocalDirectoryFromUrl should return valid directory', function () {
     it('camelcase a url and map to directory', function () {
-        var tagertDir = path_1["default"].join(process.cwd(), '/bob/');
-        var directory = TemplateFetch_1["default"].calculateLocalDirectoryFromUrl(repoUrl, tagertDir);
-        camelCaseUrl = path_1["default"].join(tagertDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
+        var targetDir = path_1["default"].join(process.cwd(), '/bob/');
+        var directory = TemplateFetch_1["default"].calculateLocalDirectoryFromUrl(repoUrl, targetDir);
+        camelCaseUrl = path_1["default"].join(targetDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
         expect(directory).toBe(camelCaseUrl);
+        fs_extra_1["default"].removeSync(targetDir);
     });
 });
 it('hasGit should not throw error', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
