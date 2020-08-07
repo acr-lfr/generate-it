@@ -22,7 +22,6 @@ describe('e2e testing', () => {
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
-        segmentFirstGrouping: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
         template: tplUrl,
