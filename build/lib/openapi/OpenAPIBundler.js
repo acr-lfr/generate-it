@@ -11,6 +11,7 @@ var generateTypeScriptInterfaceText_1 = tslib_1.__importDefault(require("../gene
 var ucFirst_1 = tslib_1.__importDefault(require("../template/helpers/ucFirst"));
 var ApiIs_1 = tslib_1.__importDefault(require("../helpers/ApiIs"));
 var includeOperationNameAction_1 = tslib_1.__importDefault(require("../helpers/includeOperationNameAction"));
+var endpointNameCalculation_1 = tslib_1.__importDefault(require("../helpers/endpointNameCalculation"));
 var RefParser = require('json-schema-ref-parser');
 var OpenAPIBundler = /** @class */ (function () {
     function OpenAPIBundler() {
@@ -314,9 +315,9 @@ var OpenAPIBundler = /** @class */ (function () {
     OpenAPIBundler.prototype.pathEndpointInjection = function (apiObject, config) {
         apiObject.basePath = apiObject.basePath || '';
         var objects = apiObject.channels || apiObject.paths;
-        for (var pathName in objects) {
-            var pathObject = objects[pathName];
-            var endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+        for (var fullPath in objects) {
+            var endpointName = endpointNameCalculation_1["default"](fullPath, config);
+            var pathObject = objects[fullPath];
             if (includeOperationNameAction_1["default"](endpointName, pathObject, config.nodegenRc)) {
                 pathObject.endpointName = endpointName;
             }
