@@ -12,7 +12,7 @@ describe('e2e testing', () => {
     clearTestServer();
   });
   afterAll(() => {
-    clearTestServer();
+    // clearTestServer();
   });
 
   it('Should build without error', async (done) => {
@@ -44,7 +44,6 @@ describe('e2e testing', () => {
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
-        segmentFirstGrouping: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
         template: tplUrl,

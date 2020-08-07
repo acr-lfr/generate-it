@@ -13,7 +13,7 @@ describe('e2e testing', function () {
         helpers_1.clearTestServer();
     });
     afterAll(function () {
-        helpers_1.clearTestServer();
+        // clearTestServer();
     });
     it('Should build without error', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var ymlPath, e_1;
@@ -58,7 +58,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
                             mockServer: true,
-                            segmentFirstGrouping: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
                             template: helpers_1.tplUrl
