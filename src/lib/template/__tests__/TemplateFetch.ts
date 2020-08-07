@@ -1,15 +1,17 @@
 import path from 'path';
 import TemplateFetch from '../TemplateFetch';
+import fs from 'fs-extra';
 
 const repoUrl = 'https://github.com/acrontum/openapi-nodegen.git';
 let camelCaseUrl = '';
 
 describe('calculateLocalDirectoryFromUrl should return valid directory', () => {
   it('camelcase a url and map to directory', () => {
-    const tagertDir = path.join(process.cwd(), '/bob/');
-    const directory = TemplateFetch.calculateLocalDirectoryFromUrl(repoUrl, tagertDir);
-    camelCaseUrl = path.join(tagertDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
+    const targetDir = path.join(process.cwd(), '/bob/');
+    const directory = TemplateFetch.calculateLocalDirectoryFromUrl(repoUrl, targetDir);
+    camelCaseUrl = path.join(targetDir, '/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenGit');
     expect(directory).toBe(camelCaseUrl);
+    fs.removeSync(targetDir);
   });
 });
 
