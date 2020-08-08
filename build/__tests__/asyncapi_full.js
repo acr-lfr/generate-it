@@ -2,9 +2,9 @@
 exports.__esModule = true;
 exports.tplUrl = void 0;
 var tslib_1 = require("tslib");
-var path_1 = tslib_1.__importDefault(require("path"));
 var generateIt_1 = tslib_1.__importDefault(require("../generateIt"));
 var fdir_1 = require("fdir");
+var path_1 = tslib_1.__importDefault(require("path"));
 var helpers_1 = require("./helpers");
 var serverDir = 'test_asyncapi';
 var testServerPath = path_1["default"].join(process.cwd(), serverDir);
