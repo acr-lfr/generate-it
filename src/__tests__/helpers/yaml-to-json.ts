@@ -17,7 +17,7 @@ export const yamlToJson = async (yamlFilePath: string): Promise<JSON> => {
     throw new Error(`Could not find YAML file '${yamlFilePath}'`);
   }
 
-  return safeLoad(await fs.readFile(yamlFilePath, 'utf8'));
+  return safeLoad(await fs.readFile(yamlFilePath, 'utf8')) as JSON;
 };
 
 /**

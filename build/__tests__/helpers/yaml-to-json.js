@@ -93,7 +93,25 @@ exports.fmtString = function (value) {
     }
     return value;
 };
-// https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+/**
+ * Turn nested json into flattened accessors
+ * https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+ *
+ * eg:
+ *   {
+ *     thing: {
+ *       one: 'two'
+ *     },
+ *     arr: [{ one: 1 }, { two: 2 }]
+ *   }
+ *
+ * becomes:
+ *   {
+ *     'thing.one' : 'two',
+ *     'arr[0].one': 1,
+ *     'arr[1].two': 2
+ *   }
+ */
 exports.flatten = function (data) {
     var result = {};
     var recurse = function (cur, prop) {
