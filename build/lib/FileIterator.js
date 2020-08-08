@@ -94,7 +94,7 @@ var FileWalker = /** @class */ (function () {
             package: this.config.package,
             data: this.config,
             file_name: filename,
-            segmentsCount: this.config.segmentsCount,
+            segmentFirstGrouping: this.config.segmentFirstGrouping,
             mockServer: this.config.mockServer
         };
     };

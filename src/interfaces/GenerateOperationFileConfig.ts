@@ -8,6 +8,6 @@ export default interface GenerateOperationFileConfig {
   package: Package;
   data: ConfigExtendedBase;
   file_name: string;
-  segmentsCount: number;
+  segmentFirstGrouping: number;
   mockServer: boolean;
 }

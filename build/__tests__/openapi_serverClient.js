@@ -27,7 +27,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: true,
                             dontUpdateTplCache: true,
                             mockServer: false,
-                            segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
                             template: helpers_1.tplUrl
@@ -54,7 +53,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: true,
                             dontUpdateTplCache: true,
                             mockServer: false,
-                            segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testClientPath,
                             template: helpers_1.tplClientServer
@@ -82,7 +80,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: true,
                             dontUpdateTplCache: true,
                             mockServer: false,
-                            segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testClientPath,
                             template: helpers_1.tplClientServer

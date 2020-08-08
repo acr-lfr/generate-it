@@ -26,7 +26,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
                             mockServer: true,
-                            segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
                             template: helpers_1.tplUrl,
@@ -59,7 +58,6 @@ describe('e2e testing', function () {
                             dontRunComparisonTool: false,
                             dontUpdateTplCache: true,
                             mockServer: true,
-                            segmentsCount: 1,
                             swaggerFilePath: ymlPath,
                             targetDir: testServerPath,
                             template: helpers_1.tplUrl
@@ -84,7 +82,7 @@ describe('e2e testing', function () {
                     expectedPathHashes = [
                         // Check rabbitMQ domains (STUB file)
                         ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
-                        ['test_server/src/domains/WeatherDomain.ts', '6f7097720b51eeb4b2bbd073aeb49111'],
+                        ['test_server/src/domains/WeatherDomain.ts', '30efe49b22921328e0be1ddc5c3e17a4'],
                         // Check complex interface (INTERFACE file)
                         ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
                         // Check the interface index file (OTHER file)

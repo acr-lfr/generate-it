@@ -22,6 +22,7 @@ describe('e2e testing', () => {
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
+        segmentFirstGrouping: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
         template: tplUrl,
@@ -44,6 +45,7 @@ describe('e2e testing', () => {
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
+        segmentFirstGrouping: 1,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
         template: tplUrl,
@@ -62,19 +64,20 @@ describe('e2e testing', () => {
 
     const expectedPathHashes = [
       // Check rabbitMQ domains (STUB file)
-      ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
-      ['test_server/src/domains/WeatherDomain.ts', '30efe49b22921328e0be1ddc5c3e17a4'],
+      ['test_server/src/domains/domainsImporter.ts', '8bf26b800eb2bf0fa83799269fd6bb0c'],
+      ['test_server/src/domains/WeatherDomain.ts', 'e41b209a29db6a4fd75d420e128c4f23'],
+      ['test_server/src/domains/WeatherIdDomain.ts', 'a4cabc695f4ba6bc869abe980faaa2f0'],
       // Check complex interface (INTERFACE file)
       ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
       // Check the interface index file (OTHER file)
       ['test_server/src/http/nodegen/interfaces/index.ts', '2dea80dc1b9399bf4de6a61be62535e6'],
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
-      // Check the rabbitMQ routes files (OPERATION file)
+      // Check the routes files (OPERATION file)
       ['test_server/src/http/nodegen/routes/rainRoutes.ts', '0d81b9b22205107531b8c26adddcdb22'],
-      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'e2f5987fd26f02a201e9bdcba6edf06c'],
+      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '22f5e21d63ef3dfc88deb17e157e80a5'],
       // Check the output transformers (OPERATION file)
-      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],
+      ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7bf587be316ef1b65f806bff871417b6'],
       ['test_server/src/http/nodegen/interfaces/JwtAccess.ts', 'e5e4baabba301bed91746dc770035fe5'],
       ['test_server/src/http/nodegen/interfaces/WeatherGetQuery.ts', 'f314eaadd0e58e47588860f6d3e2029b'],
       // Check dynamic docker file (OTHER file)

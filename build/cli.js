@@ -23,7 +23,7 @@ npm_tool_version_check_1["default"](require('../package.json').version, 'https:/
         targetDir: cli.program.output,
         template: cli.program.template,
         variables: cli.program.variables,
-        segmentsCount: cli.program.segmentsCount,
+        segmentFirstGrouping: cli.program.segmentFirstGrouping,
         handlebars_helper: undefined,
         mockServer: cli.program.mocked || false
     };

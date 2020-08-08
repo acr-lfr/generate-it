@@ -3,6 +3,7 @@ export default interface NodegenRc {
   nodegenMockDir?: string;
   nodegenType: string;
   interfaceStyle?: string;
+  segmentFirstGrouping?: number;
   helpers?: {
     publishOpIds?: string[],
     subscribeOpIds?: string[],
