@@ -19,7 +19,7 @@ export default (inputArgsArray: string[]) => {
     .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
     .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
     .option('--dont-run-comparison-tool', 'Skips the stub file comparison tool and version cleanup', false)
-    .option('-s, --segments-count <segmentsCount>', 'minimum number of segments to start merging (not supported yet)', '1')
+    .option('--segment-first-grouping <number>', 'If set will split a domain by group the 1 qty of segments defined in this setting, see endpointNameCalculation.ts')
     .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectArray, {})
     .option('-v, --verbose', 'Outputs verbose logging')
     .option('--very-verbose', 'Outputs very verbose logging')

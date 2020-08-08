@@ -30,6 +30,7 @@ class GenerateOperation {
   public async openapiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
     each(config.data.swagger.paths, (pathProperties, pathName) => {
+      // operationName equates to the stub file, for openapi we go by the opid
       const operationName = pathProperties.endpointName;
       if (includeOperationName(operationName, config.data.nodegenRc)) {
         files[operationName] = files[operationName] || [];
@@ -54,6 +55,7 @@ class GenerateOperation {
     each(config.data.swagger.channels, (pathProperties, pathName) => {
       const subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
       if (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)) {
+        // operationName equates to the stub file, for async we got by the opid
         const operationName = pathProperties.subscribe.operationId;
         files[operationName] = files[operationName] || [];
         files[operationName].push({

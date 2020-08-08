@@ -40,6 +40,7 @@ var GenerateOperation = /** @class */ (function () {
                     case 0:
                         files = {};
                         lodash_1.each(config.data.swagger.paths, function (pathProperties, pathName) {
+                            // operationName equates to the stub file, for openapi we go by the opid
                             var operationName = pathProperties.endpointName;
                             if (includeOperationName_1["default"](operationName, config.data.nodegenRc)) {
                                 files[operationName] = files[operationName] || [];
@@ -82,6 +83,7 @@ var GenerateOperation = /** @class */ (function () {
                         lodash_1.each(config.data.swagger.channels, function (pathProperties, pathName) {
                             var subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
                             if (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)) {
+                                // operationName equates to the stub file, for async we got by the opid
                                 var operationName = pathProperties.subscribe.operationId;
                                 files[operationName] = files[operationName] || [];
                                 files[operationName].push({

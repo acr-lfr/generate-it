@@ -13,7 +13,7 @@ describe('Check all program options are captured and names correctly', function 
             '-o', 'mydir',
             '-t', 'https://www.mygit.com',
             '--dont-update-tpl-cache',
-            '-s', '3',
+            '--segment-first-grouping', '3',
             '-v',
             '--very-verbose',
         ];
@@ -24,7 +24,7 @@ describe('Check all program options are captured and names correctly', function 
         expect(cli.program.template).toBe('https://www.mygit.com');
         expect(cli.program.dontUpdateTplCache).toBe(true);
         expect(cli.program.dontRunComparisonTool).toBe(false);
-        expect(cli.program.segmentsCount).toBe('3');
+        expect(cli.program.segmentFirstGrouping).toBe('3');
         expect(cli.program.verbose).toBe(true);
         expect(cli.program.veryVerbose).toBe(true);
     });

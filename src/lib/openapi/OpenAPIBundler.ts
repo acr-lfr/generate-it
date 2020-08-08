@@ -8,8 +8,8 @@ import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptIn
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
-import includeOperationName from '@/lib/helpers/includeOperationName';
 import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
+import endpointNameCalculation from '@/lib/helpers/endpointNameCalculation';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -259,9 +259,11 @@ class OpenAPIBundler {
   public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
     const objects = apiObject.channels || apiObject.paths;
-    for (const pathName in objects) {
-      const pathObject = objects[pathName];
-      const endpointName = pathName === '/' ? 'root' : pathName.split('/')[1];
+    for (const fullPath in objects) {
+      const endpointName = endpointNameCalculation(fullPath, {
+        segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping
+      });
+      const pathObject = objects[fullPath];
       if (includeOperationNameAction(endpointName, pathObject, config.nodegenRc)) {
         pathObject.endpointName = endpointName;
       }
