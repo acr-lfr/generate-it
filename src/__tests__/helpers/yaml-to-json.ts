@@ -79,7 +79,28 @@ export const fmtString = (value: any) => {
   return value;
 };
 
-// https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+
+
+
+/**
+ * Turn nested json into flattened accessors
+ * https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+ *
+ * eg:
+ *   {
+ *     thing: {
+ *       one: 'two'
+ *     },
+ *     arr: [{ one: 1 }, { two: 2 }]
+ *   }
+ *
+ * becomes:
+ *   {
+ *     'thing.one' : 'two',
+ *     'arr[0].one': 1,
+ *     'arr[1].two': 2
+ *   }
+ */
 export const flatten = (data: JSON) => {
   const result: JSON = {};
 
