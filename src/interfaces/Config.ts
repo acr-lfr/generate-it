@@ -7,6 +7,7 @@ export default interface Config {
   dontUpdateTplCache: boolean;
   dontRunComparisonTool: boolean;
   segmentFirstGrouping?: number;
+  segmentSecondGrouping?: number;
   handlebars_helper?: any;
   mockServer: boolean;
   variables?: any;

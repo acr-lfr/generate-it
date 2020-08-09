@@ -317,7 +317,8 @@ var OpenAPIBundler = /** @class */ (function () {
         var objects = apiObject.channels || apiObject.paths;
         for (var fullPath in objects) {
             var endpointName = endpointNameCalculation_1["default"](fullPath, {
-                segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping
+                segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
+                segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
             });
             var pathObject = objects[fullPath];
             if (includeOperationNameAction_1["default"](endpointName, pathObject, config.nodegenRc)) {

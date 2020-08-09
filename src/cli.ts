@@ -28,6 +28,7 @@ versionCheck(
     template: cli.program.template,
     variables: cli.program.variables,
     segmentFirstGrouping: cli.program.segmentFirstGrouping,
+    segmentSecondGrouping: cli.program.segmentSecondGrouping,
     handlebars_helper: undefined, // todo add the ability to inject custom helpers, this will allow the extraction of Joi form the core
     mockServer: cli.program.mocked || false,
   };
