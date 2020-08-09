@@ -125,6 +125,30 @@ describe('1st grouping only', function () {
     }); });
 });
 describe('1st and 2nd grouping', function () {
+    it('should throw error when 1st is >= to 2nd', function (done) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            try {
+                endpointNameCalculation_1["default"]('/item/{id}/comment/thing', {
+                    segmentFirstGrouping: 2,
+                    segmentSecondGrouping: 2
+                });
+                done('The 1st is equal to the 2nd');
+            }
+            catch (e) {
+                try {
+                    endpointNameCalculation_1["default"]('/item/{id}/comment/thing', {
+                        segmentFirstGrouping: 3,
+                        segmentSecondGrouping: 2
+                    });
+                    done('The 1st is greater than the 2nd');
+                }
+                catch (e) {
+                    done();
+                }
+            }
+            return [2 /*return*/];
+        });
+    }); });
     it('should return itemComment as the 1st grouping is 0 the same as the base segment', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var endpoint;
         return tslib_1.__generator(this, function (_a) {

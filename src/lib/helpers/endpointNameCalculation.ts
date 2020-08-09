@@ -5,6 +5,11 @@ export default (fullPath: string, config: { segmentFirstGrouping?: number, segme
   if (segmentFirstGrouping === undefined && segmentSecondGrouping !== undefined) {
     throw new Error('You must provide segmentFirstGrouping when providing segmentSecondGrouping. segmentSecondGrouping found but segmentFirstGrouping is undefined');
   }
+  if (segmentFirstGrouping !== undefined && segmentSecondGrouping !== undefined) {
+    if (segmentFirstGrouping >= segmentSecondGrouping) {
+      throw new Error('When setting the segmentSecondGrouping it must be greater that the segmentFirstGrouping');
+    }
+  }
 
   // double check the 1st char is /
   if (fullPath[0] !== '/') {

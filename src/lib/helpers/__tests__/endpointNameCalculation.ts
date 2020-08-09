@@ -79,6 +79,25 @@ describe('1st grouping only', () => {
 });
 
 describe('1st and 2nd grouping', () => {
+  it('should throw error when 1st is >= to 2nd', async (done) => {
+    try {
+      endpointNameCalculation('/item/{id}/comment/thing', {
+        segmentFirstGrouping: 2,
+        segmentSecondGrouping: 2
+      });
+      done('The 1st is equal to the 2nd');
+    } catch (e) {
+      try {
+        endpointNameCalculation('/item/{id}/comment/thing', {
+          segmentFirstGrouping: 3,
+          segmentSecondGrouping: 2
+        });
+        done('The 1st is greater than the 2nd');
+      } catch (e) {
+        done();
+      }
+    }
+  });
   it('should return itemComment as the 1st grouping is 0 the same as the base segment', async () => {
     const endpoint = endpointNameCalculation('/item/{id}/comment/thing', {
       segmentFirstGrouping: 0,
