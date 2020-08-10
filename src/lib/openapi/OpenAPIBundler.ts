@@ -261,7 +261,8 @@ class OpenAPIBundler {
     const objects = apiObject.channels || apiObject.paths;
     for (const fullPath in objects) {
       const endpointName = endpointNameCalculation(fullPath, {
-        segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping
+        segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
+        segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
       });
       const pathObject = objects[fullPath];
       if (includeOperationNameAction(endpointName, pathObject, config.nodegenRc)) {

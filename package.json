@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.14.0",
+  "version": "5.15.0",
   "description": "Generate it, socket and html consumers and clients from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "start": "node cli.js",
     "prepublishOnly": "npm run test"
   },
+  "homepage": "https://acrontum.github.io/generate-it",
   "repository": {
     "type": "git",
     "url": "https://github.com/acrontum/generate-it"
