@@ -86,6 +86,7 @@ class FileWalker {
       data: this.config,
       file_name: filename,
       segmentFirstGrouping: this.config.segmentFirstGrouping,
+      segmentSecondGrouping: this.config.segmentSecondGrouping,
       mockServer: this.config.mockServer,
     };
   }

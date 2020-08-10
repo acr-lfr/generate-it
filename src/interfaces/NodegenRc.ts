@@ -4,6 +4,7 @@ export default interface NodegenRc {
   nodegenType: string;
   interfaceStyle?: string;
   segmentFirstGrouping?: number;
+  segmentSecondGrouping?: number;
   helpers?: {
     publishOpIds?: string[],
     subscribeOpIds?: string[],
