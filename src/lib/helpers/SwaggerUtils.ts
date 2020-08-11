@@ -106,17 +106,23 @@ class SwaggerUtils {
     };
     for (const key in paramsTypes.headers) {
       if (paramsTypes.headers[key].schema) {
-        paramsTypes.headers[key].type = paramsTypes.headers[key].schema.type;
+        for (const attr in paramsTypes.headers[key].schema) {
+          paramsTypes.headers[key][attr] = paramsTypes.headers[key].schema[attr];
+        }
       }
     }
     for (const key in paramsTypes.params) {
       if (paramsTypes.params[key].schema) {
-        paramsTypes.params[key].type = paramsTypes.params[key].schema.type;
+        for (const attr in paramsTypes.params[key].schema) {
+          paramsTypes.params[key][attr] = paramsTypes.params[key].schema[attr];
+        }
       }
     }
     for (const key in paramsTypes.query) {
       if (paramsTypes.query[key].schema) {
-        paramsTypes.query[key].type = paramsTypes.query[key].schema.type;
+        for (const attr in paramsTypes.query[key].schema) {
+          paramsTypes.query[key][attr] = paramsTypes.query[key].schema[attr];
+        }
       }
     }
 

@@ -218,6 +218,7 @@ components:
       example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
       schema:
         type: string
+        pattern: ^Bearer .+$
   securitySchemes:
     jwtToken:
       type: apiKey
