@@ -9,7 +9,7 @@ node_modules
 .idea/workspace.xml
 
 # Generated
-build
+#build
 coverage/
 jest/
 .DS_Store
