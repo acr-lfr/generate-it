@@ -10,6 +10,7 @@ import generateDirectoryStructure from '@/lib/generate/generateDirectoryStructur
 import TemplateFetch from '@/lib/template/TemplateFetch';
 import OpenAPIBundler from '@/lib/openapi/OpenAPIBundler';
 import logTimeDiff from '@/lib/helpers/logTimeDiff';
+import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
 
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
@@ -34,6 +35,7 @@ export default async (config: Config): Promise<boolean> => {
     fs.ensureFileSync(baseCompiledObjectPath);
     fs.writeJsonSync(baseCompiledObjectPath, apiObject, {spaces: 2});
     extendedConfig = ConfigMerger.injectSwagger(extendedConfig, apiObject);
+    checkRcOpIdArrIsValid(extendedConfig.swagger, extendedConfig.nodegenRc);
   logTimeDiff(startTime, (new Date()).getTime(), true);
 
   console.log('Injecting content to files...'.green.bold);
