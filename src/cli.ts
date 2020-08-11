@@ -32,6 +32,23 @@ versionCheck(
     handlebars_helper: undefined, // todo add the ability to inject custom helpers, this will allow the extraction of Joi form the core
     mockServer: cli.program.mocked || false,
   };
+
+  const call = () => {
+    console.log(`${LINEBREAK}Starting the generation...${LINEBREAK}`);
+    generateIt(config).then(() => {
+      console.log(`${LINEBREAK}Done! ☺`.green.bold);
+      console.log(`${LINEBREAK}Your API files have been output here: `.yellow + cli.program.output.magenta + `.`.green.bold);
+    }).catch(async (err: any) => {
+      console.error('Something went wrong:'.red);
+      console.trace(err);
+      process.exit(1);
+    });
+  };
+
+  if (cli.program.yes) {
+    return call();
+  }
+
   const question = `Continuing will replace the entire http layer:`.green + `
 - ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost.
 - Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.
@@ -50,15 +67,7 @@ Are you sure you wish to continue?
   inquirer.prompt(questions)
     .then((answers: any) => {
       if (answers.installConfirm) {
-        console.log(`${LINEBREAK}Starting the generation...${LINEBREAK}`);
-        generateIt(config).then(() => {
-          console.log(`${LINEBREAK}Done! ☺`.green.bold);
-          console.log(`${LINEBREAK}Your API files have been output here: `.yellow + cli.program.output.magenta + `.`.green.bold);
-        }).catch(async (err: any) => {
-          console.error('Something went wrong:'.red);
-          console.trace(err);
-          process.exit(1);
-        });
+        call();
       } else {
         console.log('Generation cancelled. No files have been touched.'.red);
       }

@@ -3,10 +3,30 @@ import program from 'commander';
 import path from 'path';
 import commanderParseOutput from '@/commanderParseOutput';
 import commanderCollectArray from '@/commanderCollectObject';
+import commander from 'commander';
 
 const packageInfo = require('../package.json');
 
-export default (inputArgsArray: string[]) => {
+interface Program extends commander.CommanderStatic {
+  template: string;
+  mocked?: boolean;
+  output?: string;
+  'dont-update-tpl-cache'?: boolean;
+  'dont-run-comparison-tool'?: boolean;
+  'segment-first-grouping'?: number;
+  'segment-second-grouping'?: number;
+  variables?: any[];
+  verbose?: boolean;
+  'very-verbose'?: boolean;
+  'yes'?: boolean;
+}
+
+export interface CommanderResponse {
+  program: Program;
+  swaggerFile: string;
+}
+
+export default (inputArgsArray: string[]): CommanderResponse => {
   let swaggerFile: any;
   program
     .version(packageInfo.version)
@@ -24,6 +44,7 @@ export default (inputArgsArray: string[]) => {
     .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectArray, {})
     .option('-v, --verbose', 'Outputs verbose logging')
     .option('--very-verbose', 'Outputs very verbose logging')
+    .option('-y, --yes', 'Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten')
     .parse(inputArgsArray);
 
   if (!swaggerFile) {
@@ -32,6 +53,6 @@ export default (inputArgsArray: string[]) => {
     return {
       program,
       swaggerFile,
-    };
+    } as CommanderResponse;
   }
 };

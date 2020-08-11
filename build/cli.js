@@ -28,6 +28,23 @@ npm_tool_version_check_1["default"](require('../package.json').version, 'https:/
         handlebars_helper: undefined,
         mockServer: cli.program.mocked || false
     };
+    var call = function () {
+        console.log(cli_1.LINEBREAK + "Starting the generation..." + cli_1.LINEBREAK);
+        generateIt_1["default"](config).then(function () {
+            console.log((cli_1.LINEBREAK + "Done! \u263A").green.bold);
+            console.log((cli_1.LINEBREAK + "Your API files have been output here: ").yellow + cli.program.output.magenta + ".".green.bold);
+        })["catch"](function (err) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                console.error('Something went wrong:'.red);
+                console.trace(err);
+                process.exit(1);
+                return [2 /*return*/];
+            });
+        }); });
+    };
+    if (cli.program.yes) {
+        return call();
+    }
     var question = "Continuing will replace the entire http layer:".green + "\n- ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost.\n- Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.\n- See the manual for further information: https://acrontum.github.io/generate-it/\n- This message is of no concern for a 1st time run." + "\n\nAre you sure you wish to continue?\n".green;
     var questions = [{
             type: 'confirm',
@@ -38,18 +55,7 @@ npm_tool_version_check_1["default"](require('../package.json').version, 'https:/
     inquirer.prompt(questions)
         .then(function (answers) {
         if (answers.installConfirm) {
-            console.log(cli_1.LINEBREAK + "Starting the generation..." + cli_1.LINEBREAK);
-            generateIt_1["default"](config).then(function () {
-                console.log((cli_1.LINEBREAK + "Done! \u263A").green.bold);
-                console.log((cli_1.LINEBREAK + "Your API files have been output here: ").yellow + cli.program.output.magenta + ".".green.bold);
-            })["catch"](function (err) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
-                    console.error('Something went wrong:'.red);
-                    console.trace(err);
-                    process.exit(1);
-                    return [2 /*return*/];
-                });
-            }); });
+            call();
         }
         else {
             console.log('Generation cancelled. No files have been touched.'.red);

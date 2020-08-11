@@ -25,6 +25,7 @@ exports["default"] = (function (inputArgsArray) {
         .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectObject_1["default"], {})
         .option('-v, --verbose', 'Outputs verbose logging')
         .option('--very-verbose', 'Outputs very verbose logging')
+        .option('-y, --yes', 'Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten')
         .parse(inputArgsArray);
     if (!swaggerFile) {
         throw new Error('> Path to Swagger file not provided.'.red);
