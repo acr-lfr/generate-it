@@ -142,7 +142,7 @@ var SwaggerUtils = /** @class */ (function () {
             if (paramsTypes[paramTypeKey].length === 0) {
                 return;
             }
-            validationText += "'" + paramTypeKey + "': {";
+            validationText += "'" + paramTypeKey + "': Joi.object({";
             paramsTypes[paramTypeKey].forEach(function (param) {
                 if (param.schema && param.schema.properties) {
                     Object.keys(param.schema.properties).forEach(function (propertyKey) {
@@ -158,11 +158,11 @@ var SwaggerUtils = /** @class */ (function () {
                     });
                 }
             });
-            validationText += '},';
+            validationText += '})';
             if (paramTypeKey === ParamTypeKey.headers) {
-                validationText = validationText.substring(0, validationText.length - 1);
-                validationText += '.unknown(true),';
+                validationText += '.unknown(true)';
             }
+            validationText += ',';
         });
         return validationText;
     };
