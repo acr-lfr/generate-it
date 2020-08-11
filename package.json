@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.17.2",
+  "version": "5.18.0",
   "description": "Generate it, socket and html consumers and clients from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
