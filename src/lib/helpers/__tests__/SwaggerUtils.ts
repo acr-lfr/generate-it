@@ -79,7 +79,7 @@ test('Returns joi with 2 required params', () => {
   expect(
     SwaggerUtils.createJoiValidation('post', {parameters: [params[0]]}),
   ).toBe(
-    `'body': {'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow(''),},`,
+    `'body': Joi.object({'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow(''),}),`,
   );
 });
 
@@ -87,7 +87,7 @@ test('openapi3 query request param', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[1]]}),
   ).toBe(
-    `'query': {'limit':Joi.number().integer(),},`,
+    `'query': Joi.object({'limit':Joi.number().integer(),}),`,
   );
 });
 
@@ -95,7 +95,7 @@ test('openapi2 enums', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[3]]}),
   ).toBe(
-    `'query': {'sort':Joi.string().allow('').valid('asc', 'desc'),},`,
+    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`,
   );
 });
 
@@ -103,7 +103,7 @@ test('openapi3 enums', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[2]]}),
   ).toBe(
-    `'query': {'sort':Joi.string().allow('').valid('asc', 'desc'),},`,
+    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`,
   );
 });
 
@@ -111,7 +111,7 @@ test('openapi3 query request array param: allow single value', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[4]]}),
   ).toBe(
-    `'query': {'select':Joi.array().items(Joi.string().allow('')).single(),},`,
+    `'query': Joi.object({'select':Joi.array().items(Joi.string().allow('')).single(),}),`,
   );
 });
 
@@ -119,7 +119,7 @@ test('openapi3 request body: allow empty array', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[5]]}),
   ).toBe(
-    `'body': {'selected':Joi.array().items(Joi.string().allow('')).required(),},`,
+    `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('')).required(),}),`,
   );
 });
 
@@ -157,6 +157,6 @@ test('add unknown true for headers', () => {
       }]
     }),
   ).toBe(
-    `'headers': {'sort':Joi.string().valid('asc', 'desc').required(),'access':Joi.string().regex(/^Bearer .+$/).required(),}.unknown(true),'query': {'limit':Joi.number().integer(),},`,
+    `'headers': Joi.object({'sort':Joi.string().valid('asc', 'desc').required(),'access':Joi.string().regex(/^Bearer .+$/).required(),}).unknown(true),'query': Joi.object({'limit':Joi.number().integer(),}),`,
   );
 });

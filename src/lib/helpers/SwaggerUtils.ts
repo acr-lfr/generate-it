@@ -146,7 +146,7 @@ class SwaggerUtils {
       if (paramsTypes[paramTypeKey].length === 0) {
         return;
       }
-      validationText += `'${paramTypeKey}': {`;
+      validationText += `'${paramTypeKey}': Joi.object({`;
       paramsTypes[paramTypeKey].forEach((param: any) => {
         if (param.schema && param.schema.properties) {
           Object.keys(param.schema.properties).forEach((propertyKey) => {
@@ -163,11 +163,11 @@ class SwaggerUtils {
           });
         }
       });
-      validationText += '},';
+      validationText += '})';
       if (paramTypeKey === ParamTypeKey.headers) {
-        validationText = validationText.substring(0, validationText.length - 1);
-        validationText += '.unknown(true),';
+        validationText += '.unknown(true)';
       }
+      validationText += ',';
     });
 
     return validationText;
