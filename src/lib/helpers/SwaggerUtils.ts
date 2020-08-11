@@ -1,5 +1,18 @@
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 
+enum ParamTypeKey {
+  body = 'body',
+  headers = 'headers',
+  params = 'params',
+  query = 'query'
+}
+
+interface PathParamsToJoi {
+  requiredFields?: string[];
+  isFromArray?: boolean;
+  paramTypeKey: ParamTypeKey;
+}
+
 class SwaggerUtils {
   /**
    * Converts a sub-section of a definition
@@ -7,11 +20,12 @@ class SwaggerUtils {
    * @param {Object} [options] - options.isFromArray [string], options.requiredField [string[]]
    * @return {string|void}
    */
-  public pathParamsToJoi (param: any, options: any = {}) {
+  public pathParamsToJoi (param: any, options: PathParamsToJoi): string {
     if (!param) {
       console.log(param, options);
       return;
     }
+    const {paramTypeKey} = options;
     let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
     const type = param.type || param.schema.type;
@@ -57,6 +71,7 @@ class SwaggerUtils {
       validationText += 'Joi.array().items(';
       validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
         isFromArray: true,
+        paramTypeKey
       });
       validationText += ')';
 
@@ -77,6 +92,8 @@ class SwaggerUtils {
       Object.keys(properties).forEach((propertyKey) => {
         validationText += this.pathParamsToJoi({
           name: propertyKey, ...properties[propertyKey],
+        }, {
+          paramTypeKey
         });
       });
       validationText += '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
@@ -88,11 +105,8 @@ class SwaggerUtils {
 
   /**
    * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
-   * @param method
-   * @param {Object} pathObject
-   * @return {string|void}
    */
-  public createJoiValidation (method: string, pathObject: any) {
+  public createJoiValidation (method: string, pathObject: any): string {
     pathObject = oa3toOa2Body(method, pathObject);
     const requestParams = pathObject.parameters;
     if (!requestParams) {
@@ -140,14 +154,20 @@ class SwaggerUtils {
               name: propertyKey, ...param.schema.properties[propertyKey],
             }, {
               requiredFields: param.schema.required,
-              paramTypeKey,
+              paramTypeKey: paramTypeKey as ParamTypeKey,
             });
           });
         } else if (param.type || (param.schema && param.schema.type)) {
-          validationText += this.pathParamsToJoi(param, { paramTypeKey });
+          validationText += this.pathParamsToJoi(param, {
+            paramTypeKey: paramTypeKey as ParamTypeKey
+          });
         }
       });
       validationText += '},';
+      if (paramTypeKey === ParamTypeKey.headers) {
+        validationText = validationText.substring(0, validationText.length - 1);
+        validationText += '.unknown(true),';
+      }
     });
 
     return validationText;

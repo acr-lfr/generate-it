@@ -77,6 +77,7 @@ describe('e2e testing', () => {
       ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],
       ['test_server/src/http/nodegen/interfaces/JwtAccess.ts', 'e5e4baabba301bed91746dc770035fe5'],
       ['test_server/src/http/nodegen/interfaces/WeatherGetQuery.ts', 'f314eaadd0e58e47588860f6d3e2029b'],
+      ['test_server/src/http/nodegen/validators/weatherValidators.ts', '0ce0953626cc6586fc133bce1dbc0c4e'],
       // Check dynamic docker file (OTHER file)
       ['test_server/docker-compose.yml', '779fd3809240f10dd84c8c070f0851d3'],
       // Check git ignore was copied over (OTHER file)
