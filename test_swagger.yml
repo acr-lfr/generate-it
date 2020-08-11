@@ -210,6 +210,7 @@ parameters:
     name: Search-Id
     type: string
     description: Unique search id
+    pattern: ^Bearer .+$
     x-example: 569eecd9-9962-4aed-a0f0-30476c6a82ed
 definitions:
   AdditionalProps:

@@ -12,7 +12,7 @@ class SwaggerUtils {
       console.log(param, options);
       return;
     }
-    let validationText = param.name ? param.name + ':' : '';
+    let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
     const type = param.type || param.schema.type;
     if (['string', 'number', 'integer', 'boolean'].includes(type)) {
@@ -100,9 +100,15 @@ class SwaggerUtils {
     }
     const paramsTypes: any = {
       body: requestParams.filter((param: any) => param.in === 'body'),
+      headers: requestParams.filter((param: any) => param.in === 'header'),
       params: requestParams.filter((param: any) => param.in === 'path'),
       query: requestParams.filter((param: any) => param.in === 'query'),
     };
+    for (const key in paramsTypes.headers) {
+      if (paramsTypes.headers[key].schema) {
+        paramsTypes.headers[key].type = paramsTypes.headers[key].schema.type;
+      }
+    }
     for (const key in paramsTypes.params) {
       if (paramsTypes.params[key].schema) {
         paramsTypes.params[key].type = paramsTypes.params[key].schema.type;
@@ -120,7 +126,7 @@ class SwaggerUtils {
       if (paramsTypes[paramTypeKey].length === 0) {
         return;
       }
-      validationText += paramTypeKey + ': {';
+      validationText += `'${paramTypeKey}': {`;
       paramsTypes[paramTypeKey].forEach((param: any) => {
         if (param.schema && param.schema.properties) {
           Object.keys(param.schema.properties).forEach((propertyKey) => {
