@@ -12,6 +12,7 @@ var generateDirectoryStructure_1 = tslib_1.__importDefault(require("./lib/genera
 var TemplateFetch_1 = tslib_1.__importDefault(require("./lib/template/TemplateFetch"));
 var OpenAPIBundler_1 = tslib_1.__importDefault(require("./lib/openapi/OpenAPIBundler"));
 var logTimeDiff_1 = tslib_1.__importDefault(require("./lib/helpers/logTimeDiff"));
+var checkRcOpIdArrIsValid_1 = tslib_1.__importDefault(require("./lib/helpers/checkRcOpIdArrIsValid"));
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
  * @return {Promise}
@@ -42,6 +43,7 @@ exports["default"] = (function (config) { return tslib_1.__awaiter(void 0, void 
                 fs.ensureFileSync(baseCompiledObjectPath);
                 fs.writeJsonSync(baseCompiledObjectPath, apiObject, { spaces: 2 });
                 extendedConfig = ConfigMerger_1["default"].injectSwagger(extendedConfig, apiObject);
+                checkRcOpIdArrIsValid_1["default"](extendedConfig.swagger, extendedConfig.nodegenRc);
                 logTimeDiff_1["default"](startTime, (new Date()).getTime(), true);
                 console.log('Injecting content to files...'.green.bold);
                 return [4 /*yield*/, FileIterator_1["default"].walk(generateDirectoryStructure_1["default"](extendedConfig, templatesDir), extendedConfig)];
