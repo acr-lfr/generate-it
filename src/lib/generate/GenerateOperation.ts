@@ -59,10 +59,10 @@ class GenerateOperation {
       ) {
         // operationName equates to the stub file, for async we got by the opid
         let operationName;
-        if(pathProperties.publish && pathProperties.publish.operationId){
-          operationName = pathProperties.publish.operationId
+        if (pathProperties.publish && pathProperties.publish.operationId) {
+          operationName = pathProperties.publish.operationId;
         } else {
-          operationName = pathProperties.subscribe.operationId
+          operationName = pathProperties.subscribe.operationId;
         }
         files[operationName] = files[operationName] || [];
         files[operationName].push({
