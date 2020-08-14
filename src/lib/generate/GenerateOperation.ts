@@ -58,7 +58,12 @@ class GenerateOperation {
         pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)
       ) {
         // operationName equates to the stub file, for async we got by the opid
-        const operationName = pathProperties.subscribe.operationId;
+        let operationName;
+        if(pathProperties.publish && pathProperties.publish.operationId){
+          operationName = pathProperties.publish.operationId
+        } else {
+          operationName = pathProperties.subscribe.operationId
+        }
         files[operationName] = files[operationName] || [];
         files[operationName].push({
           channelName: pathName,
