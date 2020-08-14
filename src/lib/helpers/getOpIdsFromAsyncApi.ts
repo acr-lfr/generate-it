@@ -1,20 +1,12 @@
-export interface GetOpIdsFromAsyncApi {
-  publish: string[];
-  subscribe: string[];
-}
-
-export default (obj: any): GetOpIdsFromAsyncApi => {
-  const ids: GetOpIdsFromAsyncApi = {
-    publish: [],
-    subscribe: []
-  };
+export default (obj: any): string[] => {
+  const ids: string[] = [];
   for (const channelPath in obj.channels) {
     const channel = obj.channels[channelPath];
     if (channel.publish) {
-      ids.publish.push(channel.publish.operationId);
+      ids.push(channel.publish.operationId);
     }
     if (channel.subscribe) {
-      ids.subscribe.push(channel.subscribe.operationId);
+      ids.push(channel.subscribe.operationId);
     }
   }
   return ids;

@@ -8,9 +8,8 @@ import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
-import { OperationsContainer, Operations } from '@/interfaces/Operations';
+import { Operations, OperationsContainer } from '@/interfaces/Operations';
 import includeOperationName from '@/lib/helpers/includeOperationName';
-import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
 
 class GenerateOperation {
   /**
@@ -54,7 +53,10 @@ class GenerateOperation {
     const files: OperationsContainer = {};
     each(config.data.swagger.channels, (pathProperties, pathName) => {
       const subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
-      if (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)) {
+      if (
+        pathProperties.publish && subscribeIds.includes(pathProperties.publish.operationId) ||
+        pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)
+      ) {
         // operationName equates to the stub file, for async we got by the opid
         const operationName = pathProperties.subscribe.operationId;
         files[operationName] = files[operationName] || [];

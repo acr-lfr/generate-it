@@ -1,4 +1,4 @@
-import getOpIdsFromAsyncApi, { GetOpIdsFromAsyncApi } from '@/lib/helpers/getOpIdsFromAsyncApi';
+import getOpIdsFromAsyncApi from '@/lib/helpers/getOpIdsFromAsyncApi';
 import NodegenRc from '@/interfaces/NodegenRc';
 
 export default (apiObject: any, nodegenRc: NodegenRc) => {
@@ -6,36 +6,26 @@ export default (apiObject: any, nodegenRc: NodegenRc) => {
     return true;
   }
 
-  const ids: GetOpIdsFromAsyncApi = {
-    publish: [],
-    subscribe: []
-  };
+  const ids: string[] = [];
   nodegenRc.helpers?.subscribeOpIds?.forEach((item) => {
-    if (!ids.subscribe.includes(item)) {
-      ids.subscribe.push(item);
+    if (!ids.includes(item)) {
+      ids.push(item);
     } else {
       throw new Error('The nodegenrc file contains duplicate subscribeOpIds');
     }
   });
   nodegenRc.helpers?.publishOpIds?.forEach((item) => {
-    if (!ids.publish.includes(item)) {
-      ids.publish.push(item);
+    if (!ids.includes(item)) {
+      ids.push(item);
     } else {
       throw new Error('The nodegenrc file contains duplicate publishOpIds');
     }
   });
 
   const idsToCompare = getOpIdsFromAsyncApi(apiObject);
-
-  ids.publish.forEach((id) => {
-    if (!idsToCompare.publish.includes(id)) {
-      throw new Error('The nodegenrc file wants to PUBLISH to an id that does not exists in the async api file provided: ' + id);
-    }
-  });
-
-  ids.subscribe.forEach((id) => {
-    if (!idsToCompare.subscribe.includes(id)) {
-      throw new Error('The nodegenrc file wants to SUBSCRIBE to an id that does not exists in the async api file provided: ' + id);
+  ids.forEach((id) => {
+    if (!idsToCompare.includes(id)) {
+      throw new Error('The nodegenrc file wants to PUBLISH or SUBSCRIBE to an id that does not exists in the async api file provided: ' + id);
     }
   });
 };
