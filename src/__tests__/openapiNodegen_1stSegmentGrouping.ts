@@ -64,7 +64,7 @@ describe('e2e testing', () => {
 
     const expectedPathHashes = [
       // Check rabbitMQ domains (STUB file)
-      ['test_server/src/domains/domainsImporter.ts', '8bf26b800eb2bf0fa83799269fd6bb0c'],
+      ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
       ['test_server/src/domains/WeatherDomain.ts', 'e41b209a29db6a4fd75d420e128c4f23'],
       ['test_server/src/domains/WeatherIdDomain.ts', 'a4cabc695f4ba6bc869abe980faaa2f0'],
       // Check complex interface (INTERFACE file)
