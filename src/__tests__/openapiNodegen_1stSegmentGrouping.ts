@@ -74,6 +74,7 @@ describe('e2e testing', () => {
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
       // Check the routes files (OPERATION file)
+      ['test_server/src/http/nodegen/routesImporter.ts', '32fc29c3c892e0e0fce35cbd8780d0f6'],
       ['test_server/src/http/nodegen/routes/rainRoutes.ts', '0d81b9b22205107531b8c26adddcdb22'],
       ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '22f5e21d63ef3dfc88deb17e157e80a5'],
       // Check the output transformers (OPERATION file)

@@ -43,6 +43,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     package: config.package,
     swagger: config.data.swagger,
     endpoints: config.data.swagger.endpoints,
+    groupNamesWithFirstUrlSegment: config.data.swagger.groupNamesWithFirstUrlSegment,
     definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
     additionalTplObject,
     nodegenRc: config.data.nodegenRc,
