@@ -260,16 +260,24 @@ class OpenAPIBundler {
     apiObject.basePath = apiObject.basePath || '';
     const objects = apiObject.channels || apiObject.paths;
     for (const fullPath in objects) {
-      const endpointName = endpointNameCalculation(fullPath, {
-        segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
-        segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
-      });
       const pathObject = objects[fullPath];
+      let endpointName = '';
+      if (fullPath === '/' || fullPath === '') {
+        endpointName = 'root';
+      } else {
+        const parts = fullPath.split('/').filter(part => part.length > 0);
+        endpointName = parts[0];
+      }
       if (includeOperationNameAction(endpointName, pathObject, config.nodegenRc)) {
         pathObject.endpointName = endpointName;
+        pathObject.groupName = endpointNameCalculation(fullPath, {
+          segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
+          segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
+        });
       }
     }
 
+    // Add all the endpoints for reason - more interesting code from the original author
     apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {
       return typeof item === 'string';
     });

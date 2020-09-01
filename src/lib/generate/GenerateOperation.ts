@@ -9,7 +9,6 @@ import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import { TemplateVariables } from '@/interfaces/TemplateVariables';
 import { Operations, OperationsContainer } from '@/interfaces/Operations';
-import includeOperationName from '@/lib/helpers/includeOperationName';
 
 class GenerateOperation {
   /**
@@ -30,16 +29,17 @@ class GenerateOperation {
     const files: OperationsContainer = {};
     each(config.data.swagger.paths, (pathProperties, fullPath) => {
       // operationName equates to the stub file, for openapi we go by the opid
-      const operationName = pathProperties.endpointName;
-      if (includeOperationName(operationName, config.data.nodegenRc)) {
-        files[operationName] = files[operationName] || [];
+      const groupName = pathProperties.groupName;
+      // todo this clearly doesn't/cannot be correct - fix it
+      // if (includeOperationName(endpointName, config.data.nodegenRc)) {
+        files[groupName] = files[groupName] || [];
         fullPath = fullPath.replace(/}/g, '').replace(/{/g, ':');
-        files[operationName].push({
+        files[groupName].push({
           path_name: fullPath,
           path: pathProperties,
           subresource: generateSubresourceName(fullPath),
         });
-      }
+      // }
     });
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
