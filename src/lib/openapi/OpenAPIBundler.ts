@@ -259,6 +259,7 @@ class OpenAPIBundler {
   public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
     const objects = apiObject.channels || apiObject.paths;
+    apiObject.groupNamesWithFirstUrlSegment = {};
     for (const fullPath in objects) {
       const pathObject = objects[fullPath];
       let endpointName = '';
@@ -274,13 +275,17 @@ class OpenAPIBundler {
           segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
           segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
         });
+        if (!apiObject.groupNamesWithFirstUrlSegment[pathObject.groupName]) {
+          apiObject.groupNamesWithFirstUrlSegment[pathObject.groupName] = pathObject.endpointName;
+        }
       }
     }
 
-    // Add all the endpoints for reason - more interesting code from the original author
+    // Add all the endpoints in a single unique group
     apiObject.endpoints = _.uniq(_.map(apiObject.channels || apiObject.paths, 'endpointName')).filter((item: any) => {
       return typeof item === 'string';
     });
+
     return apiObject;
   }
 }
