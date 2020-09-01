@@ -28,20 +28,19 @@ class GenerateOperation {
 
   public async openapiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
-    each(config.data.swagger.paths, (pathProperties, pathName) => {
+    each(config.data.swagger.paths, (pathProperties, fullPath) => {
       // operationName equates to the stub file, for openapi we go by the opid
       const operationName = pathProperties.endpointName;
       if (includeOperationName(operationName, config.data.nodegenRc)) {
         files[operationName] = files[operationName] || [];
-        pathName = pathName.replace(/}/g, '').replace(/{/g, ':');
+        fullPath = fullPath.replace(/}/g, '').replace(/{/g, ':');
         files[operationName].push({
-          path_name: pathName,
+          path_name: fullPath,
           path: pathProperties,
-          subresource: generateSubresourceName(pathName, operationName),
+          subresource: generateSubresourceName(fullPath),
         });
       }
     });
-
     for (const operationNameItem in files) {
       const operation = files[operationNameItem];
       await this.file(config, operation, operationNameItem, fileType);
@@ -68,7 +67,7 @@ class GenerateOperation {
         files[operationName].push({
           channelName: pathName,
           channel: pathProperties,
-          subresource: generateSubresourceName(pathName, operationName),
+          subresource: generateSubresourceName(pathName),
         });
       }
     });

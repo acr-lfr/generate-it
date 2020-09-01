@@ -151,3 +151,13 @@ describe('2nd grouping only', () => {
     }
   });
 });
+
+describe('1st & 2nd grouping with only 2 items in the string', () => {
+  it('should throw an error', () => {
+    const calcString = endpointNameCalculation('/roles/{name}', {
+      segmentFirstGrouping: 2,
+      segmentSecondGrouping: 4
+    });
+    expect(calcString).toBe('roles');
+  });
+});
