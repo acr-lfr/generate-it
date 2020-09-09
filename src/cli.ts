@@ -11,12 +11,17 @@ process.on('unhandledRejection', (err) => {
   console.error(err);
 });
 
+const cli = cliInput(process.argv);
+
+if (cli.program.yes) {
+  process.env.npm_tool_version_check__quiet = 'true';
+}
+
 versionCheck(
   require('../package.json').version,
   'https://raw.githubusercontent.com/acrontum/generate-it/master/package.json',
   'Generate It'
 ).then(() => {
-  const cli = cliInput(process.argv);
   console.log(`Provided cli args look ok, preceding to build the http layer and any stub files... ${LINEBREAK}`.yellow);
   const config: Config = {
     verbose: cli.program.verbose || false,
