@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import ApiIs from '@/lib/helpers/ApiIs';
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
+import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
 
 class OpenAPIInjectInterfaceNaming {
   public config: any;
@@ -335,18 +336,25 @@ class OpenAPIInjectInterfaceNaming {
     }
   }
 
-  public injectFromOA2Response (path: string, method: string): { '200': any } | {} {
+  public injectFromOA2Response (path: string, method: string): { [key: string]: any } | {} {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
-    if (pathResponses && pathResponses['200'] && pathResponses['200'].schema && pathResponses['200'].schema.$ref) {
+
+    if (!pathResponses) {
+      return response;
+    }
+
+    const code = getSingleSuccessResponse(pathResponses);
+
+    if (pathResponses?.[code]?.schema?.$ref) {
       try {
         const responseInterface = this.convertRefToOjectPath(
-          pathResponses['200'].schema.$ref
+          pathResponses[code].schema.$ref
         )
           .split('.')
           .pop();
         if (responseInterface) {
-          response['200'] = responseInterface;
+          response[code] = responseInterface;
         }
       } catch (e) {
         console.error(e);
@@ -358,17 +366,17 @@ class OpenAPIInjectInterfaceNaming {
   public injectFromOA3Response (path: string, method: string): { '200': any } | {} {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
-    if (pathResponses
-      && pathResponses['200']
-      && pathResponses['200'].content
-      && pathResponses['200'].content['application/json']
-      && pathResponses['200'].content['application/json'].schema
-      && pathResponses['200'].content['application/json'].schema.$ref
-    ) {
+    if (!pathResponses) {
+      return response;
+    }
+
+    const code = getSingleSuccessResponse(pathResponses);
+
+    if (pathResponses?.[code]?.content?.['application/json']?.schema?.$ref) {
       try {
-        const responseInterface = this.convertRefToOjectPath(pathResponses['200'].content['application/json'].schema.$ref).split('.').pop();
+        const responseInterface = this.convertRefToOjectPath(pathResponses[code].content['application/json'].schema.$ref).split('.').pop();
         if (responseInterface) {
-          response['200'] = responseInterface;
+          response[code] = responseInterface;
         }
       } catch (e) {
         console.error(e);
