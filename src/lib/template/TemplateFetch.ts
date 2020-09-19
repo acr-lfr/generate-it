@@ -15,18 +15,21 @@ class TemplateFetchURL {
    * Used to write a gitignore to the parent git folder.
    * @param writeToFolder
    */
-  public writeGitIgnore (writeToFolder: string) {
+  public writeGitIgnore(writeToFolder: string) {
     fs.ensureDirSync(writeToFolder);
-    fs.writeFileSync(path.join(writeToFolder, '.gitignore'), `
+    fs.writeFileSync(
+      path.join(writeToFolder, '.gitignore'),
+      `
 ./*
-`);
+`
+    );
   }
 
   /**
    * Returns the folder to store the git repos in
    * @param targetGitCacheDir
    */
-  public getCacheFolder (targetGitCacheDir: string) {
+  public getCacheFolder(targetGitCacheDir: string) {
     this.targetGitCacheDir = path.join(targetGitCacheDir, GIT_DIRECTORY);
     this.writeGitIgnore(this.targetGitCacheDir);
     return this.targetGitCacheDir;
@@ -38,7 +41,7 @@ class TemplateFetchURL {
    * @param targetGitCacheDir
    * @return {string}
    */
-  public calculateLocalDirectoryFromUrl (url: string, targetGitCacheDir: string) {
+  public calculateLocalDirectoryFromUrl(url: string, targetGitCacheDir: string) {
     const camelCaseUrl = camelCaseStringReplacement(url, ['/', ':', '.', '-', '?', '#']);
     return path.join(this.getCacheFolder(targetGitCacheDir), camelCaseUrl);
   }
@@ -46,10 +49,12 @@ class TemplateFetchURL {
   /**
    * Deletes the entire cache directory
    */
-  public cleanSingleCacheDir (cachePath: string) {
+  public cleanSingleCacheDir(cachePath: string) {
     if (!cachePath.includes(this.targetGitCacheDir)) {
       console.error('For safety all folder removals must live within node_modules of this package.');
-      console.error('An incorrect cache folder path has been calculated, aborting! Please report this as an issue on gitHub.');
+      console.error(
+        'An incorrect cache folder path has been calculated, aborting! Please report this as an issue on gitHub.'
+      );
       throw new Error('Aborting openapi-nodegen, see above comments.');
     }
     console.log('Removing the cacheDir: ' + cachePath);
@@ -60,7 +65,7 @@ class TemplateFetchURL {
    * Throws an error if gitFetch is not installed
    * @return {Promise<boolean>}
    */
-  public async hasGit () {
+  public async hasGit() {
     try {
       await commandRun('git', ['--help']);
       return true;
@@ -75,12 +80,12 @@ class TemplateFetchURL {
    * @param cachePath
    * @return {boolean}
    */
-  public gitCacheExists (cachePath: string) {
+  public gitCacheExists(cachePath: string) {
     console.log('Checking for path: ' + cachePath);
     return fs.existsSync(cachePath);
   }
 
-  public extractTagOrBranch (url: string) {
+  public extractTagOrBranch(url: string) {
     const parts = url.split('#');
     if (parts.length === 1) {
       return 'default';
@@ -94,8 +99,8 @@ class TemplateFetchURL {
    * @param dontUpdateTplCache
    * @return {Promise<string>}
    */
-  public async gitFetch (url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
-    if (!await this.hasGit()) {
+  public async gitFetch(url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
+    if (!(await this.hasGit())) {
       throw new Error('Could not fetch cache from gitFetch url as gitFetch is not locally installed');
     }
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
@@ -127,7 +132,7 @@ class TemplateFetchURL {
    * @param cacheDirectory
    * @return {Promise<boolean>}
    */
-  public async gitPull (cacheDirectory: string) {
+  public async gitPull(cacheDirectory: string) {
     const cwd = process.cwd();
     process.chdir(cacheDirectory);
     try {
@@ -145,22 +150,26 @@ class TemplateFetchURL {
   /**
    * Logs the tpl tag and warns
    */
-  public async logTagWarning (cacheDirectory: string, tagBranch?: string) {
+  public async logTagWarning(cacheDirectory: string, tagBranch?: string) {
     // If a branch or tag was given, only continue if it is a semver and
     // not a branch thus allowing testing of develop / feature branches
     if (tagBranch && !this.isSemVer(tagBranch)) {
       return;
     }
     const pkVersion = require('../../../package.json').version;
-    const tplTag = tagBranch || await this.getTplTag(cacheDirectory);
+    const tplTag = tagBranch || (await this.getTplTag(cacheDirectory));
     if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
       console.log('IMPORTANT! There is a genetate-it & template tagged version error.'.red.bold);
-      console.log(`
-The` + `generate-it`.bold + `version must be greater or equal to the semver of the template tag but within the same major version.
+      console.log(
+        `
+The` +
+          `generate-it`.bold +
+          `version must be greater or equal to the semver of the template tag but within the same major version.
 You are currently using the following version:
 generate-it: ${pkVersion}
 template version tag: ${tplTag}
-`);
+`
+      );
 
       console.log('Aborting'.red.bold);
       process.exit(0);
@@ -171,7 +180,7 @@ template version tag: ${tplTag}
    * Checks the input is a valid semantic version string
    * @param input
    */
-  public isSemVer (input: string): boolean {
+  public isSemVer(input: string): boolean {
     const semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
     return semver.test(input);
   }
@@ -180,7 +189,7 @@ template version tag: ${tplTag}
    * Returns the last tag from a given git repo
    * @param cacheDirectory - The git directory
    */
-  public async getTplTag (cacheDirectory: string): Promise<string> {
+  public async getTplTag(cacheDirectory: string): Promise<string> {
     const cwd = process.cwd();
     process.chdir(cacheDirectory);
     const tag = await commandRun('git', ['describe', '--abbrev=0', '--tags']);
@@ -193,7 +202,7 @@ template version tag: ${tplTag}
    * @param packageVersion
    * @param tplTag
    */
-  public packageAndTplVersionOK (packageVersion: string, tplTag: string) {
+  public packageAndTplVersionOK(packageVersion: string, tplTag: string) {
     // simple check on the major versions only.. ie the 1st char of the string
     if (Number(packageVersion[0]) > Number(tplTag[0])) {
       return false;
@@ -208,7 +217,7 @@ template version tag: ${tplTag}
    * @param gitBranchOrTag
    * @return {Promise<*>}
    */
-  public async gitClone (url: string, cacheDirectory: string, gitBranchOrTag?: string) {
+  public async gitClone(url: string, cacheDirectory: string, gitBranchOrTag?: string) {
     console.log(cacheDirectory);
     console.log('Clone git repository');
     fs.ensureDirSync(cacheDirectory);
@@ -225,7 +234,7 @@ template version tag: ${tplTag}
    * @param {string} url
    * @return {{b: string, url: string}}
    */
-  public getUrlParts (url: string): { url: string, b?: string } {
+  public getUrlParts(url: string): { url: string; b?: string } {
     let cloneUrl = url;
     let b;
     if (url.includes('#')) {
@@ -247,7 +256,7 @@ template version tag: ${tplTag}
    * @param dontUpdateTplCache
    * @return {Promise<string>} - Returns the full path on the local drive to the tpl directory.
    */
-  public async resolveTemplateType (input: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
+  public async resolveTemplateType(input: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
     if (input.substring(0, 8) === 'https://') {
       return await this.gitFetch(input, targetGitCacheDir, dontUpdateTplCache);
     } else {

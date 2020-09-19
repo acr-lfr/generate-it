@@ -16,10 +16,15 @@ export default (input: string, replace: string | string[]) => {
   }
   let returnString = '';
   replace.forEach((replaceItem, i) => {
-    const replaceInString = (i === 0) ? input : returnString;
-    returnString = lcFirst((replaceInString.split(replaceItem).map((part) => {
-      return ucFirst(part);
-    })).join(''));
+    const replaceInString = i === 0 ? input : returnString;
+    returnString = lcFirst(
+      replaceInString
+        .split(replaceItem)
+        .map((part) => {
+          return ucFirst(part);
+        })
+        .join('')
+    );
   });
   return returnString;
 };

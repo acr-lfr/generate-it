@@ -7,7 +7,7 @@ export default (fullPath: string): string => {
     return '/';
   }
   // get all the path segments
-  const pathParts = fullPath.split('/').filter(part => part.length > 0);
+  const pathParts = fullPath.split('/').filter((part) => part.length > 0);
 
   // if we only have 1 segment, return / again
   if (pathParts.length === 1) {

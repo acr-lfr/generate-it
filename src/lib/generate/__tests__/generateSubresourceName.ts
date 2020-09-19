@@ -29,4 +29,3 @@ it('should return /:id/cow/donkey/:age', async () => {
   const subRes = generateSubresourceName('/name/:id/cow/donkey/:age');
   expect(subRes).toBe('/:id/cow/donkey/:age');
 });
-

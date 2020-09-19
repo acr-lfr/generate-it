@@ -19,7 +19,7 @@ class OpenAPIBundler {
    * @param filePath
    * @param config
    */
-  public async bundle (filePath: string, config: ConfigExtendedBase) {
+  public async bundle(filePath: string, config: ConfigExtendedBase) {
     let content;
 
     console.log('Reading file: ' + filePath);
@@ -30,13 +30,13 @@ class OpenAPIBundler {
     content = this.parseContent(content);
 
     console.log('Injecting path interface names');
-    content = await (new OpenAPIInjectInterfaceNaming(content, config)).inject();
+    content = await new OpenAPIInjectInterfaceNaming(content, config).inject();
 
     console.log('De-referencing object');
     content = await this.dereference(content);
 
     console.log('Calculating all request definitions to interface relations');
-    content = await (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
+    content = await new OpenAPIInjectInterfaceNaming(content, config).mergeParameters();
 
     console.log('Resolving all allOf references');
     content = openApiResolveAllOfs(content);
@@ -51,9 +51,7 @@ class OpenAPIBundler {
     content = await this.bundleObject(content);
 
     console.log('Injecting the endpoint names');
-    return JSON.parse(JSON.stringify(
-      this.pathEndpointInjection(content, config),
-    ));
+    return JSON.parse(JSON.stringify(this.pathEndpointInjection(content, config)));
   }
 
   /**
@@ -61,7 +59,7 @@ class OpenAPIBundler {
    * @param filepath
    * @param targetDir
    */
-  public copyInputFileToProject (filepath: string, targetDir: string): void {
+  public copyInputFileToProject(filepath: string, targetDir: string): void {
     const saveTo = path.join(targetDir, 'openapi-nodegen-api-file.yml');
     console.log('Writing the input yml file to: ' + saveTo);
     fs.copyFileSync(filepath, saveTo);
@@ -71,7 +69,7 @@ class OpenAPIBundler {
    * JSON load and parse a .json file or .y(a)ml file
    * @param content
    */
-  public parseContent (content: any) {
+  public parseContent(content: any) {
     content = content.toString('utf8');
     try {
       return JSON.parse(content);
@@ -84,7 +82,7 @@ class OpenAPIBundler {
    * Dereference the swagger/openapi object
    * @param json
    */
-  public async dereference (json: object) {
+  public async dereference(json: object) {
     return RefParser.dereference(json, {
       dereference: {
         circular: 'ignore',
@@ -96,7 +94,7 @@ class OpenAPIBundler {
    *
    * @param json
    */
-  public async bundleObject (json: object) {
+  public async bundleObject(json: object) {
     return RefParser.bundle(json, {
       dereference: {
         circular: 'ignore',
@@ -108,7 +106,7 @@ class OpenAPIBundler {
    * Returns a simple array of uniqueOperationids from either asyncApi or swagger/openapi
    * @param yamlObject
    */
-  public fetchOperationIdsArray (yamlObject: any): string[] {
+  public fetchOperationIdsArray(yamlObject: any): string[] {
     const ids: string[] = [];
     if (yamlObject.paths) {
       for (const pathMethod in yamlObject.paths) {
@@ -144,7 +142,7 @@ class OpenAPIBundler {
    * @param config
    * @return {Promise<void>}
    */
-  public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
+  public async injectInterfaces(apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
     apiObject = await this.injectDefinitionInterfaces(apiObject);
     if (ApiIs.isOpenAPIorSwagger(apiObject)) {
@@ -153,7 +151,7 @@ class OpenAPIBundler {
       // TODO complete the parameters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
       // TODO this was left as not required for rabbitmq
     }
-    apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1);
+    apiObject.interfaces = apiObject.interfaces.sort((a: any, b: any) => (a.name > b.name ? 1 : -1));
     apiObject.interfaces = _.uniqBy(apiObject.interfaces, 'name');
     return apiObject;
   }
@@ -163,27 +161,30 @@ class OpenAPIBundler {
    * @param apiObject
    * @return apiObject
    */
-  public async injectDefinitionInterfaces (apiObject: any): Promise<any> {
+  public async injectDefinitionInterfaces(apiObject: any): Promise<any> {
     // edge case for api's without any definitions or component schemas
-    if (ApiIs.swagger(apiObject) && !apiObject.definitions
-      || ApiIs.openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
+    if (
+      (ApiIs.swagger(apiObject) && !apiObject.definitions) ||
+      (ApiIs.openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas))
+    ) {
       return apiObject;
     }
-    const toWalk = (ApiIs.swagger(apiObject)) ? apiObject.definitions : (ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)) ? apiObject.components.schemas : {};
+    const toWalk = ApiIs.swagger(apiObject)
+      ? apiObject.definitions
+      : ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)
+      ? apiObject.components.schemas
+      : {};
     const defKeys = Object.keys(toWalk);
     for (let i = 0; i < defKeys.length; ++i) {
-      const definitionObject =
-        (ApiIs.swagger(apiObject)) ?
-          apiObject.definitions[defKeys[i]] :
-          (ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)) ?
-            apiObject.components.schemas[defKeys[i]] : {};
+      const definitionObject = ApiIs.swagger(apiObject)
+        ? apiObject.definitions[defKeys[i]]
+        : ApiIs.openapi3(apiObject) || ApiIs.asyncapi2(apiObject)
+        ? apiObject.components.schemas[defKeys[i]]
+        : {};
       try {
         apiObject.interfaces.push({
           name: defKeys[i],
-          content: await generateTypeScriptInterfaceText(
-            defKeys[i],
-            JSON.stringify(definitionObject),
-          ),
+          content: await generateTypeScriptInterfaceText(defKeys[i], JSON.stringify(definitionObject)),
         });
       } catch (e) {
         console.log(defKeys[i]);
@@ -197,7 +198,7 @@ class OpenAPIBundler {
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
    */
-  public async injectParameterInterfaces (apiObject: any) {
+  public async injectParameterInterfaces(apiObject: any) {
     // iterate over paths with for loop so can use await later
     const pathsKeys = Object.keys(apiObject.paths);
     for (let i = 0; i < pathsKeys.length; ++i) {
@@ -231,10 +232,7 @@ class OpenAPIBundler {
             }
             thisMethodXRequestionDefinitions[paramType].interfaceText = await generateTypeScriptInterfaceText(
               param.name,
-              JSON.stringify(_.get(
-                apiObject,
-                param.path,
-              )),
+              JSON.stringify(_.get(apiObject, param.path))
             );
             apiObject.interfaces.push({
               name: param.name,
@@ -256,7 +254,7 @@ class OpenAPIBundler {
   /**
    * Injects the end-points into each path object
    */
-  public pathEndpointInjection (apiObject: any, config: ConfigExtendedBase) {
+  public pathEndpointInjection(apiObject: any, config: ConfigExtendedBase) {
     apiObject.basePath = apiObject.basePath || '';
     const objects = apiObject.channels || apiObject.paths;
     apiObject.groupNamesWithFirstUrlSegment = {};
@@ -266,14 +264,14 @@ class OpenAPIBundler {
       if (fullPath === '/' || fullPath === '') {
         endpointName = 'root';
       } else {
-        const parts = fullPath.split('/').filter(part => part.length > 0);
+        const parts = fullPath.split('/').filter((part) => part.length > 0);
         endpointName = parts[0];
       }
       if (includeOperationNameAction(endpointName, pathObject, config.nodegenRc)) {
         pathObject.endpointName = endpointName;
         pathObject.groupName = endpointNameCalculation(fullPath, {
           segmentFirstGrouping: config.segmentFirstGrouping || config.nodegenRc.segmentFirstGrouping,
-          segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping
+          segmentSecondGrouping: config.segmentSecondGrouping || config.nodegenRc.segmentSecondGrouping,
         });
         if (!apiObject.groupNamesWithFirstUrlSegment[pathObject.groupName]) {
           apiObject.groupNamesWithFirstUrlSegment[pathObject.groupName] = pathObject.endpointName;

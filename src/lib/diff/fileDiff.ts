@@ -15,17 +15,25 @@ export default async (oldTextFile: string = '', newTextFile: string = ''): Promi
   let plus = 0;
   m.on('-', (line: any, obj: any) => {
     ++minus;
-    const diffLine = `
-@line: ` + obj.lineNumber + `-
-` + line;
+    const diffLine =
+      `
+@line: ` +
+      obj.lineNumber +
+      `-
+` +
+      line;
     difference += diffLine.red;
   });
 
   m.on('+', (line: any, obj: any) => {
     ++plus;
-    const diffLine = `
-@line: ` + obj.lineNumber + `+
-` + line;
+    const diffLine =
+      `
+@line: ` +
+      obj.lineNumber +
+      `+
+` +
+      line;
     difference += diffLine.green;
   });
   m.diff(oldTextFile, newTextFile);

@@ -8,30 +8,32 @@ describe('should return a path object with the requestBody injected into the par
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/WeatherPost'
-            }
-          }
-        }
-      }
+              $ref: '#/components/schemas/WeatherPost',
+            },
+          },
+        },
+      },
     };
     const result = oa3toOa2Body('POST', input);
     expect(result.parameters.length).toBe(1);
   });
   it('should work with responseBody and leave existing parameters untouched', function () {
     const input: any = {
-      parameters: [{
-        in: 'query'
-      }],
+      parameters: [
+        {
+          in: 'query',
+        },
+      ],
       requestBody: {
         required: true,
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/WeatherPost'
-            }
-          }
-        }
-      }
+              $ref: '#/components/schemas/WeatherPost',
+            },
+          },
+        },
+      },
     };
     const result = oa3toOa2Body('POST', input);
     expect(result.parameters.length).toBe(2);

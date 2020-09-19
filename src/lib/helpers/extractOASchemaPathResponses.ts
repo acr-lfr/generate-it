@@ -14,5 +14,5 @@ export default (input: any) => {
   }
   // We also check if the input contains any valid OA schema by looking for type or properties in the provided object
   // The typical use case here if for async api payloads
-  return (input && (input.type || input.properties)) ? input : {};
+  return input && (input.type || input.properties) ? input : {};
 };

@@ -10,18 +10,8 @@ export default (targetDir: string, templatesDir: string): void => {
     return;
   }
 
-  const existing = JSON.parse(
-    fs.readFileSync(
-      targetPackageJson,
-      {encoding: 'utf8'},
-    ),
-  );
-  const newJson = JSON.parse(
-    fs.readFileSync(
-      path.join(templatesDir, packageJsonStr + '.njk'),
-      'utf8',
-    ),
-  );
+  const existing = JSON.parse(fs.readFileSync(targetPackageJson, { encoding: 'utf8' }));
+  const newJson = JSON.parse(fs.readFileSync(path.join(templatesDir, packageJsonStr + '.njk'), 'utf8'));
 
   const scriptsChanged: any = {};
   const dependenciesChanged: any = {};
@@ -64,7 +54,9 @@ export default (targetDir: string, templatesDir: string): void => {
   }
 
   if (Object.keys(dependenciesChanged).length > 1) {
-    console.log('Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green);
+    console.log(
+      'Please check your package json PROD dependencies are up to date, the tpl and local scripts differ:'.green
+    );
     console.table(dependenciesChanged);
 
     const quickFix = suggestVersionUpgrade(dependenciesChanged, 'npm install');
@@ -74,7 +66,9 @@ export default (targetDir: string, templatesDir: string): void => {
   }
 
   if (Object.keys(devDependenciesChanged).length > 1) {
-    console.log('Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green);
+    console.log(
+      'Please check your package json DEV dependencies are up to date, the tpl and local scripts differ:'.green
+    );
     console.table(devDependenciesChanged);
 
     const quickFix = suggestVersionUpgrade(devDependenciesChanged, 'npm install --save-dev');

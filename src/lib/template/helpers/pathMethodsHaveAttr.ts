@@ -17,7 +17,7 @@ export default (operations: Operations, attr: string, nestedPath?: string): bool
             nestedParts.forEach((part) => {
               if (objectToLookIn) {
                 if (Array.isArray(objectToLookIn)) {
-                  objectToLookIn = objectToLookIn.find(item => {
+                  objectToLookIn = objectToLookIn.find((item) => {
                     return item[part] !== undefined;
                   });
                   if (objectToLookIn) {

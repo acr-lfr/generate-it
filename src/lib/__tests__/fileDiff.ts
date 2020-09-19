@@ -4,7 +4,7 @@ import path from 'path';
 it('should return ', async () => {
   const a = path.join(process.cwd(), 'src/lib/__tests__/fileDiff.ts');
   const diff = await fileDiff(a, a);
-  expect(diff).toEqual({minus: 0, plus: 0, difference: ''});
+  expect(diff).toEqual({ minus: 0, plus: 0, difference: '' });
 });
 
 it('should return ', async () => {

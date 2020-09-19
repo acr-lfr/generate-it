@@ -48,14 +48,8 @@ describe('semverCompare', () => {
     sorted = ['16.0.0', '20.0.0'].sort(semverCompare);
     expect(sorted).toEqual(['16.0.0', '20.0.0']);
 
-    sorted = ['1.0.0+20130313144700', '1.0.0-alpha+001', '1.0.0-beta+exp.sha.5114f85'].sort(
-      semverCompare
-    );
-    expect(sorted).toEqual([
-      '1.0.0-alpha+001',
-      '1.0.0-beta+exp.sha.5114f85',
-      '1.0.0+20130313144700',
-    ]);
+    sorted = ['1.0.0+20130313144700', '1.0.0-alpha+001', '1.0.0-beta+exp.sha.5114f85'].sort(semverCompare);
+    expect(sorted).toEqual(['1.0.0-alpha+001', '1.0.0-beta+exp.sha.5114f85', '1.0.0+20130313144700']);
 
     sorted = [
       '1.0.0',

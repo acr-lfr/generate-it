@@ -15,16 +15,20 @@ import generateFileDoWrite from '@/lib/generate/generateFileDoWrite';
  * @param  {string }nodegenDir
  * @return {Promise}
  */
-export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additionalTplObject: any = {}, nodegenDir: string) => {
+export default (
+  config: GenerateOperationFileConfig,
+  isFirstRun: boolean,
+  additionalTplObject: any = {},
+  nodegenDir: string
+) => {
   const templatesDir = config.templates_dir;
   const targetDir = config.targetDir;
   const fileName = config.file_name;
   const root = config.root;
 
   // const data = config.data
-  const loadFilePath = (fileName !== 'package.json.njk') ?
-    path.resolve(root, fileName) :
-    path.resolve(process.cwd(), 'package.json');
+  const loadFilePath =
+    fileName !== 'package.json.njk' ? path.resolve(root, fileName) : path.resolve(process.cwd(), 'package.json');
 
   const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
 
@@ -47,12 +51,12 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     definitions: config.data.swagger.definitions ? Object.keys(config.data.swagger.definitions) : [],
     additionalTplObject,
     nodegenRc: config.data.nodegenRc,
-    ...config.data.variables
+    ...config.data.variables,
   });
 
   const generatedPath = path.resolve(
     targetDir,
-    path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
+    path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName)))
   );
 
   return fs.writeFileSync(generatedPath, renderedContent, 'utf8');

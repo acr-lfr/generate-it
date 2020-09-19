@@ -44,9 +44,9 @@ export default (program: string, args: string[] = [], verbose: boolean = false):
 
     command.on('close', function (code: number) {
       if (code === 0) {
-        resolve({outputString, outputErrorString});
+        resolve({ outputString, outputErrorString });
       } else {
-        reject({code, outputString, outputErrorString});
+        reject({ code, outputString, outputErrorString });
       }
     });
   });

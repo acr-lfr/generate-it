@@ -10,17 +10,12 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
 
   if (
     !fullSwaggerObject.securityDefinitions &&
-    !(
-      fullSwaggerObject.components &&
-      fullSwaggerObject.components.securitySchemes
-    )
+    !(fullSwaggerObject.components && fullSwaggerObject.components.securitySchemes)
   ) {
     return '';
   }
 
-  const securityDefinitions =
-    fullSwaggerObject.securityDefinitions ||
-    fullSwaggerObject.components.securitySchemes;
+  const securityDefinitions = fullSwaggerObject.securityDefinitions || fullSwaggerObject.components.securitySchemes;
 
   /**
    * Example input "security": [{"apiKeyAdmin": []},{"jwtToken": []}],

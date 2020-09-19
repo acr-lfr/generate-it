@@ -12,11 +12,12 @@ const responseObject = {
   },
 };
 
-const buildResponses = (codes: (number | string)[]): { [key: string]: object; [key: number]: object; } =>
-  (codes || []).reduce((responses, code) =>
-    Object.assign(responses, {
-      [typeof code === 'number' ? code : `${code}`]: responseObject
-    }),
+const buildResponses = (codes: (number | string)[]): { [key: string]: object; [key: number]: object } =>
+  (codes || []).reduce(
+    (responses, code) =>
+      Object.assign(responses, {
+        [typeof code === 'number' ? code : `${code}`]: responseObject,
+      }),
     {}
   );
 

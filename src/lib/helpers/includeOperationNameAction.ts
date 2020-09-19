@@ -1,9 +1,7 @@
 import NodegenRc from '@/interfaces/NodegenRc';
 
 export default (operationName: string, pathProperties: any, nodegenRc: NodegenRc): boolean | object => {
-  if (
-    !nodegenRc.helpers || !nodegenRc.helpers.operationNames
-  ) {
+  if (!nodegenRc.helpers || !nodegenRc.helpers.operationNames) {
     return pathProperties;
   }
   if (

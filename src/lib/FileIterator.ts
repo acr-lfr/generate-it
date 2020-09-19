@@ -20,20 +20,22 @@ class FileWalker {
    * @param {object} providedConfig
    * @return {Promise<>}
    */
-  public walk (providedIsFirstRun: boolean, providedConfig: ConfigExtendedBase) {
+  public walk(providedIsFirstRun: boolean, providedConfig: ConfigExtendedBase) {
     this.config = providedConfig;
     this.isFirstRun = providedIsFirstRun;
     const templatesDir = this.config.templates;
     return new Promise((resolve, reject) => {
-      walk.walk(templatesDir, {
-        followLinks: false,
-      }).on('file', async (root: string, stats: any, next: any) => {
-        try {
-          await this.fileIteration(root, stats, next);
-        } catch (e) {
-          console.error(e);
-        }
-      })
+      walk
+        .walk(templatesDir, {
+          followLinks: false,
+        })
+        .on('file', async (root: string, stats: any, next: any) => {
+          try {
+            await this.fileIteration(root, stats, next);
+          } catch (e) {
+            console.error(e);
+          }
+        })
         // @ts-ignore
         .on('errors', (root: any, nodeStatsArray: any) => {
           reject(nodeStatsArray);
@@ -49,7 +51,7 @@ class FileWalker {
    * Generates the opIndex tpl file
    * @return {Promise<void>}
    */
-  public async parseOpIndex () {
+  public async parseOpIndex() {
     if (this.files[FileTypeCheck.OPERATION_INDEX]) {
       await GenerateOperation.file(
         this.files[FileTypeCheck.OPERATION_INDEX].generationDataObject,
@@ -59,25 +61,16 @@ class FileWalker {
         true,
         {
           operationFiles: this.files[FileTypeCheck.OPERATION].files,
-        },
+        }
       );
     }
   }
 
-  public calculateTemplatePath (dir: string, filename: string): string {
-    return path.resolve(
-      this.config.targetDir,
-      path.relative(
-        this.config.templates,
-        path.resolve(
-          dir,
-          filename,
-        ),
-      ),
-    );
+  public calculateTemplatePath(dir: string, filename: string): string {
+    return path.resolve(this.config.targetDir, path.relative(this.config.templates, path.resolve(dir, filename)));
   }
 
-  public buildPathDataObject (root: string, filename: string) {
+  public buildPathDataObject(root: string, filename: string) {
     return {
       root,
       templates_dir: this.config.templates,
@@ -98,7 +91,7 @@ class FileWalker {
    * @param {function} next - The callback function to continue
    * @return {Promise<void>}
    */
-  public async fileIteration (root: string, stats: any, next: any) {
+  public async fileIteration(root: string, stats: any, next: any) {
     if (isFileToIngore(root, stats.name)) {
       return next();
     }
@@ -111,17 +104,21 @@ class FileWalker {
 
     switch (fileType) {
       case FileTypeCheck.INTERFACE:
-        await (new GenerateInterfaceFiles(generationDataObject)).writeFiles();
+        await new GenerateInterfaceFiles(generationDataObject).writeFiles();
         break;
       case FileTypeCheck.OTHER:
         await generateFile(generationDataObject, this.isFirstRun, {}, this.config.nodegenRc.nodegenDir);
         break;
       case FileTypeCheck.OPERATION_INDEX:
-        this.files[fileType] = {generationDataObject};
+        this.files[fileType] = { generationDataObject };
         break;
     }
 
-    if ((this.config.mockServer && fileType === FileTypeCheck.MOCK) || fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION) {
+    if (
+      (this.config.mockServer && fileType === FileTypeCheck.MOCK) ||
+      fileType === FileTypeCheck.STUB ||
+      fileType === FileTypeCheck.OPERATION
+    ) {
       this.files[fileType] = {
         files: await GenerateOperation.files(generationDataObject, fileType),
         generationDataObject,

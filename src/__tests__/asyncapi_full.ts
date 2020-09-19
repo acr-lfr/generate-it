@@ -58,39 +58,67 @@ describe('e2e testing', () => {
     expect(schema.asyncapi).toBe('2.0.0');
     expect(schema.info.title).toBe('boats');
     expect(schema.info.version).toBe('1.0.1');
-    expect(schema.info.description).toBe('Beautiful Open / Async Template System - Write less yaml with BOATS and Nunjucks.');
+    expect(schema.info.description).toBe(
+      'Beautiful Open / Async Template System - Write less yaml with BOATS and Nunjucks.'
+    );
     expect(schema.info.license.name).toBe('Apache 2.0');
     expect(schema.info.license.url).toBe('https://www.apache.org/licenses/LICENSE-2.0');
     expect(schema.defaultContentType).toBe('application/json');
-    expect(schema.channels['/ms-auth/cache-connection'].description).toBe('When a new connection change occurs the new cache values are emitted in the payload');
+    expect(schema.channels['/ms-auth/cache-connection'].description).toBe(
+      'When a new connection change occurs the new cache values are emitted in the payload'
+    );
     expect(schema.channels['/ms-auth/cache-connection'].publish.operationId).toBe('msAuthCacheConnection');
     expect(schema.channels['/ms-auth/cache-connection'].publish.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-auth/cache-connection'].publish.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheConnection');
+    expect(schema.channels['/ms-auth/cache-connection'].publish.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheConnection'
+    );
     expect(schema.channels['/ms-auth/cache-connection'].subscribe.operationId).toBe('msAuthCacheConnection');
     expect(schema.channels['/ms-auth/cache-connection'].subscribe.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-auth/cache-connection'].subscribe.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheConnection');
-    expect(schema.channels['/ms-image/cache-user'].description).toBe('When a new connection change occurs the new cache values are emitted in the payload');
+    expect(schema.channels['/ms-auth/cache-connection'].subscribe.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheConnection'
+    );
+    expect(schema.channels['/ms-image/cache-user'].description).toBe(
+      'When a new connection change occurs the new cache values are emitted in the payload'
+    );
     expect(schema.channels['/ms-image/cache-user'].publish.operationId).toBe('msImageCacheUser');
     expect(schema.channels['/ms-image/cache-user'].publish.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-image/cache-user'].publish.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheUser');
+    expect(schema.channels['/ms-image/cache-user'].publish.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheUser'
+    );
     expect(schema.channels['/ms-image/cache-user'].subscribe.operationId).toBe('msImageCacheUser');
     expect(schema.channels['/ms-image/cache-user'].subscribe.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-image/cache-user'].subscribe.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheUser');
-    expect(schema.channels['/ms-item/delete-user'].description).toBe('When a new connection change occurs the new cache values are emitted in the payload');
+    expect(schema.channels['/ms-image/cache-user'].subscribe.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheUser'
+    );
+    expect(schema.channels['/ms-item/delete-user'].description).toBe(
+      'When a new connection change occurs the new cache values are emitted in the payload'
+    );
     expect(schema.channels['/ms-item/delete-user'].publish.operationId).toBe('msItemDeleteUser');
     expect(schema.channels['/ms-item/delete-user'].publish.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-item/delete-user'].publish.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheUser');
+    expect(schema.channels['/ms-item/delete-user'].publish.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheUser'
+    );
     expect(schema.channels['/ms-item/delete-user'].subscribe.operationId).toBe('msItemDeleteUser');
     expect(schema.channels['/ms-item/delete-user'].subscribe.message.contentType).toBe('application/json');
-    expect(schema.channels['/ms-item/delete-user'].subscribe.message.payload.$ref).toBe('#/components/schemas/MsAuthCacheUser');
+    expect(schema.channels['/ms-item/delete-user'].subscribe.message.payload.$ref).toBe(
+      '#/components/schemas/MsAuthCacheUser'
+    );
     expect(schema.components.schemas.MsAuthCacheConnection.type).toBe('object');
     expect(schema.components.schemas.MsAuthCacheConnection.properties.username.type).toBe('string');
     expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.type).toBe('array');
     expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.type).toBe('object');
-    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.updated.type).toBe('string');
-    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.updated.format).toBe('date');
-    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.state.type).toBe('string');
-    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.username.type).toBe('string');
+    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.updated.type).toBe(
+      'string'
+    );
+    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.updated.format).toBe(
+      'date'
+    );
+    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.state.type).toBe(
+      'string'
+    );
+    expect(schema.components.schemas.MsAuthCacheConnection.properties.connections.items.properties.username.type).toBe(
+      'string'
+    );
     expect(schema.components.schemas.MsAuthCacheUser.type).toBe('object');
     expect(schema.components.schemas.MsAuthCacheUser.properties.username.type).toBe('string');
     expect(schema.components.schemas.MsAuthCacheUser.properties.email.type).toBe('string');

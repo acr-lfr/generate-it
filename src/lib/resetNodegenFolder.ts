@@ -14,22 +14,14 @@ export default (targetDir: string, templatesDir: string, mocked: boolean = false
   const copyFilter = {
     filter: (src: any) => {
       // ensure the njk files are not copied over
-      return (src.indexOf('.njk') === -1);
+      return src.indexOf('.njk') === -1;
     },
   };
   fs.removeSync(path.join(targetDir, nodeGenDir));
-  fs.copySync(
-    path.join(templatesDir, nodeGenDir),
-    path.join(targetDir, nodeGenDir),
-    copyFilter,
-  );
+  fs.copySync(path.join(templatesDir, nodeGenDir), path.join(targetDir, nodeGenDir), copyFilter);
   if (mocked) {
     const mocksDir = nodegenRc.nodegenMockDir;
     fs.removeSync(path.join(targetDir, mocksDir));
-    fs.copySync(
-      path.join(templatesDir, mocksDir),
-      path.join(targetDir, mocksDir),
-      copyFilter,
-    );
+    fs.copySync(path.join(templatesDir, mocksDir), path.join(targetDir, mocksDir), copyFilter);
   }
 };

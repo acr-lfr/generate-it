@@ -15,9 +15,7 @@ describe('suggestVersionUpgrade', () => {
     expect(suggestVersionUpgrade(jsonDiff, 'npm rm -rf')).toBe('npm rm -rf @test/missing@1.19.0');
 
     jsonDiff = { '@test/samever2': { 'Changed To': '^3.1.4-beta', 'from': '1.0.89' } };
-    expect(suggestVersionUpgrade(jsonDiff, 'npm rm -rf')).toBe(
-      'npm rm -rf @test/samever2@3.1.4-beta'
-    );
+    expect(suggestVersionUpgrade(jsonDiff, 'npm rm -rf')).toBe('npm rm -rf @test/samever2@3.1.4-beta');
 
     jsonDiff = { '@types/yamljs': { 'Changed To': '^0.2.31', 'from': '^0.2.30' } };
     expect(suggestVersionUpgrade(jsonDiff, 'npm rm -rf')).toBe('npm rm -rf @types/yamljs@0.2.31');

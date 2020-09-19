@@ -27,8 +27,8 @@ describe('e2e testing', () => {
         targetDir: testServerPath,
         template: tplUrl,
         variables: {
-          name: 'Generate-it Typescript Server'
-        }
+          name: 'Generate-it Typescript Server',
+        },
       });
       done();
     } catch (e) {
