@@ -6,8 +6,8 @@ export default interface NodegenRc {
   segmentFirstGrouping?: number;
   segmentSecondGrouping?: number;
   helpers?: {
-    publishOpIds?: string[];
-    subscribeOpIds?: string[];
-    [helperName: string]: any;
+    publishOpIds?: string[],
+    subscribeOpIds?: string[],
+    [helperName: string]: any
   };
 }

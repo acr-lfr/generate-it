@@ -11,7 +11,7 @@ import * as _ from 'lodash';
  * @return {Promise<{mockServer}|*>}
  */
 class ConfigMerger {
-  public async base(config: Config, templatesDir: string): Promise<ConfigExtendedBase> {
+  public async base (config: Config, templatesDir: string): Promise<ConfigExtendedBase> {
     const nodegenRc = await NodegenRc.fetch(templatesDir, config.targetDir);
     return Object.assign(config, {
       templates: templatesDir,
@@ -19,7 +19,7 @@ class ConfigMerger {
       interfaceStyle: nodegenRc.interfaceStyle || 'interface',
     });
   }
-  public injectSwagger(config: ConfigExtendedBase, swagger: any): ConfigExtendedBase {
+  public injectSwagger (config: ConfigExtendedBase, swagger: any): ConfigExtendedBase {
     return Object.assign(config, {
       swagger,
       package: {

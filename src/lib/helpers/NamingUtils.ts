@@ -4,7 +4,7 @@ export const SHOULD_PLURAL = ['Route', 'TransformInputs', 'TransformOutputs', 'V
 export const FUNCS_DIRS = ['routes', 'transformInputs', 'transformOutputs', 'validators'];
 
 class NamingUtils {
-  public generateOperationSuffix(subdir: string, operation: string, ext: string) {
+  public generateOperationSuffix (subdir: string, operation: string, ext: string) {
     const subDirSplit = subdir.split('/');
     let suffix = subDirSplit[subDirSplit.length - 1];
     if (suffix.indexOf('__') !== -1) {
@@ -29,7 +29,7 @@ class NamingUtils {
    * @param value
    * @return {*|string}
    */
-  public fixRouteName(value: string): string {
+  public fixRouteName (value: string): string {
     const index = value.indexOf('-');
     if (index !== -1) {
       const charAfter = value.charAt(index + 1).toUpperCase();
@@ -45,7 +45,7 @@ class NamingUtils {
    * @param input
    * @return {string | *}
    */
-  public stripNjkExtension(input: string): string {
+  public stripNjkExtension (input: string): string {
     if (input.substring(input.length - 4) === '.njk') {
       return input.substring(0, input.length - 4);
     } else {
@@ -62,7 +62,7 @@ class NamingUtils {
    * @param filename
    * @return {string}
    */
-  public getFileExt(filename: string): string {
+  public getFileExt (filename: string): string {
     const parts = filename.split('.');
     if (parts[parts.length - 1] === 'njk') {
       parts.pop();

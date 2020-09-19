@@ -4,7 +4,7 @@ enum ParamTypeKey {
   body = 'body',
   headers = 'headers',
   params = 'params',
-  query = 'query',
+  query = 'query'
 }
 
 interface PathParamsToJoi {
@@ -20,12 +20,12 @@ class SwaggerUtils {
    * @param {Object} [options] - options.isFromArray [string], options.requiredField [string[]]
    * @return {string|void}
    */
-  public pathParamsToJoi(param: any, options: PathParamsToJoi): string {
+  public pathParamsToJoi (param: any, options: PathParamsToJoi): string {
     if (!param) {
       console.log(param, options);
       return;
     }
-    const { paramTypeKey } = options;
+    const {paramTypeKey} = options;
     let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
     const type = param.type || param.schema.type;
@@ -64,14 +64,14 @@ class SwaggerUtils {
         validationText += `.max(${+param.maximum})`;
       }
       if (type === 'string' && param.pattern) {
-        validationText += param.pattern ? `.regex(/${param.pattern}/)` : '';
+        validationText += (param.pattern ? `.regex(/${param.pattern}/)` : '');
       }
       validationText += (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     } else if (type === 'array') {
       validationText += 'Joi.array().items(';
       validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
         isFromArray: true,
-        paramTypeKey,
+        paramTypeKey
       });
       validationText += ')';
 
@@ -85,26 +85,20 @@ class SwaggerUtils {
       if (Number(param.maxItems)) {
         validationText += `.max(${+param.maxItems})`;
       }
-      validationText += isRequired && !options.isFromArray ? '.required(),' : ',';
+      validationText += (isRequired && !options.isFromArray ? '.required(),' : ',');
     } else if (param.properties || param.schema) {
       const properties = param.properties || param.schema.properties || {};
       validationText += 'Joi.object({';
       Object.keys(properties).forEach((propertyKey) => {
-        validationText += this.pathParamsToJoi(
-          {
-            name: propertyKey,
-            ...properties[propertyKey],
-          },
-          {
-            paramTypeKey,
-          }
-        );
+        validationText += this.pathParamsToJoi({
+          name: propertyKey, ...properties[propertyKey],
+        }, {
+          paramTypeKey
+        });
       });
-      validationText +=
-        '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     } else {
-      validationText +=
-        'Joi.any()' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += 'Joi.any()' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     }
     return validationText;
   }
@@ -112,7 +106,7 @@ class SwaggerUtils {
   /**
    * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
    */
-  public createJoiValidation(method: string, pathObject: any): string {
+  public createJoiValidation (method: string, pathObject: any): string {
     pathObject = oa3toOa2Body(method, pathObject);
     const requestParams = pathObject.parameters;
     if (!requestParams) {
@@ -156,20 +150,16 @@ class SwaggerUtils {
       paramsTypes[paramTypeKey].forEach((param: any) => {
         if (param.schema && param.schema.properties) {
           Object.keys(param.schema.properties).forEach((propertyKey) => {
-            validationText += this.pathParamsToJoi(
-              {
-                name: propertyKey,
-                ...param.schema.properties[propertyKey],
-              },
-              {
-                requiredFields: param.schema.required,
-                paramTypeKey: paramTypeKey as ParamTypeKey,
-              }
-            );
+            validationText += this.pathParamsToJoi({
+              name: propertyKey, ...param.schema.properties[propertyKey],
+            }, {
+              requiredFields: param.schema.required,
+              paramTypeKey: paramTypeKey as ParamTypeKey,
+            });
           });
         } else if (param.type || (param.schema && param.schema.type)) {
           validationText += this.pathParamsToJoi(param, {
-            paramTypeKey: paramTypeKey as ParamTypeKey,
+            paramTypeKey: paramTypeKey as ParamTypeKey
           });
         }
       });

@@ -25,10 +25,7 @@ export default (apiObject: any, nodegenRc: NodegenRc) => {
   const idsToCompare = getOpIdsFromAsyncApi(apiObject);
   ids.forEach((id) => {
     if (!idsToCompare.includes(id)) {
-      throw new Error(
-        'The nodegenrc file wants to PUBLISH or SUBSCRIBE to an id that does not exists in the async api file provided: ' +
-          id
-      );
+      throw new Error('The nodegenrc file wants to PUBLISH or SUBSCRIBE to an id that does not exists in the async api file provided: ' + id);
     }
   });
 };

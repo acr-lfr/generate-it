@@ -1,10 +1,7 @@
 import { startCase } from 'lodash';
 
 export default (method: string, fullPathMethod: any): any => {
-  if (
-    !fullPathMethod.requestBody ||
-    (Array.isArray(fullPathMethod.parameters) && fullPathMethod.parameters.some((param: any) => param.in === 'body'))
-  ) {
+  if (!fullPathMethod.requestBody || (Array.isArray(fullPathMethod.parameters) && fullPathMethod.parameters.some((param: any) => param.in === 'body'))) {
     return fullPathMethod;
   }
   try {
@@ -20,7 +17,7 @@ export default (method: string, fullPathMethod: any): any => {
       in: 'body',
       name: fullPathMethod.operationId + startCase(method),
       required: fullPathMethod.requestBody.required,
-      schema: schema,
+      schema: schema
     });
     return fullPathMethod;
   } catch (e) {

@@ -21,7 +21,10 @@ export default (config: ConfigExtendedBase, templatesDir: string) => {
   let IS_FIRST_RUN = false;
   if (!fs.existsSync(path.join(targetDir, config.nodegenRc.nodegenDir))) {
     IS_FIRST_RUN = true;
-    generateBaseStructure(targetDir, templatesDir, config.mockServer ? { mockingServer: true } : {});
+    generateBaseStructure(
+      targetDir,
+      templatesDir,
+      (config.mockServer) ? {mockingServer: true} : {});
   } else {
     resetNodegenFolder(targetDir, templatesDir, config.mockServer, config.nodegenRc);
     displayDependencyDiffs(targetDir, templatesDir);

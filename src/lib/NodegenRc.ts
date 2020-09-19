@@ -8,7 +8,7 @@ class NodegenRc {
    * @param {string} tplDir - The tpl directory
    * @param targetDir
    */
-  public async fetch(tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
+  public async fetch (tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
     const base = targetDir;
     const rcName = '.nodegenrc';
     const localPath = path.join(base, rcName);
@@ -17,9 +17,7 @@ class NodegenRc {
     } else {
       const tplRcFilePath = path.join(tplDir, rcName);
       if (!fs.pathExistsSync(tplRcFilePath)) {
-        throw new Error(
-          'The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.'
-        );
+        throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
       }
       fs.copySync(tplRcFilePath, localPath);
       return this.validate(localPath);
@@ -31,7 +29,7 @@ class NodegenRc {
    * @param localNodegenPath
    * @return {{nodegenDir}|*}
    */
-  public validate(localNodegenPath: string): NodegenRcInterface {
+  public validate (localNodegenPath: string): NodegenRcInterface {
     let nodegenRcOject: any;
     try {
       nodegenRcOject = fs.readJsonSync(localNodegenPath);

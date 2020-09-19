@@ -66,8 +66,12 @@ it('should return array', () => {
       },
     ],
   };
-  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(`['Authorization']`);
-  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(`['Authorization']`);
+  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(
+    `['Authorization']`
+  );
+  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
+    `['Authorization']`
+  );
 });
 
 it('should return array with all values', () => {
@@ -79,8 +83,12 @@ it('should return array with all values', () => {
       },
     ],
   };
-  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(`['Authorization', 'api-key']`);
-  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(`['Authorization', 'api-key']`);
+  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(
+    `['Authorization', 'api-key']`
+  );
+  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
+    `['Authorization', 'api-key']`
+  );
 });
 
 it('should return array with with authorization for type oauth2', () => {
@@ -91,7 +99,9 @@ it('should return array with with authorization for type oauth2', () => {
       },
     ],
   };
-  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(`['Authorization']`);
+  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
+    `['Authorization']`
+  );
 });
 
 it('should return array with all values in alternate order', () => {
@@ -103,6 +113,10 @@ it('should return array with all values in alternate order', () => {
       },
     ],
   };
-  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(`['api-key', 'Authorization']`);
-  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(`['api-key', 'Authorization']`);
+  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(
+    `['api-key', 'Authorization']`
+  );
+  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
+    `['api-key', 'Authorization']`
+  );
 });

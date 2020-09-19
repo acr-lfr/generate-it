@@ -6,27 +6,27 @@ const nodegenRc: NodegenRc = {
   nodegenType: 'blah',
   helpers: {
     publishOpIds: ['bob'],
-    subscribeOpIds: ['smith'],
-  },
+    subscribeOpIds: ['smith']
+  }
 };
 
 const openapi = {
-  paths: {},
+  'paths': {}
 };
 
 const asyncapi = {
   channels: {
     somepath: {
       publish: {
-        operationId: 'bob',
-      },
+        operationId: 'bob'
+      }
     },
     someotherpath: {
       subscribe: {
-        operationId: 'smith',
-      },
-    },
-  },
+        operationId: 'smith'
+      }
+    }
+  }
 };
 
 it('should not throw an error for openapi', async (done) => {

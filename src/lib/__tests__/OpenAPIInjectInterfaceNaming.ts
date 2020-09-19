@@ -1,3 +1,4 @@
+
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 
 const swagger2obj = {

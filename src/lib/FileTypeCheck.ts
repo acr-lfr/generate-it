@@ -6,7 +6,7 @@ class FileTypeCheck {
   public STUB = 'STUB';
   public OTHER = 'OTHER';
 
-  public getFileType(name: string) {
+  public getFileType (name: string) {
     if (this.isOpertationIndexFile(name)) {
       return this.OPERATION_INDEX;
     }
@@ -25,23 +25,23 @@ class FileTypeCheck {
     return this.OTHER;
   }
 
-  public isOpertationFile(name: string) {
+  public isOpertationFile (name: string) {
     return name.substr(0, 5) === '___op';
   }
 
-  public isOpertationIndexFile(name: string) {
+  public isOpertationIndexFile (name: string) {
     return name.substr(0, 10) === '___opIndex';
   }
 
-  public isMockFile(name: string) {
+  public isMockFile (name: string) {
     return name.substr(0, 7) === '___mock';
   }
 
-  public isStubFile(name: string) {
+  public isStubFile (name: string) {
     return name.substr(0, 7) === '___stub';
   }
 
-  public isInterfaceFile(name: string) {
+  public isInterfaceFile (name: string) {
     return name.substr(0, 12) === '___interface';
   }
 }

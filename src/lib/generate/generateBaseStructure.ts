@@ -13,7 +13,7 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
   additionalOptionsToInject = additionalOptionsToInject || {};
   fs.mkdirsSync(targetDir);
   const callerPackageJsonPath = path.join(targetDir, 'package.json');
-  const packageJsonFound = fs.existsSync(callerPackageJsonPath);
+  const packageJsonFound = (fs.existsSync(callerPackageJsonPath));
   fs.copySync(templatesDir, targetDir, {
     filter: (src) => {
       if (src.indexOf('__mocks__') !== -1 && !additionalOptionsToInject.mockingServer) {
@@ -36,8 +36,12 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
     const callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
     const templatePackageJson = JSON.parse(fs.readFileSync(path.join(templatesDir, 'package.json.njk'), 'utf8'));
     const merged = Object.assign(deepmerge(callerPackageJson, templatePackageJson), additionalOptionsToInject);
-    fs.writeJsonSync(callerPackageJsonPath, merged, {
-      spaces: 2,
-    });
+    fs.writeJsonSync(
+      callerPackageJsonPath,
+      merged,
+      {
+        spaces: 2,
+      },
+    );
   }
 };

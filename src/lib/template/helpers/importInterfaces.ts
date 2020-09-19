@@ -14,8 +14,7 @@ export default function (operations: any, actions?: string[]) {
       Object.keys(operation[operationType]).forEach((pathKey) => {
         const path = operation[operationType][pathKey];
         if (operationType === 'channel') {
-          if (
-            !actions ||
+          if (!actions ||
             (actions && actions.length === 0) ||
             (actions && actions.length > 0 && actions.includes(pathKey))
           ) {
@@ -61,7 +60,7 @@ export default function (operations: any, actions?: string[]) {
     });
 
     imports.sort();
-    return new Set(imports).keys();
+    return (new Set(imports)).keys();
   } catch (e) {
     console.log(e);
     throw e;

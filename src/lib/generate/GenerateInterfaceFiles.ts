@@ -8,22 +8,22 @@ import TemplateRenderer from '@/lib/template/TemplateRenderer';
 class GenerateInterfaceFiles {
   public config: GenerateOperationFileConfig;
 
-  constructor(config: GenerateOperationFileConfig) {
+  constructor (config: GenerateOperationFileConfig) {
     this.config = config;
   }
 
-  public async writeFiles() {
+  public async writeFiles () {
     const swagger = this.config.data.swagger;
     this.iterateInterfaces(swagger);
   }
 
-  public iterateInterfaces(swagger: any) {
+  public iterateInterfaces (swagger: any) {
     swagger.interfaces.forEach((interace: any) => {
       this.parseDefinition(interace.content.outputString, interace.name);
     });
   }
 
-  public parseDefinition(interfaceText: string, definitionName: string) {
+  public parseDefinition (interfaceText: string, definitionName: string) {
     const filePath = path.join(this.config.root, this.config.file_name);
     const data = fs.readFileSync(filePath, 'utf8');
 
@@ -37,9 +37,9 @@ class GenerateInterfaceFiles {
         definitionName,
         definitionInterfaceText: interfaceText,
         nodegenRc: this.config.data.nodegenRc,
-        ...this.config.data.variables,
+        ...this.config.data.variables
       },
-      ext
+      ext,
     );
     fs.writeFileSync(targetFile, content, 'utf8');
     return true;

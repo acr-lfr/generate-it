@@ -12,10 +12,7 @@ export const yamlToJson = async (yamlFilePath: string): Promise<JSON> => {
     throw new Error('No file path given');
   }
 
-  const exists = await fs
-    .access(yamlFilePath)
-    .then(() => true)
-    .catch(() => false);
+  const exists = await fs.access(yamlFilePath).then(() => true).catch(() => false);
   if (!exists) {
     throw new Error(`Could not find YAML file '${yamlFilePath}'`);
   }
@@ -31,10 +28,9 @@ export const yamlToExpect = async (yamlFilePath: string): Promise<string> => {
   const json = await yamlToJson(yamlFilePath);
   const formatted = flatten(json);
 
-  const expects = Object.entries(formatted).reduce(
-    (expectLines: string[], [key, value]) => expectLines.concat(`expect(itemToTest.${key}).toBe(${value});`),
-    []
-  );
+  const expects = Object.entries(formatted).reduce((expectLines: string[], [key, value]) =>
+    expectLines.concat(`expect(itemToTest.${key}).toBe(${value});`),
+  []);
 
   return expects.join('\n');
 };
@@ -83,6 +79,9 @@ export const fmtString = (value: any) => {
   return value;
 };
 
+
+
+
 /**
  * Turn nested json into flattened accessors
  * https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
@@ -123,9 +122,7 @@ export const flatten = (data: JSON) => {
         isEmpty = false;
         recurse(cur[p], prop ? prop + fmtProp(p) : p);
       }
-      if (isEmpty) {
-        result[prop] = {};
-      }
+      if (isEmpty) {result[prop] = {}; }
     }
   };
   recurse(data, '');
@@ -148,11 +145,11 @@ export const cli = (): Promise<void> => {
   const fullInPath = join(process.cwd(), input || '');
 
   return yamlToExpect(fullInPath)
-    .then((lines) => {
+    .then(lines => {
       console.log(lines);
       process.exit(0);
     })
-    .catch((err) => {
+    .catch(err => {
       console.trace(err);
       process.exit(1);
     });

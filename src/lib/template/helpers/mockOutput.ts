@@ -6,7 +6,9 @@ const dummyGenerate = (schema: any) => {
 
 export default (path: any, mockServer: boolean) => {
   if (mockServer) {
-    return path && path.responses ? dummyGenerate(extractOASchemaPathResponses(path.responses)) : undefined;
+    return (path && path.responses) ?
+      dummyGenerate(extractOASchemaPathResponses(path.responses)) :
+      undefined;
   } else {
     return 'return {}';
   }

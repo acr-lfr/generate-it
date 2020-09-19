@@ -38,9 +38,17 @@ class TemplateRenderer {
    * @param configRcFile Fully qualified path to .openapi-nodegenrc file   *
    * @return {*}
    */
-  public load(inputString: string, customVars = {}, ext?: string, additionalHelpers = {}, configRcFile = '') {
+  public load (
+    inputString: string,
+    customVars = {},
+    ext?: string,
+    additionalHelpers = {},
+    configRcFile = '',
+  ) {
     this.nunjucksSetup(additionalHelpers, configRcFile);
-    const content = this.stripCharacters(nunjucks.renderString(inputString, customVars));
+    const content = this.stripCharacters(
+      nunjucks.renderString(inputString, customVars),
+    );
     return ext ? prettyfyRenderedContent(content, ext) : content;
   }
 
@@ -48,8 +56,8 @@ class TemplateRenderer {
    *
    * @param content
    */
-  public stripCharacters(content: string) {
-    return content.replace(new RegExp('&' + '#' + 'x27;', 'g'), "'");
+  public stripCharacters (content: string) {
+    return content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
   }
 
   /**
@@ -57,7 +65,7 @@ class TemplateRenderer {
    * @param {object} helperFunctionKeyValueObject
    * @param configRcFile Exact path to a .boatsrc file
    */
-  public nunjucksSetup(helperFunctionKeyValueObject: any = {}, configRcFile = '') {
+  public nunjucksSetup (helperFunctionKeyValueObject: any = {}, configRcFile = '') {
     const env = nunjucks.configure(this.nunjucksOptions(configRcFile));
 
     const processEnvVars = JSON.parse(JSON.stringify(process.env));
@@ -109,7 +117,7 @@ class TemplateRenderer {
    * tags: {blockStart: string, commentStart: string, variableEnd: string, variableStart: string,
    * commentEnd: string, blockEnd: string}} & Template.nunjucksOptions)}
    */
-  public nunjucksOptions(configRcFile = '') {
+  public nunjucksOptions (configRcFile = '') {
     const baseOptions = {
       autoescape: false,
     };

@@ -7,7 +7,8 @@ import fileDiff from '@/lib/diff/fileDiff';
 import { COMPARE_DIRECTORY, MAX_CACHE_COUNT } from '@/constants/CachePaths';
 
 class GeneratedComparison {
-  public getCacheBaseDir(targetParentDirectory: string) {
+
+  public getCacheBaseDir (targetParentDirectory: string) {
     return path.join(targetParentDirectory, COMPARE_DIRECTORY);
   }
 
@@ -16,7 +17,7 @@ class GeneratedComparison {
    * @param {string} targetParentDirectory - The
    * @return {string}
    */
-  public getCacheCompareConfigPath(targetParentDirectory: string) {
+  public getCacheCompareConfigPath (targetParentDirectory: string) {
     return path.join(this.getCacheBaseDir(targetParentDirectory), 'config.json');
   }
 
@@ -25,7 +26,7 @@ class GeneratedComparison {
    * @param jsonFilePath
    * @return {{versions: {}}}
    */
-  public getCacheCompareJson(jsonFilePath: string) {
+  public getCacheCompareJson (jsonFilePath: string) {
     let json;
     if (fs.pathExistsSync(jsonFilePath)) {
       json = fs.readJsonSync(jsonFilePath);
@@ -42,7 +43,7 @@ class GeneratedComparison {
    * @param targetParentDirectory
    * @return {string}
    */
-  public getCompareDirectory(targetParentDirectory: string) {
+  public getCompareDirectory (targetParentDirectory: string) {
     const compareDir = path.join(targetParentDirectory, COMPARE_DIRECTORY);
     fs.ensureDirSync(compareDir);
     return compareDir;
@@ -53,14 +54,12 @@ class GeneratedComparison {
    * @param targetParentDirectory
    * @return {Promise<string|*>}
    */
-  public fileDiffs(targetParentDirectory: string): Promise<string> {
+  public fileDiffs (targetParentDirectory: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const json = this.getCacheCompareJson(this.getCacheCompareConfigPath(targetParentDirectory));
       const versions = Object.keys(json.versions).sort();
       if (versions.length <= 1) {
-        console.log(
-          'No previous files to compare from, a diff comparison chart will be available after the next generation.'
-        );
+        console.log('No previous files to compare from, a diff comparison chart will be available after the next generation.');
         return resolve('');
       }
       const newVersionKey = versions.pop();
@@ -71,7 +70,10 @@ class GeneratedComparison {
         if (json.versions[oldVersionKey][directory]) {
           const oldFilePath = path.join(directory, oldVersionKey);
           try {
-            fileDiff(oldFilePath, newFilePath)
+            fileDiff(
+              oldFilePath,
+              newFilePath,
+            )
               .then((diff) => {
                 json.versions[newVersionKey][directory].diff = diff;
               })
@@ -92,7 +94,7 @@ class GeneratedComparison {
    * @param outputDir
    * @param input
    */
-  public fileDiffsPrint(outputDir: string, input: any) {
+  public fileDiffsPrint (outputDir: string, input: any) {
     if (typeof input === 'string' && input !== '') {
       return console.log(input);
     }
@@ -101,7 +103,7 @@ class GeneratedComparison {
     const buildDiff = function (add: number, minus: number) {
       this.added = add;
       this.removed = minus;
-      this.message = add > 0 || minus > 0 ? 'Diff print in full above' : 'No differences';
+      this.message = (add > 0 || minus > 0) ? 'Diff print in full above' : 'No differences';
     };
     Object.keys(input).forEach((key) => {
       const displayPath = key.replace(cacheCompareDir, '');
@@ -114,7 +116,10 @@ class GeneratedComparison {
       }
 
       // @ts-ignore
-      logDiffs[displayPath] = new buildDiff(input[key].diff.plus, input[key].diff.minus);
+      logDiffs[displayPath] = new buildDiff(
+        input[key].diff.plus,
+        input[key].diff.minus,
+      );
     });
     console.table(logDiffs);
   }
@@ -124,7 +129,7 @@ class GeneratedComparison {
    * If the system has files not registered in the config, these files will remain untouched.
    * @param targetParentDirectory
    */
-  public versionCleanup(targetParentDirectory: string) {
+  public versionCleanup (targetParentDirectory: string) {
     const configPath = this.getCacheCompareConfigPath(targetParentDirectory);
     const json = this.getCacheCompareJson(configPath);
     const versions = Object.keys(json.versions).sort().reverse();
@@ -158,13 +163,7 @@ class GeneratedComparison {
    * @param {string} newFileString - The newly rendered content
    * @return {Promise<void>}
    */
-  public async generateComparisonFile(
-    targetFile: string,
-    targetParentDirectory: string,
-    subDirectory: string,
-    newFilename: string,
-    newFileString: string
-  ) {
+  public async generateComparisonFile (targetFile: string, targetParentDirectory: string, subDirectory: string, newFilename: string, newFileString: string) {
     const backupComparePath = path.join(this.getCompareDirectory(targetParentDirectory), subDirectory, newFilename);
     const backUpFile = path.join(backupComparePath, '/', global.startISOString);
     fs.ensureFileSync(backUpFile);
@@ -172,7 +171,7 @@ class GeneratedComparison {
     this.addToCacheComparisonReport(
       this.getCacheCompareConfigPath(targetParentDirectory),
       backupComparePath,
-      global.startISOString
+      global.startISOString,
     );
     return fs.writeFileSync(backUpFile, newFileString, 'utf8');
   }
@@ -184,7 +183,7 @@ class GeneratedComparison {
    * @param {string} isoTimstamp - Current runtime timestamp
    * @return {void}
    */
-  public addToCacheComparisonReport(jsonFilePath: string, backupComparePath: string, isoTimstamp: string) {
+  public addToCacheComparisonReport (jsonFilePath: string, backupComparePath: string, isoTimstamp: string) {
     const json = this.getCacheCompareJson(jsonFilePath);
     if (!json.versions[isoTimstamp]) {
       json.versions[isoTimstamp] = {};

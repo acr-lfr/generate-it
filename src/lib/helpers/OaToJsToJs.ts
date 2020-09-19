@@ -1,5 +1,5 @@
 class OaToJsToJs {
-  public getType(leaf: any) {
+  public getType (leaf: any) {
     if (leaf === Object) {
       return 'Object';
     } else if (leaf === Array) {
@@ -13,7 +13,7 @@ class OaToJsToJs {
     }
   }
 
-  public arrayWalkWrite(input: any, builtString?: string) {
+  public arrayWalkWrite (input: any, builtString?: string) {
     builtString = builtString || ' ';
     for (let i = 0; i < input.length; ++i) {
       if (typeof input[i] === 'function') {
@@ -27,7 +27,7 @@ class OaToJsToJs {
     return builtString.substring(0, builtString.length - 2);
   }
 
-  public objectWalkWrite(input: any, builtString?: string) {
+  public objectWalkWrite (input: any, builtString?: string) {
     builtString = builtString || '{';
     for (const key in input) {
       if (typeof input[key] === 'function') {

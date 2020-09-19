@@ -14,7 +14,7 @@ class GenerateOperation {
   /**
    * Groups all http verbs for each path to then generate each operation file
    */
-  public async files(config: GenerateOperationFileConfig, fileType: string) {
+  public async files (config: GenerateOperationFileConfig, fileType: string) {
     // Iterate over all paths
     // pathProperties = all the http verbs and their contents
     // pathName = the full path after the basepath
@@ -25,20 +25,20 @@ class GenerateOperation {
     }
   }
 
-  public async openapiFiles(config: GenerateOperationFileConfig, fileType: string) {
+  public async openapiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
     each(config.data.swagger.paths, (pathProperties, fullPath) => {
       // operationName equates to the stub file, for openapi we go by the opid
       const groupName = pathProperties.groupName;
       // todo this clearly doesn't/cannot be correct - fix it
       // if (includeOperationName(endpointName, config.data.nodegenRc)) {
-      files[groupName] = files[groupName] || [];
-      fullPath = fullPath.replace(/}/g, '').replace(/{/g, ':');
-      files[groupName].push({
-        path_name: fullPath,
-        path: pathProperties,
-        subresource: generateSubresourceName(fullPath),
-      });
+        files[groupName] = files[groupName] || [];
+        fullPath = fullPath.replace(/}/g, '').replace(/{/g, ':');
+        files[groupName].push({
+          path_name: fullPath,
+          path: pathProperties,
+          subresource: generateSubresourceName(fullPath),
+        });
       // }
     });
     for (const operationNameItem in files) {
@@ -48,13 +48,13 @@ class GenerateOperation {
     return files;
   }
 
-  public async asyncApiFiles(config: GenerateOperationFileConfig, fileType: string) {
+  public async asyncApiFiles (config: GenerateOperationFileConfig, fileType: string) {
     const files: OperationsContainer = {};
     each(config.data.swagger.channels, (pathProperties, pathName) => {
       const subscribeIds = config.data.nodegenRc.helpers.subscribeOpIds || [];
       if (
-        (pathProperties.publish && subscribeIds.includes(pathProperties.publish.operationId)) ||
-        (pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId))
+        pathProperties.publish && subscribeIds.includes(pathProperties.publish.operationId) ||
+        pathProperties.subscribe && subscribeIds.includes(pathProperties.subscribe.operationId)
       ) {
         // operationName equates to the stub file, for async we got by the opid
         let operationName;
@@ -81,7 +81,7 @@ class GenerateOperation {
   /**
    * Generate an operation file
    */
-  public async file(
+  public async file (
     config: GenerateOperationFileConfig,
     operations: Operations,
     operationName: string,
@@ -99,7 +99,11 @@ class GenerateOperation {
     const tplVars = this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType);
     let renderedContent = '';
     try {
-      renderedContent = TemplateRenderer.load(data.toString(), tplVars, ext);
+      renderedContent = TemplateRenderer.load(
+        data.toString(),
+        tplVars,
+        ext,
+      );
     } catch (e) {
       console.log(targetFile);
       throw new Error(e);
@@ -111,7 +115,7 @@ class GenerateOperation {
         config.targetDir,
         subDir,
         newFilename,
-        renderedContent
+        renderedContent,
       );
     }
     return fs.writeFileSync(targetFile, renderedContent, 'utf8');
@@ -120,13 +124,13 @@ class GenerateOperation {
   /**
    * Returns the template variables
    */
-  public templateVariables(
+  public templateVariables (
     operationName: string,
     operations: Operations,
     config: GenerateOperationFileConfig,
     additionalTplContent: any = {},
     verbose: boolean = false,
-    fileType: string
+    fileType: string,
   ): TemplateVariables {
     return {
       operation_name: _.camelCase(operationName.replace(/[}{]/g, '')),

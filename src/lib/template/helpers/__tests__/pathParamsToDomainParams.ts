@@ -10,7 +10,11 @@ describe('With req prefix', () => {
       ],
     };
     const output = pathParamsToDomainParams('get', testObject, false, 'req');
-    expect(output).toBe('req.query');
+    expect(
+      output,
+    ).toBe(
+      'req.query',
+    );
   });
 
   it('Should return req.body/path/query', () => {
@@ -28,7 +32,11 @@ describe('With req prefix', () => {
       ],
     };
     const output = pathParamsToDomainParams('post', testObject, false, 'req');
-    expect(output).toBe('req.body, req.pathParams, req.query');
+    expect(
+      output,
+    ).toBe(
+      'req.body, req.pathParams, req.query',
+    );
   });
 
   it('Should return req.body/path/query with req', () => {
@@ -47,7 +55,11 @@ describe('With req prefix', () => {
       'x-passRequest': true,
     };
     const output = pathParamsToDomainParams('post', testObject, false, 'req');
-    expect(output).toBe('req.body, req.pathParams, req.query, req');
+    expect(
+      output,
+    ).toBe(
+      'req.body, req.pathParams, req.query, req',
+    );
   });
 });
 
@@ -59,14 +71,16 @@ describe('Without req prefix', () => {
           in: 'query',
         },
       ],
-      security: [
-        {
-          token: 1,
-        },
-      ],
+      security: [{
+        token: 1,
+      }],
     };
     const output = pathParamsToDomainParams('get', testObject, false);
-    expect(output).toBe('query');
+    expect(
+      output,
+    ).toBe(
+      'query',
+    );
   });
   it('Should return req.query and security', () => {
     const testObject = {
@@ -75,14 +89,16 @@ describe('Without req prefix', () => {
           in: 'query',
         },
       ],
-      security: [
-        {
-          jwttoken: 1,
-        },
-      ],
+      security: [{
+        jwttoken: 1,
+      }],
     };
     const output = pathParamsToDomainParams('get', testObject, false);
-    expect(output).toBe('jwtData, query');
+    expect(
+      output,
+    ).toBe(
+      'jwtData, query',
+    );
   });
   it('Should return req.query', () => {
     const testObject = {
@@ -93,7 +109,11 @@ describe('Without req prefix', () => {
       ],
     };
     const output = pathParamsToDomainParams('get', testObject, false);
-    expect(output).toBe('query');
+    expect(
+      output,
+    ).toBe(
+      'query',
+    );
   });
 
   it('Should return req.body/path/query', () => {
@@ -111,7 +131,11 @@ describe('Without req prefix', () => {
       ],
     };
     const output = pathParamsToDomainParams('post', testObject, false);
-    expect(output).toBe('body, pathParams, query');
+    expect(
+      output,
+    ).toBe(
+      'body, pathParams, query',
+    );
   });
 
   it('Should return req.body/path/query with req', () => {
@@ -130,7 +154,11 @@ describe('Without req prefix', () => {
       'x-passRequest': true,
     };
     const output = pathParamsToDomainParams('put', testObject, false);
-    expect(output).toBe('body, pathParams, query, req');
+    expect(
+      output,
+    ).toBe(
+      'body, pathParams, query, req',
+    );
   });
 
   it('Should return body and files with formData', () => {
@@ -142,6 +170,10 @@ describe('Without req prefix', () => {
       ],
     };
     const output = pathParamsToDomainParams('get', testObject, false, 'req');
-    expect(output).toBe('req.body');
+    expect(
+      output,
+    ).toBe(
+      'req.body',
+    );
   });
 });

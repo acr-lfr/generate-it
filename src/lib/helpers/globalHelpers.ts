@@ -1,7 +1,7 @@
 import logger from '@/lib/logger/logger';
 
 export default (verbose: boolean, veryVerbose: boolean) => {
-  global.startISOString = new Date().toISOString();
+  global.startISOString = (new Date()).toISOString();
   global.veryVerboseLogging = (o: any) => {
     if (veryVerbose && o === '') {
       logger(o);

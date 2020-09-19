@@ -1,3 +1,4 @@
+
 export interface Operation {
   path_name?: string;
   path?: any;
@@ -13,12 +14,15 @@ export interface OperationsContainer {
   [operationName: string]: Operations;
 }
 
+
+
 // WIP
 const a = {
   post: {
     'tags': ['image'],
     'summary': 'Creates a new image',
-    'description': 'Creates a new image based on given image and related id',
+    'description':
+      'Creates a new image based on given image and related id',
     'operationId': 'imageRelatedIdPost',
     'consumes': ['multipart/form-data'],
     'produces': ['application/json'],
@@ -60,14 +64,16 @@ const a = {
         name: 'ImageRelatedIdPostFormData',
         params: ['parameters.FormDataImageCreate'],
         interfaceText: {
-          outputString: "export interface ImageRelatedIdPostFormData {\n  'imageCreate':any,  \n } ",
+          outputString:
+            "export interface ImageRelatedIdPostFormData {\n  'imageCreate':any,  \n } ",
         },
       },
       path: {
         name: 'ImageRelatedIdPostPath',
         params: ['parameters.PathRelatedId'],
         interfaceText: {
-          outputString: "export interface ImageRelatedIdPostPath {\n  'relatedId':string,  \n } ",
+          outputString:
+            "export interface ImageRelatedIdPostPath {\n  'relatedId':string,  \n } ",
         },
       },
     },
@@ -77,31 +83,27 @@ const a = {
 };
 interface PathObject {
   [method: string]: {
-    tags?: string[];
-    summary?: string;
-    description?: string;
-    operationId: string;
-    consumes?: string[];
-    produces?: string[];
-    parameters?: [
-      {
-        in: string;
-        name: string;
-        type: string;
-        description: string;
-        required?: boolean;
-      }
-    ];
+    tags?: string[],
+    summary?: string,
+    description?: string,
+    operationId: string,
+    consumes?: string[],
+    produces?: string[],
+    parameters?: [{
+      in: string,
+      name: string,
+      type: string,
+      description: string,
+      required?: boolean
+    }],
     responses: {
       [status: string]: {
-        description: string;
-        schema?: any;
-      };
-    };
-    security: [
-      {
-        [name: string]: any[];
+        description: string,
+        schema?: any
       }
-    ];
+    },
+    security: [{
+      [name: string]: any[]
+    }]
   };
 }

@@ -10,7 +10,7 @@ class OpenAPIInjectInterfaceNaming {
   public config: any;
   public apiObject: any;
 
-  constructor(jsObject: any, passedConfig?: ConfigExtendedBase) {
+  constructor (jsObject: any, passedConfig?: ConfigExtendedBase) {
     this.apiObject = jsObject;
     this.config = passedConfig || {};
   }
@@ -19,7 +19,7 @@ class OpenAPIInjectInterfaceNaming {
    * Merges the parameter namings into the path objects
    * @return {{paths}|module.exports.apiObject|{}}
    */
-  public async inject() {
+  public async inject () {
     if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return await this.swaggerPathIterator(true);
     }
@@ -32,7 +32,7 @@ class OpenAPIInjectInterfaceNaming {
   /**
    * Merges the injected request params into single interface objects
    */
-  public async mergeParameters() {
+  public async mergeParameters () {
     if (ApiIs.isOpenAPIorSwagger(this.apiObject)) {
       return await this.swaggerPathIterator(false);
     }
@@ -46,7 +46,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param {string} ref
    * @return {string}
    */
-  public convertRefToOjectPath(ref: string): string {
+  public convertRefToOjectPath (ref: string): string {
     const pathParts: string[] = [];
     const refParts = ref.split('/');
     for (let i = 0; i < refParts.length; ++i) {
@@ -65,7 +65,7 @@ class OpenAPIInjectInterfaceNaming {
    * True is apiobject is openapi
    * @return {boolean}
    */
-  public isAsyncAPI2() {
+  public isAsyncAPI2 () {
     return ApiIs.asyncapi2(this.apiObject);
   }
 
@@ -73,7 +73,7 @@ class OpenAPIInjectInterfaceNaming {
    * Injects x-[request|response]-definitions into the main object
    * @return {{paths}|module.exports.apiObject|{paths}|{}}
    */
-  public async swaggerPathIterator(fromInject: boolean) {
+  public async swaggerPathIterator (fromInject: boolean) {
     if (!this.apiObject.paths) {
       throw new Error('No paths found to iterate over');
     }
@@ -95,7 +95,7 @@ class OpenAPIInjectInterfaceNaming {
     return this.apiObject;
   }
 
-  public async asyncChannelIterator(fromInject: boolean) {
+  public async asyncChannelIterator (fromInject: boolean) {
     if (!this.apiObject.channels) {
       throw new Error('No paths found to iterate over');
     }
@@ -121,7 +121,7 @@ class OpenAPIInjectInterfaceNaming {
    * Injects the request and response object refs
    * @param channel
    */
-  public asyncXRequestInjector(channel: string) {
+  public asyncXRequestInjector (channel: string) {
     if (this.apiObject.channels[channel].publish) {
       this.apiObject.channels[channel].publish['x-request-definitions'] = this.injectRequestDefinitionsFromChannels(
         channel,
@@ -149,19 +149,21 @@ class OpenAPIInjectInterfaceNaming {
    * @param channel
    * @param action
    */
-  public injectRequestDefinitionsFromChannels(channel: string, action: string): object {
+  public injectRequestDefinitionsFromChannels (channel: string, action: string): object {
     const requestParams: any = {
       [action]: {
         name: _.upperFirst(),
         params: [],
-      },
+      }
     };
     if (!this.apiObject.channels[channel].parameters) {
       return {};
     }
     for (const key in this.apiObject.channels[channel].parameters) {
       const p = this.apiObject.channels[channel].parameters[key];
-      requestParams[action].params.push(this.convertRefToOjectPath(p.$ref || p.schema.$ref));
+      requestParams[action].params.push(
+        this.convertRefToOjectPath(p.$ref || p.schema.$ref)
+      );
     }
     return requestParams;
   }
@@ -171,11 +173,13 @@ class OpenAPIInjectInterfaceNaming {
    * @param channel
    * @param action
    */
-  public injectResponseDefinitionsFromChannels(channel: string, action: string) {
+  public injectResponseDefinitionsFromChannels (channel: string, action: string) {
     let response: any = {};
     const pathResponses = this.apiObject.channels[channel][action].message || false;
     if (pathResponses && pathResponses.payload && pathResponses.payload.$ref) {
-      let responseInterface = this.convertRefToOjectPath(pathResponses.payload.$ref);
+      let responseInterface = this.convertRefToOjectPath(
+        pathResponses.payload.$ref
+      );
       responseInterface = responseInterface.split('.').pop();
       if (responseInterface) {
         response = responseInterface;
@@ -189,7 +193,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param {string} path - Path of api
    * @param {string} method - Method of path to x inject to
    */
-  public openApiXRequestInjector(path: string, method: string) {
+  public openApiXRequestInjector (path: string, method: string) {
     this.apiObject.paths[path][method]['x-request-definitions'] = this.injectFromAPIPaths(path, method);
     this.apiObject.paths[path][method]['x-response-definitions'] = this.injectFromSwaggerResponse(path, method);
   }
@@ -200,7 +204,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param method
    * @return {{headers: [], path: [], query: [], body: []}}
    */
-  public injectFromAPIPaths(path: string, method: string) {
+  public injectFromAPIPaths (path: string, method: string) {
     const requestParams: any = {
       body: {
         name: _.upperFirst(generateOperationId(_.upperFirst(method), path)),
@@ -240,10 +244,7 @@ class OpenAPIInjectInterfaceNaming {
               requestParams[paramType].params.push(paramPath);
             }
           } catch (e) {
-            console.error(
-              'There was an error parsing a path and its referenced definitions, please check it is correct within the provided API specfication file'
-                .red.bold
-            );
+            console.error('There was an error parsing a path and its referenced definitions, please check it is correct within the provided API specfication file'.red.bold);
             console.error('The path provided was: '.red + paramPath.red.bold);
             console.error('This is typically a result of a definition not defined in the index.'.red);
             console.error(parameterObject);
@@ -263,7 +264,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param path
    * @param method
    */
-  public async mergeSwaggerInjectedParameters(action: string, path: string, method: string) {
+  public async mergeSwaggerInjectedParameters (action: string, path: string, method: string) {
     for (const requestType in this.apiObject[action][path][method]['x-request-definitions']) {
       if (!this.apiObject[action][path][method]['x-request-definitions'].hasOwnProperty(requestType)) {
         continue;
@@ -275,19 +276,18 @@ class OpenAPIInjectInterfaceNaming {
         clear = false;
         if (requestType !== 'body') {
           if (requestType === 'formData') {
-            let name = "'" + parameterObject.name + "'";
-            name += !parameterObject.required ? '?' : '';
-            requestObject[name] =
-              ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)
-                ? openApiTypeToTypscriptType(parameterObject.type)
-                : openApiTypeToTypscriptType(parameterObject.schema.type);
+            let name = '\'' + parameterObject.name + '\'';
+            name += (!parameterObject.required) ? '?' : '';
+            requestObject[name] = (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) ?
+              openApiTypeToTypscriptType(parameterObject.type) :
+              openApiTypeToTypscriptType(parameterObject.schema.type);
           } else {
             const paramName = parameterObject.name;
             if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
               // lift up the contents of schema
               parameterObject = {
                 ...parameterObject,
-                ...parameterObject.schema,
+                ...parameterObject.schema
               };
             }
             requestObject[paramName] = parameterObject;
@@ -296,15 +296,9 @@ class OpenAPIInjectInterfaceNaming {
       });
       if (!clear) {
         const interfaceName = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
-        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = [
-          'body',
-          'formData',
-        ].includes(requestType)
-          ? { outputString: this.objectToInterfaceString(requestObject, interfaceName) }
-          : await generateTypeScriptInterfaceText(
-              interfaceName,
-              JSON.stringify({ type: 'object', properties: requestObject })
-            );
+        this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = (['body', 'formData'].includes(requestType))
+          ? {outputString: this.objectToInterfaceString(requestObject, interfaceName)}
+          : await generateTypeScriptInterfaceText(interfaceName, JSON.stringify({type: 'object', properties: requestObject}));
       } else {
         delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }
@@ -317,9 +311,9 @@ class OpenAPIInjectInterfaceNaming {
    * @param name
    * @return {string}
    */
-  public objectToInterfaceString(object: any, name: string) {
+  public objectToInterfaceString (object: any, name: string) {
     let text = `export interface ${name} {\n  `;
-    const delim = this.config.interfaceStyle === 'interface' ? ',' : ';';
+    const delim = (this.config.interfaceStyle === 'interface') ? ',' : ';';
     Object.keys(object).forEach((key) => {
       text += key + ':' + object[key] + delim;
     });
@@ -332,7 +326,7 @@ class OpenAPIInjectInterfaceNaming {
    * @param method
    * @return {{'200': null}}
    */
-  public injectFromSwaggerResponse(path: string, method: string) {
+  public injectFromSwaggerResponse (path: string, method: string) {
     if (ApiIs.openapi3(this.apiObject)) {
       return this.injectFromOA3Response(path, method);
     }
@@ -341,12 +335,16 @@ class OpenAPIInjectInterfaceNaming {
     }
   }
 
-  public injectFromOA2Response(path: string, method: string): { '200': any } | {} {
+  public injectFromOA2Response (path: string, method: string): { '200': any } | {} {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
     if (pathResponses && pathResponses['200'] && pathResponses['200'].schema && pathResponses['200'].schema.$ref) {
       try {
-        const responseInterface = this.convertRefToOjectPath(pathResponses['200'].schema.$ref).split('.').pop();
+        const responseInterface = this.convertRefToOjectPath(
+          pathResponses['200'].schema.$ref
+        )
+          .split('.')
+          .pop();
         if (responseInterface) {
           response['200'] = responseInterface;
         }
@@ -357,23 +355,18 @@ class OpenAPIInjectInterfaceNaming {
     return response;
   }
 
-  public injectFromOA3Response(path: string, method: string): { '200': any } | {} {
+  public injectFromOA3Response (path: string, method: string): { '200': any } | {} {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
-    if (
-      pathResponses &&
-      pathResponses['200'] &&
-      pathResponses['200'].content &&
-      pathResponses['200'].content['application/json'] &&
-      pathResponses['200'].content['application/json'].schema &&
-      pathResponses['200'].content['application/json'].schema.$ref
+    if (pathResponses
+      && pathResponses['200']
+      && pathResponses['200'].content
+      && pathResponses['200'].content['application/json']
+      && pathResponses['200'].content['application/json'].schema
+      && pathResponses['200'].content['application/json'].schema.$ref
     ) {
       try {
-        const responseInterface = this.convertRefToOjectPath(
-          pathResponses['200'].content['application/json'].schema.$ref
-        )
-          .split('.')
-          .pop();
+        const responseInterface = this.convertRefToOjectPath(pathResponses['200'].content['application/json'].schema.$ref).split('.').pop();
         if (responseInterface) {
           response['200'] = responseInterface;
         }

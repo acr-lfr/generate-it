@@ -1,5 +1,5 @@
 class OaToJs {
-  public oaToJsType(input: any, from?: string): any {
+  public oaToJsType (input: any, from?: string): any {
     if (!input.type && input.properties) {
       input.type = 'object';
     }
@@ -33,7 +33,7 @@ class OaToJs {
     }
   }
 
-  public objectWalk(input: any) {
+  public objectWalk (input: any) {
     for (const key in input) {
       if (input[key].type) {
         input[key] = this.oaToJsType(input[key], key);
