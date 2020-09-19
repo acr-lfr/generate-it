@@ -1,11 +1,10 @@
 import openapiNodegen from '@/generateIt';
 import { fdir } from 'fdir';
 import path from 'path';
-import { clearTestServer, yamlToJson } from './helpers';
+import { clearTestServer, templates, yamlToJson } from './helpers';
 
 const serverDir = 'test_asyncapi';
 const testServerPath = path.join(process.cwd(), serverDir);
-export const tplUrl = 'https://github.com/acrontum/generate-it-asyncapi-rabbitmq.git';
 
 describe('e2e testing', () => {
   beforeAll(() => {
@@ -25,7 +24,7 @@ describe('e2e testing', () => {
       mockServer: false,
       swaggerFilePath: ymlPath,
       targetDir: testServerPath,
-      template: tplUrl,
+      template: templates.asyncapiRabbitmqGit,
     });
 
     expect(wasGenerated).toBe(true);

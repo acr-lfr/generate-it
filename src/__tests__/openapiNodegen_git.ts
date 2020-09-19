@@ -1,19 +1,19 @@
-import fs from 'fs-extra';
-import path from 'path';
 import openapiNodegen from '@/generateIt';
+import path from 'path';
+import { clearTestServer, templates } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 
 const testServerName = 'test_server_2';
 const testServerPath = path.join(process.cwd(), testServerName);
-export const tplUrl = 'https://github.com/acrontum/openapi-nodegen-typescript-server.git';
 
 describe('e2e testing', () => {
   beforeAll(() => {
-    fs.removeSync(testServerName);
+    clearTestServer(testServerName);
   });
+
   afterAll(() => {
-    fs.removeSync(testServerName);
+    clearTestServer(testServerName);
   });
 
   it('Should build without error', async (done) => {
@@ -25,7 +25,7 @@ describe('e2e testing', () => {
         mockServer: true,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
-        template: tplUrl,
+        template: templates.tsServerGit,
       });
       done();
     } catch (e) {

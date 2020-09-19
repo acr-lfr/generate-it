@@ -1,16 +1,18 @@
-import fs from 'fs-extra';
-import path from 'path';
 import openapiNodegen from '@/generateIt';
+import fs from 'fs-extra';
 import hasha from 'hasha';
-import { tplUrl, clearTestServer } from './helpers';
+import path from 'path';
+import { clearTestServer, templates } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
+
 const testServerPath = path.join(process.cwd(), 'test_server');
 
 describe('e2e testing', () => {
   beforeAll(() => {
     clearTestServer();
   });
+
   afterAll(() => {
     clearTestServer();
   });
@@ -24,7 +26,7 @@ describe('e2e testing', () => {
         mockServer: true,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
-        template: tplUrl,
+        template: templates.tsServerGit,
         variables: {
           name: 'Generate-it Typescript Server'
         }
@@ -46,7 +48,7 @@ describe('e2e testing', () => {
         mockServer: true,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
-        template: tplUrl,
+        template: templates.tsServerGit,
       });
       done();
     } catch (e) {

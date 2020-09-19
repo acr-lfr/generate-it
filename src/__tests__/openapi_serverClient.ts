@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import openapiNodegen from '@/generateIt';
-import { tplUrl, tplClientServer, clearTestServer } from './helpers';
+import { templates, clearTestServer } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
+
 const dirName = 'test_server_client';
 const testServerPath = path.join(process.cwd(), dirName);
 const testClientPath = path.join(testServerPath, 'src/services/openweathermap');
@@ -13,6 +14,7 @@ describe('e2e testing', () => {
   beforeAll(() => {
     clearTestServer(dirName);
   });
+
   afterAll(() => {
     clearTestServer(dirName);
   });
@@ -25,7 +27,7 @@ describe('e2e testing', () => {
         mockServer: false,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
-        template: tplUrl,
+        template: templates.tsServerGit,
       });
       done();
     } catch (e) {
@@ -41,13 +43,14 @@ describe('e2e testing', () => {
         mockServer: false,
         swaggerFilePath: ymlPath,
         targetDir: testClientPath,
-        template: tplClientServer,
+        template: templates.serverClientGit,
       });
       done();
     } catch (e) {
       done(e);
     }
   });
+
   it('should edit the client, regen and see the edit still present', async () => {
     const checkPath = path.join(testClientPath, 'lib/HttpService.ts');
     fs.writeFileSync(checkPath, '//', 'utf8');
@@ -57,7 +60,7 @@ describe('e2e testing', () => {
       mockServer: false,
       swaggerFilePath: ymlPath,
       targetDir: testClientPath,
-      template: tplClientServer,
+      template: templates.serverClientGit,
     });
     const templateStr = fs.readFileSync(checkPath).toString('utf8');
     expect(templateStr).toBe('//');

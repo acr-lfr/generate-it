@@ -1,7 +1,7 @@
 import path from 'path';
 import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
-import { clearTestServer, tplUrl } from '@/__tests__/helpers';
+import { clearTestServer, templates } from '@/__tests__/helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 
@@ -11,6 +11,7 @@ describe('e2e testing', () => {
   beforeAll(() => {
     clearTestServer();
   });
+
   afterAll(() => {
     clearTestServer();
   });
@@ -24,7 +25,7 @@ describe('e2e testing', () => {
         mockServer: true,
         swaggerFilePath: ymlPath,
         targetDir: testServerPath,
-        template: tplUrl,
+        template: templates.tsServerGit,
       });
       done();
     } catch (e) {
