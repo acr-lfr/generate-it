@@ -4,7 +4,7 @@ import { clearTestServer, templates } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 
-const testServerName = 'test_server_2';
+const testServerName = 'test_server';
 const testServerPath = path.join(process.cwd(), testServerName);
 
 describe('e2e testing', () => {
