@@ -1,5 +1,6 @@
 export default (input: any) => {
-  const successResponse = Object.entries(input).find(([code, reponse]) => /2\d\d/.test(code));
+  const successResponse = Object.entries(input).find(([statusCode, reponse]) => /2\d\d/.test(statusCode));
+
   if (!successResponse?.[1]) {
     return {};
   }
