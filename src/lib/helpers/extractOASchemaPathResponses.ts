@@ -1,4 +1,10 @@
 export default (input: any) => {
+  // async api 2 check
+  if (input?.type || input?.properties) {
+    return input;
+  }
+
+  // Handle response outputs for openapi
   const successResponse = Object.entries(input).find(([statusCode, reponse]) => /2\d\d/.test(statusCode));
 
   if (!successResponse?.[1]) {
