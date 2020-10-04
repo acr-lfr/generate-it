@@ -18,6 +18,13 @@ export default (targetDir: string, templatesDir: string, mocked: boolean = false
     },
   };
   fs.removeSync(path.join(targetDir, nodeGenDir));
+
+  // always remove the changelog and pick up the new version from the downloaded
+  const changelogFilePath = path.join(targetDir, 'changelog.generate-it.json');
+  if (fs.existsSync(changelogFilePath)) {
+    fs.removeSync(changelogFilePath);
+  }
+
   fs.copySync(
     path.join(templatesDir, nodeGenDir),
     path.join(targetDir, nodeGenDir),
