@@ -57,11 +57,18 @@ export default async (config: Config): Promise<boolean> => {
   if (fs.existsSync(changelogFilePath)) {
     const changelog = fs.readJsonSync(changelogFilePath);
     const latest = changelog.releases.pop();
-    console.log('Generated with template version: '.green + latest.templateVersion.green.bold);
-    console.log('The template version requires a min generate-t core of: '.green + latest.minCoreVersion.green.bold);
-    console.log('Version Change Description: '.green + latest.description.green);
+    console.log('  ');
+    console.log('  ');
+    console.log('Template version: '.green + latest.templateVersion.green.bold);
+    console.log('Minimum generate-it core version: ' + latest.minCoreVersion.bold);
+    console.log('Tpl Change Description: ' + latest.description.bold);
+    console.log('  ');
+    console.log('  ');
+    console.log('Complete'.green.bold);
+    console.log('  ')
     console.log('See the changelog for details: '.green.bold + changelogFilePath.green);
+  } else {
+    console.log('Complete'.green.bold);
   }
-  console.log('Complete'.green.bold);
   return true;
 };
