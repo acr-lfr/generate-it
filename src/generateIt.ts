@@ -53,6 +53,15 @@ export default async (config: Config): Promise<boolean> => {
     logTimeDiff(startTime, (new Date()).getTime(), true);
   }
 
+  const changelogFilePath = path.join(config.targetDir, 'changelog.generate-it.json');
+  if (fs.existsSync(changelogFilePath)) {
+    const changelog = fs.readJsonSync(changelogFilePath);
+    const latest = changelog.releases.pop();
+    console.log('Generated with template version: '.green + latest.templateVersion.green.bold);
+    console.log('The template version requires a min generate-t core of: '.green + latest.minCoreVersion.green.bold);
+    console.log('Version Change Description: '.green + latest.description.green);
+    console.log('See the changelog for details: '.green.bold + changelogFilePath.green);
+  }
   console.log('Complete'.green.bold);
   return true;
 };

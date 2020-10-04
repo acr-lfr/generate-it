@@ -1,0 +1,14 @@
+{
+  "releases": [
+    {
+      "templateVersion": "2.0.0",
+      "minCoreVersion": "5.20.0",
+      "description": "The http layer is now fully managed and all http output content-types are now inferred by openapi and the accept header.",
+      "changes": [
+        "[manual change required] nodegenDir in the .nodegenrc file now has value 'src/http'",
+        "[manual change required] app.ts now only calls @/src/http, see the latest in github for how it should now look",
+        "[manual change required] server.ts now must call the start() function returned in the app.ts"
+      ]
+    }
+  ]
+}
