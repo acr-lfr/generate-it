@@ -65,7 +65,7 @@ export default async (config: Config): Promise<boolean> => {
     console.log('  ');
     console.log('  ');
     console.log('Complete'.green.bold);
-    console.log('  ')
+    console.log('  ');
     console.log('See the changelog for details: '.green.bold + changelogFilePath.green);
   } else {
     console.log('Complete'.green.bold);
