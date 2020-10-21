@@ -21,5 +21,8 @@ module.exports = {
   testMatch: [
     '**/__tests__/*.ts',
   ],
+
+  setupFilesAfterEnv: ['./jest.setup.js'],
+
   testURL: 'http://localhost/',
 }
