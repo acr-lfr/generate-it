@@ -24,12 +24,12 @@ it('should return with with leading slash for patterns with regex options variat
   const input = '^[A-Za-zÀ-ž\d-_]{1,}(?:[A-Za-zÀ-ž\d-_]{1,}\s){0,}[A-Za-zÀ-ž\d-_]{1,}$';
   const gmusi = 'gmusi';
   for (let i = 0; i < gmusi.length; ++i) {
-    let testInput = input + `/${gmusi[i]}`;
+    const testIterInput = input + `/${gmusi[i]}`;
     expect(
-      SwaggerUtils.prepareRegexPattern(testInput)
-    ).toBe('/' + testInput);
+      SwaggerUtils.prepareRegexPattern(testIterInput)
+    ).toBe('/' + testIterInput);
   }
-  let testInput = input + `/${gmusi}`
+  const testInput = input + `/${gmusi}`;
   expect(
     SwaggerUtils.prepareRegexPattern(testInput)
   ).toBe('/' + testInput);
@@ -39,12 +39,12 @@ it('should return with as-is for patterns with regex options variations at the e
   const input = '/^[A-Za-zÀ-ž\d-_]{1,}(?:[A-Za-zÀ-ž\d-_]{1,}\s){0,}[A-Za-zÀ-ž\d-_]{1,}$';
   const gmusi = 'gmusi';
   for (let i = 0; i < gmusi.length; ++i) {
-    let testInput = input + `/${gmusi[i]}`;
+    const testIterInput = input + `/${gmusi[i]}`;
     expect(
-      SwaggerUtils.prepareRegexPattern(testInput)
-    ).toBe(testInput);
+      SwaggerUtils.prepareRegexPattern(testIterInput)
+    ).toBe(testIterInput);
   }
-  let testInput = input + `/${gmusi}`
+  const testInput = input + `/${gmusi}`;
   expect(
     SwaggerUtils.prepareRegexPattern(testInput)
   ).toBe(testInput);
