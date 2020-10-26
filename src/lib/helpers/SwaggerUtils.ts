@@ -14,6 +14,25 @@ interface PathParamsToJoi {
 }
 
 class SwaggerUtils {
+
+  /**
+   * Prepare the regex string based on how it has been formed in the openapi file pattern
+   * @param inputPattern
+   */
+  prepareRegexPattern (inputPattern: string): string {
+    if (inputPattern[0] !== '/') {
+      inputPattern = '/' + inputPattern;
+    }
+    if (inputPattern[inputPattern.length - 1] !== '/') {
+      const regex = new RegExp(/\/[gmusi]{1,}$/); // js regex options
+      if (!regex.test(inputPattern)) {
+        // no regex options found, but also no trailing slash, append 1 now
+        inputPattern += '/';
+      }
+    }
+    return inputPattern;
+  }
+
   /**
    * Converts a sub-section of a definition
    * @param {Object} param
@@ -64,7 +83,7 @@ class SwaggerUtils {
         validationText += `.max(${+param.maximum})`;
       }
       if (type === 'string' && param.pattern) {
-        validationText += (param.pattern ? `.regex(/${param.pattern}/)` : '');
+        validationText += (param.pattern ? `.regex(${this.prepareRegexPattern(param.pattern)})` : '');
       }
       validationText += (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
     } else if (type === 'array') {
