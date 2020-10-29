@@ -79,7 +79,7 @@ test('Returns joi with 2 required params', () => {
   expect(
     SwaggerUtils.createJoiValidation('post', {parameters: [params[0]]}),
   ).toBe(
-    `'body': Joi.object({'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow(''),}),`,
+    `'body': Joi.object({'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow('').allow(null),}),`,
   );
 });
 
@@ -119,7 +119,7 @@ test('openapi3 request body: allow empty array', () => {
   expect(
     SwaggerUtils.createJoiValidation('get', {parameters: [params[5]]}),
   ).toBe(
-    `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('')).required(),}),`,
+    `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('').allow(null)).required(),}),`,
   );
 });
 
