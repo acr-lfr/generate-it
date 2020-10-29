@@ -48,6 +48,10 @@ class SwaggerUtils {
     let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
     const type = param.type || param.schema.type;
+
+    const nullable = paramTypeKey === ParamTypeKey.body ? '.allow(null)' : '';
+    const validationTrailer = (isRequired && !options.isFromArray ? '.required()' : nullable) + (!options.isFromArray ? ',' : '');
+
     if (['string', 'number', 'integer', 'boolean'].includes(type)) {
       if (type === 'integer') {
         validationText += 'Joi.number().integer()';
@@ -85,7 +89,7 @@ class SwaggerUtils {
       if (type === 'string' && param.pattern) {
         validationText += (param.pattern ? `.regex(${this.prepareRegexPattern(param.pattern)})` : '');
       }
-      validationText += (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += validationTrailer;
     } else if (type === 'array') {
       validationText += 'Joi.array().items(';
       validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
@@ -115,9 +119,9 @@ class SwaggerUtils {
           paramTypeKey
         });
       });
-      validationText += '})' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += '})' + validationTrailer;
     } else {
-      validationText += 'Joi.any()' + (isRequired && !options.isFromArray ? '.required()' : '') + (!options.isFromArray ? ',' : '');
+      validationText += 'Joi.any()' + validationTrailer;
     }
     return validationText;
   }

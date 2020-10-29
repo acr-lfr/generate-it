@@ -95,7 +95,7 @@ class TemplateFetchURL {
    * @return {Promise<string>}
    */
   public async gitFetch (url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
-    if (!await this.hasGit()) {
+    if (!(await this.hasGit())) {
       throw new Error('Could not fetch cache from gitFetch url as gitFetch is not locally installed');
     }
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
