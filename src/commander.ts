@@ -44,7 +44,7 @@ export default (inputArgsArray: string[]): CommanderResponse => {
     .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectArray, {})
     .option('-v, --verbose', 'Outputs verbose logging')
     .option('--very-verbose', 'Outputs very verbose logging')
-    .option('-y, --yes', 'Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten')
+    .option('-y, --yes', 'Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten', true)
     .parse(inputArgsArray);
 
   if (!swaggerFile) {
