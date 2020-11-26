@@ -64,6 +64,7 @@ describe('e2e testing', () => {
       // Check rabbitMQ domains (STUB file)
       ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
       ['test_server/src/domains/WeatherDomain.ts', '30efe49b22921328e0be1ddc5c3e17a4'],
+      ['test_server/src/domains/RainDomain.ts', '2661960ee5787a58e824419d96c95cb4'],
       // Check complex interface (INTERFACE file)
       ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
       // Check the interface index file (OTHER file)
@@ -71,7 +72,7 @@ describe('e2e testing', () => {
       // Check the security definition files (OTHER file)
       ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
       // Check the rabbitMQ routes files (OPERATION file)
-      ['test_server/src/http/nodegen/routes/rainRoutes.ts', '0d81b9b22205107531b8c26adddcdb22'],
+      ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'c718e747981b83536cc607032ad890f8'],
       ['test_server/src/http/nodegen/routes/weatherRoutes.ts', 'e2f5987fd26f02a201e9bdcba6edf06c'],
       // Check the output transformers (OPERATION file)
       ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7a307263c483540e2c1577354abfbe46'],
