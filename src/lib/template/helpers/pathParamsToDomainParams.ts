@@ -74,7 +74,9 @@ export default function (method: string, pathObject: any, withType: boolean = fa
         ));
     }
   }
-  if (pathObject['x-passRequest']  && tplType !== 'client') {
+
+  // Inject the request to the params
+  if (pathObject['x-passRequest'] && tplType !== 'client') {
     if (fileType === 'STUB') {
       params.push(
         'req' + addType(
@@ -87,9 +89,36 @@ export default function (method: string, pathObject: any, withType: boolean = fa
       params.push('req' + addType(withType, pathObject));
     }
   }
+
+  // Inject the response to the params
+  if (pathObject['x-passResponse'] && tplType !== 'client') {
+    if (fileType === 'STUB') {
+      params.push(
+        'res' + addType(
+        withType,
+        pathObject,
+        undefined,
+        undefined,
+        ));
+    } else {
+      params.push('res' + addType(withType, pathObject));
+    }
+  }
+
+  // sort the params object for uniform domain params!
   params.sort();
+
+  // Inject any required prefix
   if (withPrefix) {
-    params = params.map((p: string) => (p === 'req') ? 'req' : 'req.' + (p === 'formData' ? 'body' : p));
+    params = params.map((p: string) => {
+      if (p === 'req') {
+        return 'req';
+      }
+      if (p === 'res') {
+        return 'res';
+      }
+      return 'req.' + (p === 'formData' ? 'body' : p);
+    });
   }
   return params.join(', ') + ((withType && params.length > 0) ? ',' : '');
 }

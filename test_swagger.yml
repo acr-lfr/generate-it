@@ -145,7 +145,7 @@ paths:
           description: Invalid Identifier supplied
         "404":
           description: Round not found
-      x-passRequest: true
+      x-passResponse: true
 parameters:
   formDataImage:
     in: formData
