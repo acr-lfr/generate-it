@@ -16,12 +16,11 @@ export default (targetDir: string, templatesDir: string): void => {
       {encoding: 'utf8'},
     ),
   );
-  const newJson = JSON.parse(
-    fs.readFileSync(
-      path.join(templatesDir, packageJsonStr + '.njk'),
-      'utf8',
-    ),
-  );
+  let tplPackageJsonPath = path.join(templatesDir, packageJsonStr);
+  if (!fs.pathExistsSync(tplPackageJsonPath)) {
+    tplPackageJsonPath = path.join(templatesDir, packageJsonStr + '.njk');
+  }
+  const newJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8',));
 
   const scriptsChanged: any = {};
   const dependenciesChanged: any = {};

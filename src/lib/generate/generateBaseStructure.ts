@@ -34,8 +34,13 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
   if (packageJsonFound) {
     // merge the package json files together
     const callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
-    const templatePackageJson = JSON.parse(fs.readFileSync(path.join(templatesDir, 'package.json.njk'), 'utf8'));
-    const merged = Object.assign(deepmerge(callerPackageJson, templatePackageJson), additionalOptionsToInject);
+    let tplPackageJsonPath = path.join(templatesDir, 'package.json.njk');
+    if (!fs.pathExistsSync(tplPackageJsonPath)) {
+      tplPackageJsonPath = path.join(templatesDir, 'package.json');
+    }
+
+    const templatePackageJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8'));
+    const merged = deepmerge(deepmerge(templatePackageJson, callerPackageJson), additionalOptionsToInject);
     fs.writeJsonSync(
       callerPackageJsonPath,
       merged,
