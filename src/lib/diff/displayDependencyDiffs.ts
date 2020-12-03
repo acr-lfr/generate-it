@@ -20,7 +20,7 @@ export default (targetDir: string, templatesDir: string): void => {
   if (!fs.pathExistsSync(tplPackageJsonPath)) {
     tplPackageJsonPath = path.join(templatesDir, packageJsonStr + '.njk');
   }
-  const newJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8',));
+  const newJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8', ));
 
   const scriptsChanged: any = {};
   const dependenciesChanged: any = {};
