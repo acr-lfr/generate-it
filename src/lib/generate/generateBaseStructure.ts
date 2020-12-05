@@ -40,7 +40,7 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
     }
 
     const templatePackageJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8'));
-    const merged = deepmerge(deepmerge(templatePackageJson, callerPackageJson), additionalOptionsToInject);
+    const merged = deepmerge(deepmerge(callerPackageJson, templatePackageJson), additionalOptionsToInject);
     fs.writeJsonSync(
       callerPackageJsonPath,
       merged,
