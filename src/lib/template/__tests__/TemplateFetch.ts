@@ -51,3 +51,26 @@ describe('semver check', () => {
     expect(TemplateFetch.isSemVer('a')).toBe(false);
   });
 });
+
+describe('local folder structure', () => {
+  const srcRoot = path.join(process.cwd(), '/bob');
+  const testDir = path.join('one', 'two', 'three');
+  const src = path.join(srcRoot, testDir);
+  const dest = './.bob-out';
+
+  afterAll(() => {
+    fs.removeSync(srcRoot);
+    fs.removeSync(dest);
+  });
+
+  it('accepts a local folder', async () => {
+    fs.ensureDirSync(src);
+    fs.writeJsonSync(path.join(src, 'test.json'), { hello: 'world' });
+
+    const cacheDirectory = TemplateFetch.calculateLocalDirectoryFromUrl(srcRoot, dest);
+    await TemplateFetch.resolveTemplateType(srcRoot, dest, false);
+    const testFile = path.join(process.cwd(), cacheDirectory, testDir, 'test.json');
+    expect(fs.existsSync(testFile)).toBe(true);
+    expect(require(testFile).hello).toBe('world');
+  });
+});
