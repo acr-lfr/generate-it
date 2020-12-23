@@ -1,10 +1,11 @@
-import fs from 'fs-extra';
-import nunjucks from 'nunjucks';
-import _ from 'lodash';
+import { TemplateVariables } from '@/interfaces/TemplateVariables';
+import prettyfyRenderedContent from '@/lib/helpers/prettyfyRenderedContent';
 import arrayContains from '@/lib/template/helpers/arrayContains';
+import consoleLog from '@/lib/template/helpers/consoleLog';
 import endsWith from '@/lib/template/helpers/endsWith';
 import getContext from '@/lib/template/helpers/getContext';
 import getSecurityNames from '@/lib/template/helpers/getSecurityNames';
+import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
 import importInterfaces from '@/lib/template/helpers/importInterfaces';
 import inline from '@/lib/template/helpers/inline';
 import isObjLength from '@/lib/template/helpers/isObjLength';
@@ -14,21 +15,25 @@ import isValidMethod from '@/lib/template/helpers/isValidMethod';
 import lcFirst from '@/lib/template/helpers/lcFirst';
 import mockOutput from '@/lib/template/helpers/mockOutput';
 import objLength from '@/lib/template/helpers/objLength';
+import operationsPathsHasParamsToValidate from '@/lib/template/helpers/operationsPathsHasParamsToValidate';
 import paramsOutputReducer from '@/lib/template/helpers/paramsOutputReducer';
 import paramsValidation from '@/lib/template/helpers/paramsValidation';
+import pathMethodsHaveAttr from '@/lib/template/helpers/pathMethodsHaveAttr';
 import pathParamsToDomainParams from '@/lib/template/helpers/pathParamsToDomainParams';
 import pathsHasParamsToValidate from '@/lib/template/helpers/pathsHasParamsToValidate';
-import pathMethodsHaveAttr from '@/lib/template/helpers/pathMethodsHaveAttr';
 import prettifyRouteName from '@/lib/template/helpers/prettifyRouteName';
-import prettyfyRenderedContent from '@/lib/helpers/prettyfyRenderedContent';
-import operationsPathsHasParamsToValidate from '@/lib/template/helpers/operationsPathsHasParamsToValidate';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import urlPathJoin from '@/lib/template/helpers/urlPathJoin';
 import validMethods from '@/lib/template/helpers/validMethods';
-import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
-import consoleLog from '@/lib/template/helpers/consoleLog';
+import fs from 'fs-extra';
+import _ from 'lodash';
+import nunjucks from 'nunjucks';
+import * as path from 'path';
 
 class TemplateRenderer {
+  public env: nunjucks.Environment;
+  public helpersRegistered: boolean = false;
+
   /**
    * Loads and renders a tpl
    * @param {string} inputString The string to parse
@@ -38,18 +43,15 @@ class TemplateRenderer {
    * @param configRcFile Fully qualified path to .openapi-nodegenrc file   *
    * @return {*}
    */
-  public load (
-    inputString: string,
-    customVars = {},
-    ext?: string,
-    additionalHelpers = {},
-    configRcFile = '',
-  ) {
-    this.nunjucksSetup(additionalHelpers, configRcFile);
-    const content = this.stripCharacters(
-      nunjucks.renderString(inputString, customVars),
-    );
-    return ext ? prettyfyRenderedContent(content, ext) : content;
+  public load (inputString: string, customVars?: TemplateVariables, ext?: string) {
+    this.nunjucksSetup(customVars);
+    try {
+
+      const content = this.stripCharacters(nunjucks.renderString(inputString, customVars));
+      return ext ? prettyfyRenderedContent(content, ext) : content;
+    } catch (e) {
+      console.trace(e);
+    }
   }
 
   /**
@@ -57,7 +59,7 @@ class TemplateRenderer {
    * @param content
    */
   public stripCharacters (content: string) {
-    return content.replace(new RegExp('&' + '#' + 'x27;', 'g'), '\'');
+    return content.replace(new RegExp('&' + '#' + 'x27;', 'g'), "'");
   }
 
   /**
@@ -65,48 +67,77 @@ class TemplateRenderer {
    * @param {object} helperFunctionKeyValueObject
    * @param configRcFile Exact path to a .boatsrc file
    */
-  public nunjucksSetup (helperFunctionKeyValueObject: any = {}, configRcFile = '') {
-    const env = nunjucks.configure(this.nunjucksOptions(configRcFile));
+  public nunjucksSetup (variables?: TemplateVariables) {
+    if (this.env) {
+      this.registerHelpers(variables?.config?.templates_dir);
+      return;
+    }
+
+    this.env = nunjucks.configure(this.nunjucksOptions());
 
     const processEnvVars = JSON.parse(JSON.stringify(process.env));
     for (const key in processEnvVars) {
       if (processEnvVars.hasOwnProperty(key)) {
-        env.addGlobal(key, processEnvVars[key]);
+        this.env.addGlobal(key, processEnvVars[key]);
       }
     }
 
-    env.addGlobal('arrayContains', arrayContains);
-    env.addGlobal('consoleLog', consoleLog);
-    env.addGlobal('endsWith', endsWith);
-    env.addGlobal('getSingleSuccessResponse', getSingleSuccessResponse);
-    env.addGlobal('getContext', getContext);
-    env.addGlobal('getSecurityNames', getSecurityNames);
-    env.addGlobal('importInterfaces', importInterfaces);
-    env.addGlobal('inline', inline);
-    env.addGlobal('isObjLength', isObjLength);
-    env.addGlobal('isUsingJwt', isUsingJwt);
-    env.addGlobal('isUsingSecurityDefinition', isUsingSecurityDefinition);
-    env.addGlobal('isValidMethod', isValidMethod);
-    env.addGlobal('lcFirst', lcFirst);
-    env.addGlobal('mockOutput', mockOutput);
-    env.addGlobal('objLength', objLength);
-    env.addGlobal('paramsOutputReducer', paramsOutputReducer);
-    env.addGlobal('paramsValidation', paramsValidation);
-    env.addGlobal('operationsPathsHasParamsToValidate', operationsPathsHasParamsToValidate);
-    env.addGlobal('paramsValidation', paramsValidation);
-    env.addGlobal('pathsHasParamsToValidate', pathsHasParamsToValidate);
-    env.addGlobal('pathMethodsHaveAttr', pathMethodsHaveAttr);
-    env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams);
-    env.addGlobal('prettifyRouteName', prettifyRouteName);
-    env.addGlobal('ucFirst', ucFirst);
-    env.addGlobal('urlPathJoin', urlPathJoin);
-    env.addGlobal('validMethods', validMethods);
+    this.env.addGlobal('arrayContains', arrayContains);
+    this.env.addGlobal('consoleLog', consoleLog);
+    this.env.addGlobal('endsWith', endsWith);
+    this.env.addGlobal('getSingleSuccessResponse', getSingleSuccessResponse);
+    this.env.addGlobal('getContext', getContext);
+    this.env.addGlobal('getSecurityNames', getSecurityNames);
+    this.env.addGlobal('importInterfaces', importInterfaces);
+    this.env.addGlobal('inline', inline);
+    this.env.addGlobal('isObjLength', isObjLength);
+    this.env.addGlobal('isUsingJwt', isUsingJwt);
+    this.env.addGlobal('isUsingSecurityDefinition', isUsingSecurityDefinition);
+    this.env.addGlobal('isValidMethod', isValidMethod);
+    this.env.addGlobal('lcFirst', lcFirst);
+    this.env.addGlobal('mockOutput', mockOutput);
+    this.env.addGlobal('objLength', objLength);
+    this.env.addGlobal('paramsOutputReducer', paramsOutputReducer);
+    this.env.addGlobal('paramsValidation', paramsValidation);
+    this.env.addGlobal('operationsPathsHasParamsToValidate', operationsPathsHasParamsToValidate);
+    this.env.addGlobal('paramsValidation', paramsValidation);
+    this.env.addGlobal('pathsHasParamsToValidate', pathsHasParamsToValidate);
+    this.env.addGlobal('pathMethodsHaveAttr', pathMethodsHaveAttr);
+    this.env.addGlobal('pathParamsToDomainParams', pathParamsToDomainParams);
+    this.env.addGlobal('prettifyRouteName', prettifyRouteName);
+    this.env.addGlobal('ucFirst', ucFirst);
+    this.env.addGlobal('urlPathJoin', urlPathJoin);
+    this.env.addGlobal('validMethods', validMethods);
 
-    env.addGlobal('_', _);
+    this.env.addGlobal('_', _);
 
-    Object.keys(helperFunctionKeyValueObject).forEach((key: string) => {
-      env.addGlobal(key, helperFunctionKeyValueObject[key]);
+    this.registerHelpers(variables?.config?.templates_dir);
+  }
+
+  public registerHelpers (tplDir: string): void {
+    if (!tplDir || !this.env || this.helpersRegistered) {
+      return;
+    }
+
+    const helperDir = path.join(tplDir, '.nodegen/helpers');
+    try {
+      if (!fs.lstatSync(helperDir).isDirectory()) {
+        this.helpersRegistered = true;
+        return;
+      }
+    } catch (e) {
+      this.helpersRegistered = true;
+      return;
+    }
+
+    fs.readdirSync(helperDir).forEach((filename) => {
+      if (filename.endsWith('.js')) {
+        const resolved = require(path.join(helperDir, filename)).default;
+        this.env.addGlobal(filename.replace(/.js$/, ''), resolved);
+      }
     });
+
+    this.helpersRegistered = true;
   }
 
   /**
