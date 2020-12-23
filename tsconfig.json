@@ -23,11 +23,7 @@
       }
     ]
   },
-  "exclude": [
-    "package.json",
-    "__tests__/**",
-    "test_server/**",
-    "test_asyncapi/**",
-    "test_server_client/**"
+  "include": [
+    "src"
   ]
 }
