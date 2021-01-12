@@ -2,7 +2,7 @@ import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import { Package } from '@/interfaces/Package';
 
 export interface GenerateOperationFileConfig {
-  root: any;
+  root: string;
   templates_dir: string;
   targetDir: string;
   package: Package;

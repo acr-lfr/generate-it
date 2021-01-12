@@ -1,4 +1,3 @@
-import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
 import _, { each } from 'lodash';
 import generateSubresourceName from '@/lib/generate/generateSubresourceName';
 import path from 'path';
@@ -7,8 +6,7 @@ import NamingUtils from '@/lib/helpers/NamingUtils';
 import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';
-import { TemplateVariables } from '@/interfaces/TemplateVariables';
-import { Operations, OperationsContainer } from '@/interfaces/Operations';
+import { GenerateOperationFileConfig, TemplateVariables, Operation, OperationsContainer } from '@/interfaces';
 
 class GenerateOperation {
   /**
@@ -35,6 +33,7 @@ class GenerateOperation {
         files[groupName] = files[groupName] || [];
         fullPath = fullPath.replace(/}/g, '').replace(/{/g, ':');
         files[groupName].push({
+          responses: {},
           path_name: fullPath,
           path: pathProperties,
           subresource: generateSubresourceName(fullPath),
@@ -65,6 +64,7 @@ class GenerateOperation {
         }
         files[operationName] = files[operationName] || [];
         files[operationName].push({
+          responses: {},
           channelName: pathName,
           channel: pathProperties,
           subresource: generateSubresourceName(pathName),
@@ -83,7 +83,7 @@ class GenerateOperation {
    */
   public async file (
     config: GenerateOperationFileConfig,
-    operations: Operations,
+    operations: Operation[],
     operationName: string,
     fileType: string,
     verbose = false,
@@ -126,7 +126,7 @@ class GenerateOperation {
    */
   public templateVariables (
     operationName: string,
-    operations: Operations,
+    operations: Operation[],
     config: GenerateOperationFileConfig,
     additionalTplContent: any = {},
     verbose: boolean = false,

@@ -119,7 +119,7 @@ export class TemplateRenderer {
       return;
     }
 
-    const helperDir = path.join(tplDir, '.nodegen/helpers');
+    const helperDir = path.join(tplDir, '.openapi-nodegen/helpers');
     try {
       if (!fs.lstatSync(helperDir).isDirectory()) {
         this.helpersRegistered = true;
