@@ -1,7 +1,7 @@
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import { Package } from '@/interfaces/Package';
 
-export default interface GenerateOperationFileConfig {
+export interface GenerateOperationFileConfig {
   root: any;
   templates_dir: string;
   targetDir: string;

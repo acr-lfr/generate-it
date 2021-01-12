@@ -1,4 +1,4 @@
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import displayDependencyDiffs from '@/lib/diff/displayDependencyDiffs';
 import generateBaseStructure from '@/lib/generate/generateBaseStructure';
 import resetNodegenFolder from '@/lib/resetNodegenFolder';

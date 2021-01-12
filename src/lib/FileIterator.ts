@@ -2,13 +2,13 @@ import fs from 'fs-extra';
 import path from 'path';
 import * as walk from '@root/walk';
 
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import generateFile from '@/lib/generate/generateFile';
 import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
 import isFileToIngore from '@/lib/helpers/isFileToIngore';
 import GenerateOperation from '@/lib/generate/GenerateOperation';
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
+import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
 
 class FileWalker {
   public files: any = {};

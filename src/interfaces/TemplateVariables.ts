@@ -1,5 +1,5 @@
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
-import NodegenRc from '@/interfaces/NodegenRc';
+import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 
 export interface TemplateVariables {
   operation_name: string;

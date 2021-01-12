@@ -1,4 +1,4 @@
-export default interface FileDiff {
+export interface FileDiff {
   minus: number;
   plus: number;
   difference: string;

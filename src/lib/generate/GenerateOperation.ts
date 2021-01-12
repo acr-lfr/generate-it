@@ -1,4 +1,4 @@
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
+import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
 import _, { each } from 'lodash';
 import generateSubresourceName from '@/lib/generate/generateSubresourceName';
 import path from 'path';

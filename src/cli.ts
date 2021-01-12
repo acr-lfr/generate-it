@@ -4,7 +4,7 @@ import * as inquirer from 'inquirer';
 import cliInput from './commander';
 import generateIt from './generateIt';
 import { LINEBREAK } from '@/constants/cli';
-import Config from '@/interfaces/Config';
+import { Config } from '@/interfaces/Config';
 import versionCheck from 'npm-tool-version-check';
 
 process.on('unhandledRejection', (err) => {
