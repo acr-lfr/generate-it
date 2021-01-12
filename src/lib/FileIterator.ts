@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import walk from 'walk';
+import * as walk from '@root/walk';
 
 import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
@@ -8,6 +8,7 @@ import generateFile from '@/lib/generate/generateFile';
 import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
 import isFileToIngore from '@/lib/helpers/isFileToIngore';
 import GenerateOperation from '@/lib/generate/GenerateOperation';
+import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
 
 class FileWalker {
   public files: any = {};
@@ -24,25 +25,21 @@ class FileWalker {
     this.config = providedConfig;
     this.isFirstRun = providedIsFirstRun;
     const templatesDir = this.config.templates;
-    return new Promise((resolve, reject) => {
-      walk.walk(templatesDir, {
-        followLinks: false,
-      }).on('file', async (root: string, stats: any, next: any) => {
-        try {
-          await this.fileIteration(root, stats, next);
-        } catch (e) {
-          console.error(e);
-        }
-      })
-        // @ts-ignore
-        .on('errors', (root: any, nodeStatsArray: any) => {
-          reject(nodeStatsArray);
-        })
-        .on('end', async () => {
-          await this.parseOpIndex();
-          resolve();
-        });
-    });
+
+    return walk.walk(templatesDir, async (err: Error, fullpath: string, dirent: fs.Dirent) => {
+      if (err) {
+        throw err;
+      }
+      if (isFileToIngore(fullpath, dirent.name)) {
+        return Promise.resolve(false);
+      }
+      if (dirent.isDirectory()) {
+        return;
+      }
+
+      const root = fullpath.slice(0, -dirent.name.length - 1);
+      await this.fileIteration(root, dirent).catch(console.error);
+    }).then(() => this.parseOpIndex());
   }
 
   /**
@@ -77,7 +74,7 @@ class FileWalker {
     );
   }
 
-  public buildPathDataObject (root: string, filename: string) {
+  public buildPathDataObject (root: string, filename: string): GenerateOperationFileConfig {
     return {
       root,
       templates_dir: this.config.templates,
@@ -95,13 +92,9 @@ class FileWalker {
    * The walker function for a single file
    * @param {string} root - The directory to the file
    * @param {string} stats - The name of the file
-   * @param {function} next - The callback function to continue
    * @return {Promise<void>}
    */
-  public async fileIteration (root: string, stats: any, next: any) {
-    if (isFileToIngore(root, stats.name)) {
-      return next();
-    }
+  public async fileIteration (root: string, stats: any) {
     global.veryVerboseLogging('Dir:' + root);
     global.veryVerboseLogging('File:' + stats.name);
 
@@ -132,7 +125,6 @@ class FileWalker {
       fs.removeSync(templatePath);
     }
     global.veryVerboseLogging(root);
-    next();
   }
 }
 
