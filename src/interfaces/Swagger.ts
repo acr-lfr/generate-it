@@ -47,4 +47,4 @@ export interface OperationsContainer {
   [operationName: string]: Operations;
 }
 
-export { Schema }
+export { Schema };
