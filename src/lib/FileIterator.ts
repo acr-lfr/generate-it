@@ -9,6 +9,8 @@ import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
 import isFileToIngore from '@/lib/helpers/isFileToIngore';
 import GenerateOperation from '@/lib/generate/GenerateOperation';
 import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
+import TemplateRenderer from '@/lib/template/TemplateRenderer';
+import * as typescript from 'typescript';
 
 class FileWalker {
   public files: any = {};
@@ -58,6 +60,17 @@ class FileWalker {
           operationFiles: this.files[FileTypeCheck.OPERATION].files,
         },
       );
+    } else if (this.files[FileTypeCheck.EVAL]) {
+      for (const ctx of this.files[FileTypeCheck.EVAL]) {
+        const res = await typescript.transpileModule(fs.readFileSync(ctx.src, 'utf8'), {});
+        fs.removeSync(path.join(ctx.dest, '___eval.ts'));
+
+        const jspath = `${ctx.src}.js`;
+        fs.writeFileSync(jspath, res.outputText);
+
+        await require(jspath).default(ctx);
+        fs.removeSync(jspath);
+      }
     }
   }
 
@@ -119,6 +132,15 @@ class FileWalker {
         files: await GenerateOperation.files(generationDataObject, fileType),
         generationDataObject,
       };
+    } else if (fileType === FileTypeCheck.EVAL) {
+      this.files[fileType] = (this.files[fileType] || []).concat({
+        ...generationDataObject.data,
+        src: path.join(root, stats.name),
+        dest: path.dirname(templatePath),
+        root,
+        filename: stats.name,
+        TemplateRenderer,
+      });
     }
 
     if (templatePath.substr(templatePath.length - 3) === 'njk') {
