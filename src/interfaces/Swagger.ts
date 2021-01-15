@@ -46,3 +46,5 @@ export type Operations = Operation[];
 export interface OperationsContainer {
   [operationName: string]: Operations;
 }
+
+export { Schema }
