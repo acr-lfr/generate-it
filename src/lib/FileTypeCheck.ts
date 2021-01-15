@@ -5,6 +5,7 @@ class FileTypeCheck {
   public MOCK = 'MOCK';
   public STUB = 'STUB';
   public OTHER = 'OTHER';
+  public EVAL = 'EVAL';
 
   public getFileType (name: string) {
     if (this.isOpertationIndexFile(name)) {
@@ -21,6 +22,9 @@ class FileTypeCheck {
     }
     if (this.isInterfaceFile(name)) {
       return this.INTERFACE;
+    }
+    if (this.isEvalFile(name)) {
+      return this.EVAL;
     }
     return this.OTHER;
   }
@@ -43,6 +47,10 @@ class FileTypeCheck {
 
   public isInterfaceFile (name: string) {
     return name.substr(0, 12) === '___interface';
+  }
+
+  public isEvalFile (name: string) {
+    return name.substr(0, 7) === '___eval';
   }
 }
 
