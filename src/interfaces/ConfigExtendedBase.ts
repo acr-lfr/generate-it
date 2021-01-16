@@ -1,11 +1,12 @@
-import Config from '@/interfaces/Config';
-import NodegenRc from '@/interfaces/NodegenRc';
+import { Config } from '@/interfaces/Config';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 import { Package } from '@/interfaces/Package';
+import { Swagger } from '@/interfaces/Swagger';
 
-export default interface ConfigExtendedBase extends Config {
+export interface ConfigExtendedBase extends Config {
   nodegenRc?: NodegenRc;
   interfaceStyle?: string;
   templates?: string;
-  swagger?: any;
+  swagger?: Swagger;
   package?: Package;
 }

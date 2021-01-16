@@ -1,4 +1,4 @@
-export default interface Config {
+export interface Config {
   verbose?: boolean;
   veryVerbose?: boolean;
   swaggerFilePath: string;

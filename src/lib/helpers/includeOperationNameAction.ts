@@ -1,4 +1,4 @@
-import NodegenRc from '@/interfaces/NodegenRc';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 
 export default (operationName: string, pathProperties: any, nodegenRc: NodegenRc): boolean | object => {
   if (

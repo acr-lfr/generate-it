@@ -5,7 +5,7 @@ import * as YAML from 'js-yaml';
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 import openApiResolveAllOfs from '@/lib/openapi/openApiResolveAllOfs';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
 import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';

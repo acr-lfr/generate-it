@@ -1,5 +1,5 @@
-import Config from '@/interfaces/Config';
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { Config } from '@/interfaces/Config';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import NodegenRc from '@/lib/NodegenRc';
 import * as _ from 'lodash';
 

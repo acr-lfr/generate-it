@@ -1,4 +1,5 @@
 import pathMethodsHaveAttr from '@/lib/template/helpers/pathMethodsHaveAttr';
+import { Operation } from '@/interfaces';
 
 it('should return undefined', () => {
   const operations = [{
@@ -8,7 +9,7 @@ it('should return undefined', () => {
       }
     }
   }];
-  expect(pathMethodsHaveAttr(operations, 'security')).toBe(true);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'security')).toBe(true);
 });
 
 it('should return undefined', () => {
@@ -19,7 +20,7 @@ it('should return undefined', () => {
       }
     }
   }];
-  expect(pathMethodsHaveAttr(operations, 'security', 'jwtToken')).toBe(false);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'security', 'jwtToken')).toBe(false);
 });
 
 it('should return true', () => {
@@ -33,7 +34,7 @@ it('should return true', () => {
       }
     },
   }];
-  expect(pathMethodsHaveAttr(operations, 'security', 'jwtToken')).toBe(true);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'security', 'jwtToken')).toBe(true);
 });
 
 it('should return false', () => {
@@ -50,7 +51,7 @@ it('should return false', () => {
       }
     },
   }];
-  expect(pathMethodsHaveAttr(operations, 'security', 'jwtToken')).toBe(false);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'security', 'jwtToken')).toBe(false);
 });
 
 it('should return true', () => {
@@ -67,7 +68,7 @@ it('should return true', () => {
       }
     },
   }];
-  expect(pathMethodsHaveAttr(operations, 'security', 'jwtToken')).toBe(true);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'security', 'jwtToken')).toBe(true);
 });
 
 it('should return true', () => {
@@ -82,5 +83,5 @@ it('should return true', () => {
       }
     },
   }];
-  expect(pathMethodsHaveAttr(operations, 'parameters', 'x-nested.required')).toBe(true);
+  expect(pathMethodsHaveAttr(operations as unknown as Operation[], 'parameters', 'x-nested.required')).toBe(true);
 });

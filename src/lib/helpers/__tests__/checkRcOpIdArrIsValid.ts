@@ -1,5 +1,5 @@
 import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
-import NodegenRc from '@/interfaces/NodegenRc';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 
 const nodegenRc: NodegenRc = {
   nodegenDir: 'blah',

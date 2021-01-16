@@ -1,10 +1,7 @@
 import { LINEBREAK } from '@/constants/cli';
-import GenerateTypeScriptInterfaceText from '@/interfaces/GenerateTypeScriptInterfaceText';
+import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
 
 const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
-
-
-
 
 const countNoOfMatches = (name: string, line: string): number => {
   const regex = new RegExp(name, 'gi');
@@ -18,8 +15,8 @@ export default async (name: string, schema: string): Promise<GenerateTypeScriptI
     schema: JSON.stringify({
       type: 'object',
       properties: {
-        [name]: schema ? JSON.parse(schema) : schema
-      }
+        [name]: schema ? JSON.parse(schema) : schema,
+      },
     }),
   });
 

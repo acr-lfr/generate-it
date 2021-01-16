@@ -1,5 +1,5 @@
 import getOpIdsFromAsyncApi from '@/lib/helpers/getOpIdsFromAsyncApi';
-import NodegenRc from '@/interfaces/NodegenRc';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 
 export default (apiObject: any, nodegenRc: NodegenRc) => {
   if (!apiObject.channels) {
