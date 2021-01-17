@@ -1,4 +1,4 @@
-import ConfigExtendedBase from '@/interfaces/ConfigExtendedBase';
+import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import generateOperationId from '@/lib/generate/generateOperationId';
 import openApiTypeToTypscriptType from '@/lib/openapi/openApiTypeToTypscriptType';
 import * as _ from 'lodash';

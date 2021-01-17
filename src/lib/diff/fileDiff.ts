@@ -1,4 +1,4 @@
-import FileDiff from '@/interfaces/FileDiff';
+import { FileDiff } from '@/interfaces/FileDiff';
 
 const TextFileDiff = require('text-file-diff');
 

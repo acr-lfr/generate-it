@@ -2,7 +2,7 @@ import 'colors';
 import * as fs from 'fs-extra';
 import path from 'path';
 import globalHelpers from '@/lib/helpers/globalHelpers';
-import Config from '@/interfaces/Config';
+import { Config } from '@/interfaces/Config';
 import ConfigMerger from '@/lib/ConfigMerger';
 import FileIterator from '@/lib/FileIterator';
 import GeneratedComparison from '@/lib/generate/GeneratedComparison';

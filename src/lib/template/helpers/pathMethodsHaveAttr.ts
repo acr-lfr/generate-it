@@ -1,19 +1,21 @@
 import * as _ from 'lodash';
-import { Operation, Operations } from '@/interfaces/Operations';
+import { Operation, Path } from '@/interfaces';
 import isValidMethod from '@/lib/template/helpers/isValidMethod';
 
-export default (operations: Operations, attr: string, nestedPath?: string): boolean => {
+type Methods = 'get' |'put' |'post' |'delete' |'options' |'head' |'patch';
+
+export default (operations: Operation[], attr: string, nestedPath?: string): boolean => {
   let found = false;
   for (const key in operations) {
     const op: Operation = operations[key];
     for (const method in op.path) {
       if (isValidMethod(method)) {
-        if (op.path[method][attr]) {
+        if (op.path[method as Methods][attr as keyof Operation]) {
           if (!nestedPath) {
             found = true;
           } else {
             const nestedParts = nestedPath.split('.');
-            let objectToLookIn = op.path[method][attr];
+            let objectToLookIn = op.path[method as Methods][attr as keyof Operation];
             nestedParts.forEach((part) => {
               if (objectToLookIn) {
                 if (Array.isArray(objectToLookIn)) {

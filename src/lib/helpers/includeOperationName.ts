@@ -1,4 +1,4 @@
-import NodegenRc from '@/interfaces/NodegenRc';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 
 export default (operationName: string, nodegenRc: NodegenRc): boolean => {
   if (

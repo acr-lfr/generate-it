@@ -1,5 +1,6 @@
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
-import NodegenRc from '@/interfaces/NodegenRc';
+import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
+import { NodegenRc } from '@/interfaces/NodegenRc';
+import { Swagger } from '@/interfaces/Swagger';
 
 export interface TemplateVariables {
   operation_name: string;
@@ -7,7 +8,7 @@ export interface TemplateVariables {
   config: GenerateOperationFileConfig;
   operations: any;
   nodegenRc: NodegenRc;
-  swagger: any;
+  swagger: Swagger;
   mockServer: boolean;
   verbose: boolean;
 }

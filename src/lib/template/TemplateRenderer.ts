@@ -30,7 +30,7 @@ import _ from 'lodash';
 import nunjucks from 'nunjucks';
 import * as path from 'path';
 
-class TemplateRenderer {
+export class TemplateRenderer {
   public env: nunjucks.Environment;
   public helpersRegistered: boolean = false;
 
@@ -119,7 +119,7 @@ class TemplateRenderer {
       return;
     }
 
-    const helperDir = path.join(tplDir, '.nodegen/helpers');
+    const helperDir = path.join(tplDir, '.openapi-nodegen/helpers');
     try {
       if (!fs.lstatSync(helperDir).isDirectory()) {
         this.helpersRegistered = true;

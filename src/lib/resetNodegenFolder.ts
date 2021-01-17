@@ -1,4 +1,4 @@
-import NodegenRc from '@/interfaces/NodegenRc';
+import { NodegenRc } from '@/interfaces/NodegenRc';
 import * as fs from 'fs-extra';
 import path from 'path';
 

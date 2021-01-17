@@ -1,5 +1,5 @@
 import isValidMethod from './isValidMethod';
-import { Operation } from '@/interfaces/Operations';
+import { Operation } from '@/interfaces';
 
 /**
  *
