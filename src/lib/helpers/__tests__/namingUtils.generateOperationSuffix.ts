@@ -13,3 +13,9 @@ it('should return customerRoutes.ts', () => {
     generateOperationSuffix('src/http/nodegen/routes', 'customer', 'ts'),
   ).toBe('customerRoutes.ts');
 });
+
+it('should return B2DDomainMock.ts', () => {
+  expect(
+    generateOperationSuffix('src/domains/__mocks__', 'b2d', 'ts'),
+  ).toBe('B2DDomainMock.ts');
+});
