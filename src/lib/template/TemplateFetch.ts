@@ -1,11 +1,12 @@
-import 'colors';
+import { GIT_DIRECTORY } from '@/constants/CachePaths';
+import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement';
 import commandRun from '@/lib/helpers/commandRun';
+import isFileToIngore from '@/lib/helpers/isFileToIngore';
+import * as walk from '@root/walk';
+import 'colors';
+import compareVersions from 'compare-versions';
 import fs from 'fs-extra';
 import path from 'path';
-import compareVersions from 'compare-versions';
-
-import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement';
-import { GIT_DIRECTORY } from '@/constants/CachePaths';
 
 class TemplateFetchURL {
   public targetGitCacheDir: string;
@@ -249,23 +250,32 @@ template version tag: ${tplTag}
   }
 
   /**
-   * cp -R
-   * https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js
+   * Copy folder structure from src to dest
    * @param src
    * @param dest
    */
-  public copyRecursiveSync (src: string, dest: string) {
-    const exists = fs.existsSync(src);
-    const stats = exists && fs.statSync(src);
-    const isDirectory = exists && stats.isDirectory();
-    if (isDirectory) {
-      fs.ensureDirSync(dest);
-      fs.readdirSync(src).forEach((childItemName) =>
-        this.copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName))
-      );
-    } else {
-      fs.copyFile(src, dest);
+  public copyRecursive (src: string, dest: string) {
+    if (!src.endsWith('/')) {
+      src += '/';
     }
+    if (!dest.endsWith('/')) {
+      dest += '/';
+    }
+    return walk.walk(src, async (err: Error, fullpath: string, dirent: fs.Dirent) => {
+      if (err) {
+        throw err;
+      }
+      if (isFileToIngore(fullpath, dirent.name)) {
+        return Promise.resolve(false);
+      }
+
+      const outpath = fullpath.replace(src, dest);
+      if (dirent.isDirectory()) {
+        fs.ensureDirSync(outpath);
+      } else {
+        fs.copyFile(fullpath, outpath);
+      }
+    });
   }
 
   /**
@@ -291,7 +301,7 @@ template version tag: ${tplTag}
       if (this.gitCacheExists(cacheDirectory)) {
         this.cleanSingleCacheDir(cacheDirectory);
       }
-      this.copyRecursiveSync(url, cacheDirectory);
+      await this.copyRecursive(url, cacheDirectory);
     } catch (e) {
       console.error('Could not copy the folders!');
       this.cleanSingleCacheDir(cacheDirectory);
