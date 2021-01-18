@@ -1,4 +1,4 @@
-import GenerateOperationFileConfig from '@/interfaces/GenerateOperationFileConfig';
+import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
 import NamingUtils from '@/lib/helpers/NamingUtils';
 import TemplateRenderer from '@/lib/template/TemplateRenderer';
 import fs from 'fs-extra';

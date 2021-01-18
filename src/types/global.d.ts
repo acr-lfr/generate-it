@@ -10,3 +10,5 @@ declare namespace NodeJS {
     verboseLogging: any;
   }
 }
+
+declare module '@root/walk';

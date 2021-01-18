@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.24.1",
+  "version": "5.25.1",
   "description": "Generate-it, will generate servers, clients, web-socket and anything else you can template with nunjucks from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH",
   "license": "MIT",
@@ -8,6 +8,7 @@
   "bin": {
     "generate-it": "./build/cli.js"
   },
+  "types": "build/index.d.ts",
   "scripts": {
     "install:githooks": "cp ./githooks/* .git/hooks",
     "test": "npm run lint && npm run test:unit",
@@ -19,6 +20,7 @@
     "build": "rm -fR ./build && ttsc -p .",
     "build:watch": "ttsc --watch -p .",
     "start": "node cli.js",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run test"
   },
   "homepage": "https://acrontum.github.io/generate-it",
@@ -42,6 +44,7 @@
     "compare-versions": "^3.6.0",
     "deepmerge": "^4.2.2",
     "fs-extra": "^9.0.1",
+    "generate-it-mockers": "^1.0.4",
     "inquirer": "^7.3.3",
     "js-yaml": "^3.14.1",
     "json-schema-ref-parser": "^9.0.6",
@@ -70,6 +73,7 @@
     "@types/nunjucks": "^3.1.3",
     "@types/prettier": "^2.1.6",
     "@types/semver": "^7.3.4",
+    "@types/swagger-schema-official": "^2.0.21",
     "@types/yamljs": "^0.2.31",
     "@zerollup/ts-transform-paths": "^1.7.18",
     "codecov": "^3.8.1",

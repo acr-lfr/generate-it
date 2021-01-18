@@ -1,4 +1,4 @@
-export default interface NodegenRc {
+export interface NodegenRc {
   nodegenDir: string;
   nodegenMockDir?: string;
   nodegenType: string;

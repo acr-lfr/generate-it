@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import NodegenRcInterface from '../interfaces/NodegenRc';
+import { NodegenRc as NodegenRcInterface } from '@/interfaces/NodegenRc';
 
 class NodegenRc {
   /**

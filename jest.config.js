@@ -1,3 +1,9 @@
+const ignore = [
+  '/node_modules/',
+  '/build/',
+  '/dist/',
+];
+
 module.exports = {
   moduleFileExtensions: [
     'js',
@@ -14,7 +20,9 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
-  transformIgnorePatterns: ['/node_modules/'],
+  transformIgnorePatterns: ignore,
+  testPathIgnorePatterns: ignore,
+  modulePathIgnorePatterns: ignore,
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
