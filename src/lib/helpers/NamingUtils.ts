@@ -17,8 +17,9 @@ class NamingUtils {
     if (SHOULD_PLURAL.includes(suffix)) {
       suffix += 's';
     }
+    operation = _.camelCase(operation);
     if (!FUNCS_DIRS.includes(subDirSplit[subDirSplit.length - 1])) {
-      operation = operation.charAt(0).toUpperCase() + _.camelCase(operation.substring(1));
+      operation = operation.charAt(0).toUpperCase() + operation.substring(1);
     }
 
     return operation + suffix + '.' + ext;
