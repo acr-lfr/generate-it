@@ -1,6 +1,7 @@
 import deepmerge from 'deepmerge';
 import * as fs from 'fs-extra';
 import path from 'path';
+import { mergePackageJsonFiles } from '@/lib/helpers/mergePackageJsonFiles';
 
 /**
  * Creates the base structure
@@ -40,7 +41,12 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
     }
 
     const templatePackageJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8'));
-    const merged = deepmerge(deepmerge(callerPackageJson, templatePackageJson), additionalOptionsToInject);
+
+    const merged = mergePackageJsonFiles(
+      callerPackageJson,
+      templatePackageJson,
+      additionalOptionsToInject
+    );
     fs.writeJsonSync(
       callerPackageJsonPath,
       merged,
