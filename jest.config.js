@@ -1,4 +1,5 @@
 const ignore = [
+  '/.openapi-nodegen/',
   '/node_modules/',
   '/build/',
   '/dist/',
