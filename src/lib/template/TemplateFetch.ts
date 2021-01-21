@@ -271,9 +271,9 @@ template version tag: ${tplTag}
 
       const outpath = fullpath.replace(src, dest);
       if (dirent.isDirectory()) {
-        fs.ensureDirSync(outpath);
+        await fs.ensureDir(outpath);
       } else {
-        fs.copyFile(fullpath, outpath);
+        await fs.copyFile(fullpath, outpath);
       }
     });
   }
