@@ -62,14 +62,15 @@ class FileWalker {
       );
     } else if (this.files[FileTypeCheck.EVAL]) {
       for (const ctx of this.files[FileTypeCheck.EVAL]) {
-        const res = await typescript.transpileModule(fs.readFileSync(ctx.src, 'utf8'), {});
-        fs.removeSync(path.join(ctx.dest, '___eval.ts'));
+        const jsFilename: string = `${ctx.dest}${path.sep}___eval.js`;
 
-        const jspath = `${ctx.src}.js`;
-        fs.writeFileSync(jspath, res.outputText);
+        if (ctx.src.endsWith('.ts')) {
+          const res = await typescript.transpileModule(fs.readFileSync(ctx.src, 'utf8'), {});
+          fs.writeFileSync(jsFilename, res.outputText);
+        }
 
-        await require(jspath).default(ctx);
-        fs.removeSync(jspath);
+        await require(jsFilename).default(ctx);
+        fs.removeSync(jsFilename);
       }
     }
   }

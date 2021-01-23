@@ -13,17 +13,15 @@ export default (input: any) => {
 
   const [code, response] = successResponse as [string, { schema: any, content: any }];
 
-  if (response.schema) {
-    // we are oa2
+  if (response.schema) {  // we are oa2
     return response.schema;
-  } else {
-    // we are oa3
-    if (response.content && response.content['application/json']) {
-      if (response.content['application/json'].schema) {
-        return response.content['application/json'].schema;
-      }
-    }
+  } else if (response.content) {  // we are oa3
+    // prefer application/json, otherwise return the first content-type in the list
+    const contentSchema = response.content['application/json'] || Object.entries(response.content)[0][1];
+
+    return contentSchema?.schema || contentSchema;
   }
+
   // We also check if the input contains any valid OA schema by looking for type or properties in the provided object
   // The typical use case here if for async api payloads
   return (input?.type || input?.properties) ? input : {};
