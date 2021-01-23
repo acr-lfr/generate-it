@@ -54,9 +54,9 @@ describe('e2e testing', () => {
   });
 
   it(`shouldn't mangle package.json`, async () => {
-    const jsonfile = `${testServerPath}${path.sep}package.json`;
+    const jsonfile = path.join(testServerPath, 'package.json');
     fs.writeFileSync(jsonfile, '{\n  "name": "hallo",\n  "scripts": {\n    "go-away": "rm -rf *"\n  }\n}');
-    let json = JSON.parse(fs.readFileSync(jsonfile, 'utf8'));
+    let json = require(jsonfile);
     expect(!!json.scripts['go-away']).toBe(true);
 
     await openapiNodegen({
@@ -68,7 +68,7 @@ describe('e2e testing', () => {
       template: tplUrl,
     });
 
-    json = JSON.parse(fs.readFileSync(jsonfile, 'utf8'));
+    json = require(jsonfile);
     expect(!!json.scripts['go-away']).toBe(true);
   });
 
