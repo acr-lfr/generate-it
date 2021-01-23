@@ -22,7 +22,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   const root = config.root;
 
   // const data = config.data
-  const loadFilePath = (fileName !== 'package.json.njk') ?
+  const loadFilePath = (fileName !== 'package.json') ?
     path.resolve(root, fileName) :
     path.resolve(process.cwd(), 'package.json');
 

@@ -6,6 +6,7 @@ import { tplUrl, clearTestServer } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 const testServerPath = path.join(process.cwd(), 'test_server');
+const swaggerFilePath = path.join(process.cwd(), 'test_swagger.yml');
 
 describe('e2e testing', () => {
   beforeAll(() => {
@@ -17,12 +18,11 @@ describe('e2e testing', () => {
 
   it('Should build without error', async (done) => {
     try {
-      const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
-        swaggerFilePath: ymlPath,
+        swaggerFilePath,
         targetDir: testServerPath,
         template: tplUrl,
         variables: {
@@ -39,12 +39,11 @@ describe('e2e testing', () => {
     try {
       // remove a survive file which should then be copied back over
       fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
-      const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
         mockServer: true,
-        swaggerFilePath: ymlPath,
+        swaggerFilePath,
         targetDir: testServerPath,
         template: tplUrl,
       });
@@ -52,6 +51,25 @@ describe('e2e testing', () => {
     } catch (e) {
       done(e);
     }
+  });
+
+  it(`shouldn't mangle package.json`, async () => {
+    const jsonfile = `${testServerPath}${path.sep}package.json`;
+    fs.writeFileSync(jsonfile, '{\n  "name": "hallo",\n  "scripts": {\n    "go-away": "rm -rf *"\n  }\n}');
+    let json = JSON.parse(fs.readFileSync(jsonfile, 'utf8'));
+    expect(!!json.scripts['go-away']).toBe(true);
+
+    await openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      mockServer: true,
+      swaggerFilePath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    });
+
+    json = JSON.parse(fs.readFileSync(jsonfile, 'utf8'));
+    expect(!!json.scripts['go-away']).toBe(true);
   });
 
   it('Should have the correct file hashes', async (done) => {
