@@ -20,7 +20,7 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
       if (src.indexOf('__mocks__') !== -1 && !additionalOptionsToInject.mockingServer) {
         return false;
       }
-      if (src.indexOf('.git') !== -1) {
+      if (src.endsWith('.git')) {
         return false;
       }
       if (packageJsonFound) {

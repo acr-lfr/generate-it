@@ -32,27 +32,27 @@ export default (targetDir: string, templatesDir: string): void => {
 
   if (newJson.scripts) {
     Object.keys(newJson.scripts).forEach((key: string) => {
-      if (!existing.scripts[key] || existing.scripts[key] !== newJson.scripts[key]) {
+      if (!existing?.scripts?.[key] || existing?.scripts?.[key] !== newJson.scripts[key]) {
         // @ts-ignore
-        scriptsChanged[key] = new buildDiff(newJson.scripts[key], existing.scripts[key]);
+        scriptsChanged[key] = new buildDiff(newJson.scripts[key], existing?.scripts?.[key]);
       }
     });
   }
 
   if (newJson.dependencies) {
     Object.keys(newJson.dependencies).forEach((key) => {
-      if (!existing.dependencies[key] || existing.dependencies[key] !== newJson.dependencies[key]) {
+      if (!existing?.dependencies?.[key] || existing?.dependencies?.[key] !== newJson.dependencies[key]) {
         // @ts-ignore
-        dependenciesChanged[key] = new buildDiff(newJson.dependencies[key], existing.dependencies[key]);
+        dependenciesChanged[key] = new buildDiff(newJson.dependencies[key], existing?.dependencies?.[key]);
       }
     });
   }
 
   if (newJson.devDependencies) {
     Object.keys(newJson.devDependencies).forEach((key) => {
-      if (!existing.devDependencies[key] || existing.devDependencies[key] !== newJson.devDependencies[key]) {
+      if (!existing?.devDependencies?.[key] || existing?.devDependencies?.[key] !== newJson.devDependencies[key]) {
         // @ts-ignore
-        devDependenciesChanged[key] = new buildDiff(newJson.devDependencies[key], existing.devDependencies[key]);
+        devDependenciesChanged[key] = new buildDiff(newJson.devDependencies[key], existing?.devDependencies?.[key]);
       }
     });
   }
