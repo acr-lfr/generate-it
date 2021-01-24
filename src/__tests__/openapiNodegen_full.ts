@@ -123,18 +123,12 @@ describe('e2e testing', () => {
   });
 
   it('should remove the ___eval file', async (done) => {
-    try {
-      fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.ts'));
+    if (fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.ts'))) {
       done('test_server/src/http/nodegen/tests/___eval.ts should not be there!');
-    } catch (e) {
-      // then the ts file is removed
-      try {
-        fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.js'));
-        done('test_server/src/http/nodegen/tests/___eval.ts should not be there!');
-      } catch (e) {
-        // then both files removed properly
-        done();
-      }
     }
+    if (fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.js'))) {
+      done('test_server/src/http/nodegen/tests/___eval.js should not be there!');
+    }
+    done();
   });
 });
