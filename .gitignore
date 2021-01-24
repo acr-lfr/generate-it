@@ -15,8 +15,3 @@ jest/
 .DS_Store
 npm-debug.log
 
-# test junk - ignore all, then unignore nodegen
-test_asyncapi/*
-!test_asyncapi/*/.openapi-nodegen
-test_server*/*
-!test_server*/*/.openapi-nodegen
