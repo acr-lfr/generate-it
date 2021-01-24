@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
-import { tplUrl, clearTestServer } from './helpers';
+import { clearTestServer, tplUrl } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 const testServerPath = path.join(process.cwd(), 'test_server');
@@ -109,7 +109,7 @@ describe('e2e testing', () => {
     for (let i = 0; i < expectedPathHashes.length; ++i) {
       const filePath = expectedPathHashes[i][0];
       const fileHash = expectedPathHashes[i][1];
-      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), { algorithm: 'md5' });
+      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
       if (hash !== fileHash) {
         const wrong = `Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`;
         mismatched.push(wrong);
@@ -120,5 +120,15 @@ describe('e2e testing', () => {
     } else {
       done();
     }
+  });
+
+  it('should remove the ___eval file', async (done) => {
+    if (fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.ts'))) {
+      done('test_server/src/http/nodegen/tests/___eval.ts should not be there!');
+    }
+    if (fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.js'))) {
+      done('test_server/src/http/nodegen/tests/___eval.js should not be there!');
+    }
+    done();
   });
 });
