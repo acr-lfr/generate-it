@@ -44,7 +44,7 @@
     "compare-versions": "^3.6.0",
     "deepmerge": "^4.2.2",
     "fs-extra": "^9.0.1",
-    "generate-it-mockers": "^1.0.5",
+    "generate-it-mockers": "^1.0.6",
     "inquirer": "^7.3.3",
     "js-yaml": "^3.14.1",
     "json-schema-ref-parser": "^9.0.6",
