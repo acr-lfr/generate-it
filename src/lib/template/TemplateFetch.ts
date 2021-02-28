@@ -121,9 +121,13 @@ class TemplateFetchURL {
         await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
       }
     } catch (e) {
-      console.error('Could not clone or pull the given git repository!');
+      console.error('Could not clone or pull the given git repository, clearing and cloning from fresh.');
       this.cleanSingleCacheDir(cacheDirectory);
-      throw e;
+      try {
+        await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
+      } catch (e) {
+        throw e;
+      }
     }
     return cacheDirectory;
   }
@@ -164,8 +168,8 @@ class TemplateFetchURL {
       console.log(
         `
 The` +
-          `generate-it`.bold +
-          `version must be greater or equal to the semver of the template tag but within the same major version.
+        `generate-it`.bold +
+        `version must be greater or equal to the semver of the template tag but within the same major version.
 You are currently using the following version:
 generate-it: ${pkVersion}
 template version tag: ${tplTag}
