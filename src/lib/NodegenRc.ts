@@ -9,19 +9,37 @@ class NodegenRc {
    * @param targetDir
    */
   public async fetch (tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
-    const base = targetDir;
-    const rcName = '.nodegenrc';
-    const localPath = path.join(base, rcName);
-    if (fs.pathExistsSync(localPath)) {
-      return this.validate(localPath);
+    const rcPath = this.checkWhichExists(targetDir);
+
+    if (rcPath) {
+      return this.validate(rcPath);
     } else {
-      const tplRcFilePath = path.join(tplDir, rcName);
+      const defaultName = '.nodegenrc';
+      const tplRcFilePath = path.join(tplDir, defaultName);
       if (!fs.pathExistsSync(tplRcFilePath)) {
-        throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
+        throw new Error('The tpl directory you are trying to use does not have a .nodegenrc file. Aborting the process.');
       }
+      const localPath = path.join(targetDir, defaultName);
       fs.copySync(tplRcFilePath, localPath);
       return this.validate(localPath);
     }
+  }
+
+  checkWhichExists (basePath: string): string | false {
+    const rcNames = ['.nodegenrc', '.generate-itrc'];
+    for (let i = 0; i < rcNames.length; i++) {
+      if (fs.pathExistsSync(path.join(basePath, rcNames[i]))) {
+        return rcNames[i];
+      }
+    }
+    // else try the .js ext
+    const rcJSNames = ['.nodegenrc.js', '.generate-itrc.js'];
+    for (let i = 0; i < rcJSNames.length; i++) {
+      if (fs.pathExistsSync(path.join(basePath, rcJSNames[i]))) {
+        return rcJSNames[i];
+      }
+    }
+    return false;
   }
 
   /**
@@ -34,8 +52,13 @@ class NodegenRc {
     try {
       nodegenRcOject = fs.readJsonSync(localNodegenPath);
     } catch (e) {
-      console.log('Failed to parse .nodegenrc file:' + localNodegenPath);
-      throw e;
+      // try to require the js file instead
+      try {
+        nodegenRcOject = require(localNodegenPath);
+      } catch (e) {
+        console.error(`Failed to parse ${localNodegenPath} file`, e);
+        throw e;
+      }
     }
     if (!nodegenRcOject.nodegenDir) {
       throw new Error('Missing .nodegenrc attribute: nodegenDir');
