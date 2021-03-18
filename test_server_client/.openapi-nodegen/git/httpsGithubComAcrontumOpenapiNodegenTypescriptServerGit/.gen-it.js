@@ -1,0 +1,11 @@
+module.exports = {
+  'nodegenDir': 'src/http/nodegen',
+  'nodegenMockDir': 'src/domains/__mocks__',
+  'nodegenType': 'server',
+  'helpers': {
+    'stub': {
+      'jwtType': 'JwtAccess',
+      'requestType': 'NodegenRequest'
+    }
+  }
+}
