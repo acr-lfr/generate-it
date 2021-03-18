@@ -28,17 +28,12 @@ class NodegenRc {
     const rcNames = [
       // original rc files containing json
       '.nodegenrc',
-      '.gen-itrc',
 
       // rc .json files containing json
       '.nodegenrc.json',
-      '.gen-itrc.json',
 
-      // js files exporting a default common js module containing the required js object
+      // rc .js (commonjs module)
       '.nodegenrc.js',
-      '.gen-itrc.js',
-      '.nodegen.js',
-      '.gen-it.js',
     ];
     for (let i = 0; i < rcNames.length; i++) {
       const fullRcPath = path.join(basePath, rcNames[i]);
