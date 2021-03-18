@@ -9,19 +9,42 @@ class NodegenRc {
    * @param targetDir
    */
   public async fetch (tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
-    const base = targetDir;
-    const rcName = '.nodegenrc';
-    const localPath = path.join(base, rcName);
-    if (fs.pathExistsSync(localPath)) {
-      return this.validate(localPath);
+    const fullRcPath = this.checkWhichExists(targetDir);
+
+    if (fullRcPath) {
+      return this.validate(fullRcPath.path);
     } else {
-      const tplRcFilePath = path.join(tplDir, rcName);
-      if (!fs.pathExistsSync(tplRcFilePath)) {
-        throw new Error('The tpl directory you are trying to use does not have a ' + rcName + ' file. Aborting the process.');
+      const tplRcFilePath = this.checkWhichExists(tplDir);
+      if (!tplRcFilePath) {
+        throw new Error('The tpl directory you are trying to use does not have a .nodegenrc file. Aborting the process.');
       }
-      fs.copySync(tplRcFilePath, localPath);
+      const localPath = path.join(targetDir, tplRcFilePath.filename);
+      fs.copySync(tplRcFilePath.path, localPath);
       return this.validate(localPath);
     }
+  }
+
+  checkWhichExists (basePath: string): { path: string, filename: string } | false {
+    const rcNames = [
+      // original rc files containing json
+      '.nodegenrc',
+
+      // rc .json files containing json
+      '.nodegenrc.json',
+
+      // rc .js (commonjs module)
+      '.nodegenrc.js',
+    ];
+    for (let i = 0; i < rcNames.length; i++) {
+      const fullRcPath = path.join(basePath, rcNames[i]);
+      if (fs.pathExistsSync(fullRcPath)) {
+        return {
+          filename: rcNames[i],
+          path: fullRcPath
+        };
+      }
+    }
+    return false;
   }
 
   /**
@@ -34,8 +57,13 @@ class NodegenRc {
     try {
       nodegenRcOject = fs.readJsonSync(localNodegenPath);
     } catch (e) {
-      console.log('Failed to parse .nodegenrc file:' + localNodegenPath);
-      throw e;
+      // try to require the js file instead
+      try {
+        nodegenRcOject = require(localNodegenPath);
+      } catch (e) {
+        console.error(`Failed to parse ${localNodegenPath} file`, e);
+        throw e;
+      }
     }
     if (!nodegenRcOject.nodegenDir) {
       throw new Error('Missing .nodegenrc attribute: nodegenDir');
