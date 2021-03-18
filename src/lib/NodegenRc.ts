@@ -9,34 +9,44 @@ class NodegenRc {
    * @param targetDir
    */
   public async fetch (tplDir: string, targetDir: string): Promise<NodegenRcInterface> {
-    const rcPath = this.checkWhichExists(targetDir);
+    const fullRcPath = this.checkWhichExists(targetDir);
 
-    if (rcPath) {
-      return this.validate(rcPath);
+    if (fullRcPath) {
+      return this.validate(fullRcPath.path);
     } else {
-      const defaultName = '.nodegenrc';
-      const tplRcFilePath = path.join(tplDir, defaultName);
-      if (!fs.pathExistsSync(tplRcFilePath)) {
+      const tplRcFilePath = this.checkWhichExists(tplDir);
+      if (!tplRcFilePath) {
         throw new Error('The tpl directory you are trying to use does not have a .nodegenrc file. Aborting the process.');
       }
-      const localPath = path.join(targetDir, defaultName);
-      fs.copySync(tplRcFilePath, localPath);
+      const localPath = path.join(targetDir, tplRcFilePath.filename);
+      fs.copySync(tplRcFilePath.path, localPath);
       return this.validate(localPath);
     }
   }
 
-  checkWhichExists (basePath: string): string | false {
-    const rcNames = ['.nodegenrc', '.generate-itrc'];
+  checkWhichExists (basePath: string): { path: string, filename: string } | false {
+    const rcNames = [
+      // original rc files containing json
+      '.nodegenrc',
+      '.gen-itrc',
+
+      // rc .json files containing json
+      '.nodegenrc.json',
+      '.gen-itrc.json',
+
+      // js files exporting a default common js module containing the required js object
+      '.nodegenrc.js',
+      '.gen-itrc.js',
+      '.nodegen.js',
+      '.gen-it.js',
+    ];
     for (let i = 0; i < rcNames.length; i++) {
-      if (fs.pathExistsSync(path.join(basePath, rcNames[i]))) {
-        return rcNames[i];
-      }
-    }
-    // else try the .js ext
-    const rcJSNames = ['.nodegenrc.js', '.generate-itrc.js'];
-    for (let i = 0; i < rcJSNames.length; i++) {
-      if (fs.pathExistsSync(path.join(basePath, rcJSNames[i]))) {
-        return rcJSNames[i];
+      const fullRcPath = path.join(basePath, rcNames[i]);
+      if (fs.pathExistsSync(fullRcPath)) {
+        return {
+          filename: rcNames[i],
+          path: fullRcPath
+        };
       }
     }
     return false;
