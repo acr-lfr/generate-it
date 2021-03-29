@@ -15,6 +15,7 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
       fullSwaggerObject.components.securitySchemes
     )
   ) {
+    console.error(`WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}, however no security definitions were found in the openapi file.`);
     return '';
   }
 
@@ -38,5 +39,8 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
       }
     });
   });
+  if (names.length === 0) {
+    console.error(`WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}, however no matching security definitions were found in the openapi file: ${JSON.stringify(securityDefinitions)}`);
+  }
   return names.length === 0 ? '' : '[' + names.join(', ') + ']';
 };
