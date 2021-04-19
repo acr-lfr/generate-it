@@ -49,7 +49,7 @@ class SwaggerUtils {
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required;
     const type = param.type || param.schema.type;
 
-    const nullable = paramTypeKey === ParamTypeKey.body ? '.allow(null)' : '';
+    const nullable = (paramTypeKey === ParamTypeKey.body && param['x-nullable'] !== false && param.nullable !== false) ? '.allow(null)' : '';
     const validationTrailer = (isRequired && !options.isFromArray ? '.required()' : nullable) + (!options.isFromArray ? ',' : '');
 
     if (['string', 'number', 'integer', 'boolean'].includes(type)) {
