@@ -9,7 +9,6 @@ import GeneratedComparison from '@/lib/generate/GeneratedComparison';
 import generateDirectoryStructure from '@/lib/generate/generateDirectoryStructure';
 import TemplateFetch from '@/lib/template/TemplateFetch';
 import OpenAPIBundler from '@/lib/openapi/OpenAPIBundler';
-import logTimeDiff from '@/lib/helpers/logTimeDiff';
 import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
 
 /**
@@ -17,40 +16,25 @@ import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
  * @return {Promise}
  */
 export default async (config: Config): Promise<boolean> => {
-  logTimeDiff(0, 0);
-  const startTime = new Date().getTime();
   globalHelpers(config.verbose, config.veryVerbose);
 
-  console.log('Fetching templates...'.green.bold);
-    const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir, config.dontUpdateTplCache);
-    let extendedConfig = await ConfigMerger.base(config, templatesDir);
-  logTimeDiff(startTime, (new Date()).getTime(), true);
+  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir, config.dontUpdateTplCache);
+  let extendedConfig = await ConfigMerger.base(config, templatesDir);
 
-  console.log('Preparing openapi object...'.green.bold);
-    const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, extendedConfig);
-  logTimeDiff(startTime, (new Date()).getTime(), true);
+  const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, extendedConfig);
 
-  console.log(`Printing full object to the .openapi-nodegen directory`.green.bold);
-    const baseCompiledObjectPath = path.join(GeneratedComparison.getCacheBaseDir(config.targetDir), 'apiObject.json');
-    fs.ensureFileSync(baseCompiledObjectPath);
-    fs.writeJsonSync(baseCompiledObjectPath, apiObject, {spaces: 2});
-    extendedConfig = ConfigMerger.injectSwagger(extendedConfig, apiObject);
-    checkRcOpIdArrIsValid(extendedConfig.swagger, extendedConfig.nodegenRc);
-  logTimeDiff(startTime, (new Date()).getTime(), true);
+  const baseCompiledObjectPath = path.join(GeneratedComparison.getCacheBaseDir(config.targetDir), 'apiObject.json');
+  fs.ensureFileSync(baseCompiledObjectPath);
+  fs.writeJsonSync(baseCompiledObjectPath, apiObject, {spaces: 2});
+  extendedConfig = ConfigMerger.injectSwagger(extendedConfig, apiObject);
+  checkRcOpIdArrIsValid(extendedConfig.swagger, extendedConfig.nodegenRc);
 
-  console.log('Injecting content to files...'.green.bold);
-    await FileIterator.walk(generateDirectoryStructure(extendedConfig, templatesDir), extendedConfig);
-  logTimeDiff(startTime, (new Date()).getTime(), true);
+  await FileIterator.walk(generateDirectoryStructure(extendedConfig, templatesDir), extendedConfig);
 
   if (!config.dontRunComparisonTool) {
-    console.log('Building stub file comparison list...'.green.bold);
-      const diffObject = await GeneratedComparison.fileDiffs(config.targetDir);
-      await GeneratedComparison.fileDiffsPrint(config.targetDir, diffObject);
-    logTimeDiff(startTime, (new Date()).getTime(), true);
-
-    console.log('Comparison version cleanup...'.green.bold);
-      GeneratedComparison.versionCleanup(config.targetDir);
-    logTimeDiff(startTime, (new Date()).getTime(), true);
+    const diffObject = await GeneratedComparison.fileDiffs(config.targetDir);
+    await GeneratedComparison.fileDiffsPrint(config.targetDir, diffObject);
+    GeneratedComparison.versionCleanup(config.targetDir);
   }
 
   const changelogFilePath = path.join(config.targetDir, 'changelog.generate-it.json');
@@ -68,7 +52,7 @@ export default async (config: Config): Promise<boolean> => {
     console.log('  ');
     console.log('See the changelog for details: '.green.bold + changelogFilePath.green);
   } else {
-    console.log('Complete'.green.bold);
+    console.log('Completed'.green.bold);
   }
   return true;
 };

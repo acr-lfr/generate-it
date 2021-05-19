@@ -1,3 +1,4 @@
+import 'colors';
 /**
  * Extracts the security key names from a path object and returns as a tpl string or array
  * @param pathObject
@@ -15,7 +16,10 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
       fullSwaggerObject.components.securitySchemes
     )
   ) {
-    console.error(`WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}, however no security definitions were found in the openapi file.`);
+    console.error(`
+    WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}
+    However no security definitions were found in the openapi file.
+    `.red.bold);
     return '';
   }
 
@@ -40,7 +44,10 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
     });
   });
   if (names.length === 0) {
-    console.error(`WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}, however no matching security definitions were found in the openapi file: ${JSON.stringify(securityDefinitions)}`);
+    console.error(`
+    WARNING: A path object was found with a security name(s): ${JSON.stringify(pathObject.security)}
+    However, no matching security definitions were found in the openapi file: ${JSON.stringify(securityDefinitions)}
+    `.red.bold);
   }
   return names.length === 0 ? '' : '[' + names.join(', ') + ']';
 };

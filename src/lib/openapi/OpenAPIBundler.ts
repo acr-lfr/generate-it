@@ -22,35 +22,25 @@ class OpenAPIBundler {
   public async bundle (filePath: string, config: ConfigExtendedBase) {
     let content;
 
-    console.log('Reading file: ' + filePath);
     content = fs.readFileSync(filePath);
     this.copyInputFileToProject(filePath, config.targetDir);
 
-    console.log('Parsing file contents');
     content = this.parseContent(content);
 
-    console.log('Injecting path interface names');
     content = await (new OpenAPIInjectInterfaceNaming(content, config)).inject();
 
-    console.log('De-referencing object');
     content = await this.dereference(content);
 
-    console.log('Calculating all request definitions to interface relations');
     content = await (new OpenAPIInjectInterfaceNaming(content, config)).mergeParameters();
 
-    console.log('Resolving all allOf references');
     content = openApiResolveAllOfs(content);
 
-    console.log('Injecting interface texts');
     content = await this.injectInterfaces(content, config);
 
-    console.log('Injecting operationId array');
     content.operationIds = await this.fetchOperationIdsArray(content);
 
-    console.log('Bundling the full object');
     content = await this.bundleObject(content);
 
-    console.log('Injecting the endpoint names');
     return JSON.parse(JSON.stringify(
       this.pathEndpointInjection(content, config),
     ));
@@ -63,7 +53,6 @@ class OpenAPIBundler {
    */
   public copyInputFileToProject (filepath: string, targetDir: string): void {
     const saveTo = path.join(targetDir, 'openapi-nodegen-api-file.yml');
-    console.log('Writing the input yml file to: ' + saveTo);
     fs.copyFileSync(filepath, saveTo);
   }
 
