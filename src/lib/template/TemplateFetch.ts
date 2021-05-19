@@ -58,7 +58,6 @@ class TemplateFetchURL {
       );
       throw new Error('Aborting openapi-nodegen, see above comments.');
     }
-    console.log('Removing the cacheDir: ' + cachePath);
     fs.removeSync(cachePath);
   }
 
@@ -82,7 +81,6 @@ class TemplateFetchURL {
    * @return {boolean}
    */
   public gitCacheExists (cachePath: string) {
-    console.log('Checking for path: ' + cachePath);
     return fs.existsSync(cachePath);
   }
 
@@ -107,11 +105,11 @@ class TemplateFetchURL {
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
     const urlParts = this.getUrlParts(url);
     if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
-      console.log('Template cache already found and bypass update true: ' + url);
       return cacheDirectory;
     }
     if (dontUpdateTplCache) {
-      console.log('dontUpdateTplCache was true however the cache of the templates did not already exist.');
+      console.log('dontUpdateTplCache was true however the cache of the templates did not already exist...');
+      console.log('Proceeding to clone');
     }
     try {
       if (this.gitCacheExists(cacheDirectory) && !urlParts.b) {
