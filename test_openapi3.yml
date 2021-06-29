@@ -161,6 +161,15 @@ paths:
         - apiToken: []
 servers:
   - url: https://samples.openweathermap.org/data/2.5
+  - url: https://api.example.com
+  - url: https://api.example.com:8443/v1/reports
+  - url: http://localhost:3025/v1
+  - url: http://10.0.81.36/v1
+  - url: ws://api.example.com/v1
+  - url: wss://api.example.com/v1
+  - url: /v1/reports
+  - url: /
+  - url: //api.example.com
 components:
   parameters:
     pathId:
