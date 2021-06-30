@@ -10,6 +10,7 @@ import ucFirst from '@/lib/template/helpers/ucFirst';
 import ApiIs from '@/lib/helpers/ApiIs';
 import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
 import endpointNameCalculation from '@/lib/helpers/endpointNameCalculation';
+import getBaseUrl from '@/lib/helpers/getBaseUrl';
 
 const RefParser = require('json-schema-ref-parser');
 
@@ -40,6 +41,10 @@ class OpenAPIBundler {
     content.operationIds = await this.fetchOperationIdsArray(content);
 
     content = await this.bundleObject(content);
+
+    if (!content.basePath) {
+      content.basePath = getBaseUrl(content);
+    }
 
     return JSON.parse(JSON.stringify(
       this.pathEndpointInjection(content, config),
