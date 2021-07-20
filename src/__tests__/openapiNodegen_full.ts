@@ -21,6 +21,7 @@ describe('e2e testing', () => {
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
+        updateDependenciesFromTpl: false,
         mockServer: true,
         swaggerFilePath,
         targetDir: testServerPath,
@@ -42,6 +43,7 @@ describe('e2e testing', () => {
       await openapiNodegen({
         dontRunComparisonTool: false,
         dontUpdateTplCache: true,
+        updateDependenciesFromTpl: false,
         mockServer: true,
         swaggerFilePath,
         targetDir: testServerPath,
@@ -62,6 +64,7 @@ describe('e2e testing', () => {
     await openapiNodegen({
       dontRunComparisonTool: false,
       dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
       mockServer: true,
       swaggerFilePath,
       targetDir: testServerPath,

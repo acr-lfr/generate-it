@@ -22,6 +22,7 @@ it('Should build without error', async () => {
   const wasGenerated = await openapiNodegen({
     dontRunComparisonTool: false,
     dontUpdateTplCache: true,
+    updateDependenciesFromTpl: false,
     mockServer: false,
     swaggerFilePath: ymlPath,
     targetDir: testServerPath,

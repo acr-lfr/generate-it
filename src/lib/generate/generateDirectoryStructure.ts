@@ -1,5 +1,5 @@
 import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
-import displayDependencyDiffs from '@/lib/diff/displayDependencyDiffs';
+import DisplayDependencyDiffs from '@/lib/diff/DisplayDependencyDiffs';
 import generateBaseStructure from '@/lib/generate/generateBaseStructure';
 import resetNodegenFolder from '@/lib/resetNodegenFolder';
 import 'colors';
@@ -16,7 +16,7 @@ import path from 'path';
  * @param  {String}        templatesDir - The absolute path the templates directory
  * @return {boolean}
  */
-export default (config: ConfigExtendedBase, templatesDir: string) => {
+export default async (config: ConfigExtendedBase, templatesDir: string): Promise<boolean> => {
   const targetDir = config.targetDir;
   let IS_FIRST_RUN = false;
   if (!fs.existsSync(path.join(targetDir, config.nodegenRc.nodegenDir))) {
@@ -27,7 +27,7 @@ export default (config: ConfigExtendedBase, templatesDir: string) => {
       (config.mockServer) ? {mockingServer: true} : {});
   } else {
     resetNodegenFolder(targetDir, templatesDir, config.mockServer, config.nodegenRc);
-    displayDependencyDiffs(targetDir, templatesDir);
+    await DisplayDependencyDiffs.check(targetDir, templatesDir, config.updateDependenciesFromTpl);
   }
   console.log('Nodegen directory structure ready');
   return IS_FIRST_RUN;
