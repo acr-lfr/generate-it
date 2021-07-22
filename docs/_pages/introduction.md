@@ -10,13 +10,18 @@ Build your complex yaml files from [boats](https://www.npmjs.com/package/boats) 
 
 ## Introduction
 
-Write a well defined RESTful API specification file for server or client (eg with [BOATS](https://www.npmjs.com/package/boats)) then [Generate-It](https://www.npmjs.com/package/generate-it). 
+Generate-it is very similar to swagger-codegen except.. it does a lot more and there is no Java code in sight.
 
-Checkout the known-template page to see what can be built.
+Use generate-it with openapi and asyncapi yaml files.
 
-Generate-it is very similar to swagger-codegen except:
-- The core engine is written 100% in TypeScript and only needs Node LTS to run and is currently designed to primarily generate TypeScript code.
-- The template engine is the Mozilla Nunjucks engine extended with Lodash & a few custom helpers.
-- All the template files to generate content have been removed from the core engine.
-  - The core downloads the template files from a git URL, eg from GitHub, of your choosing.
-  - This allows for tpl changes to be released without having to publish a new version of the core.
+Quick example:
+```bash
+git clone git@github.com:j-d-carmichael/generate-it-dummy.git
+cd generate-it-dummy
+npm i
+npm run generate:server
+```
+
+You now have a complete server complete with input and output validation delivering mocked output based on the types defined in the openapi file.
+
+Try changing the openapi file and see how http layer is automatically updated after a re-run of the `generate:server` script, but note that the files in the domain layer after their 1st generation are not altered again.
