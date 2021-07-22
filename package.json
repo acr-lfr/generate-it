@@ -2,9 +2,8 @@
   "name": "generate-it",
   "version": "5.31.0",
   "description": "Generate-it, will generate servers, clients, web-socket and anything else you can template with nunjucks from yml files (openapi/asyncapi)",
-  "author": "Acrontum GmbH",
+  "author": "Acrontum GmbH & Liffery Ltd",
   "license": "MIT",
-  "main": "./build/openapiNodegen.js",
   "bin": {
     "generate-it": "./build/cli.js"
   },
