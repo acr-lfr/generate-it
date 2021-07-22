@@ -28,6 +28,7 @@ versionCheck(
     veryVerbose: cli.program.veryVerbose || false,
     dontRunComparisonTool: cli.program.dontRunComparisonTool,
     dontUpdateTplCache: cli.program.dontUpdateTplCache,
+    updateDependenciesFromTpl: cli.program.updateDependenciesFromTpl,
     swaggerFilePath: cli.swaggerFile,
     targetDir: cli.program.output,
     template: cli.program.template,

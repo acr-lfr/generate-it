@@ -1,5 +1,5 @@
 # Generate-It
-[![Dependencies](https://david-dm.org/acrontum/generate-it.svg)](https://david-dm.org/acrontum/generate-it) | [![Build Status](https://travis-ci.org/acrontum/generate-it.svg?branch=master)](https://travis-ci.org/acrontum/generate-it) | [codecov](https://codecov.io/gh/acrontum/generate-it/)
+[![Dependencies](https://david-dm.org/acrontum/generate-it.svg)](https://david-dm.org/acrontum/generate-it) | [![Build Status](https://travis-ci.org/acrontum/generate-it.svg?branch=master)](https://travis-ci.org/acrontum/generate-it)
 
 Generate-It is a tool to generate RESTful servers/clients without Java.
 
@@ -29,4 +29,4 @@ The templates should be hosted on a publicly available https url, eg: [openapi-n
 It is strongly recommended to use the OpenApi DSL package [boats](https://www.npmjs.com/package/boats) to standardize OpenAPI/AsyncAPI file architecture and operation IDs and more.
 ___
 
-Generate-It is an opensourced project from [acrontum](https://www.acrontum.de/) written in TypeScript and is tested on NodeJS 12 LTS. 
+Generate-It is an opensource project from [acrontum](https://www.acrontum.de/) and [Liffery](https://www.liffery.com/) written in TypeScript and is tested on NodeJS 14 LTS. 

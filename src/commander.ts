@@ -1,9 +1,9 @@
 import 'colors';
 import program from 'commander';
+import commander from 'commander';
 import path from 'path';
 import commanderParseOutput from '@/commanderParseOutput';
 import commanderCollectArray from '@/commanderCollectObject';
-import commander from 'commander';
 
 const packageInfo = require('../package.json');
 
@@ -13,6 +13,7 @@ interface Program extends commander.CommanderStatic {
   output?: string;
   'dont-update-tpl-cache'?: boolean;
   'dont-run-comparison-tool'?: boolean;
+  'update-dependencies-from-tpl'?: boolean;
   'segment-first-grouping'?: number;
   'segment-second-grouping'?: number;
   variables?: any[];
@@ -39,6 +40,7 @@ export default (inputArgsArray: string[]): CommanderResponse => {
     .requiredOption('-t, --template <helpers>', 'Full URL to a public git repo, eg github')
     .option('--dont-update-tpl-cache', 'If the given git url is already cached does not attempt to update', false)
     .option('--dont-run-comparison-tool', 'Skips the stub file comparison tool and version cleanup', false)
+    .option('-u, --update-dependencies-from-tpl', 'Run the npm install scripts inline with the tpl package.json opposed to displaying for manual update', false)
     .option('--segment-first-grouping <number>', 'If set will split a domain by group the 1 qty of segments defined in this setting, see endpointNameCalculation.ts')
     .option('--segment-second-grouping <number>', 'Assuming the 1st grouping is set, this will group the 2nd group into another 2 groups, see endpointNameCalculation.ts')
     .option('-$, --variables [value]', 'Array of variables to pass to the templates, eg "-$ httpLibImportStr=@/services/HttpService -$ apikey=321654987"', commanderCollectArray, {})
@@ -49,6 +51,8 @@ export default (inputArgsArray: string[]): CommanderResponse => {
 
   if (!swaggerFile) {
     throw new Error('> Path to Swagger file not provided.'.red);
+  } else if (program.program.output !== process.cwd() && program.program.updateDependenciesFromTpl) {
+    throw new Error('> Currently the auto dependency updates cannot be run when the target is not the current directory'.red);
   } else {
     return {
       program,
