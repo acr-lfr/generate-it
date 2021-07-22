@@ -1,0 +1,15 @@
+{
+  "name": "generate-it-docs",
+  "version": "1.0.0",
+  "scripts": {
+    "docsify-cli": "node node_modules/docsify-cli/bin/docsify",
+    "docsify-serve": "npm run docsify-cli -- serve ./"
+  },
+  "dependencies": {
+    "docsify": "^4.9.4"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.1",
+    "docsify-cli": "^4.3.0"
+  }
+}

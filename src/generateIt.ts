@@ -29,7 +29,10 @@ export default async (config: Config): Promise<boolean> => {
   extendedConfig = ConfigMerger.injectSwagger(extendedConfig, apiObject);
   checkRcOpIdArrIsValid(extendedConfig.swagger, extendedConfig.nodegenRc);
 
-  await FileIterator.walk(generateDirectoryStructure(extendedConfig, templatesDir), extendedConfig);
+  await FileIterator.walk(
+    await generateDirectoryStructure(extendedConfig, templatesDir),
+    extendedConfig
+  );
 
   if (!config.dontRunComparisonTool) {
     const diffObject = await GeneratedComparison.fileDiffs(config.targetDir);
