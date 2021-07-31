@@ -36,7 +36,7 @@ export default async (config: Config): Promise<boolean> => {
 
   if (!config.dontRunComparisonTool) {
     const diffObject = await GeneratedComparison.fileDiffs(config.targetDir);
-    await GeneratedComparison.fileDiffsPrint(config.targetDir, diffObject);
+    GeneratedComparison.fileDiffsPrint(config.targetDir, diffObject);
     GeneratedComparison.versionCleanup(config.targetDir);
   }
 
