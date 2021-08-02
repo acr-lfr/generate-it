@@ -91,12 +91,14 @@ class SwaggerUtils {
       }
       validationText += validationTrailer;
     } else if (type === 'array') {
-      validationText += 'Joi.array().items(';
-      validationText += this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
+      validationText += 'Joi.array()';
+      const itemsContent = this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
         isFromArray: true,
         paramTypeKey
       });
-      validationText += ')';
+      if (itemsContent) {
+        validationText += `.items(${itemsContent})`;
+      }
 
       if (options.paramTypeKey && options.paramTypeKey === 'query') {
         validationText += '.single()';
