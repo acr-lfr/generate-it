@@ -65,17 +65,15 @@ class GeneratedComparison {
     const newVersionKey = versions.pop();
     const oldVersionKey = versions.pop();
 
-    await Promise.all(
-      Object.keys(json.versions[newVersionKey]).map(async (directory) => {
-        if (!json.versions[oldVersionKey][directory]) {
-          return;
-        }
+    for (const directory of Object.keys(json.versions[newVersionKey])) {
+      if (!json.versions[oldVersionKey][directory]) {
+        return;
+      }
 
-        const oldFilePath = path.join(directory, oldVersionKey);
-        const newFilePath = path.join(directory, newVersionKey);
-        json.versions[newVersionKey][directory].diff = await fileDiff(oldFilePath, newFilePath);
-      })
-    );
+      const oldFilePath = path.join(directory, oldVersionKey);
+      const newFilePath = path.join(directory, newVersionKey);
+      json.versions[newVersionKey][directory].diff = await fileDiff(oldFilePath, newFilePath);
+    }
 
     return json.versions[newVersionKey];
   }
