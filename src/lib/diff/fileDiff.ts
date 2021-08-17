@@ -13,22 +13,21 @@ export default async (oldTextFile: string = '', newTextFile: string = ''): Promi
   let difference = '';
   let minus = 0;
   let plus = 0;
+
   m.on('-', (line: any, obj: any) => {
     ++minus;
-    const diffLine = `
-@line: ` + obj.lineNumber + `-
-` + line;
+    const diffLine = `\n@line: ${obj.lineNumber}-\n${line}`;
     difference += diffLine.red;
   });
 
   m.on('+', (line: any, obj: any) => {
     ++plus;
-    const diffLine = `
-@line: ` + obj.lineNumber + `+
-` + line;
+    const diffLine = `\n@line: ${obj.lineNumber}+\n${line}`;
     difference += diffLine.green;
   });
-  m.diff(oldTextFile, newTextFile);
+
+  await m.diff(oldTextFile, newTextFile);
+
   return {
     minus,
     plus,
