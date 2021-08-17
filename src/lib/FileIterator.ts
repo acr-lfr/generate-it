@@ -66,7 +66,7 @@ class FileWalker {
         const jsFilename: string = `${ctx.dest}${path.sep}___eval.js`;
 
         if (ctx.src.endsWith('.ts')) {
-          const res = await typescript.transpileModule(fs.readFileSync(ctx.src, 'utf8'), {});
+          const res = typescript.transpileModule(fs.readFileSync(ctx.src, 'utf8'), {});
           fs.removeSync(path.join(ctx.dest, '___eval.ts'));
           fs.writeFileSync(jsFilename, res.outputText);
         }
