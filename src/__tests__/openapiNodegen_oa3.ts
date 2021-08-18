@@ -42,7 +42,7 @@ describe('e2e testing', () => {
       // Check domains (STUB file)
       [
         'test_server/src/domains/domainsImporter.ts',
-        '40c2afe0eb99354e208ba9833e9fbfd4',
+        'f320fd1f45c82774fce9cf19e42cd0a5',
       ],
       [
         'test_server/src/domains/WeatherDomain.ts',
@@ -56,7 +56,7 @@ describe('e2e testing', () => {
       // Check the interface index file (OTHER file)
       [
         'test_server/src/http/nodegen/interfaces/index.ts',
-        'db175959c900708e577b790970f7fee0',
+        '0a4658f2480054f9a3a416f358deee2f',
       ],
       // Check the security definition files (OTHER file)
       [
