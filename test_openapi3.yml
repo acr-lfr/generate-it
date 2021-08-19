@@ -159,6 +159,22 @@ paths:
           description: Round not found
       security:
         - apiToken: []
+  /weather-upload:
+    post:
+      tags:
+        - Wet-er
+      operationId: weatherUpload
+      summary: Upload new weather
+      description: Upload new weather (ie in case it's summer and you, a normal person, prefer winter)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WeatherUpload'
+      responses:
+        '201':
+          description: successful operation
 servers:
   - url: https://samples.openweathermap.org/data/2.5
   - url: https://api.example.com
@@ -344,3 +360,14 @@ components:
           type: string
         cod:
           type: number
+    WeatherUpload:
+      type: object
+      properties:
+        rain:
+          type: boolean
+        pdfAboutHowMuchBetterWinterIs:
+          type: string
+          format: binary
+        startDate:
+          type: string
+          format: date
