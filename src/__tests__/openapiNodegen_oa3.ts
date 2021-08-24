@@ -15,25 +15,23 @@ describe('e2e testing', () => {
     clearTestServer();
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      const ymlPath = path.join(process.cwd(), 'test_openapi3.yml');
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+
+    const ymlPath = path.join(process.cwd(), 'test_openapi3.yml');
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should have the correct file hashes', async (done) => {
+  it('Should have the correct file hashes', async () => {
     // If these tests fail the either:
     // A) The test_swagger.yml has changed
     // B) The tpl for the typescipt server has change
@@ -99,10 +97,8 @@ describe('e2e testing', () => {
       }
     }
     if (mismatched.length > 0) {
-      console.log(mismatched);
-      done(mismatched);
-    } else {
-      done();
+      console.error(mismatched);
     }
+    expect(mismatched.length).toBe(0);
   });
 });

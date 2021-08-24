@@ -16,43 +16,37 @@ describe('e2e testing', () => {
     clearTestServer();
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        swaggerFilePath,
-        targetDir: testServerPath,
-        template: tplUrl,
-        variables: {
-          name: 'Generate-it Typescript Server'
-        }
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      swaggerFilePath,
+      targetDir: testServerPath,
+      template: tplUrl,
+      variables: {
+        name: 'Generate-it Typescript Server'
+      }
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should build again without error on top of the existing generation', async (done) => {
-    try {
-      // remove a survive file which should then be copied back over
-      fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        swaggerFilePath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build again without error on top of the existing generation', (done) => {
+    // remove a survive file which should then be copied back over
+    fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      swaggerFilePath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
   it(`shouldn't mangle package.json`, async () => {
@@ -75,7 +69,7 @@ describe('e2e testing', () => {
     expect(!!json.scripts['go-away']).toBe(true);
   });
 
-  it('Should have the correct file hashes', async (done) => {
+  it('Should have the correct file hashes', async () => {
     // If these tests fail the either:
     // A) The test_swagger.yml has changed
     // B) The tpl for the typescipt server has change
@@ -119,13 +113,12 @@ describe('e2e testing', () => {
       }
     }
     if (mismatched.length > 0) {
-      done(mismatched);
-    } else {
-      done();
+      console.error(mismatched);
     }
+    expect(mismatched.length).toBe(0);
   });
 
-  it('should remove the ___eval file', async (done) => {
+  it('should remove the ___eval file', (done) => {
     if (fs.existsSync(path.join(process.cwd(), 'test_server/src/http/nodegen/tests/___eval.ts'))) {
       done('test_server/src/http/nodegen/tests/___eval.ts should not be there!');
     }

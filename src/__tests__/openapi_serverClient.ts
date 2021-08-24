@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import openapiNodegen from '@/generateIt';
-import { tplUrl, tplClientServer, clearTestServer } from './helpers';
+import { clearTestServer, tplClientServer, tplUrl } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 const dirName = 'test_server_client';
@@ -17,39 +17,34 @@ describe('e2e testing', () => {
     clearTestServer(dirName);
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      await openapiNodegen({
-        dontRunComparisonTool: true,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: false,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+    openapiNodegen({
+      dontRunComparisonTool: true,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: false,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should build the client', async (done) => {
-    try {
-      await openapiNodegen({
-        dontRunComparisonTool: true,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: false,
-        swaggerFilePath: ymlPath,
-        targetDir: testClientPath,
-        template: tplClientServer,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build the client', (done) => {
+    openapiNodegen({
+      dontRunComparisonTool: true,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: false,
+      swaggerFilePath: ymlPath,
+      targetDir: testClientPath,
+      template: tplClientServer,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
+
   it('should edit the client, regen and see the edit still present', async () => {
     const checkPath = path.join(testClientPath, 'lib/HttpService.ts');
     fs.writeFileSync(checkPath, '//', 'utf8');
