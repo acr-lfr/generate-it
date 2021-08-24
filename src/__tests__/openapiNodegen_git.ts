@@ -16,21 +16,18 @@ describe('e2e testing', () => {
     fs.removeSync(testServerName);
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: false,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+    const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: false,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 });

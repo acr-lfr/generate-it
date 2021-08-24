@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import openapiNodegen from '@/generateIt';
 import hasha from 'hasha';
-import { tplUrl, clearTestServer } from './helpers';
+import { clearTestServer, tplUrl } from './helpers';
 
 jest.setTimeout(60 * 1000); // in milliseconds
 const testServerPath = path.join(process.cwd(), 'test_server');
@@ -15,50 +15,46 @@ describe('e2e testing', () => {
     clearTestServer();
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        segmentFirstGrouping: 1,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-        variables: {
-          name: 'Generate-it Typescript Server'
-        }
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+
+    const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      segmentFirstGrouping: 1,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+      variables: {
+        name: 'Generate-it Typescript Server'
+      }
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should build again without error on top of the existing generation', async (done) => {
-    try {
-      // remove a survive file which should then be copied back over
-      fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
-      const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        segmentFirstGrouping: 1,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build again without error on top of the existing generation', (done) => {
+
+    // remove a survive file which should then be copied back over
+    fs.removeSync(path.join(process.cwd(), 'test_server/src/services/HttpHeadersCacheService.ts'));
+    const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      segmentFirstGrouping: 1,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should have the correct file hashes', async (done) => {
+  it('Should have the correct file hashes', async () => {
     // If these tests fail the either:
     // A) The test_swagger.yml has changed
     // B) The tpl for the typescipt server has change
@@ -95,16 +91,15 @@ describe('e2e testing', () => {
     for (let i = 0; i < expectedPathHashes.length; ++i) {
       const filePath = expectedPathHashes[i][0];
       const fileHash = expectedPathHashes[i][1];
-      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), { algorithm: 'md5' });
+      const hash = await hasha.fromFile(path.join(process.cwd(), filePath), {algorithm: 'md5'});
       if (hash !== fileHash) {
         const wrong = `Hash mis-match for file ${filePath}. Expected hash ${fileHash} but got ${hash}`;
         mismatched.push(wrong);
       }
     }
     if (mismatched.length > 0) {
-      done(mismatched);
-    } else {
-      done();
+      console.error(mismatched);
     }
+    expect(mismatched.length).toBe(0);
   });
 });
