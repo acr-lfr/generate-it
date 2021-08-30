@@ -15,25 +15,23 @@ describe('e2e testing', () => {
     clearTestServer();
   });
 
-  it('Should build without error', async (done) => {
-    try {
-      const ymlPath = path.join(process.cwd(), 'test_openapi3.yml');
-      await openapiNodegen({
-        dontRunComparisonTool: false,
-        dontUpdateTplCache: true,
-        updateDependenciesFromTpl: false,
-        mockServer: true,
-        swaggerFilePath: ymlPath,
-        targetDir: testServerPath,
-        template: tplUrl,
-      });
-      done();
-    } catch (e) {
-      done(e);
-    }
+  it('Should build without error', (done) => {
+
+    const ymlPath = path.join(process.cwd(), 'test_openapi3.yml');
+    openapiNodegen({
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: true,
+      updateDependenciesFromTpl: false,
+      mockServer: true,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: tplUrl,
+    })
+      .then(() => done())
+      .catch(e => done(e));
   });
 
-  it('Should have the correct file hashes', async (done) => {
+  it('Should have the correct file hashes', async () => {
     // If these tests fail the either:
     // A) The test_swagger.yml has changed
     // B) The tpl for the typescipt server has change
@@ -42,7 +40,7 @@ describe('e2e testing', () => {
       // Check domains (STUB file)
       [
         'test_server/src/domains/domainsImporter.ts',
-        '40c2afe0eb99354e208ba9833e9fbfd4',
+        'f320fd1f45c82774fce9cf19e42cd0a5',
       ],
       [
         'test_server/src/domains/WeatherDomain.ts',
@@ -56,7 +54,7 @@ describe('e2e testing', () => {
       // Check the interface index file (OTHER file)
       [
         'test_server/src/http/nodegen/interfaces/index.ts',
-        'db175959c900708e577b790970f7fee0',
+        '0a4658f2480054f9a3a416f358deee2f',
       ],
       // Check the security definition files (OTHER file)
       [
@@ -99,10 +97,8 @@ describe('e2e testing', () => {
       }
     }
     if (mismatched.length > 0) {
-      console.log(mismatched);
-      done(mismatched);
-    } else {
-      done();
+      console.error(mismatched);
     }
+    expect(mismatched.length).toBe(0);
   });
 });

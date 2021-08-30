@@ -29,17 +29,17 @@ const asyncapi = {
   }
 };
 
-it('should not throw an error for openapi', async (done) => {
+it('should not throw an error for openapi', (done) => {
   checkRcOpIdArrIsValid(openapi, nodegenRc);
   done();
 });
 
-it('should not throw an error for asyncapi', async (done) => {
+it('should not throw an error for asyncapi', (done) => {
   checkRcOpIdArrIsValid(asyncapi, nodegenRc);
   done();
 });
 
-it('should throw an error for asyncapi with invalid subscribe id', async (done) => {
+it('should throw an error for asyncapi with invalid subscribe id', (done) => {
   nodegenRc.helpers.subscribeOpIds.push('timmy');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);
@@ -50,7 +50,7 @@ it('should throw an error for asyncapi with invalid subscribe id', async (done) 
   }
 });
 
-it('should throw an error for asyncapi with invalid publish id', async (done) => {
+it('should throw an error for asyncapi with invalid publish id', (done) => {
   nodegenRc.helpers.publishOpIds.push('timmy');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);
@@ -61,7 +61,7 @@ it('should throw an error for asyncapi with invalid publish id', async (done) =>
   }
 });
 
-it('should throw an error for asyncapi with any duplicate id', async (done) => {
+it('should throw an error for asyncapi with any duplicate id', (done) => {
   nodegenRc.helpers.publishOpIds.push('smith');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);
@@ -70,7 +70,9 @@ it('should throw an error for asyncapi with any duplicate id', async (done) => {
     nodegenRc.helpers.publishOpIds.pop();
     done();
   }
+});
 
+it('should throw an error for asyncapi with any duplicate id', (done) => {
   nodegenRc.helpers.subscribeOpIds.push('bob');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);

@@ -53,7 +53,7 @@ it('output folder should have all the files', async () => {
   expect(files.includes('subscribeHandles/MsAuthCacheConnectionSubscribeHandle.ts')).toBe(true);
 });
 
-it('should pass the hash checks for key files', async (done) => {
+it('should pass the hash checks for key files', async () => {
   const expectedPathHashes = [
     ['test_asyncapi/rabbitMQ/operationIds.ts', '1696b25d08581f736d12fbe4ff411181'],
     ['test_asyncapi/rabbitMQ/Service.ts', '0fffde6c4b3b2ac7b1ace14b90994bd7']
@@ -70,10 +70,9 @@ it('should pass the hash checks for key files', async (done) => {
     }
   }
   if (mismatched.length > 0) {
-    done(mismatched);
-  } else {
-    done();
+    console.error(mismatched);
   }
+  expect(mismatched.length).toBe(0);
 });
 
 it('should have the correct YAML structure', async () => {
