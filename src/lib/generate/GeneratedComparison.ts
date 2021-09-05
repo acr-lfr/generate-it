@@ -67,7 +67,7 @@ class GeneratedComparison {
 
     for (const directory of Object.keys(json.versions[newVersionKey])) {
       if (!json.versions[oldVersionKey][directory]) {
-        return;
+        continue;
       }
 
       const oldFilePath = path.join(directory, oldVersionKey);
@@ -86,6 +86,9 @@ class GeneratedComparison {
   public fileDiffsPrint (outputDir: string, input: any): void {
     if (typeof input === 'string' && input !== '') {
       return console.log(input);
+    }
+    if (typeof input === 'undefined' || input === null) {
+      return;
     }
 
     const buildDiff = (add: number, minus: number) => {
