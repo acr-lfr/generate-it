@@ -140,9 +140,9 @@ Based on the definition of the responses in the swagger/openapi file automatical
 
 The [generate-it-typescript-server](https://github.com/acrontum/openapi-nodegen-typescript-server/) use of the `--mocked` flag to injected generate-it-mockers into the [domain methods](https://github.com/acrontum/openapi-nodegen-typescript-server/blob/master/src/domains/___stub.ts.njk#L19). This allows a team to design an API first, setup a microservice quickly to deliver mocked data thus allowing the frontend dev(s) and backend dev(s) to then build without depending on each other.
 
-## Pass full request object to ___stub method
+## Pass full request / response object to \_\_\_stub method
 
-Occasionally you will find that you just want to pass the full request object to the ___stub file method.
+Occasionally you will find that you just want to pass the full request object to the \_\_\_stub file method.
 
 For example, in the typescript server it is sometimes needed that you have the full request object passed to a domain method.
 
@@ -165,6 +165,8 @@ get:
         $ref: '#/definitions/Pets'
   x-passRequest: true        
 ```
+
+`x-passResponse` works the same way, but provides the express response object. **NOTE** you must manually complete the response (eg `res.json({ hello: 'world' })`), otherwise your HTTP call will hang.  
 
 #### Allow non authenticated request to access domain
 With some API designs there is the need to offer 1 API route which returns content for authenticated users and non-authenticated users. The content could be a newsfeed for example with authenticated users getting a extra attributes in the new objects returned compared to non-authenticated users.
