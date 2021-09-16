@@ -73,6 +73,16 @@ const params = [{
           },
         },
     },
+}, {
+  in: 'query',
+  name: 'objectInsideQuery',
+  schema: {
+    type: 'object',
+    properties: [{
+      name: 'prop1',
+      type: 'string'
+    }]
+  }
 }];
 
 test('Returns joi with 2 required params', () => {
@@ -158,5 +168,14 @@ test('add unknown true for headers', () => {
     }),
   ).toBe(
     `'headers': Joi.object({'sort':Joi.string().valid('asc', 'desc').required(),'access':Joi.string().regex(/^Bearer .+$/).required(),}).unknown(true),'query': Joi.object({'limit':Joi.number().integer(),}),`,
+  );
+});
+
+
+test('query item key is properly created inside the query object', () => {
+  expect(
+    SwaggerUtils.createJoiValidation('get', {parameters: [params[6]]}),
+  ).toBe(
+    `'query': Joi.object({'objectInsideQuery': Joi.object({'prop1':Joi.string().allow(''),}),}),`,
   );
 });

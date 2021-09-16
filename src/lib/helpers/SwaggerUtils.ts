@@ -174,6 +174,9 @@ class SwaggerUtils {
       validationText += `'${paramTypeKey}': Joi.object({`;
       paramsTypes[paramTypeKey].forEach((param: any) => {
         if (param.schema && param.schema.properties) {
+          if (paramTypeKey === 'query') {
+            validationText += `'${param.name}': Joi.object({`;
+          }
           Object.keys(param.schema.properties).forEach((propertyKey) => {
             validationText += this.pathParamsToJoi({
               name: propertyKey, ...param.schema.properties[propertyKey],
@@ -182,6 +185,9 @@ class SwaggerUtils {
               paramTypeKey: paramTypeKey as ParamTypeKey,
             });
           });
+          if (paramTypeKey === 'query') {
+            validationText += '}),';
+          }
         } else if (param.type || (param.schema && param.schema.type)) {
           validationText += this.pathParamsToJoi(param, {
             paramTypeKey: paramTypeKey as ParamTypeKey
