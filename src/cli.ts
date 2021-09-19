@@ -19,7 +19,7 @@ if (cli.program.yes) {
 
 versionCheck(
   require('../package.json').version,
-  'https://raw.githubusercontent.com/acrontum/generate-it/master/package.json',
+  'generate-it',
   'Generate It'
 ).then(() => {
   console.log(`Provided cli args look ok, preceding to build the http layer and any stub files... ${LINEBREAK}`.yellow);
