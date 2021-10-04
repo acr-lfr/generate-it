@@ -4,7 +4,7 @@ enum ParamTypeKey {
   body = 'body',
   headers = 'headers',
   params = 'params',
-  query = 'query'
+  query = 'query',
 }
 
 interface PathParamsToJoi {
@@ -14,7 +14,6 @@ interface PathParamsToJoi {
 }
 
 class SwaggerUtils {
-
   /**
    * Prepare the regex string based on how it has been formed in the openapi file pattern
    * @param inputPattern
@@ -44,12 +43,13 @@ class SwaggerUtils {
       console.log(param, options);
       return;
     }
-    const {paramTypeKey} = options;
+
+    const { paramTypeKey } = options;
     let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required === true;
     const type = param.type || param.schema.type;
 
-    const nullable = (paramTypeKey === ParamTypeKey.body && param['x-nullable'] !== false && param.nullable !== false) ? '.allow(null)' : '';
+    const nullable = paramTypeKey === ParamTypeKey.body && param['x-nullable'] !== false && param.nullable !== false ? '.allow(null)' : '';
     const validationTrailer = (isRequired && !options.isFromArray ? '.required()' : nullable) + (!options.isFromArray ? ',' : '');
 
     if (['string', 'number', 'integer', 'boolean'].includes(type)) {
@@ -74,27 +74,27 @@ class SwaggerUtils {
         validationText += '.valid(' + enumValues.map((e: string) => `'${e}'`).join(', ') + ')';
       }
 
-      if (Number(param.minLength)) {
+      if (!Number.isNaN(Number(param.minLength))) {
         validationText += `.min(${+param.minLength})`;
       }
-      if (Number(param.minimum)) {
+      if (!Number.isNaN(Number(param.minimum))) {
         validationText += `.min(${+param.minimum})`;
       }
-      if (Number(param.maxLength)) {
+      if (!Number.isNaN(Number(param.maxLength))) {
         validationText += `.max(${+param.maxLength})`;
       }
-      if (Number(param.maximum)) {
+      if (!Number.isNaN(Number(param.maximum))) {
         validationText += `.max(${+param.maximum})`;
       }
       if (type === 'string' && param.pattern) {
-        validationText += (param.pattern ? `.regex(${this.prepareRegexPattern(param.pattern)})` : '');
+        validationText += param.pattern ? `.regex(${this.prepareRegexPattern(param.pattern)})` : '';
       }
       validationText += validationTrailer;
     } else if (type === 'array') {
       validationText += 'Joi.array()';
       const itemsContent = this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
         isFromArray: true,
-        paramTypeKey
+        paramTypeKey,
       });
       if (itemsContent) {
         validationText += `.items(${itemsContent})`;
@@ -104,22 +104,26 @@ class SwaggerUtils {
         validationText += '.single()';
       }
 
-      if (Number(param.minItems)) {
+      if (!Number.isNaN(Number(param.minItems))) {
         validationText += `.min(${+param.minItems})`;
       }
-      if (Number(param.maxItems)) {
+      if (!Number.isNaN(Number(param.maxItems))) {
         validationText += `.max(${+param.maxItems})`;
       }
-      validationText += (isRequired && !options.isFromArray ? '.required(),' : ',');
+      validationText += isRequired && !options.isFromArray ? '.required(),' : ',';
     } else if (param.properties || param.schema) {
       const properties = param.properties || param.schema.properties || {};
       validationText += 'Joi.object({';
       Object.keys(properties).forEach((propertyKey) => {
-        validationText += this.pathParamsToJoi({
-          name: propertyKey, ...properties[propertyKey],
-        }, {
-          paramTypeKey
-        });
+        validationText += this.pathParamsToJoi(
+          {
+            name: propertyKey,
+            ...properties[propertyKey],
+          },
+          {
+            paramTypeKey,
+          }
+        );
       });
       validationText += '})' + validationTrailer;
     } else {
@@ -178,19 +182,23 @@ class SwaggerUtils {
             validationText += `'${param.name}': Joi.object({`;
           }
           Object.keys(param.schema.properties).forEach((propertyKey) => {
-            validationText += this.pathParamsToJoi({
-              name: propertyKey, ...param.schema.properties[propertyKey],
-            }, {
-              requiredFields: param.schema.required,
-              paramTypeKey: paramTypeKey as ParamTypeKey,
-            });
+            validationText += this.pathParamsToJoi(
+              {
+                name: propertyKey,
+                ...param.schema.properties[propertyKey],
+              },
+              {
+                requiredFields: param.schema.required,
+                paramTypeKey: paramTypeKey as ParamTypeKey,
+              }
+            );
           });
           if (paramTypeKey === 'query') {
             validationText += '}),';
           }
         } else if (param.type || (param.schema && param.schema.type)) {
           validationText += this.pathParamsToJoi(param, {
-            paramTypeKey: paramTypeKey as ParamTypeKey
+            paramTypeKey: paramTypeKey as ParamTypeKey,
           });
         }
       });
