@@ -1,6 +1,14 @@
 import getOpIdsFromAsyncApi from '@/lib/helpers/getOpIdsFromAsyncApi';
 import { NodegenRc } from '@/interfaces/NodegenRc';
 
+/**
+ * TODO: potential improvement opposed to loops
+ * const uniques = [...new Set(input.map(obj => obj.value))];
+   if (uniques.length !== input.length) {
+    throw 'has dupes';
+   }
+ */
+
 export default (apiObject: any, nodegenRc: NodegenRc) => {
   if (!apiObject.channels) {
     return true;
