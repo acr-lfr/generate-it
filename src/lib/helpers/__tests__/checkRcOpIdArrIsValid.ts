@@ -5,8 +5,8 @@ const nodegenRc: NodegenRc = {
   nodegenDir: 'blah',
   nodegenType: 'blah',
   helpers: {
-    publishOpIds: ['bob'],
-    subscribeOpIds: ['smith']
+    publishOpIds: ['bob', 'pubAndSubOnSameService'],
+    subscribeOpIds: ['smith', 'pubAndSubOnSameService']
   }
 };
 
@@ -16,6 +16,11 @@ const openapi = {
 
 const asyncapi = {
   channels: {
+    doBoth: {
+      publish: {
+        operationId: 'pubAndSubOnSameService'
+      }
+    },
     somepath: {
       publish: {
         operationId: 'bob'
@@ -61,8 +66,8 @@ it('should throw an error for asyncapi with invalid publish id', (done) => {
   }
 });
 
-it('should throw an error for asyncapi with any duplicate id', (done) => {
-  nodegenRc.helpers.publishOpIds.push('smith');
+it('should throw an error for asyncapi with any duplicate id in the pub list', (done) => {
+  nodegenRc.helpers.publishOpIds.push('bob');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);
     done('should have errored');
@@ -73,7 +78,7 @@ it('should throw an error for asyncapi with any duplicate id', (done) => {
 });
 
 it('should throw an error for asyncapi with any duplicate id', (done) => {
-  nodegenRc.helpers.subscribeOpIds.push('bob');
+  nodegenRc.helpers.subscribeOpIds.push('smith');
   try {
     checkRcOpIdArrIsValid(asyncapi, nodegenRc);
     done('should have errored');

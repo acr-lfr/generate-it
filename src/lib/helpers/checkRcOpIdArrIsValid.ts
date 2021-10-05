@@ -6,24 +6,26 @@ export default (apiObject: any, nodegenRc: NodegenRc) => {
     return true;
   }
 
-  const ids: string[] = [];
+  const subIds: string[] = [];
   nodegenRc.helpers?.subscribeOpIds?.forEach((item) => {
-    if (!ids.includes(item)) {
-      ids.push(item);
+    if (!subIds.includes(item)) {
+      subIds.push(item);
     } else {
       throw new Error('The nodegenrc file contains duplicate subscribeOpIds');
     }
   });
+
+  const pubIds: string[] = [];
   nodegenRc.helpers?.publishOpIds?.forEach((item) => {
-    if (!ids.includes(item)) {
-      ids.push(item);
+    if (!pubIds.includes(item)) {
+      pubIds.push(item);
     } else {
       throw new Error('The nodegenrc file contains duplicate publishOpIds');
     }
   });
 
   const idsToCompare = getOpIdsFromAsyncApi(apiObject);
-  ids.forEach((id) => {
+  pubIds.concat(subIds).forEach((id) => {
     if (!idsToCompare.includes(id)) {
       throw new Error('The nodegenrc file wants to PUBLISH or SUBSCRIBE to an id that does not exists in the async api file provided: ' + id);
     }
