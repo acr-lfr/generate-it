@@ -79,7 +79,7 @@ describe('e2e testing', () => {
       // Check rabbitMQ domains (STUB file)
       ['test_server/src/domains/domainsImporter.ts', '8502ae153a067f2832b991a4b6b4812a'],
       ['test_server/src/domains/WeatherDomain.ts', '30efe49b22921328e0be1ddc5c3e17a4'],
-      ['test_server/src/domains/RainDomain.ts', '2661960ee5787a58e824419d96c95cb4'],
+      ['test_server/src/domains/RainDomain.ts', '5a6a09b8828a9a89e38e0964e94e53e5'],
       // Check complex interface (INTERFACE file)
       ['test_server/src/http/nodegen/interfaces/WeatherFull.ts', 'ae5f4c579130f22b8d5aeb931a6fac74'],
       // Check the interface index file (OTHER file)

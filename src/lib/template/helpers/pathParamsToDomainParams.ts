@@ -92,17 +92,8 @@ export default function (method: string, pathObject: any, withType: boolean = fa
 
   // Inject the response to the params
   if (pathObject['x-passResponse'] && tplType !== 'client') {
-    if (fileType === 'STUB') {
-      params.push(
-        'res' + addType(
-        withType,
-        pathObject,
-        undefined,
-        undefined,
-        ));
-    } else {
-      params.push('res' + addType(withType, pathObject));
-    }
+    const type = withType ? ': Response' : '';
+    params.push(`res${type}`);
   }
 
   // sort the params object for uniform domain params!
