@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.36.0",
+  "version": "5.36.1",
   "description": "Generate-it, will generate servers, clients, web-socket and anything else you can template with nunjucks from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH & Liffery Ltd",
   "license": "MIT",
@@ -37,7 +37,7 @@
   ],
   "dependencies": {
     "@root/walk": "^1.1.0",
-    "colors": "^1.4.0",
+    "colors": "1.4.0",
     "commander": "^5.1.0",
     "compare-versions": "^3.6.0",
     "deepmerge": "^4.2.2",
