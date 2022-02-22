@@ -9,7 +9,7 @@ Change your APIs yml and simply (re)Generate-It, your business logic is safe and
 
 Here is an example: generate-it is parsing an **OpenAPI** file using a [typescript sever tpl git repo](https://github.com/acr-lfr/generate-it-typescript-server):
 ```
-generate-it openapi.yml --template https://github.com/acr-lfr/acr-lfr-typescript-server.git
+generate-it openapi.yml --template https://github.com/acr-lfr/generate-it-typescript-server.git
 ```
 
 Here is an example: generate-it is parsing an **AsyncAPI** file using a [typescript RabbitMQ tpl git repo](https://github.com/acr-lfr/generate-it-asyncapi-rabbitmq) which is designed to work with the TypeScript server:
