@@ -1,3 +1,15 @@
+export interface Helpers {
+  publishOpIds?: string[],
+  subscribeOpIds?: string[],
+
+  [helperName: string]: any
+}
+
+export interface InjectionOverwrites {
+  targetDir: string,
+  url: string
+}
+
 export interface NodegenRc {
   nodegenDir: string;
   nodegenMockDir?: string;
@@ -5,9 +17,6 @@ export interface NodegenRc {
   interfaceStyle?: string;
   segmentFirstGrouping?: number;
   segmentSecondGrouping?: number;
-  helpers?: {
-    publishOpIds?: string[],
-    subscribeOpIds?: string[],
-    [helperName: string]: any
-  };
+  helpers?: Helpers;
+  injectionOverwrites?: InjectionOverwrites[];
 }
