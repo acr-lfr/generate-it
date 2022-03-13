@@ -1,13 +1,13 @@
 export interface Helpers {
-  publishOpIds?: string[],
-  subscribeOpIds?: string[],
+  publishOpIds?: string[];
+  subscribeOpIds?: string[];
 
-  [helperName: string]: any
+  [helperName: string]: any;
 }
 
-export interface InjectionOverwrites {
-  targetDir: string,
-  url: string
+export interface Injection {
+  destination?: string;
+  source: string;
 }
 
 export interface NodegenRc {
@@ -18,5 +18,5 @@ export interface NodegenRc {
   segmentFirstGrouping?: number;
   segmentSecondGrouping?: number;
   helpers?: Helpers;
-  injectionOverwrites?: InjectionOverwrites[];
+  injections?: Injection[];
 }

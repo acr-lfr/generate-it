@@ -19,10 +19,10 @@ import Injections from '@/lib/Injections';
 export default async (config: Config): Promise<boolean> => {
   globalHelpers(config.verbose, config.veryVerbose);
 
-  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir, config.dontUpdateTplCache);
+  const templatesDir = await TemplateFetch.resolveTemplateType( config.template, config.targetDir, config.dontUpdateTplCache);
   let extendedConfig = await ConfigMerger.base(config, templatesDir);
 
-  await Injections.go(extendedConfig);
+  extendedConfig.templates = await Injections.init(extendedConfig);
 
   const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, extendedConfig);
 

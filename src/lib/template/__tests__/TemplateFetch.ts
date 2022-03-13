@@ -65,7 +65,7 @@ describe('local folder structure', () => {
 
   it('accepts a local folder', async () => {
     fs.ensureDirSync(src);
-    fs.writeJsonSync(path.join(src, 'test.json'), { hello: 'world' });
+    fs.writeJsonSync(path.join(src, 'test.json'), {hello: 'world'});
 
     const cacheDirectory = TemplateFetch.calculateLocalDirectoryFromUrl(srcRoot, dest);
     await TemplateFetch.resolveTemplateType(srcRoot, dest, false);
