@@ -184,6 +184,24 @@ Each set of templates will evolve their own specific attribute requirements. Add
 
 An example of a template specific custom attribute usage: https://github.com/acrontum/openapi-nodegen-typescript-server/blob/master/src/http/nodegen/routes/___op.ts.njk#L28
 
+## Overriding template code with code from another source
+
+Sometimes, the code of 1 template is ok, but you would like to change just a few lines somewhere in a managed folder.
+
+With injections this is possible.
+
+For example, you might generate a typescript server from [acr-lfr/generate-it-typescript-server](https://github.com/acr-lfr/generate-it-typescript-server) but would like change part of the [src/http/index.ts](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/index.ts)
+```
+"injections": [
+  {
+    "source": "https://github.com/yourusername/ts-overwrites.git"
+  }
+],
+```
+
+With the above injection block, generate-it will clone the base template and then copy over all files from `yourusername/ts-overwrites` before generating any code. The end result would be a generation based on a merged set of files from the base and your injections. 
+
+
 ## .nodegenrc file
 For more details please read this page: [templates](/_pages/templates.md)
 
