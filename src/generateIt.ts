@@ -10,6 +10,7 @@ import generateDirectoryStructure from '@/lib/generate/generateDirectoryStructur
 import TemplateFetch from '@/lib/template/TemplateFetch';
 import OpenAPIBundler from '@/lib/openapi/OpenAPIBundler';
 import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
+import Injections from '@/lib/Injections';
 
 /**
  * Generates a code skeleton for an API given an OpenAPI/Swagger file.
@@ -18,8 +19,10 @@ import checkRcOpIdArrIsValid from '@/lib/helpers/checkRcOpIdArrIsValid';
 export default async (config: Config): Promise<boolean> => {
   globalHelpers(config.verbose, config.veryVerbose);
 
-  const templatesDir = await TemplateFetch.resolveTemplateType(config.template, config.targetDir, config.dontUpdateTplCache);
+  const templatesDir = await TemplateFetch.resolveTemplateType( config.template, config.targetDir, config.dontUpdateTplCache);
   let extendedConfig = await ConfigMerger.base(config, templatesDir);
+
+  extendedConfig.templates = await Injections.init(extendedConfig);
 
   const apiObject = await OpenAPIBundler.bundle(config.swaggerFilePath, extendedConfig);
 
@@ -57,5 +60,6 @@ export default async (config: Config): Promise<boolean> => {
   } else {
     console.log('Completed'.green.bold);
   }
+
   return true;
 };
