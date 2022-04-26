@@ -1,7 +1,6 @@
 import { GIT_DIRECTORY } from '@/constants/CachePaths';
 import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement';
 import commandRun from '@/lib/helpers/commandRun';
-import isFileToIgnore from '@/lib/helpers/isFileToIgnore';
 import * as walk from '@root/walk';
 import 'colors';
 import compareVersions from 'compare-versions';
@@ -266,9 +265,6 @@ template version tag: ${tplTag}
     return walk.walk(src, async (err: Error, fullpath: string, dirent: fs.Dirent) => {
       if (err) {
         throw err;
-      }
-      if (isFileToIgnore(fullpath, dirent.name)) {
-        return Promise.resolve(false);
       }
 
       const outpath = fullpath.replace(src, dest);

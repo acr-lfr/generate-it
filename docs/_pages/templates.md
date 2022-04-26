@@ -24,6 +24,12 @@ Example:
   }
 }
 ```
+### Other options
+| Option        | Type               | Example                 | Comment                                                                                                                                                                                                                                                        |
+|---------------|--------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ignoreFiles   | string or string[] | ignoreFiles: ['target'] | Allows the template to define which files shouldn't be copied. This String will be treated as a Regex object.<br><br>You could use this option to ignore files and folders that shouldn't be part of the project. For example target folder in maven projects. |
+| renderOnlyExt | string             | ignoreFiles: '.njk'     | Allows the template to define which files file extension should be rendered.                                                                                                                                                                                   |
+| dontPrettify  | boolean            | dontPrettify: true      | Allows the template to define if the generate-it shouldn't run prettier after generate sources.                                                                                                                                                                |
 
 The full contents of the nodegenrc file are passed to the templates within the config: [TemplateVariables.ts](https://github.com/acrontum/openapi-nodegen/blob/master/src/interfaces/TemplateVariables.ts)
 

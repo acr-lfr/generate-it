@@ -19,7 +19,8 @@ Options:
   --very-verbose                      Outputs very verbose logging
   -y, --yes                           Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten
   -h, --help                          display help for command
-
+  --render-only-ext <extension>       Defines which extension should be processed. If none is informed all files will be processed
+  --dont-prettify                     Defines if should ignore prettier after generate the source.
 ```
 
 To inject many variables into a template just add many -$:

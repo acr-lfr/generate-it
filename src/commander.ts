@@ -20,6 +20,8 @@ interface Program extends commander.CommanderStatic {
   verbose?: boolean;
   'very-verbose'?: boolean;
   'yes'?: boolean;
+  'render-only-ext'?: string;
+  'dont-prettify'?: boolean;
 }
 
 export interface CommanderResponse {
@@ -47,6 +49,8 @@ export default (inputArgsArray: string[]): CommanderResponse => {
     .option('-v, --verbose', 'Outputs verbose logging')
     .option('--very-verbose', 'Outputs very verbose logging')
     .option('-y, --yes', 'Assumes yes to any questions prompted by the tool. If marked yes we assume you know what you are doing and know the nodegenDir will be rewritten')
+    .option('--render-only-ext <extension>', 'Defines which extension should be processed. If none is informed all files will be processed')
+    .option('--dont-prettify', 'Defines if should ignore prettier after generate the source', false)
     .parse(inputArgsArray);
 
   if (!swaggerFile) {

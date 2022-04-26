@@ -32,7 +32,7 @@ class FileWalker {
       if (err) {
         throw err;
       }
-      if (isFileToIgnore(fullpath, dirent.name)) {
+      if (isFileToIgnore(fullpath, dirent.name, providedConfig.nodegenRc)) {
         return Promise.resolve(false);
       }
       if (dirent.isDirectory()) {

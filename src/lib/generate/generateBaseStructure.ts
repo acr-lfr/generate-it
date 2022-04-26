@@ -1,17 +1,20 @@
-import deepmerge from 'deepmerge';
 import * as fs from 'fs-extra';
 import path from 'path';
 import { mergePackageJsonFiles } from '@/lib/helpers/mergePackageJsonFiles';
+import { ConfigExtendedBase } from '@/interfaces';
+import isFileToIgnore from '@/lib/helpers/isFileToIgnore';
 
 /**
  * Creates the base structure
  * @param targetDir
  * @param templatesDir
- * @param additionalOptionsToInject
+ * @param config
  * @return void
  */
-export default (targetDir: string, templatesDir: string, additionalOptionsToInject: any) => {
-  additionalOptionsToInject = additionalOptionsToInject || {};
+export default (targetDir: string, templatesDir: string, config: ConfigExtendedBase) => {
+  const additionalOptionsToInject = {
+    mockingServer: config.mockServer
+  };
   fs.mkdirsSync(targetDir);
   const callerPackageJsonPath = path.join(targetDir, 'package.json');
   const packageJsonFound = (fs.existsSync(callerPackageJsonPath));
@@ -28,6 +31,12 @@ export default (targetDir: string, templatesDir: string, additionalOptionsToInje
           return false;
         }
       }
+      const dir = src.substring(0, src.lastIndexOf(path.sep));
+      const file = src.substr(src.lastIndexOf(path.sep) + 1);
+      if (isFileToIgnore(dir, file, config.nodegenRc)) {
+        return false;
+      }
+
       return true;
     },
   });

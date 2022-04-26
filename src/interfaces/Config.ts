@@ -12,4 +12,6 @@ export interface Config {
   handlebars_helper?: any;
   mockServer: boolean;
   variables?: any;
+  renderOnlyExt?: string;
+  dontPrettify?: boolean;
 }
