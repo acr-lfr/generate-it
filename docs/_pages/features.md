@@ -40,7 +40,7 @@ It is required that the 1st run is done with an internet connection, this flag w
 ## Stub (domain) versions
 The core will store the last few versions of stub files generated in a cache folder to compare future changes:
 ```
-.generate-it/cache/compare
+.openapi-nodegen/cache/compare
 ```
 
 During the 1st generation this folder is populated. Subsequent generations will compare the previous files to the current generation, any difference are then printed to the console.
