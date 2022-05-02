@@ -35,11 +35,21 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
 
   // This could be a new file in the templates, ensure the dir structure is present before preceding
   fs.ensureFileSync(templatePath);
+
+  const generatedPath = path.resolve(
+    targetDir,
+    path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
+  );
+
+  const renderOnlyExt = config.data.renderOnlyExt || config.data.nodegenRc?.renderOnlyExt;
+  if (renderOnlyExt && ! fileName.endsWith(renderOnlyExt)) {
+    return;
+  }
+
   global.veryVerboseLogging('Parsing/placing file: ' + templatePath);
-
   const content = fs.readFileSync(loadFilePath, 'utf8');
-
   const renderedContent = TemplateRenderer.load(content, {
+    config,
     package: config.package,
     swagger: config.data.swagger,
     endpoints: config.data.swagger.endpoints,
@@ -49,11 +59,6 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
     nodegenRc: config.data.nodegenRc,
     ...config.data.variables
   });
-
-  const generatedPath = path.resolve(
-    targetDir,
-    path.relative(templatesDir, path.resolve(root, NamingUtils.stripNjkExtension(fileName))),
-  );
 
   return fs.writeFileSync(generatedPath, renderedContent, 'utf8');
 };

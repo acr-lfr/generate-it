@@ -37,6 +37,8 @@ versionCheck(
     segmentSecondGrouping: cli.program.segmentSecondGrouping,
     handlebars_helper: undefined, // todo add the ability to inject custom helpers, this will allow the extraction of Joi form the core
     mockServer: cli.program.mocked || false,
+    renderOnlyExt: cli.program.renderOnlyExt,
+    dontPrettify: cli.program.dontPrettify,
   };
 
   const call = () => {

@@ -34,6 +34,7 @@ class GenerateInterfaceFiles {
     const content = TemplateRenderer.load(
       data.toString(),
       {
+        config: this.config,
         definitionName,
         definitionInterfaceText: interfaceText,
         nodegenRc: this.config.data.nodegenRc,
