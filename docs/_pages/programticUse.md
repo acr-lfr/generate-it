@@ -27,7 +27,7 @@ const generate = (configArray) => {
       segmentsCount: 1,
       swaggerFilePath: item.from,
       targetDir: item.to,
-      template: 'https://github.com/acrontum/generate-it-typescript-client-to-server.git',
+      template: 'https://github.com/acr-lfr/generate-it-typescript-client-to-server',
       variables: {
         httpServiceImport: '@/services/HttpService'
       }

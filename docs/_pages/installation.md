@@ -1,5 +1,5 @@
 ## Requirements
-- Node 12 LTS
+- Node 12 LTS or greater
 - Linux/Mac/Windows
 - Git
   - Without git you cannot fetch the templates.
@@ -16,12 +16,12 @@ npm i --save-dev generate-it
 ```
 
 After installation of the core you will need to decide on what you want to build, a server or client. 
-Currently there is a lot of activity on the [generate-it-typescript-server](https://github.com/acrontum/openapi-nodegen-typescript-server) which generates a NodeJS server running express written in TypeScript.
+Currently there is a lot of activity on the [generate-it-typescript-server](https://github.com/acr-lfr/generate-it-typescript-server) which generates a NodeJS server running express written in TypeScript.
 
 After installing, add a build script to your `package.json` file with the relevant [arguments](/_pages/cli.md):
 ```
 "scripts": {
-    "generate:nodegen": "generate-it ./openapi.yml -t https://github.com/acrontum/openapi-nodegen-typescript-server.git",
+    "generate:nodegen": "generate-it ./openapi.yml -t https://github.com/acr-lfr/generate-it-typescript-server.git",
 }
 ```
 
