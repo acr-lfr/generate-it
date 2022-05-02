@@ -13,11 +13,11 @@ import isFileToIgnore from '@/lib/helpers/isFileToIgnore';
  */
 export default (targetDir: string, templatesDir: string, config: ConfigExtendedBase) => {
   const additionalOptionsToInject = {
-    mockingServer: config.mockServer
+    mockingServer: config.mockServer,
   };
   fs.mkdirsSync(targetDir);
   const callerPackageJsonPath = path.join(targetDir, 'package.json');
-  const packageJsonFound = (fs.existsSync(callerPackageJsonPath));
+  const packageJsonFound = fs.existsSync(callerPackageJsonPath);
   fs.copySync(templatesDir, targetDir, {
     filter: (src) => {
       if (src.indexOf('__mocks__') !== -1 && !additionalOptionsToInject.mockingServer) {
@@ -41,27 +41,25 @@ export default (targetDir: string, templatesDir: string, config: ConfigExtendedB
     },
   });
 
-  if (packageJsonFound) {
-    // merge the package json files together
-    const callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
-    let tplPackageJsonPath = path.join(templatesDir, 'package.json.njk');
-    if (!fs.pathExistsSync(tplPackageJsonPath)) {
-      tplPackageJsonPath = path.join(templatesDir, 'package.json');
-    }
-
-    const templatePackageJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8'));
-
-    const merged = mergePackageJsonFiles(
-      callerPackageJson,
-      templatePackageJson,
-      additionalOptionsToInject
-    );
-    fs.writeJsonSync(
-      callerPackageJsonPath,
-      merged,
-      {
-        spaces: 2,
-      },
-    );
+  if (!packageJsonFound) {
+    return;
   }
+
+  // merge the package json files together
+  const callerPackageJson = fs.readJsonSync(callerPackageJsonPath);
+  let tplPackageJsonPath = path.join(templatesDir, 'package.json.njk');
+
+  if (!fs.pathExistsSync(tplPackageJsonPath)) {
+    tplPackageJsonPath = path.join(templatesDir, 'package.json');
+    if (!fs.pathExistsSync(tplPackageJsonPath)) {
+      return;
+    }
+  }
+
+  const templatePackageJson = JSON.parse(fs.readFileSync(tplPackageJsonPath, 'utf8'));
+
+  const merged = mergePackageJsonFiles(callerPackageJson, templatePackageJson, additionalOptionsToInject);
+  fs.writeJsonSync(callerPackageJsonPath, merged, {
+    spaces: 2,
+  });
 };
