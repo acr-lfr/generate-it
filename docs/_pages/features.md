@@ -17,7 +17,7 @@ To help ensure backward compatibility of future releases of the core and the tem
 
 Targeting is handled using the same pattern seen with NPM via a trailing *#<version|branch>*
 ```
-generate-it apifile.yml -t https://github.com/acrontum/openapi-nodegen-typescript-server.git#3.0.6
+generate-it apifile.yml -t https://github.com/acr-lfr/generate-it-typescript-server#3.0.6
 ```
 
 ###### Example
@@ -138,7 +138,7 @@ A [command line](/_pages/cli.md) argument option.
 
 Based on the definition of the responses in the swagger/openapi file automatically return mocked responses from a generated API with the [generate-it-mockers](https://www.npmjs.com/package/generate-it-mockers) package.
 
-The [generate-it-typescript-server](https://github.com/acrontum/openapi-nodegen-typescript-server/) use of the `--mocked` flag to injected generate-it-mockers into the [domain methods](https://github.com/acrontum/openapi-nodegen-typescript-server/blob/master/src/domains/___stub.ts.njk#L19). This allows a team to design an API first, setup a microservice quickly to deliver mocked data thus allowing the frontend dev(s) and backend dev(s) to then build without depending on each other.
+The [generate-it-typescript-server](https://github.com/acr-lfr/generate-it-typescript-server/) use of the `--mocked` flag to injected generate-it-mockers into the [domain methods](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/domains/___stub.ts.njk#L19). This allows a team to design an API first, setup a microservice quickly to deliver mocked data thus allowing the frontend dev(s) and backend dev(s) to then build without depending on each other.
 
 ## Pass full request / response object to \_\_\_stub method
 
@@ -173,7 +173,7 @@ With some API designs there is the need to offer 1 API route which returns conte
 
 This can be acheived by marking a route with an additional attribute: `x-passThruWithoutJWT`
 
-The result of this feature is `pathParamsToDomainParams` tpl helper will pass the forced type (.nodegenrc: `helpers.stub.jwtType`) as `| undefined` which is seen in the [typescript server](https://github.com/acrontum/openapi-nodegen-typescript-server#allow-non-authenticated-request-to-access-domain).
+The result of this feature is `pathParamsToDomainParams` tpl helper will pass the forced type (.nodegenrc: `helpers.stub.jwtType`) as `| undefined` which is seen in the [typescript server](https://github.com/acr-lfr/generate-it-typescript-server#allow-non-authenticated-request-to-access-domain).
 
 
 ## Access all path attributes 
@@ -182,7 +182,7 @@ The full path object from the API spec file is passed to the [templates](/_pages
 
 Each set of templates will evolve their own specific attribute requirements. Additional attributes must be prefixed with `x-` to be seen as valid swagger/openapi.
 
-An example of a template specific custom attribute usage: https://github.com/acrontum/openapi-nodegen-typescript-server/blob/master/src/http/nodegen/routes/___op.ts.njk#L28
+An example of a template specific custom attribute usage: https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/nodegen/routes/___op.ts.njk#L28
 
 ## Overriding template code with code from another source
 
@@ -194,7 +194,7 @@ For example, you might generate a typescript server from [acr-lfr/generate-it-ty
 ```
 "injections": [
   {
-    "source": "https://github.com/yourusername/ts-overwrites.git"
+    "source": "https://github.com/yourusername/ts-overwrites"
   }
 ],
 ```

@@ -1,5 +1,3 @@
-[![Dependencies](https://david-dm.org/acrontum/generate-it.svg)](https://david-dm.org/acrontum/generate-it) | [![Build Status](https://travis-ci.org/acrontum/generate-it.svg?branch=master)](https://travis-ci.org/acrontum/generate-it) | [codecov](https://codecov.io/gh/acrontum/generate-it/)
-
 # Generate-It
 
 Generate-It is an open-sourced tool from [https://www.acrontum.com](https://www.acrontum.com) and [https://www.liffery.com](https://www.liffery.com).

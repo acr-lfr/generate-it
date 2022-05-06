@@ -24,7 +24,7 @@ export default async (config: ConfigExtendedBase, templatesDir: string): Promise
     generateBaseStructure(
       targetDir,
       templatesDir,
-      (config.mockServer) ? {mockingServer: true} : {});
+      config);
   } else {
     resetNodegenFolder(targetDir, templatesDir, config.mockServer, config.nodegenRc);
     await DisplayDependencyDiffs.check(targetDir, templatesDir, config.updateDependenciesFromTpl);
