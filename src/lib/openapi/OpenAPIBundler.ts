@@ -140,9 +140,9 @@ class OpenAPIBundler {
    */
   public async injectInterfaces (apiObject: any, config: ConfigExtendedBase) {
     apiObject.interfaces = [];
-    apiObject = await this.injectDefinitionInterfaces(apiObject);
+    apiObject = await this.injectDefinitionInterfaces(apiObject, config);
     if (ApiIs.isOpenAPIorSwagger(apiObject)) {
-      apiObject = await this.injectParameterInterfaces(apiObject);
+      apiObject = await this.injectParameterInterfaces(apiObject, config);
     } else if (ApiIs.asyncapi2(apiObject)) {
       // TODO complete the parameters for async api apiObject = await this.injectParameterInterfacesFromAsyncApi(apiObject, config);
       // TODO this was left as not required for rabbitmq
@@ -157,7 +157,7 @@ class OpenAPIBundler {
    * @param apiObject
    * @return apiObject
    */
-  public async injectDefinitionInterfaces (apiObject: any): Promise<any> {
+  public async injectDefinitionInterfaces (apiObject: any, config: ConfigExtendedBase): Promise<any> {
     // edge case for api's without any definitions or component schemas
     if (ApiIs.swagger(apiObject) && !apiObject.definitions
       || ApiIs.openapi3(apiObject) && (!apiObject.components || !apiObject.components.schemas)) {
@@ -177,6 +177,7 @@ class OpenAPIBundler {
           content: await generateTypeScriptInterfaceText(
             defKeys[i],
             JSON.stringify(definitionObject),
+            config
           ),
         });
       } catch (e) {
@@ -191,7 +192,7 @@ class OpenAPIBundler {
   /**
    * Iterates over all path generating interface texts from the json schema in the request definitions
    */
-  public async injectParameterInterfaces (apiObject: any) {
+  public async injectParameterInterfaces (apiObject: any, config: ConfigExtendedBase) {
     // iterate over paths with for loop so can use await later
     const pathsKeys = Object.keys(apiObject.paths);
     for (let i = 0; i < pathsKeys.length; ++i) {
@@ -229,6 +230,7 @@ class OpenAPIBundler {
                 apiObject,
                 param.path,
               )),
+              config
             );
             apiObject.interfaces.push({
               name: param.name,
