@@ -11,7 +11,7 @@ class OpenAPIInjectInterfaceNaming {
   public config: any;
   public apiObject: any;
 
-  constructor (jsObject: any, passedConfig?: ConfigExtendedBase) {
+  constructor (jsObject: any, passedConfig: ConfigExtendedBase) {
     this.apiObject = jsObject;
     this.config = passedConfig || {};
   }
@@ -299,7 +299,11 @@ class OpenAPIInjectInterfaceNaming {
         const interfaceName = this.apiObject[action][path][method]['x-request-definitions'][requestType].name;
         this.apiObject[action][path][method]['x-request-definitions'][requestType].interfaceText = (['body', 'formData'].includes(requestType))
           ? {outputString: this.objectToInterfaceString(requestObject, interfaceName)}
-          : await generateTypeScriptInterfaceText(interfaceName, JSON.stringify({type: 'object', properties: requestObject}));
+          : await generateTypeScriptInterfaceText(
+            interfaceName,
+            JSON.stringify({type: 'object', properties: requestObject}),
+            this.config
+          );
       } else {
         delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }

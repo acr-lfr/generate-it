@@ -1,4 +1,5 @@
 import { LINEBREAK } from '@/constants/cli';
+import { ConfigExtendedBase } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
 
 const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
@@ -8,7 +9,7 @@ const countNoOfMatches = (name: string, line: string): number => {
   return ((line || '').match(regex) || []).length;
 };
 
-export default async (name: string, schema: string): Promise<GenerateTypeScriptInterfaceText> => {
+export default async (name: string, schema: string, config: ConfigExtendedBase): Promise<GenerateTypeScriptInterfaceText> => {
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
   await schemaInput.addSource({
     name: '___Nodegen',
@@ -27,6 +28,7 @@ export default async (name: string, schema: string): Promise<GenerateTypeScriptI
     inputData,
     lang: 'ts',
     rendererOptions: {
+      ...(config.nodegenRc?.quickTypeOptions || {}),
       'just-types': true,
       'acronym-style': 'original',
     },
