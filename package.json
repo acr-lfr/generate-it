@@ -53,7 +53,7 @@
     "nunjucks": "^3.2.3",
     "prettier": "^2.4.1",
     "project-name-generator": "^2.1.9",
-    "quicktype": "^15.0.261",
+    "quicktype": "^15.0.260",
     "recursive-copy": "^2.0.13",
     "semver": "^7.3.5",
     "text-file-diff": "1.1.2",

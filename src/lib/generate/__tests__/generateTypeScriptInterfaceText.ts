@@ -1,6 +1,4 @@
-import { ConfigExtendedBase } from '@/interfaces';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
-import { mockConfig } from '@/__mocks__/mockConfig';
 
 describe('generateTypeScriptInterfaceText', () => {
   it('should convert a schema to the correct type', async () => {
@@ -9,7 +7,7 @@ describe('generateTypeScriptInterfaceText', () => {
       "type": "object",
       "properties": { "lon": { "type": "number" }, "lat": { "type": "number" } }
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe(
       'export interface Person {\n' +
       '    lat?: number;\n' +
@@ -23,7 +21,7 @@ describe('generateTypeScriptInterfaceText', () => {
     {
       "type": "string"
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe('export type UserId = string;');
   });
 
@@ -35,7 +33,7 @@ describe('generateTypeScriptInterfaceText', () => {
         "type": "string"
       }
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe('export type UserId = string[];');
   });
 
@@ -49,7 +47,7 @@ describe('generateTypeScriptInterfaceText', () => {
         "type": "string"
       }
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe('export type NamibianCities = string[];');
   });
 
@@ -61,7 +59,7 @@ describe('generateTypeScriptInterfaceText', () => {
         "type": "string"
       }
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe('export type UserMap = { [key: string]: string };');
   });
 
@@ -78,52 +76,12 @@ describe('generateTypeScriptInterfaceText', () => {
         }
       }
     }
-    `, mockConfig);
+    `);
     expect(output.outputString.trim()).toBe(
       'export type Users = User[];\n\n' +
       'export interface User {\n' +
       '    name?: string;\n' +
       '}'
-    );
-  });
-
-  it('should create an enum', async () => {
-    const output = await generateTypeScriptInterfaceText('EnumItIs', `
-    {
-      "type": "string",
-      "enum": ["yay", "hey", "it works!"]
-    }
-    `, mockConfig);
-
-    expect(output.outputString.trim()).toBe(
-      'export enum EnumItIs {\n' +
-      '    Hey = "hey",\n' +
-      '    ItWorks = "it works!",\n' +
-      '    Yay = "yay",\n' +
-      '}'
-    );
-  });
-
-  it('should create an union', async () => {
-    const unionConfig = {
-      ...mockConfig,
-      nodegenRc: {
-        ...mockConfig.nodegenRc,
-        quickTypeOptions: {
-          'prefer-unions': 'true'
-        }
-      }
-    };
-
-    const output = await generateTypeScriptInterfaceText('WeAreUnion', `
-    {
-      "type": "string",
-      "enum": ["yay", "hey", "it works!"]
-    }
-    `, unionConfig);
-
-    expect(output.outputString.trim()).toBe(
-      'export type WeAreUnion = "yay" | "hey" | "it works!";'
     );
   });
 });
