@@ -44,9 +44,6 @@ More extensive example:
       "throwErrorOnAlien": false,
       "allowNullishKeys": true
     }
-  },
-  "quickTypeOptions": {
-    "prefer-unions": false
   }
 }
 ```
@@ -55,10 +52,9 @@ More extensive example:
 
 | Option        | Type               | Default                                                                | Example                 | Comment                                                                                                                                                                                                                                                        |
 |---------------|--------------------|------------------------------------------------------------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ignoreFiles      | string or string[]  | ['\\.idea', '\\.git', '\\.vscode', 'node_modules', 'build', 'dist']    | ignoreFiles: ['target'] | If specified, ignores files matching the pattern or list (eg binaries, build outputs, etc). Values are parsed as regular expressions                                                                                                                           |
-| renderOnlyExt    | string              | '*'     | ignoreFiles: '.njk'                                           | If specified, will only render files with the extension provided and simply copy everything else.                                                                                                                                                                                        |
-| dontPrettify     | boolean             | false   | dontPrettify: true                                           | If true, prevents running `prettier` on files after rendering.                                                                                                                                                                                                                           |
-| quickTypeOptions | Record<string, any> | {}      | "quickTypeOptions": { "prefer-unions": true }                                              | Specifies additional options for QuickType when converting schemas to types |
+| ignoreFiles   | string or string[] | ['\\.idea', '\\.git', '\\.vscode', 'node_modules', 'build', 'dist']    | ignoreFiles: ['target'] | If specified, ignores files matching the pattern or list (eg binaries, build outputs, etc). Values are parsed as regular expressions                                                                                                                           |
+| renderOnlyExt | string             | '*'     | ignoreFiles: '.njk'                                          | If specified, will only render files with the extension provided and simply copy everything else.                                                                                                                                                                                        |
+| dontPrettify  | boolean            | false   | dontPrettify: true                                           | If true, prevents running `prettier` on files after rendering.                                                                                                                                                                                                                           |
 
 The full contents of the nodegenrc file are passed to the templates within the config: [TemplateVariables.ts](https://github.com/acr-lfr/generate-it/blob/master/src/interfaces/TemplateVariables.ts)
 
@@ -86,7 +82,7 @@ The `___op.ts.njk` files generally live in the `nodegenDir` of the folder struct
 
 Named: [\___interface.ts.njk](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/nodegen/interfaces/___interface.ts.njk)
 
-This type of file is rewritten every single time the core is run, it only ever contains interface code, currently only for typescript files.
+This type of file is rewritten every single time the core is run, it only ever contains interface code, currently only for typescript files. 
 
 The `___interface.ts.njk` files generally live in the `nodegenDir` of the folder structure.
 

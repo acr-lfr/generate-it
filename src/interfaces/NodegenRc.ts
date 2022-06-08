@@ -38,13 +38,4 @@ export interface NodegenRc {
    * Let the template project decides if it should run prettier.
    */
   dontPrettify?: boolean;
-  /**
-   * Extra options to pass to quicktype when generating types.
-   * NOTE: Defaults like 'acronym-style' and 'just-types' are not overridable.
-   *
-   * Example, use unions instead of enums in TypeScript: {
-   *   'prefer-unions': true
-   * }
-   */
-  quickTypeOptions?: Record<string, string>;
 }
