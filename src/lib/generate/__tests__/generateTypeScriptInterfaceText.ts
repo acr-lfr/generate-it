@@ -1,6 +1,13 @@
-import { ConfigExtendedBase } from '@/interfaces';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import { mockConfig } from '@/__mocks__/mockConfig';
+
+const mockConfigWithNullableWorkaround = {
+  ...mockConfig,
+  nodegenRc: {
+    ...mockConfig.nodegenRc,
+    enableNullableWorkaround: true
+  }
+};
 
 describe('generateTypeScriptInterfaceText', () => {
   it('should convert a schema to the correct type', async () => {
@@ -124,6 +131,95 @@ describe('generateTypeScriptInterfaceText', () => {
 
     expect(output.outputString.trim()).toBe(
       'export type WeAreUnion = "yay" | "hey" | "it works!";'
+    );
+  });
+
+  it('does not handle nullable string without workaround', async () => {
+    const output = await generateTypeScriptInterfaceText(
+      'NullableString',
+      `{
+        "type": "string",
+        "nullable": true
+      }`,
+      mockConfig
+    );
+
+    expect(output.outputString.trim()).toBe(
+      'export type NullableString = string;'
+    );
+  });
+
+  it('handles nullable string with workaround', async () => {
+    const output = await generateTypeScriptInterfaceText(
+      'NullableString',
+      `{
+        "type": "string",
+        "nullable": true
+      }`,
+      mockConfigWithNullableWorkaround
+    );
+
+    expect(output.outputString.trim()).toBe(
+      'export type NullableString = null | string;'
+    );
+  });
+
+  it('handles nullable string with workaround', async () => {
+    const output = await generateTypeScriptInterfaceText(
+      'NullableString',
+      `{
+        "type": "string",
+        "nullable": true
+      }`,
+      mockConfigWithNullableWorkaround
+    );
+
+    expect(output.outputString.trim()).toBe(
+      'export type NullableString = null | string;'
+    );
+  });
+
+  it('does not handle nullable object without workaround', async () => {
+    const output = await generateTypeScriptInterfaceText(
+      'NullableObject',
+      `{
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }`,
+      mockConfig
+    );
+
+    expect(output.outputString.trim()).toBe(
+      'export interface NullableObject {\n' +
+      '    key?: string;\n' +
+      '}'
+    );
+  });
+
+  it('handles nullable object with workaround', async () => {
+    const output = await generateTypeScriptInterfaceText(
+      'NullableObject',
+      `{
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }`,
+      mockConfigWithNullableWorkaround
+    );
+
+    expect(output.outputString.trim()).toBe(
+      'export interface NullableObject {\n' +
+      '    key?: null | string;\n' +
+      '}'
     );
   });
 });

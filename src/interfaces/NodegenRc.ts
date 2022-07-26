@@ -47,4 +47,8 @@ export interface NodegenRc {
    * }
    */
   quickTypeOptions?: Record<string, string>;
+  /**
+   * QuickType does not handle "nullable" or "x-nullable", enabling this option allows us to workaround this behaviour.
+   */
+  enableNullableWorkaround?: boolean;
 }
