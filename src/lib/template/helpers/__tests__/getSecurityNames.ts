@@ -12,6 +12,10 @@ const fullSwaggerObject: any = {
       name: 'Authorization',
       in: 'header',
     },
+    basic: {
+      type: 'http',
+      scheme: 'basic',
+    },
   },
 };
 
@@ -78,6 +82,22 @@ it('should return array', () => {
   );
 });
 
+it('should return array', () => {
+  const pathObj: any = {
+    security: [
+      {
+        basic: [],
+      },
+    ],
+  };
+  expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(
+    `['Authorization']`
+  );
+  expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
+    `['Authorization']`
+  );
+});
+
 it('should return array with all values', () => {
   const pathObj: any = {
     security: [
@@ -114,13 +134,14 @@ it('should return array with all values in alternate order', () => {
       {
         apiKey: [],
         jwtToken: [],
+        basic: [],
       },
     ],
   };
   expect(getSecurityNames(pathObj, fullSwaggerObject)).toBe(
-    `['api-key', 'Authorization']`
+    `['api-key', 'Authorization', 'Authorization']`
   );
   expect(getSecurityNames(pathObj, fullSwaggerObjectOA3)).toBe(
-    `['api-key', 'Authorization']`
+    `['api-key', 'Authorization', 'Authorization']`
   );
 });
