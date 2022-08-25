@@ -256,6 +256,9 @@ components:
     apiToken:
       type: http
       scheme: bearer
+    basic:
+      type: http
+      scheme: basic
   schemas:
     AdditionalProps:
       type: object

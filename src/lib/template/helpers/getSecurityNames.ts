@@ -34,7 +34,7 @@ export default (pathObject: any, fullSwaggerObject: any): string => {
   pathObject.security.forEach((secObj: any) => {
     Object.keys(secObj).forEach((name) => {
       if (securityDefinitions[name]) {
-        const headerName = ['bearer', 'oauth2'].includes(
+        const headerName = ['bearer', 'oauth2', 'basic'].includes(
           securityDefinitions[name].scheme || securityDefinitions[name].type
         )
           ? 'Authorization'

@@ -27,6 +27,10 @@ const fullSwaggerObjectOA3: any = {
         type: 'http',
         scheme: 'bearer',
       },
+      basic: {
+        type: 'http',
+        scheme: 'basic',
+      },
       OAuth2: {
         type: 'oauth2',
         flows: {
