@@ -42,6 +42,7 @@ paths:
       security:
         - apiKeyAdmin: []
         - jwtToken: []
+        - basic: []
       x-passRequest: true
   '/weather/{id}':
     get:
@@ -256,6 +257,9 @@ components:
     apiToken:
       type: http
       scheme: bearer
+    basic:
+      type: http
+      scheme: basic
   schemas:
     AdditionalProps:
       type: object

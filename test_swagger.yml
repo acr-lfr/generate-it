@@ -26,6 +26,9 @@ securityDefinitions:
     type: apiKey
     name: x-api-key
     in: header
+  basic:
+    type: http
+    scheme: basic
 paths:
   /weather/:
     get:
@@ -56,6 +59,7 @@ paths:
       security:
         - apiKeyAdmin: []
         - jwtToken: []
+        - basic: []
       x-passRequest: true
   /weather/{id}:
     get:
