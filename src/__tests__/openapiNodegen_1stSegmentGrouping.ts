@@ -70,11 +70,11 @@ describe('e2e testing', () => {
       // Check the interface index file (OTHER file)
       ['test_server/src/http/nodegen/interfaces/index.ts', '2dea80dc1b9399bf4de6a61be62535e6'],
       // Check the security definition files (OTHER file)
-      ['test_server/src/http/nodegen/security/definitions.ts', 'acb2aa134d1e8ac90765a24b367166ea'],
+      ['test_server/src/http/nodegen/security/definitions.ts', '6e418ff120c8b0ae5fc9bf77208ffb12'],
       // Check the routes files (OPERATION file)
       ['test_server/src/http/nodegen/routesImporter.ts', '32fc29c3c892e0e0fce35cbd8780d0f6'],
       ['test_server/src/http/nodegen/routes/rainRoutes.ts', 'c718e747981b83536cc607032ad890f8'],
-      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '22f5e21d63ef3dfc88deb17e157e80a5'],
+      ['test_server/src/http/nodegen/routes/weatherRoutes.ts', '265c07852b1512ff068261feec8c4cb6'],
       // Check the output transformers (OPERATION file)
       ['test_server/src/http/nodegen/transformOutputs/weatherTransformOutput.ts', '7bf587be316ef1b65f806bff871417b6'],
       ['test_server/src/http/nodegen/interfaces/JwtAccess.ts', 'e5e4baabba301bed91746dc770035fe5'],

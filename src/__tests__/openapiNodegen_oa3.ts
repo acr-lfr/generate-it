@@ -59,7 +59,7 @@ describe('e2e testing', () => {
       // Check the security definition files (OTHER file)
       [
         'test_server/src/http/nodegen/security/definitions.ts',
-        '6b25d2dcc74702d6fa231ea3719eefa2',
+        'e8c40f8f37711ce5331b2a3062143bbb',
       ],
       // Check the rabbitMQ routes files (OPERATION file)
       [
@@ -68,7 +68,7 @@ describe('e2e testing', () => {
       ],
       [
         'test_server/src/http/nodegen/routes/weatherRoutes.ts',
-        'e2f5987fd26f02a201e9bdcba6edf06c',
+        '521c1fcbacae3c32e38cd731dcaa486e',
       ],
       // Check the output transformers (OPERATION file)
       [
