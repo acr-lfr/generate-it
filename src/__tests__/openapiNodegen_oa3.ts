@@ -68,7 +68,7 @@ describe('e2e testing', () => {
       ],
       [
         'test_server/src/http/nodegen/routes/weatherRoutes.ts',
-        'e2f5987fd26f02a201e9bdcba6edf06c',
+        '521c1fcbacae3c32e38cd731dcaa486e',
       ],
       // Check the output transformers (OPERATION file)
       [

@@ -42,6 +42,7 @@ paths:
       security:
         - apiKeyAdmin: []
         - jwtToken: []
+        - basic: []
       x-passRequest: true
   '/weather/{id}':
     get:
