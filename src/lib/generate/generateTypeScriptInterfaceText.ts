@@ -1,6 +1,7 @@
 import { LINEBREAK } from '@/constants/cli';
 import { ConfigExtendedBase, TypegenFunction } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
+import _ from 'lodash';
 
 const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
 
@@ -25,7 +26,11 @@ const generateTypeScriptInterfaceText: TypegenFunction = async (
       ? typegenModule.default
       : typegenModule;
 
-    return typegen(name, schema, config);
+    return typegen(
+      name,
+      schema,
+      _.cloneDeep(config)
+    );
   }
 
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
