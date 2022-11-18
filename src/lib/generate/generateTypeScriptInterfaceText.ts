@@ -9,7 +9,25 @@ const countNoOfMatches = (name: string, line: string): number => {
   return ((line || '').match(regex) || []).length;
 };
 
-export default async (name: string, schema: string, config: ConfigExtendedBase): Promise<GenerateTypeScriptInterfaceText> => {
+export default async (
+  name: string,
+  schema: string,
+  config: ConfigExtendedBase
+): Promise<GenerateTypeScriptInterfaceText> => {
+  if (config.nodegenRc.typegen) {
+    const typegenModule = require(
+      config.nodegenRc.typegen.startsWith('./')
+        ? config.nodegenRc.typegen.replace(/^\.\//, `${process.cwd()}/`)
+        : config.nodegenRc.typegen
+    );
+
+    const typegen = typeof typegenModule.default === 'function'
+      ? typegenModule.default
+      : typegenModule;
+
+    return typegen(name, schema, config);
+  }
+
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
   await schemaInput.addSource({
     name: '___Nodegen',

@@ -47,4 +47,11 @@ export interface NodegenRc {
    * }
    */
   quickTypeOptions?: Record<string, string>;
+  /**
+   * Allows you to specify your own schema to types generator.
+   * In case nothing is specified here, the default type generator (QuickType) will be used instead.
+   *
+   * Examples: "./schema-to-typescript.js", "generate-it-typegen-spec2ts"
+   */
+   typegen?: string;
 }
