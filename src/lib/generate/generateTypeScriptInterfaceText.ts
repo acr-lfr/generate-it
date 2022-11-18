@@ -1,5 +1,5 @@
 import { LINEBREAK } from '@/constants/cli';
-import { ConfigExtendedBase } from '@/interfaces';
+import { ConfigExtendedBase, TypegenFunction } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
 
 const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
@@ -9,7 +9,7 @@ const countNoOfMatches = (name: string, line: string): number => {
   return ((line || '').match(regex) || []).length;
 };
 
-export default async (
+const generateTypeScriptInterfaceText: TypegenFunction = async (
   name: string,
   schema: string,
   config: ConfigExtendedBase
@@ -21,7 +21,7 @@ export default async (
         : config.nodegenRc.typegen
     );
 
-    const typegen = typeof typegenModule.default === 'function'
+    const typegen: TypegenFunction = typeof typegenModule.default === 'function'
       ? typegenModule.default
       : typegenModule;
 
@@ -70,3 +70,5 @@ export default async (
     outputString: interfaceReturnString,
   };
 };
+
+export default generateTypeScriptInterfaceText;
