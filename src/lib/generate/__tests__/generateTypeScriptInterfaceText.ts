@@ -126,4 +126,22 @@ describe('generateTypeScriptInterfaceText', () => {
       'export type WeAreUnion = "yay" | "hey" | "it works!";'
     );
   });
+
+  it('should work with an external typegen', async () => {
+    const mockTypegenConfig = {
+      ...mockConfig,
+      nodegenRc: {
+        ...mockConfig.nodegenRc,
+        typegen: './build/__mocks__/mockTypegen.js',
+      }
+    };
+
+    const name = 'InterfaceName1';
+    const schema = 'DummySchema1';
+    const output = await generateTypeScriptInterfaceText(name, schema, mockTypegenConfig);
+
+    expect(output.outputString.trim()).toBe(
+      `mocked_typegen_${schema}_${name}`
+    );
+  });
 });
