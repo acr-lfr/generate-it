@@ -9,3 +9,4 @@ export * from './NodegenRc';
 export * from './Package';
 export * from './Swagger';
 export * from './TemplateVariables';
+export * from './TypegenFunction';

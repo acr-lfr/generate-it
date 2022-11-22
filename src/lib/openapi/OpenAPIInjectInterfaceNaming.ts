@@ -6,6 +6,7 @@ import ApiIs from '@/lib/helpers/ApiIs';
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
+import { JSONSchema } from 'json-schema-ref-parser';
 
 class OpenAPIInjectInterfaceNaming {
   public config: any;
@@ -301,13 +302,40 @@ class OpenAPIInjectInterfaceNaming {
           ? {outputString: this.objectToInterfaceString(requestObject, interfaceName)}
           : await generateTypeScriptInterfaceText(
             interfaceName,
-            JSON.stringify({type: 'object', properties: requestObject}),
+            JSON.stringify(this.convertRequestParamsToSchemaObject(requestObject)),
             this.config
           );
       } else {
         delete this.apiObject[action][path][method]['x-request-definitions'][requestType];
       }
     }
+  }
+
+  public convertRequestParamsToSchemaObject (requestObject: any): JSONSchema {
+    const schemaObj: JSONSchema = {
+      type: 'object',
+      required: [],
+      properties: {}
+    };
+
+    if (!Object.keys(requestObject || {}).length) {
+      return schemaObj;
+    }
+
+    for (const [paramKey, { required, ...param } = {} as any] of Object.entries(requestObject)) {
+      if (required === true && Array.isArray(schemaObj.required)) {
+        schemaObj.required.push(paramKey);
+      }
+
+      schemaObj.properties[paramKey] = typeof required === 'boolean'
+        ? param
+        : {
+          required,
+          ...param
+        };
+    }
+
+    return schemaObj;
   }
 
   /**

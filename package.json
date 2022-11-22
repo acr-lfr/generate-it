@@ -83,6 +83,6 @@
     "jest": "^27.0.6",
     "ts-jest": "^27.0.5",
     "tslint": "^6.1.3",
-    "ttypescript": "^1.5.10"
+    "ttypescript": "^1.5.13"
   }
 }

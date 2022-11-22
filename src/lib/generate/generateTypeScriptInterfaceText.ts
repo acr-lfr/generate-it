@@ -1,6 +1,7 @@
 import { LINEBREAK } from '@/constants/cli';
-import { ConfigExtendedBase } from '@/interfaces';
+import { ConfigExtendedBase, TypegenFunction } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
+import _ from 'lodash';
 
 const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
 
@@ -9,7 +10,29 @@ const countNoOfMatches = (name: string, line: string): number => {
   return ((line || '').match(regex) || []).length;
 };
 
-export default async (name: string, schema: string, config: ConfigExtendedBase): Promise<GenerateTypeScriptInterfaceText> => {
+const generateTypeScriptInterfaceText: TypegenFunction = async (
+  name: string,
+  schema: string,
+  config: ConfigExtendedBase
+): Promise<GenerateTypeScriptInterfaceText> => {
+  if (config.nodegenRc.typegen) {
+    const typegenModule = require(
+      config.nodegenRc.typegen.startsWith('./')
+        ? config.nodegenRc.typegen.replace(/^\.\//, `${process.cwd()}/`)
+        : config.nodegenRc.typegen
+    );
+
+    const typegen: TypegenFunction = typeof typegenModule.default === 'function'
+      ? typegenModule.default
+      : typegenModule;
+
+    return typegen(
+      name,
+      schema,
+      _.cloneDeep(config)
+    );
+  }
+
   const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
   await schemaInput.addSource({
     name: '___Nodegen',
@@ -52,3 +75,5 @@ export default async (name: string, schema: string, config: ConfigExtendedBase):
     outputString: interfaceReturnString,
   };
 };
+
+export default generateTypeScriptInterfaceText;
