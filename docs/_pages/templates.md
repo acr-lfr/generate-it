@@ -59,7 +59,7 @@ More extensive example:
 | renderOnlyExt    | string              | '*'     | "renderOnlyExt": ".njk"                                      | If specified, will only render files with the extension provided and simply copy everything else.                                                                                                                                                                                        |
 | dontPrettify     | boolean             | false   | "dontPrettify": true                                         | If true, prevents running `prettier` on files after rendering.                                                                                                                                                                                                                           |
 | quickTypeOptions | Record<string, any> | {}      | "quickTypeOptions": { "prefer-unions": true }                                              | Specifies additional options for QuickType when converting schemas to types |
-| typegen          | string              | ''                                                                     | "./schema-to-typescript.js" | Allows you to specify your own schema to types generator. In case nothing is specified here, the default type generator (QuickType) will be used instead |
+| typegen          | string              | ''                                                                     | ["./schema-to-typescript.js"](###TYPEGEN%20EXAMPLE) | Allows you to specify your own schema to types generator. In case nothing is specified here, the default type generator (QuickType) will be used instead |
 
 The full contents of the nodegenrc file are passed to the templates within the config: [TemplateVariables.ts](https://github.com/acr-lfr/generate-it/blob/master/src/interfaces/TemplateVariables.ts)
 
@@ -118,3 +118,20 @@ Useful if you need something that is not supported natively, or would be cumbers
 Named: Anything, with or without .njk file extension.
 
 These files are every other file that is not one of the above special file types. They are also rendered by the templating engine unless the `renderOnlyExt` option is enabled.
+
+### TYPEGEN EXAMPLE
+
+**./schema-to-typescript.js:**
+```js
+module.exports.default = async (
+  name,
+  schema,
+  config
+) => {
+  const typeString = doSomeMagicToGetTypesFromSchema(schema);
+
+  return {
+    outputString: `export type ${name} = ${typeString};\n`
+  };
+};
+```
