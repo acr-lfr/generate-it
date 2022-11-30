@@ -213,3 +213,36 @@ test('query string with min / max zero properly adds validation', () => {
     "'query': Joi.object({'limit':Joi.string().allow('').min(0).max(0),}),"
   );
 });
+
+test('respects x-nullable and nullable for required body parameters', () => {
+  const param = {
+    in: 'body',
+    name: 'userData',
+    required: true,
+    schema: {
+      type: 'object',
+      required: [
+        'email',
+        'phoneNumber',
+        'comment'
+      ],
+      properties: {
+        email: {
+          type: 'string'
+        },
+        phoneNumber: {
+          type: 'string',
+          nullable: true
+        },
+        comment: {
+          type: 'string',
+          'x-nullable': true
+        },
+      },
+    },
+  };
+
+  expect(SwaggerUtils.createJoiValidation('get', { parameters: [param] })).toBe(
+    `'body': Joi.object({'email':Joi.string().required(),'phoneNumber':Joi.string().allow('').allow(null).required(),'comment':Joi.string().allow('').allow(null).required(),}),`
+  );
+});

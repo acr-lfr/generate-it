@@ -49,8 +49,8 @@ class SwaggerUtils {
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required === true;
     const type = param.type || param.schema.type;
 
-    const nullable = paramTypeKey === ParamTypeKey.body && param['x-nullable'] !== false && param.nullable !== false ? '.allow(null)' : '';
-    const validationTrailer = (isRequired && !options.isFromArray ? '.required()' : nullable) + (!options.isFromArray ? ',' : '');
+    const nullable = paramTypeKey === ParamTypeKey.body && (!isRequired || param['x-nullable'] || param.nullable) ? '.allow(null)' : '';
+    const validationTrailer = (isRequired && !options.isFromArray ? `${nullable}.required()` : nullable) + (!options.isFromArray ? ',' : '');
 
     if (['string', 'number', 'integer', 'boolean'].includes(type)) {
       if (type === 'integer') {
@@ -59,7 +59,7 @@ class SwaggerUtils {
         validationText += 'Joi.' + type + '()';
       }
 
-      if (type === 'string' && !isRequired && !param.minLength) {
+      if (type === 'string' && (!isRequired || nullable) && !param.minLength) {
         validationText += `.allow('')`;
       }
       if (param.default) {
