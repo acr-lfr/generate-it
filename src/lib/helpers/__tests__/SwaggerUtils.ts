@@ -217,14 +217,16 @@ test('query string with min / max zero properly adds validation', () => {
 test('respects x-nullable and nullable for required body parameters', () => {
   const param = {
     in: 'body',
-    name: 'userData',
+    name: 'userPut',
     required: true,
     schema: {
       type: 'object',
       required: [
         'email',
         'phoneNumber',
-        'comment'
+        'comment',
+        'info',
+        'code'
       ],
       properties: {
         email: {
@@ -236,13 +238,22 @@ test('respects x-nullable and nullable for required body parameters', () => {
         },
         comment: {
           type: 'string',
-          'x-nullable': true
+          'x-nullable': true,
         },
+        info: {
+          type: 'string',
+          nullable: true,
+          minLength: 10
+        },
+        code: {
+          type: 'number',
+          nullable: true
+        }
       },
     },
   };
 
   expect(SwaggerUtils.createJoiValidation('get', { parameters: [param] })).toBe(
-    `'body': Joi.object({'email':Joi.string().required(),'phoneNumber':Joi.string().allow('').allow(null).required(),'comment':Joi.string().allow('').allow(null).required(),}),`
+    `'body': Joi.object({'email':Joi.string().required(),'phoneNumber':Joi.string().allow('').allow(null).required(),'comment':Joi.string().allow('').allow(null).required(),'info':Joi.string().min(10).allow(null).required(),'code':Joi.number().allow(null).required(),}),`
   );
 });
