@@ -61,12 +61,14 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          host: github.com
       - run: |
           mkdir -p ~/.ssh && \
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" && \
           eval "$(ssh-agent -s)" && \
-          ssh-add ~/.ssh/id_rsa
-      - run: npm test
+          ssh-add ~/.ssh/id_rsa && \
+          ssh-keyscan github.com >> ~/.ssh/known_hosts && \
+          npm test
 
   coverage:
     runs-on: ubuntu-latest
