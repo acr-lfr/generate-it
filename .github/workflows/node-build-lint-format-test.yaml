@@ -61,6 +61,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - run: mkdir -p ~/.ssh && ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ""
       - run: npm test
 
   coverage:
