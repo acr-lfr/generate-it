@@ -6,28 +6,52 @@ jest.setTimeout(60 * 1000); // in milliseconds
 
 const testServerName = 'test_server_2';
 const testServerPath = path.join(process.cwd(), testServerName);
-export const tplUrl = 'https://github.com/acrontum/generate-it-typescript-server.git';
 
 describe('e2e testing', () => {
   beforeAll(() => {
-    fs.removeSync(testServerName);
+    fs.removeSync(testServerPath);
   });
   afterAll(() => {
-    fs.removeSync(testServerName);
+    fs.removeSync(testServerPath);
   });
 
-  it('Should build without error', (done) => {
+  it('Should build from https then update ie git pull over https', (done) => {
     const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
-    openapiNodegen({
+    const openapiConfig = {
       dontRunComparisonTool: false,
       dontUpdateTplCache: false,
       updateDependenciesFromTpl: false,
-      mockServer: true,
+      mockServer: false,
       swaggerFilePath: ymlPath,
       targetDir: testServerPath,
-      template: tplUrl,
-    })
-      .then(() => done())
+      template: 'https://github.com/acr-lfr/generate-it-typescript-server-client.git',
+    };
+    openapiNodegen(openapiConfig)
+      .then(() => {
+        openapiNodegen(openapiConfig)
+          .then(() => done())
+          .catch((e) => done(e));
+      })
+      .catch(e => done(e));
+  });
+
+  it('Should build from SSH then update ie git pull over SSH', (done) => {
+    const ymlPath = path.join(process.cwd(), 'test_swagger.yml');
+    const openapiConfig = {
+      dontRunComparisonTool: false,
+      dontUpdateTplCache: false,
+      updateDependenciesFromTpl: false,
+      mockServer: false,
+      swaggerFilePath: ymlPath,
+      targetDir: testServerPath,
+      template: 'git@github.com:acr-lfr/generate-it-typescript-server-client.git',
+    };
+    openapiNodegen(openapiConfig)
+      .then(() => {
+        openapiNodegen(openapiConfig)
+          .then(() => done())
+          .catch((e) => done(e));
+      })
       .catch(e => done(e));
   });
 });

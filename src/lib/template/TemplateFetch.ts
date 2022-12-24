@@ -317,7 +317,7 @@ template version tag: ${tplTag}
    * @return {Promise<string>} - Returns the full path on the local drive to the tpl directory.
    */
   public async resolveTemplateType (input: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
-    if (input.substring(0, 8) === 'https://') {
+    if (input.startsWith('https://') || input.startsWith('git@')) {
       return await this.gitFetch(input, targetGitCacheDir, dontUpdateTplCache);
     } else if (fs.existsSync(path.resolve(input))) {
       return await this.localDirectoryCopy(input, targetGitCacheDir, dontUpdateTplCache);
