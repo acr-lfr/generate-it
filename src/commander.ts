@@ -1,4 +1,4 @@
-import 'colors';
+import '@colors/colors';
 import program from 'commander';
 import commander from 'commander';
 import path from 'path';

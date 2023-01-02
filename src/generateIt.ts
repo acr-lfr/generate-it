@@ -1,4 +1,4 @@
-import 'colors';
+import '@colors/colors';
 import * as fs from 'fs-extra';
 import path from 'path';
 import globalHelpers from '@/lib/helpers/globalHelpers';

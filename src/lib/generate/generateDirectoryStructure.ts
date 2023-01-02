@@ -2,7 +2,7 @@ import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import DisplayDependencyDiffs from '@/lib/diff/DisplayDependencyDiffs';
 import generateBaseStructure from '@/lib/generate/generateBaseStructure';
 import resetNodegenFolder from '@/lib/resetNodegenFolder';
-import 'colors';
+import '@colors/colors';
 import fs from 'fs-extra';
 import path from 'path';
 

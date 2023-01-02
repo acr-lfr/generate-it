@@ -1,4 +1,4 @@
-import 'colors';
+import '@colors/colors';
 import fs from 'fs-extra';
 import path from 'path';
 import { suggestVersionUpgrade } from '../helpers/suggestVersionUpgrade';

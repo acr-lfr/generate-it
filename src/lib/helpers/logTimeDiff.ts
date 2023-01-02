@@ -1,4 +1,4 @@
-import 'colors';
+import '@colors/colors';
 export default (time1: number, time2: number, green?: boolean) => {
   const diff = Math.round((time2 - time1) / 1000);
   const str = `Seconds passed: ${diff}`;

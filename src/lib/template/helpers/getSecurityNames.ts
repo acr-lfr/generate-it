@@ -1,4 +1,4 @@
-import 'colors';
+import '@colors/colors';
 /**
  * Extracts the security key names from a path object and returns as a tpl string or array
  * @param pathObject

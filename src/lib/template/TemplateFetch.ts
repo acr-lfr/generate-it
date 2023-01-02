@@ -2,10 +2,11 @@ import { GIT_DIRECTORY } from '@/constants/CachePaths';
 import camelCaseStringReplacement from '@/lib/helpers/camelCaseStringReplacement';
 import commandRun from '@/lib/helpers/commandRun';
 import * as walk from '@root/walk';
-import 'colors';
+import '@colors/colors';
 import compareVersions from 'compare-versions';
 import fs from 'fs-extra';
 import path from 'path';
+import * as process from 'process';
 
 class TemplateFetchURL {
   public targetGitCacheDir: string;
@@ -51,9 +52,9 @@ class TemplateFetchURL {
    */
   public cleanSingleCacheDir (cachePath: string) {
     if (!cachePath.includes(this.targetGitCacheDir)) {
-      console.error('For safety all folder removals must live within node_modules of this package.');
+      console.error('For safety all folder removals must live within node_modules of this package.'.red);
       console.error(
-        'An incorrect cache folder path has been calculated, aborting! Please report this as an issue on gitHub.'
+        'An incorrect cache folder path has been calculated, aborting! Please report this as an issue on gitHub.'.red
       );
       throw new Error('Aborting openapi-nodegen, see above comments.');
     }
@@ -69,7 +70,7 @@ class TemplateFetchURL {
       await commandRun('git', ['--help']);
       return true;
     } catch (e) {
-      console.error('No gitFetch cli found on this operating system');
+      console.error('No gitFetch cli found on this operating system'.red);
       return false;
     }
   }
@@ -118,7 +119,7 @@ class TemplateFetchURL {
         await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
       }
     } catch (e) {
-      console.error('Could not clone or pull the given git repository', e);
+      console.error('Could not clone or pull the given git repository'.red, e);
       console.log('');
       console.log('Clearing the cache and trying to clone from fresh:');
       this.cleanSingleCacheDir(cacheDirectory);
@@ -168,8 +169,9 @@ class TemplateFetchURL {
       try {
         tplTag = (await this.getTplTag(cacheDirectory));
       } catch (e) {
-        console.error('Error trying to fetch the template tag. Ensure the tpl repository has a tag in the remote and try again.');
-        throw e;
+        console.error(cacheDirectory.red);
+        console.error('Error trying to fetch the template tag. A tpl repository requires a semver tag adding to it, generate uses this semver to determine the min. generate-it core version required for the given template repo. When no git tag is found on the tpl this error is thrown.'.red);
+        process.exit(1);
       }
     }
     if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
@@ -313,7 +315,7 @@ template version tag: ${tplTag}
       }
       await this.copyRecursive(url, cacheDirectory);
     } catch (e) {
-      console.error('Could not copy the folders!');
+      console.error('Could not copy the folders!'.red, e);
       this.cleanSingleCacheDir(cacheDirectory);
       throw e;
     }

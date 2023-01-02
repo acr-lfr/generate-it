@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import 'colors';
+import '@colors/colors';
 import * as inquirer from 'inquirer';
 import cliInput from './commander';
 import generateIt from './generateIt';
