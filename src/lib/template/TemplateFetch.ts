@@ -161,7 +161,17 @@ class TemplateFetchURL {
       return;
     }
     const pkVersion = require('../../../package.json').version;
-    const tplTag = tagBranch || (await this.getTplTag(cacheDirectory));
+    let tplTag;
+    if (tagBranch) {
+      tplTag = tagBranch;
+    } else {
+      try {
+        tplTag = (await this.getTplTag(cacheDirectory));
+      } catch (e) {
+        console.error('Error trying to fetch the template tag. Ensure the tpl repository has a tag in the remote and try again.');
+        throw e;
+      }
+    }
     if (!this.packageAndTplVersionOK(pkVersion, tplTag)) {
       console.log('IMPORTANT! There is a genetate-it & template tagged version error.'.red.bold);
       console.log(
