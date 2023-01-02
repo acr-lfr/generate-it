@@ -4,12 +4,6 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/test_asyncapi/.openapi-nodegen/git/httpsGithubComAcrontumGenerateItAsyncapiRabbitmqGit" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/test_server/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_2/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_2/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit442" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_2/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit500" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/test_server_client/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_client/src/service/openweathermap/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerClientGit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_client/src/services/openweathermap/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerClientGit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_server_new/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit" vcs="Git" />
   </component>
 </project>

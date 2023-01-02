@@ -118,7 +118,9 @@ class TemplateFetchURL {
         await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
       }
     } catch (e) {
-      console.error('Could not clone or pull the given git repository, clearing and cloning from fresh.');
+      console.error('Could not clone or pull the given git repository', e);
+      console.log('');
+      console.log('Clearing the cache and trying to clone from fresh:');
       this.cleanSingleCacheDir(cacheDirectory);
       try {
         await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
