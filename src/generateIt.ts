@@ -33,7 +33,7 @@ export default async (config: Config): Promise<boolean> => {
   checkRcOpIdArrIsValid(extendedConfig.swagger, extendedConfig.nodegenRc);
 
   await FileIterator.walk(
-    await generateDirectoryStructure(extendedConfig, templatesDir),
+    await generateDirectoryStructure(extendedConfig),
     extendedConfig
   );
 
