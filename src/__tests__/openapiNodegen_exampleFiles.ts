@@ -31,6 +31,7 @@ describe('e2e testing for example files', () => {
   it('Build, delete the expected example file, regen, the example should stay dead.', async () => {
     await openapiNodegen(generateItConfig);
     const exampleFilePath = path.join(testServerPath, 'src/EXAMPLE_app.ts');
+    expect(fs.pathExistsSync(exampleFilePath)).toBe(true);
     fs.removeSync(exampleFilePath);
     await openapiNodegen(generateItConfig);
     expect(fs.pathExistsSync(exampleFilePath)).toBe(false);
