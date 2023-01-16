@@ -6,6 +6,7 @@ class FileTypeCheck {
   public STUB = 'STUB';
   public OTHER = 'OTHER';
   public EVAL = 'EVAL';
+  public EXAMPLE = 'EXAMPLE';
 
   public getFileType (name: string) {
     if (this.isOpertationIndexFile(name)) {
@@ -25,6 +26,9 @@ class FileTypeCheck {
     }
     if (this.isEvalFile(name)) {
       return this.EVAL;
+    }
+    if (this.isExampleFile(name)) {
+      return this.EXAMPLE;
     }
     return this.OTHER;
   }
@@ -51,6 +55,10 @@ class FileTypeCheck {
 
   public isEvalFile (name: string) {
     return name.substr(0, 7) === '___eval';
+  }
+
+  public isExampleFile (name: string) {
+    return name.startsWith('EXAMPLE_');
   }
 }
 

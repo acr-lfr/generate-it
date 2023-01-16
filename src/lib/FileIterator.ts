@@ -128,6 +128,10 @@ class FileWalker {
       case FileTypeCheck.OPERATION_INDEX:
         this.files[fileType] = {generationDataObject};
         break;
+      case FileTypeCheck.EXAMPLE:
+        // Do nothing, an example file be injected by generateBaseStructure
+        // Subsequent re-gens should not inject the file back into the file
+        // system as the user may well have intentionally removed it
     }
 
     if ((this.config.mockServer && fileType === FileTypeCheck.MOCK) || fileType === FileTypeCheck.STUB || fileType === FileTypeCheck.OPERATION) {
