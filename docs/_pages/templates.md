@@ -50,6 +50,19 @@ When generate-it encounters an eval file, it will import in and run it's default
 
 Useful if you need something that is not supported natively, or would be cumbersome to do through templating. The default export of the file will be passed in a [Context](https://github.com/acr-lfr/generate-it-typescript-server/blob/9443ef670705eb6637991bc93cba9ebb619c7233/src/http/nodegen/tests/___eval.ts#L8) as the first argument, containing most of the generation data.
 
+### EXAMPLE
+
+Named: [EXAMPLE_anything.ts](https://github.com/acr-lfr/generate-it/blob/master/test_server/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit/src/EXAMPLE_app.ts)
+
+On the 1st generation of an API these files will be copied over. After the 1st run, these files in the remote TPL repo will be ignored.
+
+Useful for when you want to easily manage and add example database repository files, or connections files to other systems.
+
+The user is free to delete these files are the 1st run knowing they will not reappear.
+
+NOTE: This is different to type OTHER which will always be added back if not found.
+
+
 ### OTHER
 
 Named: Anything, with or without .njk file extension.
