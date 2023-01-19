@@ -4,6 +4,15 @@ import TemplateFetch from '@/lib/template/TemplateFetch';
 import fs from 'fs-extra';
 import * as walk from '@root/walk';
 import path from 'path';
+import deepmerge from 'deepmerge';
+
+interface SingleTplFetched {
+  isBaseTpl: boolean;
+  source: string;
+  templatesDir: string;
+}
+
+type TplsFetched = SingleTplFetched[]
 
 class Injections {
   /**
@@ -20,8 +29,16 @@ class Injections {
 
     const {injections} = extendedConfig.nodegenRc;
 
+    // if we have more than 1 baseTpl flag, throw error to explain
+    const baseTplFlags = injections.filter((injection) => injection.isBaseTpl);
+    if (baseTplFlags.length > 1) {
+      throw new Error('There can only be 1 baseTpl: baseTpl: true; was found on more than 1 injection object in your nodegenrc file.');
+    }
+
     // Before starting, we need a folder for the merged code to live
     const baseMerged = this.createBaseMergeTemplateFolder(extendedConfig);
+
+    const tplsFetched: TplsFetched = [];
 
     // Iterate over each injection
     for (let i = 0; i < injections.length; i++) {
@@ -32,6 +49,12 @@ class Injections {
         extendedConfig.targetDir,
         extendedConfig.dontUpdateTplCache
       );
+
+      tplsFetched.push({
+        isBaseTpl: injections[i].isBaseTpl,
+        source: injections[i].source,
+        templatesDir
+      });
 
       // Merge the injection tpl into the merge folder
       await this.mergeInjectionIntoBaseMergeFolder({
@@ -44,7 +67,52 @@ class Injections {
       });
     }
 
+    // finally, use the tplsFetched to merge together the dependency files - currently only supports package.json
+    if (baseTplFlags.length) {
+      await this.dependencyFileMerging(tplsFetched, baseMerged.fullPath);
+    }
+
     return baseMerged.fullPath;
+  }
+
+  dependencyFileMerging (tplsFetched: TplsFetched, baseMergedFullPath: string) {
+    const baseTpl = tplsFetched.find(tpl => tpl.isBaseTpl);
+    // Only continue if we have a base package.json file to merge into
+    const baseMergedPackageJsonPath = this.getPackageJsonPathFromDirectory(baseMergedFullPath);
+    if (baseMergedPackageJsonPath) {
+      // Now only continue is the isbaseTpl has a package.json to use as a base
+      const basePackageJsonPath = this.getPackageJsonPathFromDirectory(baseTpl.templatesDir);
+      if (basePackageJsonPath) {
+        let baseJson = fs.readJsonSync(basePackageJsonPath);
+        // now iterate over non baseTpls in order they are provided
+        // merging 1 into the baseJson as we go
+        for (let i = 0; i < tplsFetched.length; i++) {
+          const tpl = tplsFetched[i];
+          if (tpl.isBaseTpl) {
+            continue;
+          }
+          const tplPackageJsonPath = this.getPackageJsonPathFromDirectory(tpl.templatesDir);
+          if (tplPackageJsonPath) {
+            baseJson = deepmerge(baseJson, fs.readJsonSync(tplPackageJsonPath));
+          }
+        }
+        // finally, write the baseJson into packageJson of the __merge folder
+        fs.writeJsonSync(baseMergedPackageJsonPath, baseJson, {spaces: 2});
+      }
+    }
+  }
+
+  getPackageJsonPathFromDirectory (fullDirPath: string): string | null {
+    const tplPackageJson = path.join(fullDirPath, 'package.json');
+    if (fs.pathExistsSync(tplPackageJson)) {
+      return tplPackageJson;
+    } else {
+      const tplPackageJson = path.join(fullDirPath, 'package.json.njk');
+      if (fs.pathExistsSync(tplPackageJson)) {
+        return tplPackageJson;
+      }
+    }
+    return null;
   }
 
   /**
@@ -79,8 +147,8 @@ class Injections {
         throw err;
       }
 
-      // don't copy the got folder or contents over
-      if (fullPath.includes('.git')) {
+      // don't copy the git folder or contents over, but do copy over the .gitignore/module/attributes etc etc files
+      if (fullPath.includes('.git/')) {
         return;
       }
 

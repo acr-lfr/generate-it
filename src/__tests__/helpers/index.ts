@@ -7,7 +7,13 @@ export const clearTestServer = (dir: string = 'test_server') => {
   // return;
   const names = fs.readdirSync(path.join(process.cwd(), dir));
   for (let i = 0; i < names.length; ++i) {
-    if (names[i] !== '.openapi-nodegen') {
+    if (names[i] === '.openapi-nodegen') {
+      // only remove the merged folder from .openapi-nodegen dirs
+      const fullOpenapiNodeGenPath = path.join(process.cwd(), dir, names[i], 'git/httpsGithubComAcrontumOpenapiNodegenTypescriptServerGit_merged');
+      if (fs.pathExistsSync(fullOpenapiNodeGenPath)) {
+        fs.removeSync(fullOpenapiNodeGenPath);
+      }
+    } else {
       fs.removeSync(path.join(process.cwd(), dir, names[i]));
     }
   }

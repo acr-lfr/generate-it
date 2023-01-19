@@ -7,5 +7,14 @@
       "jwtType": "JwtAccess",
       "requestType": "NodegenRequest"
     }
-  }
+  },
+  "injections": [
+    {
+      "source": "https://github.com/acrontum/openapi-nodegen-typescript-server.git",
+      "isBaseTpl": true
+    },
+    {
+      "source": "https://github.com/acrontum/openapi-nodegen-typescript-inject-server.git"
+    }
+  ]
 }

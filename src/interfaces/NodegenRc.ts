@@ -6,7 +6,13 @@ export interface Helpers {
 }
 
 export interface Injection {
-  destination?: string;
+  /**
+   * Only 1 injection object in the array of injection objects can be marked as the isBaseTpl.
+   * When an injection is marked as the base, the package.json files from the injections will
+   * be merged into the base. This allows the injections to not have to maintain dependency
+   * mgmt, but instead offsetting the said mgmt to the base tpl authors.
+   **/
+  isBaseTpl?: boolean;
   source: string;
 }
 
@@ -53,5 +59,5 @@ export interface NodegenRc {
    *
    * Examples: "./schema-to-typescript.js", "generate-it-typegen-spec2ts"
    */
-   typegen?: string;
+  typegen?: string;
 }
