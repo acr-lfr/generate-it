@@ -11,7 +11,7 @@ export interface Injection {
    * When an injection is marked as the base, the package.json files from the injections will
    * be merged into the base. This allows the injections to not have to maintain dependency
    * mgmt, but instead offsetting the said mgmt to the base tpl authors.
-   **/
+   */
   isBaseTpl?: boolean;
   source: string;
 }

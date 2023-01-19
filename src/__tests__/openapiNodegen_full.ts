@@ -119,13 +119,13 @@ it('The injections should have merged the package json files using the main serv
   const json = fs.readJsonSync(path.join(process.cwd(), 'test_server/package.json'));
 
   // from the injected tpl
-  expect(json.scripts.injectedScript).toBe('echo \'bob was here thanks to an injection\'')
-  expect(json.dependencies.boats).toBe('^2.38')
+  expect(json.scripts.injectedScript).toBe('echo \'bob was here thanks to an injection\'');
+  expect(json.dependencies.boats).toBe('^2.38');
 
   // from the base tpl
-  expect(json.scripts.build).toBe('ttsc -p .')
-  expect(json.dependencies.cors).toBe('^2.8.5')
-  expect(json.devDependencies.typescript).toBe('^3.6.4')
+  expect(json.scripts.build).toBe('ttsc -p .');
+  expect(json.dependencies.cors).toBe('^2.8.5');
+  expect(json.devDependencies.typescript).toBe('^3.6.4');
 });
 
 

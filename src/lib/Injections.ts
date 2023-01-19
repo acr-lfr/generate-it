@@ -12,7 +12,7 @@ interface SingleTplFetched {
   templatesDir: string;
 }
 
-type TplsFetched = SingleTplFetched[]
+type TplsFetched = SingleTplFetched[];
 
 class Injections {
   /**
@@ -102,17 +102,17 @@ class Injections {
     }
   }
 
-  getPackageJsonPathFromDirectory (fullDirPath: string): string | null {
+  getPackageJsonPathFromDirectory (fullDirPath: string): string | undefined {
     const tplPackageJson = path.join(fullDirPath, 'package.json');
     if (fs.pathExistsSync(tplPackageJson)) {
       return tplPackageJson;
     } else {
-      const tplPackageJson = path.join(fullDirPath, 'package.json.njk');
-      if (fs.pathExistsSync(tplPackageJson)) {
-        return tplPackageJson;
+      const tplPackageJsonNjk = path.join(fullDirPath, 'package.json.njk');
+      if (fs.pathExistsSync(tplPackageJsonNjk)) {
+        return tplPackageJsonNjk;
       }
     }
-    return null;
+    return undefined;
   }
 
   /**
