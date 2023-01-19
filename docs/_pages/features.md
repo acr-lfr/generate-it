@@ -242,18 +242,29 @@ To make this simpler, turn the whole process around.
     }
   },
   "injections": [
-     {"source": "https://github.com/acr-lfr/generate-it-typescript-server.git"}
-     {"source": "https://github.com/yourusername/ts-overwrites"}
-   ],
+     {
+        "isBaseTpl": true
+        "source": "https://github.com/acr-lfr/generate-it-typescript-server.git"
+     }
+     {
+        "source": "https://github.com/yourusername/ts-overwrites"
+     }
+   ]
 }
 ```
-
-Now the 1st time you run the script on a new api, the nodegenrc script will be pulled down and parsed; generate-it will then have the injections right away to iterate over (in the order they appear).
-
-In the above example, the generate-it-typescript-server files will be copied into the _merged folder 1st, then your override files will automatically be added on top.
-
-The end result here is that both remote urls can be updated independently of each other. This will allow for 2 teams to build an API from the same base files and benifit from the updates both teams can provide. While at the same time, each team can effortlessly inject their own customisations as wanted.
-
+What will happen now:
+1. The package.json script calls generate-it using the remote tpl which contains the above nodegenrc file
+2. The existence of the injections object tells generate-it create a new folder which will house the merged contents. In the above example:
+   1. generate-it-typescript-server files will be copied into the _merged folder 1st, then your override files will automatically be added on top.
+   2. The order of the injections array is respected, ergo, the 1st injection object in the array is handled 1st and the 2nd seconds etc etc until the array is exhausted
+   3. In the 1st position there is a boolean flag `isBaseTpl: true`. When this optional flag is present generate it will merge the package.json scripts into 1 using the isBaseTpl's package.json as the base object to merge into. 
+      - When this boolean flag is not present, nothing is merged. Instead, should the last injection tpl files contain a package.json file, this will replace whatever is found in the merged folder.
+      - If you place the boolean on more than 1 injection object an error is thrown.
+      - You can mark any injection to be the base.
+      - TIP: It is advisable to use this flag as it offsets the dependency management to the authors of the base tpl.
+3. The end/final result will be your API now contains a combination of the injection tpls. 
+   1. The base tpl management can be left to whoever manages it.
+   2. You can inject your changes as required and manage updates to the changes remotely, changes will be pulled in on next call of generate-it.
 
 ## .nodegenrc file
 For more details please read this page: [templates](/_pages/templates.md)
