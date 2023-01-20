@@ -53,7 +53,6 @@
     "nunjucks": "^3.2.3",
     "prettier": "^2.4.1",
     "quicktype": "^15.0.261",
-    "semver": "^7.3.5",
     "text-file-diff": "1.1.2",
     "typescript": "^4.3.5",
     "word-wrap": "^1.2.3"
@@ -68,7 +67,6 @@
     "@types/node": "^13.13.52",
     "@types/nunjucks": "^3.1.5",
     "@types/prettier": "^2.3.2",
-    "@types/semver": "^7.3.7",
     "@types/swagger-schema-official": "^2.0.22",
     "@types/yamljs": "^0.2.31",
     "@zerollup/ts-transform-paths": "^1.7.18",
