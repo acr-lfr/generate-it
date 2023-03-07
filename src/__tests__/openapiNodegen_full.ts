@@ -114,6 +114,9 @@ it('The injected example file and random other injected file should be there ', 
   expect(fs.existsSync(path.join(process.cwd(), 'test_server/src/EXAMPLE_app.ts'))).toBe(true);
   expect(fs.existsSync(path.join(process.cwd(), 'test_server/src/someotherfile.ts'))).toBe(true);
 });
+it('The injections, it should have removed the "src/services/PermissionService.ts"', async () => {
+  expect(fs.existsSync(path.join(process.cwd(), 'test_server/src/services/PermissionService.ts'))).toBe(false);
+});
 
 it('The injections should have merged the package json files using the main server as the is base', async () => {
   const json = fs.readJsonSync(path.join(process.cwd(), 'test_server/package.json'));
@@ -127,7 +130,6 @@ it('The injections should have merged the package json files using the main serv
   expect(json.dependencies.cors).toBe('^2.8.5');
   expect(json.devDependencies.typescript).toBe('^3.6.4');
 });
-
 
 it(`shouldn't mangle package.json`, async () => {
   const jsonfile = path.join(testServerPath, 'package.json');

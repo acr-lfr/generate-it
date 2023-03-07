@@ -39,9 +39,14 @@ class Injections {
     const baseMerged = this.createBaseMergeTemplateFolder(extendedConfig);
 
     const tplsFetched: TplsFetched = [];
+    let filesToDelete: string[] = [];
 
     // Iterate over each injection
     for (let i = 0; i < injections.length; i++) {
+
+      if (Array.isArray(injections[i].deleteFiles) && injections[i].deleteFiles.length) {
+        filesToDelete = filesToDelete.concat(injections[i].deleteFiles);
+      }
 
       // download the injections using the regular TemplateFetch class
       const templatesDir = await TemplateFetch.resolveTemplateType(
@@ -65,6 +70,14 @@ class Injections {
           ''
         )
       });
+    }
+
+    // remove any files marked to delete from the merged source folder
+    for (let i = 0; i < filesToDelete.length; i++) {
+      fs.removeSync(path.join(
+        baseMerged.fullPath,
+        filesToDelete[i]
+      ));
     }
 
     // finally, use the tplsFetched to merge together the dependency files - currently only supports package.json
