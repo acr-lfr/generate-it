@@ -27,15 +27,20 @@ class OaToJsToJs {
     return builtString.substring(0, builtString.length - 2);
   }
 
+  shouldWrapAttribute (key: string): boolean {
+    return !Boolean(key.match(/^[A-Za-z0-9_]*$/));
+  }
+
   public objectWalkWrite (input: any, builtString?: string) {
     builtString = builtString || '{';
     for (const key in input) {
+      const objectKey = this.shouldWrapAttribute(key) ? `['${key}']` : key;
       if (typeof input[key] === 'function') {
-        builtString += key + ': ' + this.getType(input[key]) + `, `;
+        builtString += objectKey + ': ' + this.getType(input[key]) + `, `;
       } else if (Array.isArray(input[key])) {
-        builtString += key + ': [' + this.arrayWalkWrite(input[key]) + '],';
+        builtString += objectKey + ': [' + this.arrayWalkWrite(input[key]) + '],';
       } else if (typeof input[key] === 'object') {
-        builtString += key + ': ' + this.objectWalkWrite(input[key]);
+        builtString += objectKey + ': ' + this.objectWalkWrite(input[key]);
       }
     }
     builtString += '},';
