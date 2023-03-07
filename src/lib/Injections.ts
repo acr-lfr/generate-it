@@ -32,7 +32,7 @@ class Injections {
     // if we have more than 1 baseTpl flag, throw error to explain
     const baseTplFlags = injections.filter((injection) => injection.isBaseTpl);
     if (baseTplFlags.length > 1) {
-      throw new Error('There can only be 1 baseTpl: baseTpl: true; was found on more than 1 injection object in your nodegenrc file.');
+      throw new Error(`There can only be 1 "isBaseTpl: true". The nodegenrc of this project has ${baseTplFlags.length}.`);
     }
 
     // Before starting, we need a folder for the merged code to live
