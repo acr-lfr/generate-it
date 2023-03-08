@@ -14,6 +14,7 @@ export interface Injection {
    */
   isBaseTpl?: boolean;
   source: string;
+  deleteFiles?: string[];
 }
 
 export interface NodegenRc {

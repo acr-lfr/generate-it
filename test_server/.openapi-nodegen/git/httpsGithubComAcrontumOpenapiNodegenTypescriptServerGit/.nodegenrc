@@ -14,7 +14,10 @@
       "isBaseTpl": true
     },
     {
-      "source": "https://github.com/acrontum/openapi-nodegen-typescript-inject-server.git"
+      "source": "https://github.com/acrontum/openapi-nodegen-typescript-inject-server.git",
+      "deleteFiles": [
+        "src/services/PermissionService.ts"
+      ]
     }
   ]
 }

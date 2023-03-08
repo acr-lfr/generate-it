@@ -247,7 +247,10 @@ To make this simpler, turn the whole process around.
         "source": "https://github.com/acr-lfr/generate-it-typescript-server.git"
      }
      {
-        "source": "https://github.com/yourusername/ts-overwrites"
+        "source": "https://github.com/yourusername/ts-overwrites",
+        "deleteFiles": [
+          "src/services/PermissionService.ts"
+        ]
      }
    ]
 }
@@ -263,7 +266,8 @@ What will happen now:
       - If you place the boolean on more than 1 injection object an error is thrown.
       - You can mark any injection to be the base.
       - TIP: It is advisable to use this flag as it offsets the dependency management to the authors of the base tpl.
-3. The end/final result will be your API now contains a combination of the injection tpls.
+   4. During the merge an array of files to remove from the merged director is collected. After all are collected, each will be removed from the merged folder.
+3. The end/final result will be your API now contains a combination of the injection tpls, but without the PermissionService.ts file.
    1. The base tpl management can be left to whoever manages it.
    2. You can inject your changes as required and manage updates to the changes remotely, changes will be pulled in on next call of generate-it.
 
