@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import '@colors/colors';
 import * as inquirer from 'inquirer';
-import cliInput from './commander';
+import cliInput from './cliInput';
 import generateIt from './generateIt';
 import { LINEBREAK } from '@/constants/cli';
 import { Config } from '@/interfaces/Config';

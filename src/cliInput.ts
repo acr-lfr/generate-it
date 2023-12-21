@@ -1,37 +1,39 @@
 import '@colors/colors';
-import program from 'commander';
-import commander from 'commander';
+import { createCommand } from 'commander';
 import path from 'path';
 import commanderParseOutput from '@/commanderParseOutput';
 import commanderCollectArray from '@/commanderCollectObject';
 
 const packageInfo = require('../package.json');
 
-interface Program extends commander.CommanderStatic {
+const program = createCommand();
+
+interface ReturnOptions {
   template: string;
   mocked?: boolean;
   output?: string;
-  'dont-update-tpl-cache'?: boolean;
-  'dont-run-comparison-tool'?: boolean;
-  'update-dependencies-from-tpl'?: boolean;
-  'segment-first-grouping'?: number;
-  'segment-second-grouping'?: number;
+  dontUpdateTplCache?: boolean;
+  dontRunComparisonTool?: boolean;
+  updateDependenciesFromTpl?: boolean;
+  segmentFirstGrouping?: number;
+  segmentSecondGrouping?: number;
   variables?: any[];
   verbose?: boolean;
-  'very-verbose'?: boolean;
-  'yes'?: boolean;
-  'render-only-ext'?: string;
-  'dont-prettify'?: boolean;
+  veryVerbose?: boolean;
+  yes?: boolean;
+  renderOnlyExt?: string;
+  dontPrettify?: boolean;
 }
 
 export interface CommanderResponse {
-  program: Program;
+  program: ReturnOptions;
   swaggerFile: string;
 }
 
 export default (inputArgsArray: string[]): CommanderResponse => {
   let swaggerFile: any;
   program
+    .name(packageInfo.name)
     .version(packageInfo.version)
     .arguments('<swaggerFile>')
     .action((swaggerFilePath: string) => {
@@ -53,14 +55,16 @@ export default (inputArgsArray: string[]): CommanderResponse => {
     .option('--dont-prettify', 'Defines if should ignore prettier after generate the source', false)
     .parse(inputArgsArray);
 
+  const options = program.opts();
+
   if (!swaggerFile) {
     throw new Error('> Path to Swagger file not provided.'.red);
-  } else if (program.program.output !== process.cwd() && program.program.updateDependenciesFromTpl) {
+  } else if (options.output !== process.cwd() && options.updateDependenciesFromTpl) {
     throw new Error('> Currently the auto dependency updates cannot be run when the target is not the current directory'.red);
   } else {
     return {
-      program,
+      program: options as ReturnOptions,
       swaggerFile,
-    } as CommanderResponse;
+    };
   }
 };

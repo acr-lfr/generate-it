@@ -1,4 +1,4 @@
-import cliInput from '@/commander';
+import cliInput from '@/cliInput';
 import path from 'path';
 
 describe('Check all program options are captured and names correctly', () => {

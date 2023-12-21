@@ -38,12 +38,12 @@
   "dependencies": {
     "@colors/colors": "1.5.0",
     "@root/walk": "^1.1.0",
-    "commander": "^5.1.0",
+    "commander": "^11.1.0",
     "compare-versions": "^3.6.0",
     "deepmerge": "^4.2.2",
     "fs-extra": "^10.0.0",
     "generate-it-mockers": "^1.1.1",
-    "inquirer": "^7.3.3",
+    "inquirer": "^8.2.6",
     "js-yaml": "^3.14.1",
     "json-schema-ref-parser": "^9.0.9",
     "json-schema-resolve-allof": "^1.5.0",
@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^8.1.2",
-    "@types/inquirer": "^6.5.0",
+    "@types/inquirer": "^8.2.10",
     "@types/jest": "^27.0.1",
     "@types/js-yaml": "^3.12.10",
     "@types/json-schema": "^7.0.15",
