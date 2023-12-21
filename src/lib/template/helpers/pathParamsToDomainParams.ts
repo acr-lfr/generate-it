@@ -49,9 +49,10 @@ export default function (method: string, pathObject: any, withType: boolean = fa
       params.push('formData' + addType(withType, pathObject, 'formData'));
     }
   }
-  const helpers = (this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
-  const tplType = this.ctx && this.ctx.config.data.nodegenRc.nodegenType;
-  const fileType = (this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
+
+  const helpers = (this && this.ctx && this.ctx.config.data.nodegenRc.helpers) ? this.ctx.config.data.nodegenRc.helpers : undefined;
+  const tplType = this && this.ctx && this.ctx.config.data.nodegenRc.nodegenType;
+  const fileType = (this && this.ctx && this.ctx.fileType) ? this.ctx.fileType : undefined;
   const stubHelpers = (helpers && helpers.stub) ? helpers.stub : undefined;
   if (pathObject.security && tplType !== 'client') {
     let push = false;
@@ -66,11 +67,11 @@ export default function (method: string, pathObject: any, withType: boolean = fa
     if (push || pathObject['x-passThruWithoutJWT']) {
       params.push(
         'jwtData' + addType(
-        withType,
-        pathObject,
-        undefined,
-        (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
-        (!!pathObject['x-passThruWithoutJWT']),
+          withType,
+          pathObject,
+          undefined,
+          (stubHelpers && stubHelpers.jwtType) ? stubHelpers.jwtType : undefined,
+          (!!pathObject['x-passThruWithoutJWT']),
         ));
     }
   }
@@ -80,10 +81,10 @@ export default function (method: string, pathObject: any, withType: boolean = fa
     if (fileType === 'STUB') {
       params.push(
         'req' + addType(
-        withType,
-        pathObject,
-        undefined,
-        (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined,
+          withType,
+          pathObject,
+          undefined,
+          (stubHelpers && stubHelpers.requestType) ? stubHelpers.requestType : undefined,
         ));
     } else {
       params.push('req' + addType(withType, pathObject));
