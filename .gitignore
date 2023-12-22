@@ -6,7 +6,8 @@ cache
 node_modules
 
 # ide
-.idea/workspace.xml
+.idea
+.vscode
 
 # Generated
 build
