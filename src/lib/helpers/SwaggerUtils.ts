@@ -44,7 +44,7 @@ class SwaggerUtils {
       return;
     }
 
-    const { paramTypeKey } = options;
+    const {paramTypeKey} = options;
     let validationText = param.name ? `'${param.name}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required === true;
     const type = param.type || param.schema.type;
@@ -121,6 +121,7 @@ class SwaggerUtils {
             ...properties[propertyKey],
           },
           {
+            requiredFields: Array.isArray(param.required) ? param.required : undefined,
             paramTypeKey,
           }
         );
