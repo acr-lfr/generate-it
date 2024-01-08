@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.54.0",
+  "version": "5.54.1",
   "description": "Generate-it, will generate servers, clients, web-socket and anything else you can template with nunjucks from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH & Liffery Ltd",
   "license": "MIT",
