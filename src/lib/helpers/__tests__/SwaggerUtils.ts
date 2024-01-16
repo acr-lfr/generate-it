@@ -341,3 +341,39 @@ it('When the string attribute contains x-dont-trim then trim(true) should not be
 
   expect(joiString).toBe(expectedouput);
 });
+
+
+it('Adding the Joi methods to the string', () => {
+  const pathObj: any = {
+    'parameters': [
+      {
+        in: 'body',
+        name: 'teamsPostPost',
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            team: {
+              type: 'object',
+              required: ['name'],
+              properties: {
+                name: {
+                  type: 'string',
+                  minLength: 1,
+                  'x-joi-string-lowercase': true,
+                  'x-joi-string-email': true,
+                },
+              },
+            }
+          },
+        },
+      },
+    ]
+  };
+
+  const joiString = SwaggerUtils.createJoiValidation('post', pathObj);
+
+  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().trim(true).lowercase().email().min(1).required(),}).allow(null),}),`;
+
+  expect(joiString).toBe(expectedouput);
+});

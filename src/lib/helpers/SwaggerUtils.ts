@@ -64,6 +64,16 @@ class SwaggerUtils {
           validationText += `.trim(true)`;
         }
 
+        // extract the potential Joi string methods
+        const paramKeys = Object.keys(param);
+        paramKeys.forEach((key) => {
+          // https://joi.dev/api/?v=17.9.1#string
+          if (key.startsWith('x-joi-string-') && param[key]) {
+            const joiStringMethod = key.replace('x-joi-string-', '');
+            validationText += `.${joiStringMethod}()`;
+          }
+        });
+
         if ((!isRequired || nullable) && !param.minLength) {
           validationText += `.allow('')`;
         }
