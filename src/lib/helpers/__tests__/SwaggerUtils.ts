@@ -87,7 +87,7 @@ const params = [
 
 test('Returns joi with 2 required params', () => {
   expect(SwaggerUtils.createJoiValidation('post', {parameters: [params[0]]})).toBe(
-    `'body': Joi.object({'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow('').allow(null),}),`
+    `'body': Joi.object({'password':Joi.string().trim(true).required(),'newPassword':Joi.string().trim(true).required(),'newPasswordConfirm':Joi.string().trim(true).allow('').allow(null),}),`
   );
 });
 
@@ -97,25 +97,25 @@ test('openapi3 query request param', () => {
 
 test('openapi2 enums', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[3]]})).toBe(
-    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`
+    `'query': Joi.object({'sort':Joi.string().trim(true).allow('').valid('asc', 'desc'),}),`
   );
 });
 
 test('openapi3 enums', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[2]]})).toBe(
-    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`
+    `'query': Joi.object({'sort':Joi.string().trim(true).allow('').valid('asc', 'desc'),}),`
   );
 });
 
 test('openapi3 query request array param: allow single value', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[4]]})).toBe(
-    `'query': Joi.object({'select':Joi.array().items(Joi.string().allow('')).single(),}),`
+    `'query': Joi.object({'select':Joi.array().items(Joi.string().trim(true).allow('')).single(),}),`
   );
 });
 
 test('openapi3 request body: allow empty array', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[5]]})).toBe(
-    `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('').allow(null)).required(),}),`
+    `'body': Joi.object({'selected':Joi.array().items(Joi.string().trim(true).allow('').allow(null)).required(),}),`
   );
 });
 
@@ -154,13 +154,13 @@ test('add unknown true for headers', () => {
       ],
     })
   ).toBe(
-    `'headers': Joi.object({'sort':Joi.string().valid('asc', 'desc').required(),'access':Joi.string().regex(/^Bearer .+$/).required(),}).unknown(true),'query': Joi.object({'limit':Joi.number().integer(),}),`
+    `'headers': Joi.object({'sort':Joi.string().trim(true).valid('asc', 'desc').required(),'access':Joi.string().trim(true).regex(/^Bearer .+$/).required(),}).unknown(true),'query': Joi.object({'limit':Joi.number().integer(),}),`
   );
 });
 
 test('query item key is properly created inside the query object', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[6]]})).toBe(
-    `'query': Joi.object({'objectInsideQuery': Joi.object({'prop1':Joi.string().allow(''),}),}),`
+    `'query': Joi.object({'objectInsideQuery': Joi.object({'prop1':Joi.string().trim(true).allow(''),}),}),`
   );
 });
 
@@ -205,12 +205,12 @@ test('query string with min / max zero properly adds validation', () => {
     minimum: 0,
   };
 
-  expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]})).toBe('\'query\': Joi.object({\'limit\':Joi.string().allow(\'\').min(0),}),');
+  expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]})).toBe('\'query\': Joi.object({\'limit\':Joi.string().trim(true).allow(\'\').min(0),}),');
 
   param.schema.maximum = 0;
   param.maximum = 0;
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]})).toBe(
-    '\'query\': Joi.object({\'limit\':Joi.string().allow(\'\').min(0).max(0),}),'
+    '\'query\': Joi.object({\'limit\':Joi.string().trim(true).allow(\'\').min(0).max(0),}),'
   );
 });
 
@@ -254,7 +254,7 @@ test('respects x-nullable and nullable for required body parameters', () => {
   };
 
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]})).toBe(
-    `'body': Joi.object({'email':Joi.string().required(),'phoneNumber':Joi.string().allow('').allow(null).required(),'comment':Joi.string().allow('').allow(null).required(),'info':Joi.string().min(10).allow(null).required(),'code':Joi.number().allow(null).required(),}),`
+    `'body': Joi.object({'email':Joi.string().trim(true).required(),'phoneNumber':Joi.string().trim(true).allow('').allow(null).required(),'comment':Joi.string().trim(true).allow('').allow(null).required(),'info':Joi.string().trim(true).min(10).allow(null).required(),'code':Joi.number().allow(null).required(),}),`
   );
 });
 
@@ -303,12 +303,12 @@ test('post object with nested objects that are required should be required in th
 
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj);
 
-  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().min(1).required(),'isPremium':Joi.boolean().required(),}).allow(null),'invitations':Joi.array().items(Joi.object({'id':Joi.number().allow(null),'name':Joi.string().allow('').allow(null),'email':Joi.string().allow('').allow(null),'roleId':Joi.number().required(),'invitationLink':Joi.string().allow('').allow(null),'action':Joi.string().allow('').valid('create', 'update', 'delete').allow(null),}).allow(null)),'invitationsLanguage':Joi.string().allow('').allow(null),}),`;
+  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().trim(true).min(1).required(),'isPremium':Joi.boolean().required(),}).allow(null),'invitations':Joi.array().items(Joi.object({'id':Joi.number().allow(null),'name':Joi.string().trim(true).allow('').allow(null),'email':Joi.string().trim(true).allow('').allow(null),'roleId':Joi.number().required(),'invitationLink':Joi.string().trim(true).allow('').allow(null),'action':Joi.string().trim(true).allow('').valid('create', 'update', 'delete').allow(null),}).allow(null)),'invitationsLanguage':Joi.string().trim(true).allow('').allow(null),}),`;
 
   expect(joiString).toBe(expectedouput);
 });
 
-it('When an attribute contains x-trim then joi should for a string include the trim(true)', () => {
+it('When the string attribute contains x-dont-trim then trim(true) should not be output', () => {
   const pathObj: any = {
     'parameters': [
       {
@@ -325,7 +325,7 @@ it('When an attribute contains x-trim then joi should for a string include the t
                 name: {
                   type: 'string',
                   minLength: 1,
-                  'x-trim': true
+                  'x-dont-trim': true
                 },
               },
             }
@@ -337,7 +337,7 @@ it('When an attribute contains x-trim then joi should for a string include the t
 
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj);
 
-  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().trim(true).min(1).required(),}).allow(null),}),`;
+  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().min(1).required(),}).allow(null),}),`;
 
   expect(joiString).toBe(expectedouput);
 });

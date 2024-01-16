@@ -60,7 +60,7 @@ class SwaggerUtils {
       }
 
       if (type === 'string') {
-        if (param['x-trim']) {
+        if (!param['x-dont-trim']) {
           validationText += `.trim(true)`;
         }
 
