@@ -59,8 +59,14 @@ class SwaggerUtils {
         validationText += 'Joi.' + type + '()';
       }
 
-      if (type === 'string' && (!isRequired || nullable) && !param.minLength) {
-        validationText += `.allow('')`;
+      if (type === 'string') {
+        if (param['x-trim']) {
+          validationText += `.trim(true)`;
+        }
+
+        if ((!isRequired || nullable) && !param.minLength) {
+          validationText += `.allow('')`;
+        }
       }
       if (param.default) {
         if (type === 'string') {

@@ -260,62 +260,6 @@ test('respects x-nullable and nullable for required body parameters', () => {
 
 test('post object with nested objects that are required should be required in the joi validation output', () => {
   const pathObj: any = {
-    'summary': 'Create a teams',
-    'requestBody': {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              team: {
-                type: 'object',
-                required: ['name', 'isPremium'],
-                properties: {
-                  name: {type: 'string', minLength: 1},
-                  isPremium: {type: 'boolean'},
-                },
-              },
-              invitations: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  required: ['roleId'],
-                  properties: {
-                    id: {type: 'number'},
-                    name: {type: 'string'},
-                    email: {type: 'string'},
-                    roleId: {type: 'number'},
-                    invitationLink: {type: 'string'},
-                    action: {
-                      type: 'string',
-                      enum: ['create', 'update', 'delete'],
-                    },
-                  },
-                },
-              },
-              invitationsLanguage: {type: 'string'},
-            },
-          },
-        },
-      },
-    },
-    'responses': {
-      '200': {
-        description: 'OK',
-        content: {
-          'text/plain': {schema: {type: 'string', example: 'OK'}},
-        },
-      },
-      '400': {description: 'Bad Request'},
-      '401': {description: 'Unauthorized'},
-      '403': {description: 'Forbidden'},
-      '406': {description: 'Not Acceptable'},
-    },
-    'tags': ['Teams'],
-    'operationId': 'teamsPost',
-    'x-passRequest': true,
-    'security': [{JwtToken: []}],
     'parameters': [
       {
         in: 'body',
@@ -360,6 +304,40 @@ test('post object with nested objects that are required should be required in th
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj);
 
   const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().min(1).required(),'isPremium':Joi.boolean().required(),}).allow(null),'invitations':Joi.array().items(Joi.object({'id':Joi.number().allow(null),'name':Joi.string().allow('').allow(null),'email':Joi.string().allow('').allow(null),'roleId':Joi.number().required(),'invitationLink':Joi.string().allow('').allow(null),'action':Joi.string().allow('').valid('create', 'update', 'delete').allow(null),}).allow(null)),'invitationsLanguage':Joi.string().allow('').allow(null),}),`;
+
+  expect(joiString).toBe(expectedouput);
+});
+
+it('When an attribute contains x-trim then joi should for a string include the trim(true)', () => {
+  const pathObj: any = {
+    'parameters': [
+      {
+        in: 'body',
+        name: 'teamsPostPost',
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            team: {
+              type: 'object',
+              required: ['name'],
+              properties: {
+                name: {
+                  type: 'string',
+                  minLength: 1,
+                  'x-trim': true
+                },
+              },
+            }
+          },
+        },
+      },
+    ]
+  };
+
+  const joiString = SwaggerUtils.createJoiValidation('post', pathObj);
+
+  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().trim(true).min(1).required(),}).allow(null),}),`;
 
   expect(joiString).toBe(expectedouput);
 });
