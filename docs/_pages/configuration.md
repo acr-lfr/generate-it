@@ -47,7 +47,7 @@ More extensive example:
   },
   "joi": {
     "strings": {
-      "autotrim": "opt-out"
+      "autoTrim": "opt-out"
     }
   },
   "quickTypeOptions": {
@@ -76,14 +76,14 @@ The nodegenrc `"joi"` section controls the default validation and transformation
   ... // .nodegenrc
   "joi": {
     "strings": {
-      "autotrim": "opt-out"
+      "autoTrim": "opt-out"
     }
   },
   ...
 }
 ```
 
-`joi.strings.autotrim`: Controls how strings are processed before validation. Options are `["off", "opt-out"]`, defaulting to `"off"`.
+`joi.strings.autoTrim`: Controls how strings are processed before validation. Options are `["off", "opt-out"]`, defaulting to `"off"`.
 - `off` means strings received are not trimmed in validation.
 - `opt-out` means auto-trim on strings received will be applied, opt out on a specific component with `x-dont-trim`.
 
@@ -94,7 +94,7 @@ password:
   x-dont-trim: true
 ```
 
-If you only want `trim` input on a few routes, set `joi.strings.autotrim` to `off` and then add `x-joi-trim: true` to the specific component you want to trim. Please see the "Joi validation & transformation" section in the template functions guide for a full explanation of using any of the Joi API methods.
+If you only want `trim` input on a few routes, set `joi.strings.autoTrim` to `off` and then add `x-joi-trim: true` to the specific component you want to trim. Please see the "Joi validation & transformation" section in the template functions guide for a full explanation of using any of the Joi API methods.
 
 ### TYPEGEN EXAMPLE
 

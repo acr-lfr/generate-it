@@ -72,7 +72,9 @@ class SwaggerUtils {
       });
 
       if (type === 'string') {
-        if (nodegenRc.joi?.strings?.autoTrim === 'opt-out' && !param['x-dont-trim']) {
+        // leaving this for now without ? operator as the TS setup results in some whacky codegolf.
+        // todo: upgrade to eslint, then update the tsconfig and typescript devDep
+        if (nodegenRc.joi && nodegenRc.joi.strings && nodegenRc.joi.strings.autoTrim === 'opt-out' && !param['x-dont-trim']) {
           validationText += `.trim(true)`;
         }
 

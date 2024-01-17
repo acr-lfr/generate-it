@@ -56,10 +56,6 @@ Joi
 ```
 
 
-
-
-
-
 ## Reveal full context in tpl
 By adding `{{ getContext() | dump }}` you will see the full context object passed to a template.
 
