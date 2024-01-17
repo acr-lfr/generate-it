@@ -364,12 +364,6 @@ it('Default trim from nodegenrc always opt-out and off', () => {
   };
 
   expect(
-    SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'always'}}} as NodegenRc)
-  ).toBe(
-    `'body': Joi.object({'name':Joi.string().trim(true).required(),}),`
-  );
-
-  expect(
     SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'off'}}} as NodegenRc)
   ).toBe(
     `'body': Joi.object({'name':Joi.string().required(),}),`

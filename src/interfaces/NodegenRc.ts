@@ -7,7 +7,7 @@ export interface Helpers {
 
 export interface Joi {
   strings?: {
-    autoTrim?: 'off' | 'opt-out' | 'always';
+    autoTrim?: 'off' | 'opt-out';
   };
 }
 

@@ -72,11 +72,8 @@ class SwaggerUtils {
       });
 
       if (type === 'string') {
-        const autoTrim = nodegenRc.joi?.strings?.autoTrim;
-        if (['opt-out', 'always'].includes(autoTrim)) {
-          if (autoTrim === 'always' || (autoTrim === 'opt-out' && !param['x-dont-trim'])) {
-            validationText += `.trim(true)`;
-          }
+        if (nodegenRc.joi?.strings?.autoTrim === 'opt-out' && !param['x-dont-trim']) {
+          validationText += `.trim(true)`;
         }
 
         if ((!isRequired || nullable) && !param.minLength) {

@@ -68,24 +68,33 @@ More extensive example:
 
 The full contents of the nodegenrc file are passed to the templates within the config: [TemplateVariables.ts](https://github.com/acr-lfr/generate-it/blob/master/src/interfaces/TemplateVariables.ts)
 
-### Joi rc details
-From the nodegenrc file you have the option to set autotrim on incoming strings to your API
+### nodegenrc Joi configuration
+The nodegenrc `"joi"` section controls the default validation and transformations.
 
-When not passed, auto-trim is off. The available options to pass in are "off", "opt-in" or "always".
+```json
+{
+  ... // .nodegenrc
+  "joi": {
+    "strings": {
+      "autotrim": "opt-out"
+    }
+  },
+  ...
+}
+```
 
-- `off` means the auto-trim will never be applied.
-- `opt-out` means the auto-trim will be applied unless the specific schema contains `x-dont-trim`.
-- `always` means the auto-trim will always be applied to all incoming string data types.
+`joi.strings.autotrim`: Controls how strings are processed before validation. Options are `["off", "opt-out"]`, defaulting to `"off"`.
+- `off` means strings received are not trimmed in validation.
+- `opt-out` means auto-trim on strings received will be applied, opt out on a specific component with `x-dont-trim`.
 
-If you have `opt-out` set for your api, opt'ing out on a single component is done by adding the `x-dont-trim` option to your schema eg:
+If you have `opt-out` set for your api, opt'ing out on a single component is done by adding the `x-dont-trim` option to your schema (a password field is an exmaple of when you don't want to trim) eg:
 ```yaml
-book-blurb:
+password:
   type: string
   x-dont-trim: true
 ```
 
-If you only want `trim` input on a few routes, please the see "Joi validation & transformation" section in the template functions guide. You would need to apply the trim Joi method on your specific component.
-
+If you only want `trim` input on a few routes, set `joi.strings.autotrim` to `off` and then add `x-joi-trim: true` to the specific component you want to trim. Please see the "Joi validation & transformation" section in the template functions guide for a full explanation of using any of the Joi API methods.
 
 ### TYPEGEN EXAMPLE
 
