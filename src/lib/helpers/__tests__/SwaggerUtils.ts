@@ -344,7 +344,7 @@ it('When the string attribute contains x-dont-trim then trim(true) should not be
 });
 
 it('Default trim from nodegenrc always opt-out and off', () => {
-  let pathObj: any = {
+  const pathObj: any = {
     'parameters': [
       {
         in: 'body',
@@ -402,6 +402,7 @@ it('Adding the Joi methods to the string', () => {
                 name: {
                   type: 'string',
                   minLength: 1,
+                  // tslint:disable-next-line
                   'x-joi-lowercase': null,
                   'x-joi-email': {
                     allowFullyQualified: true

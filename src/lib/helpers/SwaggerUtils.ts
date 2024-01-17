@@ -114,7 +114,10 @@ class SwaggerUtils {
       validationText += 'Joi.array()';
       const itemsContent = this.pathParamsToJoi(
         param.schema ? param.schema.items : param.items,
-        {isFromArray: true, paramTypeKey,},
+        {
+          isFromArray: true,
+          paramTypeKey
+        },
         nodegenRc
       );
       if (itemsContent) {

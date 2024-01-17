@@ -6,4 +6,4 @@ export default function (method: string, pathMethodObject: any) {
     pathMethodObject,
     this.ctx.nodegenRc
   );
-};
+}
