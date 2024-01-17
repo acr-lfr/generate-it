@@ -8,6 +8,11 @@
       "requestType": "NodegenRequest"
     }
   },
+  "joi": {
+    "string": {
+      "autoTrim": "opt-out"
+    }
+  },
   "injections": [
     {
       "source": "https://github.com/acrontum/openapi-nodegen-typescript-server.git",

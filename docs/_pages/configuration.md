@@ -45,6 +45,11 @@ More extensive example:
       "allowNullishKeys": true
     }
   },
+  "joi": {
+    "strings": {
+      "autotrim": "opt-out"
+    }
+  },
   "quickTypeOptions": {
     "prefer-unions": false
   }
@@ -62,6 +67,24 @@ More extensive example:
 | typegen          | string              | ''                                                                     | "./schema-to-typescript.js" | Allows you to specify your own schema to types generator. In case nothing is specified here, the default type generator (QuickType) will be used instead |
 
 The full contents of the nodegenrc file are passed to the templates within the config: [TemplateVariables.ts](https://github.com/acr-lfr/generate-it/blob/master/src/interfaces/TemplateVariables.ts)
+
+### Joi rc details
+From the nodegenrc file you have the option to set autotrim on incoming strings to your API
+
+When not passed, auto-trim is off. The available options to pass in are "off", "opt-in" or "always".
+
+- `off` means the auto-trim will never be applied.
+- `opt-out` means the auto-trim will be applied unless the specific schema contains `x-dont-trim`.
+- `always` means the auto-trim will always be applied to all incoming string data types.
+
+If you have `opt-out` set for your api, opt'ing out on a single component is done by adding the `x-dont-trim` option to your schema eg:
+```yaml
+book-blurb:
+  type: string
+  x-dont-trim: true
+```
+
+If you only want `trim` input on a few routes, please the see "Joi validation & transformation" section in the template functions guide. You would need to apply the trim Joi method on your specific component.
 
 
 ### TYPEGEN EXAMPLE

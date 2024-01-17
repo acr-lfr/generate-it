@@ -129,12 +129,7 @@ export class TemplateRenderer {
   }
 
   /**
-   * Tries to inject the provided json from a .boatsrc file
-   * @param configRcFile
-   * @returns {{autoescape: boolean, tags: {blockStart: string, commentStart: string, variableEnd: string,
-   * variableStart: string, commentEnd: string, blockEnd: string}}|({autoescape: boolean,
-   * tags: {blockStart: string, commentStart: string, variableEnd: string, variableStart: string,
-   * commentEnd: string, blockEnd: string}} & Template.nunjucksOptions)}
+   * Gets and returns and nunjucks options from the config rc file
    */
   public nunjucksOptions (configRcFile = '') {
     const baseOptions = {
