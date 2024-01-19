@@ -161,7 +161,7 @@ class SwaggerUtils {
   /**
    * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
    */
-  public createJoiValidation (method: string, pathObject: any, nodegenRc: NodegenRc): string {
+  public createJoiValidation (method: string, pathObject: any, nodegenRc?: NodegenRc): string {
     pathObject = oa3toOa2Body(method, pathObject);
     const requestParams = pathObject.parameters;
     if (!requestParams) {

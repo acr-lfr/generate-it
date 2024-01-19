@@ -343,7 +343,7 @@ it('When the string attribute contains x-dont-trim then trim(true) should not be
   expect(joiString).toBe(expectedouput);
 });
 
-it('Default trim from nodegenrc always opt-out and off', () => {
+it('Default trim from nodegenrc always opt-out and off, and testing no nodegenrc object present at all', () => {
   const pathObj: any = {
     'parameters': [
       {
@@ -362,6 +362,12 @@ it('Default trim from nodegenrc always opt-out and off', () => {
       },
     ]
   };
+
+  expect(
+    SwaggerUtils.createJoiValidation('post', pathObj)
+  ).toBe(
+    `'body': Joi.object({'name':Joi.string().required(),}),`
+  );
 
   expect(
     SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'off'}}} as NodegenRc)
