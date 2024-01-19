@@ -36,7 +36,7 @@ class SwaggerUtils {
   /**
    * Converts a sub-section of a definition
    */
-  public pathParamsToJoi (param: any, options: PathParamsToJoi, nodegenRc: NodegenRc): string {
+  public pathParamsToJoi (param: any, options: PathParamsToJoi, nodegenRc?: NodegenRc): string {
     if (!param) {
       console.log(param, options);
       return;
@@ -72,9 +72,7 @@ class SwaggerUtils {
       });
 
       if (type === 'string') {
-        // leaving this for now without ? operator as the TS setup results in some whacky codegolf.
-        // todo: upgrade to eslint, then update the tsconfig and typescript devDep
-        if (nodegenRc.joi && nodegenRc.joi.strings && nodegenRc.joi.strings.autoTrim === 'opt-out' && !param['x-dont-trim']) {
+        if (nodegenRc?.joi?.strings?.autoTrim === 'opt-out' && !param['x-dont-trim']) {
           validationText += `.trim(true)`;
         }
 
