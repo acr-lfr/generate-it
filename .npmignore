@@ -8,6 +8,7 @@ __tests__
 coverage
 docs
 githooks
+src
 test_openapi3.yml
 test_asyncapi.yml
 test_swagger.yml
