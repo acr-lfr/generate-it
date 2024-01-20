@@ -5,6 +5,12 @@ export interface Helpers {
   [helperName: string]: any;
 }
 
+export interface Joi {
+  strings?: {
+    autoTrim?: 'off' | 'opt-out';
+  };
+}
+
 export interface Injection {
   /**
    * Only 1 injection object in the array of injection objects can be marked as the isBaseTpl.
@@ -34,6 +40,12 @@ export interface NodegenRc {
    * Gradle project the `gradle.build` your project will need it.
    */
   ignoreFiles?: string | string[];
+
+  /**
+   * RC for the Joi validators
+   */
+  joi?: Joi;
+
   /**
    * Defines the extension that should be processed as a template.
    *

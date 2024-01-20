@@ -1,4 +1,5 @@
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
+import { NodegenRc } from '@/interfaces';
 
 enum ParamTypeKey {
   body = 'body',
@@ -34,11 +35,8 @@ class SwaggerUtils {
 
   /**
    * Converts a sub-section of a definition
-   * @param {Object} param
-   * @param {Object} [options] - options.isFromArray [string], options.requiredField [string[]]
-   * @return {string|void}
    */
-  public pathParamsToJoi (param: any, options: PathParamsToJoi): string {
+  public pathParamsToJoi (param: any, options: PathParamsToJoi, nodegenRc?: NodegenRc): string {
     if (!param) {
       console.log(param, options);
       return;
@@ -59,9 +57,30 @@ class SwaggerUtils {
         validationText += 'Joi.' + type + '()';
       }
 
-      if (type === 'string' && (!isRequired || nullable) && !param.minLength) {
-        validationText += `.allow('')`;
+      // extract the potential Joi methods, pass the value to the method
+      const paramKeys = Object.keys(param);
+      paramKeys.forEach((key) => {
+        // https://joi.dev/api/?v=17.9.1
+        if (key.startsWith('x-joi-')) {
+          const joiStringMethod = key.replace('x-joi-', '');
+          let joiParam = param[key] !== null ? param[key] : '';
+          if (typeof joiParam === 'object') {
+            joiParam = JSON.stringify(joiParam);
+          }
+          validationText += `.${joiStringMethod}(${joiParam})`;
+        }
+      });
+
+      if (type === 'string') {
+        if (nodegenRc?.joi?.strings?.autoTrim === 'opt-out' && !param['x-dont-trim']) {
+          validationText += `.trim(true)`;
+        }
+
+        if ((!isRequired || nullable) && !param.minLength) {
+          validationText += `.allow('')`;
+        }
       }
+
       if (param.default) {
         if (type === 'string') {
           validationText += `.default('${param.default}')`;
@@ -69,6 +88,7 @@ class SwaggerUtils {
           validationText += `.default(${param.default})`;
         }
       }
+
       if (param.enum || (param.schema && param.schema.enum)) {
         const enumValues = param.enum || param.schema.enum;
         validationText += '.valid(' + enumValues.map((e: string) => `'${e}'`).join(', ') + ')';
@@ -92,10 +112,14 @@ class SwaggerUtils {
       validationText += validationTrailer;
     } else if (type === 'array') {
       validationText += 'Joi.array()';
-      const itemsContent = this.pathParamsToJoi(param.schema ? param.schema.items : param.items, {
-        isFromArray: true,
-        paramTypeKey,
-      });
+      const itemsContent = this.pathParamsToJoi(
+        param.schema ? param.schema.items : param.items,
+        {
+          isFromArray: true,
+          paramTypeKey
+        },
+        nodegenRc
+      );
       if (itemsContent) {
         validationText += `.items(${itemsContent})`;
       }
@@ -123,7 +147,8 @@ class SwaggerUtils {
           {
             requiredFields: Array.isArray(param.required) ? param.required : undefined,
             paramTypeKey,
-          }
+          },
+          nodegenRc
         );
       });
       validationText += '})' + validationTrailer;
@@ -136,7 +161,7 @@ class SwaggerUtils {
   /**
    * Iterates over the request params from an OpenAPI path and returns Joi validation syntax for a validation class.
    */
-  public createJoiValidation (method: string, pathObject: any): string {
+  public createJoiValidation (method: string, pathObject: any, nodegenRc?: NodegenRc): string {
     pathObject = oa3toOa2Body(method, pathObject);
     const requestParams = pathObject.parameters;
     if (!requestParams) {
@@ -191,16 +216,20 @@ class SwaggerUtils {
               {
                 requiredFields: param.schema.required,
                 paramTypeKey: paramTypeKey as ParamTypeKey,
-              }
+              },
+              nodegenRc
             );
           });
           if (paramTypeKey === 'query') {
             validationText += '}),';
           }
         } else if (param.type || (param.schema && param.schema.type)) {
-          validationText += this.pathParamsToJoi(param, {
-            paramTypeKey: paramTypeKey as ParamTypeKey,
-          });
+          validationText += this.pathParamsToJoi(
+            param, {
+              paramTypeKey: paramTypeKey as ParamTypeKey,
+            },
+            nodegenRc
+          );
         }
       });
       validationText += '})';

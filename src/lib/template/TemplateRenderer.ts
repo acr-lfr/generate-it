@@ -36,12 +36,6 @@ export class TemplateRenderer {
 
   /**
    * Loads and renders a tpl
-   * @param {string} inputString The string to parse
-   * @param {object} customVars Custom variables passed to nunjucks
-   * @param {string} ext - the file type by extension
-   * @param {object} additionalHelpers
-   * @param configRcFile Fully qualified path to .openapi-nodegenrc file   *
-   * @return {*}
    */
   public load (inputString: string, customVars?: TemplateVariables, ext?: string) {
     this.nunjucksSetup(customVars);
@@ -54,18 +48,12 @@ export class TemplateRenderer {
     }
   }
 
-  /**
-   *
-   * @param content
-   */
   public stripCharacters (content: string) {
     return content.replace(new RegExp('&' + '#' + 'x27;', 'g'), "'");
   }
 
   /**
    * Sets up the tpl engine for the current file being rendered
-   * @param {object} helperFunctionKeyValueObject
-   * @param configRcFile Exact path to a .boatsrc file
    */
   public nunjucksSetup (variables?: TemplateVariables) {
     if (this.env) {
@@ -141,12 +129,7 @@ export class TemplateRenderer {
   }
 
   /**
-   * Tries to inject the provided json from a .boatsrc file
-   * @param configRcFile
-   * @returns {{autoescape: boolean, tags: {blockStart: string, commentStart: string, variableEnd: string,
-   * variableStart: string, commentEnd: string, blockEnd: string}}|({autoescape: boolean,
-   * tags: {blockStart: string, commentStart: string, variableEnd: string, variableStart: string,
-   * commentEnd: string, blockEnd: string}} & Template.nunjucksOptions)}
+   * Gets and returns and nunjucks options from the config rc file
    */
   public nunjucksOptions (configRcFile = '') {
     const baseOptions = {
