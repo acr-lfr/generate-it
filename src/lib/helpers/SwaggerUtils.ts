@@ -81,7 +81,7 @@ class SwaggerUtils {
         }
       }
 
-      if (param.default) {
+      if (param.default !== undefined) {
         if (type === 'string') {
           validationText += `.default('${param.default}')`;
         } else {
