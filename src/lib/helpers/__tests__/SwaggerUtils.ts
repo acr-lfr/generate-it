@@ -165,6 +165,26 @@ test('query item key is properly created inside the query object', () => {
   );
 });
 
+test('enum values with string and number', () => {
+  const param: Record<string, any> = {
+    in: 'query',
+    name: 'limit',
+    schema: {type: 'number', default: 25, enum: [5, 25, 50]},
+  };
+
+  expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]}, {} as NodegenRc))
+    .toBe('\'query\': Joi.object({\'limit\':Joi.number().default(25).valid(5, 25, 50),}),');
+
+  const paramsString: Record<string, any> = {
+    in: 'query',
+    name: 'limit',
+    schema: {type: 'string', default: '25', enum: ['5', '25', '50']},
+  };
+
+  expect(SwaggerUtils.createJoiValidation('get', {parameters: [paramsString]}, {} as NodegenRc))
+    .toBe('\'query\': Joi.object({\'limit\':Joi.string().allow(\'\').default(\'25\').valid(\'5\', \'25\', \'50\'),}),');
+});
+
 test('query numeric with min / max zero properly adds validation', () => {
   const param: Record<string, any> = {
     in: 'query',

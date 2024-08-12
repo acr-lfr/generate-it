@@ -91,7 +91,8 @@ class SwaggerUtils {
 
       if (param.enum || (param.schema && param.schema.enum)) {
         const enumValues = param.enum || param.schema.enum;
-        validationText += '.valid(' + enumValues.map((e: string) => `'${e}'`).join(', ') + ')';
+        const validTplString = enumValues.map((e: string) => ['number', 'integer'].includes(type) ? e : `'${e}'`).join(', ');
+        validationText += '.valid(' + validTplString + ')';
       }
 
       if (!Number.isNaN(Number(param.minLength))) {
