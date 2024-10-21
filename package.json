@@ -51,7 +51,7 @@
     "npm-tool-version-check": "^1.2.0",
     "nunjucks": "^3.2.4",
     "prettier": "^2.4.1",
-    "quicktype": "^15.0.261",
+    "quicktype": "^20.0.27",
     "text-file-diff": "1.1.2",
     "typescript": "^4.9.5"
   },
