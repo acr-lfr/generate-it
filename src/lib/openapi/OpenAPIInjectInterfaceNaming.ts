@@ -6,7 +6,7 @@ import ApiIs from '@/lib/helpers/ApiIs';
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
-import { JSONSchema } from 'json-schema-ref-parser';
+import { JSONSchema } from '@apidevtools/json-schema-ref-parser';
 
 class OpenAPIInjectInterfaceNaming {
   public config: any;

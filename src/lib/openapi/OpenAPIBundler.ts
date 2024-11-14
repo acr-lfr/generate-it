@@ -11,8 +11,7 @@ import ApiIs from '@/lib/helpers/ApiIs';
 import includeOperationNameAction from '@/lib/helpers/includeOperationNameAction';
 import endpointNameCalculation from '@/lib/helpers/endpointNameCalculation';
 import getBaseUrl from '@/lib/helpers/getBaseUrl';
-
-const RefParser = require('json-schema-ref-parser');
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 
 class OpenAPIBundler {
   /**
@@ -42,7 +41,9 @@ class OpenAPIBundler {
 
     content = await this.bundleObject(content);
 
+    // @ts-ignore
     if (!content.basePath) {
+      // @ts-ignore
       content.basePath = getBaseUrl(content);
     }
 
@@ -79,7 +80,7 @@ class OpenAPIBundler {
    * @param json
    */
   public async dereference (json: object) {
-    return RefParser.dereference(json, {
+    return $RefParser.dereference(json, {
       dereference: {
         circular: 'ignore',
       },
@@ -91,7 +92,7 @@ class OpenAPIBundler {
    * @param json
    */
   public async bundleObject (json: object) {
-    return RefParser.bundle(json, {
+    return $RefParser.bundle(json, {
       dereference: {
         circular: 'ignore',
       },
