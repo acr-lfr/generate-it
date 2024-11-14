@@ -18,9 +18,7 @@ function resolveAllOf (inputSpec: any): any {
 }
 
 const customizer = (objValue: any, srcValue: any, key: string) => {
-  if (_.isArray(objValue) && key === 'required') {
-    return _.union(objValue, srcValue);
-  } else if (_.isArray(objValue)) {
+  if (_.isArray(objValue)) {
     return _.union(objValue, srcValue);
   }
   return;
