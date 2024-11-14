@@ -46,7 +46,6 @@
     "generate-it-mockers": "^1.1.1",
     "inquirer": "^8.2.6",
     "js-yaml": "^3.14.1",
-    "json-schema-resolve-allof": "^1.5.0",
     "lodash": "^4.17.21",
     "npm-tool-version-check": "^1.2.0",
     "nunjucks": "^3.2.4",

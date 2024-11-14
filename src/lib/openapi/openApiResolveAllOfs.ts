@@ -1,5 +1,30 @@
-const jsonSchemaResolveAllOf = require('json-schema-resolve-allof');
+import * as _ from 'lodash';
 
+function resolveAllOf (inputSpec: any): any {
+  if (inputSpec && typeof inputSpec === 'object'
+    && Object.keys(inputSpec).length > 0
+  ) {
+    if (inputSpec.allOf) {
+      const allOf = inputSpec.allOf;
+      delete inputSpec.allOf;
+      const nested = _.mergeWith({}, ...allOf, customizer);
+      inputSpec = _.defaultsDeep(inputSpec, nested, customizer);
+    }
+    Object.keys(inputSpec).forEach((key: string) => {
+      inputSpec[key] = resolveAllOf(inputSpec[key]);
+    });
+  }
+  return inputSpec;
+}
+
+const customizer = (objValue: any, srcValue: any, key: string) => {
+  if (_.isArray(objValue) && key === 'required') {
+    return _.union(objValue, srcValue);
+  } else if (_.isArray(objValue)) {
+    return _.union(objValue, srcValue);
+  }
+  return;
+};
 export default (input: any) => {
-  return jsonSchemaResolveAllOf(input);
+  return resolveAllOf(input);
 };
