@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.57.0 15/11/2024
+fix: allof fixed for deeply nested allOfs - was previously dropping some required fields.
+chore: @apidevtools/json-schema-ref-parser upgraded from json-schema-ref-parser
+
 ### 5.56.0 12/08/2024
 feat: Now allows enums on type number and integer
 
