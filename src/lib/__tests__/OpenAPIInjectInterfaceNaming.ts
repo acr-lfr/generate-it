@@ -1,6 +1,5 @@
 import OpenAPIInjectInterfaceNaming from '@/lib/openapi/OpenAPIInjectInterfaceNaming';
 import { mockConfig } from '@/__mocks__/mockConfig';
-import { JSONSchema } from 'json-schema-ref-parser';
 
 const swagger2obj = {
   swagger: '2.0',
@@ -12,7 +11,7 @@ const openApiobj = {
 };
 const initialisedOpenApi = new OpenAPIInjectInterfaceNaming(openApiobj, mockConfig);
 
-const requestParam: JSONSchema = {
+const requestParam = {
   in: 'query',
   name: 'term',
   schema: { type: 'string' },

@@ -1,6 +1,6 @@
 {
   "name": "generate-it",
-  "version": "5.56.0",
+  "version": "5.57.0",
   "description": "Generate-it, will generate servers, clients, web-socket and anything else you can template with nunjucks from yml files (openapi/asyncapi)",
   "author": "Acrontum GmbH & Liffery Ltd",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "generate-it"
   ],
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^11.7.2",
     "@colors/colors": "1.6.0",
     "@root/walk": "^1.1.0",
     "commander": "^11.1.0",
@@ -45,8 +46,6 @@
     "generate-it-mockers": "^1.1.1",
     "inquirer": "^8.2.6",
     "js-yaml": "^3.14.1",
-    "json-schema-ref-parser": "^9.0.9",
-    "json-schema-resolve-allof": "^1.5.0",
     "lodash": "^4.17.21",
     "npm-tool-version-check": "^1.2.0",
     "nunjucks": "^3.2.4",

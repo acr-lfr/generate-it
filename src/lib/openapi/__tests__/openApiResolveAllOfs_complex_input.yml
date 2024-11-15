@@ -1,0 +1,56 @@
+components:
+  schemas:
+    SeriesOwnerEvent:
+      type: object
+      required:
+        - _id
+        - name
+        - location
+        - contests
+        - dateFromTo
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        description:
+          type: string
+        contests:
+          $ref: '#/components/schemas/SeriesOwnerEventContests'
+    SeriesOwnerEventContests:
+      type: array
+      items:
+        $ref: '#/components/schemas/SeriesOwnerEventContest'
+    SeriesOwnerEventContest:
+      allOf:
+        - $ref: '#/components/schemas/SeriesOwnerEventContestBaseAttributes'
+        - type: object
+          required:
+            - _id
+            - secrets
+          properties:
+            _id:
+              type: string
+            secrets:
+              type: array
+              items:
+                type: string
+    SeriesOwnerEventContestBaseAttributes:
+      allOf:
+        - $ref: '#/components/schemas/EventContestBaseAttributes'
+    EventContestBaseAttributes:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
