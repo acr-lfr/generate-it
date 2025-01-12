@@ -257,6 +257,7 @@ class OpenAPIInjectInterfaceNaming {
         }
       });
     }
+    console.log(requestParams);
     return requestParams;
   }
 
@@ -282,7 +283,7 @@ class OpenAPIInjectInterfaceNaming {
             name += (!parameterObject.required) ? '?' : '';
             requestObject[name] = (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) ?
               openApiTypeToTypscriptType(parameterObject.type) :
-              openApiTypeToTypscriptType(parameterObject.schema.type);
+              openApiTypeToTypscriptType(parameterObject.schema);
           } else {
             const paramName = parameterObject.name;
             if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
