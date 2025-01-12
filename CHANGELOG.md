@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.59.0 12/01/2024
+revert: 5.57.0 
+
+### 5.58.0 12/01/2024
+unpublished version
+
 ### 5.57.0 15/11/2024
 fix: allof fixed for deeply nested allOfs - was previously dropping some required fields.
 chore: @apidevtools/json-schema-ref-parser upgraded from json-schema-ref-parser
