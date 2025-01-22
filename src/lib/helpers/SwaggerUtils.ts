@@ -204,7 +204,14 @@ class SwaggerUtils {
       }
       validationText += `'${paramTypeKey}': Joi.object({`;
       paramsTypes[paramTypeKey].forEach((param: any) => {
-        if (param.schema && param.schema.properties) {
+
+        if (param.schema && param.schema.type === 'object' && !param.schema.properties) {
+          // An object without properties = any = no validation
+          validationText = validationText.replace(
+            `'${paramTypeKey}': Joi.object({`,
+            `'${paramTypeKey}': Joi.any({`
+          );
+        } else if (param.schema && param.schema.properties) {
           if (paramTypeKey === 'query') {
             validationText += `'${param.name}': Joi.object({`;
           }
@@ -234,6 +241,11 @@ class SwaggerUtils {
         }
       });
       validationText += '})';
+
+      // due to string concat pattern in this function replace needed for the joi any
+      validationText = validationText.replace('Joi.any({})', 'Joi.any()');
+
+      // Add unknown to the header validation
       if (paramTypeKey === ParamTypeKey.headers) {
         validationText += '.unknown(true)';
       }

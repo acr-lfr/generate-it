@@ -84,6 +84,14 @@ const params = [
       ],
     },
   },
+  {
+    in: 'body',
+    name: 'v1UserPasswordAnyPut',
+    required: true,
+    schema: {
+      type: 'object'
+    },
+  },
 ];
 
 test('Returns joi with 2 required params', () => {
@@ -117,6 +125,12 @@ test('openapi3 query request array param: allow single value', () => {
 test('openapi3 request body: allow empty array', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[5]]}, {} as NodegenRc)).toBe(
     `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('').allow(null)).required(),}),`
+  );
+});
+
+test('openapi3 request body empty object as any', () => {
+  expect(SwaggerUtils.createJoiValidation('put', {parameters: [params[7]]}, {} as NodegenRc)).toBe(
+    `'body': Joi.any(),`
   );
 });
 
