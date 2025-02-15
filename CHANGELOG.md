@@ -1,6 +1,9 @@
 # Changelog
 
-### 5.60.0 23/01/2024
+### 5.61.0 15/02/2025
+chore: typescript bumped to latest major and quicktype to latest minor in the 15 major range
+
+### 5.60.0 23/01/2025
 feat: when the body is `type: object` without props the Joi validation will now be Joi.any() - essentially no validation and anything send use case for example being incoming webhooks from 3rd party with unknown payload. 
 
 ### 5.59.0 12/01/2024
