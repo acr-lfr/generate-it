@@ -11,6 +11,8 @@ describe('Should not allow directories on black list, eg git idea vscode, even a
     expect(isFileToIgnore('som/dir/node_modules/blah', 'workspace')).toBe(true);
     expect(isFileToIgnore('som/dir/node_modules', 'workspace')).toBe(true);
     expect(isFileToIgnore('som/dir/node_modules/', 'workspace')).toBe(true);
+    expect(isFileToIgnore('som/dir/_tpl_testing_/', 'workspace')).toBe(true);
+    expect(isFileToIgnore('som/_tpl_testing_/nested/dir', 'workspace')).toBe(true);
   });
 
   it('should match exactly', () => {

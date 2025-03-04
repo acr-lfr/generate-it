@@ -1,7 +1,7 @@
 import { NodegenRc } from '@/interfaces';
 import path from 'path';
 
-const defaultIgnoreList = [`(\\.idea|\\.git|\\.vscode|node_modules|build|dist)\\b`];
+const defaultIgnoreList = [`(\\.idea|\\.git|\\.vscode|node_modules|build|dist|_tpl_testing_)\\b`];
 let ignoreList: string;
 let fullRegex: RegExp;
 
