@@ -6,7 +6,7 @@ import { ConfigExtendedBase } from '@/interfaces/ConfigExtendedBase';
 import FileTypeCheck from '@/lib/FileTypeCheck';
 import generateFile from '@/lib/generate/generateFile';
 import GenerateInterfaceFiles from '@/lib/generate/GenerateInterfaceFiles';
-import isFileToIgnore from '@/lib/helpers/isFileToIgnore';
+import shouldCopyOrRenderFile from '@/lib/helpers/shouldCopyOrRenderFile';
 import GenerateOperation from '@/lib/generate/GenerateOperation';
 import { GenerateOperationFileConfig } from '@/interfaces/GenerateOperationFileConfig';
 import TemplateRenderer from '@/lib/template/TemplateRenderer';
@@ -32,9 +32,15 @@ class FileWalker {
       if (err) {
         throw err;
       }
-      if (isFileToIgnore(fullpath, dirent.name, providedConfig.nodegenRc)) {
+      if (!shouldCopyOrRenderFile({
+        ignoreForWhichAction: 'render',
+        directoryPathContainingFilename: fullpath,
+        filenameBeingProcessed: dirent.name,
+        nodegenRc: providedConfig.nodegenRc
+      })) {
         return Promise.resolve(false);
       }
+
       if (dirent.isDirectory()) {
         return;
       }

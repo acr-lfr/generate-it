@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import path from 'path';
 import { mergePackageJsonFiles } from '@/lib/helpers/mergePackageJsonFiles';
 import { ConfigExtendedBase } from '@/interfaces';
-import isFileToIgnore from '@/lib/helpers/isFileToIgnore';
+import shouldCopyOrRenderFile from '@/lib/helpers/shouldCopyOrRenderFile';
 
 /**
  * Creates the base structure
@@ -33,11 +33,13 @@ export default (targetDir: string, templatesDir: string, config: ConfigExtendedB
       }
       const dir = src.substring(0, src.lastIndexOf(path.sep));
       const file = src.substr(src.lastIndexOf(path.sep) + 1);
-      if (isFileToIgnore(dir, file, config.nodegenRc)) {
-        return false;
-      }
 
-      return true;
+      return shouldCopyOrRenderFile({
+        directoryPathContainingFilename: dir,
+        filenameBeingProcessed: file,
+        ignoreForWhichAction: 'copy',
+        nodegenRc: config.nodegenRc
+      });
     },
   });
 
