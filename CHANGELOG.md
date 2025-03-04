@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.62.2 04/03/2025
+fix: log removed
+
 ### 5.62.1 04/03/2025
 fix: _tpl_testing_ ignore split out into copy and render ignore patterns
 

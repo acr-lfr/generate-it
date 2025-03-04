@@ -17,8 +17,6 @@ export default (input: {
     (input.ignoreForWhichAction === 'copy' ? defaultCopyIgnoreList :
       input.ignoreForWhichAction === 'render' ? defaultRenderIgnoreList : undefined);
 
-  console.log(filesToIgnore);
-
   filesToIgnore = Array.isArray(filesToIgnore) ? filesToIgnore : [filesToIgnore];
   filesToIgnore = filesToIgnore.join('|');
 
