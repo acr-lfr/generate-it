@@ -336,7 +336,7 @@ template version tag: ${tplTag}
     } else if (fs.existsSync(path.resolve(input))) {
       return await this.localDirectoryCopy(input, targetGitCacheDir, dontUpdateTplCache);
     } else {
-      throw new Error('The provided helpers argument must be a valid https url');
+      throw new Error(`The provided input address could not be resolved: ${input}`);
     }
   }
 }

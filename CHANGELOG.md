@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.62.3 04/03/2025
+fix: template fetch fail message referred toa URL even when local path provided
+
 ### 5.62.2 04/03/2025
 fix: log removed
 
