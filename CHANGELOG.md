@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.62.0 04/03/2025
+feat: _tpl_testing_ added to the default ignore allowing a tpl to hold own test files
+
 ### 5.61.0 15/02/2025
 chore: typescript bumped to latest major and quicktype to latest minor in the 15 major range
 
