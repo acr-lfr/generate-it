@@ -71,6 +71,6 @@ These files are every other file that is not one of the above special file types
 
 ### Testing template files
 
-Generate-it will ignore any files in a folder called "". An example can be found in the https://github.com/j-d-carmichael/gen-it-ts-esm-server template.
+Generate-it will ignore any files in a folder called "\_tpl_testing\_". An example can be found in the https://github.com/j-d-carmichael/gen-it-ts-esm-server template.
 
 This allows the developer of the template to build and test locally before publishing.
