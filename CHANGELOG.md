@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.62.1 04/03/2025
+fix: _tpl_testing_ ignore split out into copy and render ignore patterns
+
 ### 5.62.0 04/03/2025
 feat: _tpl_testing_ added to the default ignore allowing a tpl to hold own test files
 
