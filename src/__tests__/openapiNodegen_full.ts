@@ -82,6 +82,8 @@ it('Should have the correct file hashes', async () => {
     // The app ts should be modified - the hash should match:
     // test_server/.openapi-nodegen/git/httpsGithubComAcrontumOpenapiNodegenTypescriptInjectServerGit/src/app.ts
     ['test_server/src/app.ts', 'c8b383752c315a02043acdd40df63caf'],
+    // It should copy over build files like tsconfig.build.json
+    ['test_server/tsconfig.build.json', 'a085d43ab78199c39acaaddd70696776'],
   ];
 
   const mismatched: string[] = [];

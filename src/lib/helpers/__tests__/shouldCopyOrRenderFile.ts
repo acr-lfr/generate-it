@@ -2,6 +2,52 @@ import shouldCopyOrRenderFile from '@/lib/helpers/shouldCopyOrRenderFile';
 import { NodegenRc } from '@/interfaces';
 
 describe('File Ignore Functionality', () => {
+
+  it('should skip files in a build or dist folder but not if the file contains build or dist', () => {
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'copy',
+      directoryPathContainingFilename: 'build/something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(false);
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'render',
+      directoryPathContainingFilename: 'build/something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(false);
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'copy',
+      directoryPathContainingFilename: 'dist/something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(false);
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'render',
+      directoryPathContainingFilename: 'dist/something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(false);
+
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'copy',
+      directoryPathContainingFilename: 'dist.something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(true);
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'render',
+      directoryPathContainingFilename: 'dist.something.ts',
+      filenameBeingProcessed: 'config'
+    })).toBe(true);
+
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'copy',
+      directoryPathContainingFilename: 'tsconfig.build.json',
+      filenameBeingProcessed: 'config'
+    })).toBe(true);
+    expect(shouldCopyOrRenderFile({
+      ignoreForWhichAction: 'render',
+      directoryPathContainingFilename: 'tsconfig.build.json',
+      filenameBeingProcessed: 'config'
+    })).toBe(true);
+  });
+
   it('should skip .git, node_modules, and editor files', () => {
     expect(shouldCopyOrRenderFile({
       ignoreForWhichAction: 'copy',

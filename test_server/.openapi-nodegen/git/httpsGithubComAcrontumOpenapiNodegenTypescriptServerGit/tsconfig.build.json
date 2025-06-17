@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node"],
+    "sourceMap": false,
+    "composite": true,
+    "incremental": true
+  },
+  "exclude": ["**/*.test.ts", "**/*.spec.ts"],
+  "include": ["src/**/*.ts", "migrations", "src/router.int.spec.ts", "package.json"]
+}
