@@ -14,7 +14,7 @@ All files starting with 3* underscores "`___`" will be generated multiple times 
 
 ### OPERATION
 
-Named: [\___op.ts.njk](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/nodegen/routes/___op.ts.njk)
+Named: ___op.ts.njk
 
 This type of file is rewritten every single time the core is run. In the example above it is used as a route file for the nodejs server.
 
@@ -22,7 +22,7 @@ The `___op.ts.njk` files generally live in the `nodegenDir` of the folder struct
 
 ### INTERFACE
 
-Named: [\___interface.ts.njk](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/nodegen/interfaces/___interface.ts.njk)
+Named: ___interface.ts.njk
 
 This type of file is rewritten every single time the core is run, it only ever contains interface code, currently only for typescript files.
 
@@ -30,7 +30,7 @@ The `___interface.ts.njk` files generally live in the `nodegenDir` of the folder
 
 ### MOCK
 
-Named: [\___mock.ts.njk](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/domains/__mocks__/___mock.ts.njk)
+Named: ___mock.ts.njk
 
 This type of file is rewritten every single time the core is run.
 
@@ -38,13 +38,13 @@ The `___mock.ts.njk` files live in the `nodegenMockDir` of the folder structure.
 
 ### STUB
 
-Named: [\___stub.ts.njk](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/domains/___stub.ts.njk)
+Named: ___stub.ts.njk
 
 The stub is as the name suggests a file intended to house stubbed methods. These are designed to be method/function placeholders for the developer to write in the business logic that is not possible to generate.
 
 ### EVAL
 
-Named: [\___eval.ts](https://github.com/acr-lfr/generate-it-typescript-server/blob/master/src/http/nodegen/tests/___eval.ts)
+Named: ___eval.ts
 
 When generate-it encounters an eval file, it will import in and run it's default export - any file generation or modification is completely handed over, but afterwards the file is deleted.
 
