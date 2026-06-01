@@ -16,7 +16,7 @@ export default (method: string, fullPathMethod: any): any => {
     } else if (fullPathMethod.requestBody.content['application/x-www-form-urlencoded']) {
       schema = fullPathMethod.requestBody.content['application/x-www-form-urlencoded'].schema;
     } else if (fullPathMethod.requestBody.content['multipart/form-data']) {
-      schema = fullPathMethod.requestBody.content['multipart/form-data'];
+      schema = fullPathMethod.requestBody.content['multipart/form-data'].schema;
       inParam = 'formData';
     } else {
       schema = Object.values(fullPathMethod.requestBody.content)?.[0];

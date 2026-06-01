@@ -54,7 +54,7 @@ describe('e2e testing', () => {
       // Check the interface index file (OTHER file)
       [
         'test_server/src/http/nodegen/interfaces/index.ts',
-        '0a4658f2480054f9a3a416f358deee2f',
+        'af6df3472f2cb44fcaf4f6314058c10e',
       ],
       // Check the security definition files (OTHER file)
       [

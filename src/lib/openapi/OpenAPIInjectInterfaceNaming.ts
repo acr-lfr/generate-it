@@ -278,11 +278,21 @@ class OpenAPIInjectInterfaceNaming {
         clear = false;
         if (requestType !== 'body') {
           if (requestType === 'formData') {
-            let name = '\'' + parameterObject.name + '\'';
-            name += (!parameterObject.required) ? '?' : '';
-            requestObject[name] = (ApiIs.swagger(this.apiObject) || ApiIs.openapi2(this.apiObject)) ?
-              openApiTypeToTypscriptType(parameterObject.type) :
-              openApiTypeToTypscriptType(parameterObject.schema.type);
+            if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {
+              // OA3 multipart/form-data references a single object schema, so
+              // iterate its properties to build the form data interface fields
+              const properties = parameterObject.properties || {};
+              const requiredProps = Array.isArray(parameterObject.required) ? parameterObject.required : [];
+              Object.keys(properties).forEach((propName) => {
+                let name = '\'' + propName + '\'';
+                name += (!requiredProps.includes(propName)) ? '?' : '';
+                requestObject[name] = openApiTypeToTypscriptType(properties[propName].type);
+              });
+            } else {
+              let name = '\'' + parameterObject.name + '\'';
+              name += (!parameterObject.required) ? '?' : '';
+              requestObject[name] = openApiTypeToTypscriptType(parameterObject.type);
+            }
           } else {
             const paramName = parameterObject.name;
             if (ApiIs.openapi3(this.apiObject) || ApiIs.asyncapi2(this.apiObject)) {

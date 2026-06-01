@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.62.5 01/06/2026
+fix: bug in the domains when handling file uploads oa3
+
 ### 5.62.4 16/06/2025
 fix: default ignore paths for copy and render now explicitly match the build & dist folder only, avoiding accidental matches with similarly named files (e.g., tsconfig.build.json).
 
