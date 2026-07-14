@@ -6,6 +6,7 @@ import ApiIs from '@/lib/helpers/ApiIs';
 import oa3toOa2Body from '@/lib/openapi/oa3toOa2Body';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import getSingleSuccessResponse from '@/lib/template/helpers/getSingleSuccessResponse';
+import isValidMethod from '@/lib/template/helpers/isValidMethod';
 import { JSONSchema } from '@apidevtools/json-schema-ref-parser';
 
 class OpenAPIInjectInterfaceNaming {
@@ -85,6 +86,10 @@ class OpenAPIInjectInterfaceNaming {
       }
       for (const method in this.apiObject.paths[path]) {
         if (!Object.prototype.hasOwnProperty.call(this.apiObject.paths[path], method)) {
+          continue;
+        }
+        // paths may contain non-operation members (summary, description, parameters, servers, $ref)
+        if (!isValidMethod(method)) {
           continue;
         }
         if (fromInject) {

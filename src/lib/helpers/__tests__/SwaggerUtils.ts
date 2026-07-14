@@ -463,3 +463,45 @@ it('Adding the Joi methods to the string', () => {
 
   expect(joiString).toBe(expectedouput);
 });
+
+it('should escape single quotes in enum and default values', () => {
+  const out = SwaggerUtils.pathParamsToJoi(
+    {
+      name: 'field',
+      type: 'string',
+      default: "o'clock",
+      enum: ["a'; drop", 'b'],
+    },
+    {paramTypeKey: 'query' as any},
+  );
+  expect(out).toContain(".default('o\\'clock')");
+  expect(out).toContain(".valid('a\\'; drop', 'b')");
+});
+
+it('should skip x-joi keys that are not valid method names', () => {
+  const out = SwaggerUtils.pathParamsToJoi(
+    {
+      name: 'field',
+      type: 'string',
+      'x-joi-min': 3,
+      'x-joi-evil()); doThing((': 'x',
+    },
+    {paramTypeKey: 'query' as any},
+  );
+  expect(out).toContain('.min(3)');
+  expect(out).not.toContain('doThing');
+});
+
+it('should not crash on an object property without an explicit type', () => {
+  const out = SwaggerUtils.pathParamsToJoi(
+    {
+      name: 'meta',
+      properties: {
+        tag: {type: 'string'},
+      },
+    },
+    {paramTypeKey: 'body' as any},
+  );
+  expect(out).toContain("'meta':Joi.object({");
+  expect(out).toContain("'tag':Joi.string()");
+});

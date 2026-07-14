@@ -19,9 +19,9 @@ class OaToJsToJs {
       if (typeof input[i] === 'function') {
         builtString += this.getType(input[i]) + ', ';
       } else if (Array.isArray(input[i])) {
-        builtString += '[' + this.arrayWalkWrite(input[i]) + '],';
+        builtString += '[' + this.arrayWalkWrite(input[i]) + '], ';
       } else if (typeof input[i] === 'object') {
-        builtString += '{' + this.objectWalkWrite(input[i], builtString) + '}';
+        builtString += this.objectWalkWrite(input[i]) + ' ';
       }
     }
     return builtString.substring(0, builtString.length - 2);

@@ -68,16 +68,16 @@ class DisplayDependencyDiffs {
       });
     }
 
-    if (Object.keys(scriptsChanged).length > 1) {
+    if (Object.keys(scriptsChanged).length > 0) {
       console.log('Please check your package json scripts are up to date, the tpl and local scripts differ:'.green);
       console.table(scriptsChanged);
     }
 
-    if (Object.keys(dependenciesChanged).length > 1) {
+    if (Object.keys(dependenciesChanged).length > 0) {
       await this.warnOrUpdate(dependenciesChanged, DependencyTypeEnum.dependencies, updateDependenciesFromTpl);
     }
 
-    if (Object.keys(devDependenciesChanged).length > 1) {
+    if (Object.keys(devDependenciesChanged).length > 0) {
       await this.warnOrUpdate(devDependenciesChanged, DependencyTypeEnum.devDependencies, updateDependenciesFromTpl);
     }
   }

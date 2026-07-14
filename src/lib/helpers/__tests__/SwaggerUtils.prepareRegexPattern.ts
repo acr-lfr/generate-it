@@ -49,3 +49,9 @@ it('should return with as-is for patterns with regex options variations at the e
     SwaggerUtils.prepareRegexPattern(testInput)
   ).toBe(testInput);
 });
+
+it('should escape unescaped forward slashes inside the pattern body', async () => {
+  expect(SwaggerUtils.prepareRegexPattern('^a/b$')).toBe('/^a\\/b$/');
+  expect(SwaggerUtils.prepareRegexPattern('^a\\/b$')).toBe('/^a\\/b$/');
+  expect(SwaggerUtils.prepareRegexPattern('/^a/b$/i')).toBe('/^a\\/b$/i');
+});

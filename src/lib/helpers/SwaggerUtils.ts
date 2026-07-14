@@ -30,7 +30,21 @@ class SwaggerUtils {
         inputPattern += '/';
       }
     }
+    // escape unescaped slashes within the body so they cannot terminate the
+    // generated regex literal early, eg ^a/b$ -> /^a\/b$/
+    const delimited = inputPattern.match(/^\/([\s\S]*)\/([gmusi]*)$/);
+    if (delimited) {
+      const body = delimited[1].replace(/\\\//g, '/').replace(/\//g, '\\/');
+      inputPattern = `/${body}/${delimited[2]}`;
+    }
     return inputPattern;
+  }
+
+  /**
+   * Escapes a value for safe placement inside a single-quoted JS string literal
+   */
+  public escapeSingleQuoted (value: any): string {
+    return String(value).replace(/\\/g, '\\\\').replace(/'/g, '\\\'').replace(/\r?\n/g, '\\n');
   }
 
   /**
@@ -43,9 +57,9 @@ class SwaggerUtils {
     }
 
     const {paramTypeKey} = options;
-    let validationText = param.name ? `'${param.name}'` + ':' : '';
+    let validationText = param.name ? `'${this.escapeSingleQuoted(param.name)}'` + ':' : '';
     const isRequired = (options.requiredFields && options.requiredFields.includes(param.name)) || param.required === true;
-    const type = param.type || param.schema.type;
+    const type = param.type || param.schema?.type;
 
     const nullable = paramTypeKey === ParamTypeKey.body && (!isRequired || param['x-nullable'] || param.nullable) ? '.allow(null)' : '';
     const validationTrailer = (isRequired && !options.isFromArray ? `${nullable}.required()` : nullable) + (!options.isFromArray ? ',' : '');
@@ -63,6 +77,10 @@ class SwaggerUtils {
         // https://joi.dev/api/?v=17.9.1
         if (key.startsWith('x-joi-')) {
           const joiStringMethod = key.replace('x-joi-', '');
+          if (!/^[A-Za-z_$][\w$]*$/.test(joiStringMethod)) {
+            console.warn(`Skipping invalid x-joi method name: ${joiStringMethod}`);
+            return;
+          }
           let joiParam = param[key] !== null ? param[key] : '';
           if (typeof joiParam === 'object') {
             joiParam = JSON.stringify(joiParam);
@@ -83,7 +101,7 @@ class SwaggerUtils {
 
       if (param.default !== undefined) {
         if (type === 'string') {
-          validationText += `.default('${param.default}')`;
+          validationText += `.default('${this.escapeSingleQuoted(param.default)}')`;
         } else {
           validationText += `.default(${param.default})`;
         }
@@ -91,7 +109,7 @@ class SwaggerUtils {
 
       if (param.enum || (param.schema && param.schema.enum)) {
         const enumValues = param.enum || param.schema.enum;
-        const validTplString = enumValues.map((e: string) => ['number', 'integer'].includes(type) ? e : `'${e}'`).join(', ');
+        const validTplString = enumValues.map((e: string) => ['number', 'integer'].includes(type) ? e : `'${this.escapeSingleQuoted(e)}'`).join(', ');
         validationText += '.valid(' + validTplString + ')';
       }
 
@@ -213,7 +231,7 @@ class SwaggerUtils {
           );
         } else if (param.schema && param.schema.properties) {
           if (paramTypeKey === 'query') {
-            validationText += `'${param.name}': Joi.object({`;
+            validationText += `'${this.escapeSingleQuoted(param.name)}': Joi.object({`;
           }
           Object.keys(param.schema.properties).forEach((propertyKey) => {
             validationText += this.pathParamsToJoi(

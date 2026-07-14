@@ -22,6 +22,9 @@ export default (program: string, args: string[] = [], verbose: boolean = false):
     const command = spawn(program, args);
     let outputString = '';
     let outputErrorString = '';
+    command.on('error', function (error: Error) {
+      reject(error);
+    });
     command.stdout.on('data', function (data: any) {
       if (verbose && data !== '') {
         console.log(String(data));

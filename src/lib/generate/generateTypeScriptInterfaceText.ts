@@ -3,7 +3,7 @@ import { ConfigExtendedBase, TypegenFunction } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
 import _ from 'lodash';
 
-import { InputData, JSONSchemaInput, quicktype } from 'quicktype-core';
+import { InputData, JSONSchemaInput, Options, quicktype } from 'quicktype-core';
 
 const countNoOfMatches = (name: string, line: string): number => {
   const regex = new RegExp(name, 'gi');
@@ -78,7 +78,7 @@ const generateTypeScriptInterfaceText: TypegenFunction = async (
       ...(config.nodegenRc?.quickTypeOptions || {}),
       'just-types': true,
       'acronym-style': 'original',
-    },
+    } as Options<'ts'>['rendererOptions'],
   });
 
   let interfaceReturnString = '';

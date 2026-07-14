@@ -24,7 +24,7 @@ export default (config: GenerateOperationFileConfig, isFirstRun: boolean, additi
   // const data = config.data
   const loadFilePath = (fileName !== 'package.json') ?
     path.resolve(root, fileName) :
-    path.resolve(process.cwd(), 'package.json');
+    path.resolve(targetDir, 'package.json');
 
   const templatePath = path.resolve(targetDir, path.relative(templatesDir, path.resolve(root, fileName)));
 

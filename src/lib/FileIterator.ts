@@ -46,7 +46,10 @@ class FileWalker {
       }
 
       const root = fullpath.slice(0, -dirent.name.length - 1);
-      await this.fileIteration(root, dirent).catch(console.error);
+      await this.fileIteration(root, dirent).catch((e) => {
+        console.error(`Error processing template file: ${fullpath}`);
+        throw e;
+      });
     }).then(() => this.parseOpIndex());
   }
 

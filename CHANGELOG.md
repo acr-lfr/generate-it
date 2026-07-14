@@ -1,5 +1,20 @@
 # Changelog
 
+### 5.63.0 14/07/2026
+chore: dependency updates
+
+Fixes:
+1. Swallowed render errors — TemplateRenderer.load() no longer catches-and-returns-undefined; FileIterator now logs which template file failed and rethrows instead of .catch(console.error). A bad template now aborts generation with exit 1 instead of printing "Done! ☺" with files missing.
+2. Joi generator injection/breakage (SwaggerUtils.ts) — added an escapeSingleQuoted helper applied to enum values, string defaults, and param names; x-joi-* method names must now be valid JS identifiers (invalid ones are skipped with a warning); regex patterns get unescaped / in the body escaped so ^a/b$ emits /^a\/b$/ instead of a broken literal. The escaping runs after the existing delimiter logic, so all six existing prepareRegexPattern behaviors are preserved.
+3. commandRun — registered an error handler on the spawned child, so a missing git binary rejects the promise (letting hasGit()'s friendly message work) instead of crashing the process.
+4. Absolute -o paths — path.join(cwd, dir) → path.resolve(cwd, dir); also fixes -o ./ being wrongly rejected with -u due to a trailing-separator mismatch.
+5. package.json template source — now read from config.targetDir (where generateBaseStructure writes the merged file) instead of process.cwd(). Verified the e2e templates use package.json.njk, so this branch only affects plain-package.json templates — no test churn.
+6. Verbose logging — the inverted o === '' guards flipped; -v/--very-verbose actually log now.
+7. Path-level non-operation keys — swaggerPathIterator skips summary, description, parameters, servers, $ref via the existing isValidMethod helper instead of crashing on valid specs.
+8. Mock serializer — arrayWalkWrite no longer passes its accumulator into nested objectWalkWrite (that duplicated everything built so far inside the braces) and no longer strips closing brackets from trailing nested arrays. The only visible change for previously-working inputs is a cosmetic space ([ { id: → [ {id:), which is why three paramsOutputReducer expectations needed updating — the e2e hash suites passed untouched.
+9. Dependency diff off-by-one — the three > 1 guards are now > 0, so a single changed script/dependency is reported and -u acts on it.
+10. Typeless object properties — param.schema?.type optional chaining; a property defined only by properties now falls through to the Joi.object({...}) branch (covered by a new test) instead of throwing.
+
 ### 5.62.5 01/06/2026
 fix: bug in the domains when handling file uploads oa3
 

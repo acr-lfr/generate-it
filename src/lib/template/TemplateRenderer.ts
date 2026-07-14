@@ -39,13 +39,9 @@ export class TemplateRenderer {
    */
   public load (inputString: string, customVars?: TemplateVariables, ext?: string) {
     this.nunjucksSetup(customVars);
-    try {
-      const content = this.stripCharacters(nunjucks.renderString(inputString, customVars));
-      const dontPrettify = customVars?.config?.data?.dontPrettify || customVars?.nodegenRc?.dontPrettify;
-      return ! dontPrettify && ext ? prettyfyRenderedContent(content, ext) : content;
-    } catch (e) {
-      console.trace(e);
-    }
+    const content = this.stripCharacters(nunjucks.renderString(inputString, customVars));
+    const dontPrettify = customVars?.config?.data?.dontPrettify || customVars?.nodegenRc?.dontPrettify;
+    return ! dontPrettify && ext ? prettyfyRenderedContent(content, ext) : content;
   }
 
   public stripCharacters (content: string) {
