@@ -30,7 +30,6 @@ export default (spec?: OASpec): string => {
   }
 
   if (spec?.servers?.length) {
-    // tslint:disable-next-line:no-null-keyword
     let commonBasePath: string = null;
 
     for (const { url } of spec.servers) {

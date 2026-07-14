@@ -73,11 +73,11 @@ class SwaggerUtils {
 
       if (type === 'string') {
         if (nodegenRc?.joi?.strings?.autoTrim === 'opt-out' && !param['x-dont-trim']) {
-          validationText += `.trim(true)`;
+          validationText += '.trim(true)';
         }
 
         if ((!isRequired || nullable) && !param.minLength) {
-          validationText += `.allow('')`;
+          validationText += '.allow(\'\')';
         }
       }
 

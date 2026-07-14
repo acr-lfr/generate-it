@@ -46,9 +46,8 @@ it('Example input response of mixed should return valid string', () => {
       },
     },
   };
-  /* tslint:disable */
-  const returnString = `{id: String, birthday: String, birthday2: String, dateAdded: String, addedByUsername: String, recommendation: Boolean, recommendationForUserName: String, channelId: String, channelName: String, text: String, url: String, urlPreviewHTML: String, urlImage: {id: String, name: String, sizeKB: String, height: Number, width: Number, },userAddedPhotos: [ { id: String, name: String, sizeKB: String, height: Number, width: Number, }],},`;
-  /* tslint:enable */
+  // eslint-disable-next-line max-len
+  const returnString = '{id: String, birthday: String, birthday2: String, dateAdded: String, addedByUsername: String, recommendation: Boolean, recommendationForUserName: String, channelId: String, channelName: String, text: String, url: String, urlPreviewHTML: String, urlImage: {id: String, name: String, sizeKB: String, height: Number, width: Number, },userAddedPhotos: [ { id: String, name: String, sizeKB: String, height: Number, width: Number, }],},';
   expect(paramsOutputReducer(responses)).toBe(returnString);
 });
 
@@ -72,7 +71,7 @@ it('Validate array of arrays', () => {
       },
     },
   };
-  const returnString = `[ { name: String, age: String, }],`;
+  const returnString = '[ { name: String, age: String, }],';
   expect(paramsOutputReducer(responses)).toBe(returnString);
 });
 
@@ -96,6 +95,6 @@ it('Validate array-interface of arrays', () => {
       },
     },
   };
-  const returnString = `[ { name: String, age: String, }],`;
+  const returnString = '[ { name: String, age: String, }],';
   expect(paramsOutputReducer(responses)).toBe(returnString);
 });

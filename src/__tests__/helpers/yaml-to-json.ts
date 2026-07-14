@@ -46,7 +46,7 @@ export const yamlToExpect = async (yamlFilePath: string): Promise<string> => {
  *   => test['thing-with/non-variable or numeric'].something
  */
 export const fmtProp = (prop: any) => {
-  if (/^[a-zA-Z\$][a-zA-Z\$0-9_]*$/.test(prop)) {
+  if (/^[a-zA-Z$][a-zA-Z$0-9_]*$/.test(prop)) {
     return `.${prop}`;
   }
   if (/^[0-9]+$/.test(prop)) {

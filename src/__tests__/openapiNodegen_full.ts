@@ -133,7 +133,7 @@ it('The injections should have merged the package json files using the main serv
   expect(json.devDependencies.typescript).toBe('^3.6.4');
 });
 
-it(`shouldn't mangle package.json`, async () => {
+it('shouldn\'t mangle package.json', async () => {
   const jsonfile = path.join(testServerPath, 'package.json');
   fs.writeFileSync(jsonfile, '{\n  "name": "hallo",\n  "scripts": {\n    "go-away": "echo \'good bye\'"\n  }\n}');
   let json = require(jsonfile);

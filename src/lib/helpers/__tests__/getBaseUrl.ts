@@ -56,7 +56,7 @@ describe('getBaseUrl template helper', () => {
     expect(getBaseUrl(oaSpec)).toBe('/v1');
   });
 
-  it(`returns '/' when no common base path is found`, async () => {
+  it('returns \'/\' when no common base path is found', async () => {
     const oaSpec = specFromUrls([
       'http://localhost:3025/v1',
       'http://10.0.81.36/v1',

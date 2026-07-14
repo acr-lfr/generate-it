@@ -65,7 +65,7 @@ export class TemplateRenderer {
 
     const processEnvVars = JSON.parse(JSON.stringify(process.env));
     for (const key in processEnvVars) {
-      if (processEnvVars.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(processEnvVars, key)) {
         this.env.addGlobal(key, processEnvVars[key]);
       }
     }

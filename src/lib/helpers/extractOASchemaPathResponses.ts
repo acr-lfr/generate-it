@@ -5,13 +5,13 @@ export default (input: any) => {
   }
 
   // Handle response outputs for openapi
-  const successResponse = Object.entries(input).find(([statusCode, reponse]) => /2\d\d/.test(statusCode));
+  const successResponse = Object.entries(input).find(([statusCode]) => /2\d\d/.test(statusCode));
 
   if (!successResponse?.[1]) {
     return {};
   }
 
-  const [code, response] = successResponse as [string, { schema: any, content: any }];
+  const [, response] = successResponse as [string, { schema: any, content: any }];
 
   if (response.schema) {  // we are oa2
     return response.schema;

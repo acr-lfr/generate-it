@@ -44,7 +44,7 @@ class DisplayDependencyDiffs {
     if (newJson.scripts) {
       Object.keys(newJson.scripts).forEach((key: string) => {
         if (!existing?.scripts?.[key] || existing?.scripts?.[key] !== newJson.scripts[key]) {
-          // @ts-ignore
+          // @ts-expect-error buildDiff is an untyped constructor function
           scriptsChanged[key] = new buildDiff(newJson.scripts[key], existing?.scripts?.[key]);
         }
       });
@@ -53,7 +53,7 @@ class DisplayDependencyDiffs {
     if (newJson.dependencies) {
       Object.keys(newJson.dependencies).forEach((key) => {
         if (!existing?.dependencies?.[key] || existing?.dependencies?.[key] !== newJson.dependencies[key]) {
-          // @ts-ignore
+          // @ts-expect-error buildDiff is an untyped constructor function
           dependenciesChanged[key] = new buildDiff(newJson.dependencies[key], existing?.dependencies?.[key]);
         }
       });
@@ -62,7 +62,7 @@ class DisplayDependencyDiffs {
     if (newJson.devDependencies) {
       Object.keys(newJson.devDependencies).forEach((key) => {
         if (!existing?.devDependencies?.[key] || existing?.devDependencies?.[key] !== newJson.devDependencies[key]) {
-          // @ts-ignore
+          // @ts-expect-error buildDiff is an untyped constructor function
           devDependenciesChanged[key] = new buildDiff(newJson.devDependencies[key], existing?.devDependencies?.[key]);
         }
       });

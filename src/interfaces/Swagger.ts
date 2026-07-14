@@ -4,8 +4,8 @@ export interface Swagger extends Schema.Spec {
   channels: {
     [pathName: string]: Channel;
   };
-  endpoints: {};
-  groupNamesWithFirstUrlSegment: {};
+  endpoints: object;
+  groupNamesWithFirstUrlSegment: object;
   paths: {
     [pathName: string]: Path;
   };

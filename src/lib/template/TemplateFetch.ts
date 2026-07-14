@@ -123,11 +123,7 @@ class TemplateFetchURL {
       console.log('');
       console.log('Clearing the cache and trying to clone from fresh:');
       this.cleanSingleCacheDir(cacheDirectory);
-      try {
-        await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
-      } catch (e) {
-        throw e;
-      }
+      await this.gitClone(urlParts.url, cacheDirectory, urlParts.b);
     }
     return cacheDirectory;
   }
@@ -170,7 +166,11 @@ class TemplateFetchURL {
         tplTag = (await this.getTplTag(cacheDirectory));
       } catch (e) {
         console.error(cacheDirectory.red);
-        console.error('Error trying to fetch the template tag. A tpl repository requires a semver tag adding to it, generate uses this semver to determine the min. generate-it core version required for the given template repo. When no git tag is found on the tpl this error is thrown.'.red);
+        console.error((
+          'Error trying to fetch the template tag. A tpl repository requires a semver tag adding to it, ' +
+          'generate uses this semver to determine the min. generate-it core version required for the given template repo. ' +
+          'When no git tag is found on the tpl this error is thrown.'
+        ).red);
         process.exit(1);
       }
     }
@@ -179,7 +179,7 @@ class TemplateFetchURL {
       console.log(
         `
 The` +
-        `generate-it`.bold +
+        'generate-it'.bold +
         `version must be greater or equal to the semver of the template tag but within the same major version.
 You are currently using the following version:
 generate-it: ${pkVersion}
@@ -197,7 +197,7 @@ template version tag: ${tplTag}
    * @param input
    */
   public isSemVer (input: string): boolean {
-    const semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
+    const semver = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?)?)?$/i;
     return semver.test(input);
   }
 
@@ -299,7 +299,6 @@ template version tag: ${tplTag}
    */
   public async localDirectoryCopy (url: string, targetGitCacheDir: string, dontUpdateTplCache: boolean) {
     const cacheDirectory = this.calculateLocalDirectoryFromUrl(url, targetGitCacheDir);
-    const urlParts = this.getUrlParts(url);
 
     if (this.gitCacheExists(cacheDirectory) && dontUpdateTplCache) {
       console.log('Template cache already found and bypass update true: ' + url);

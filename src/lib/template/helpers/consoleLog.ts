@@ -1,3 +1,3 @@
-export default function () {
-  console.log(arguments);
+export default function (...args: any[]) {
+  console.log(...args);
 }

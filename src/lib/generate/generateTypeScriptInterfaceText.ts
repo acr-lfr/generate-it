@@ -3,11 +3,34 @@ import { ConfigExtendedBase, TypegenFunction } from '@/interfaces';
 import { GenerateTypeScriptInterfaceText } from '@/interfaces/GenerateTypeScriptInterfaceText';
 import _ from 'lodash';
 
-const { InputData, JSONSchemaInput, JSONSchemaStore, quicktype } = require('quicktype/dist/quicktype-core');
+import { InputData, JSONSchemaInput, quicktype } from 'quicktype-core';
 
 const countNoOfMatches = (name: string, line: string): number => {
   const regex = new RegExp(name, 'gi');
   return ((line || '').match(regex) || []).length;
+};
+
+// quicktype-core >= 23 renders "[property: string]: any;" index signatures for
+// object schemas that do not set additionalProperties. quicktype 15 could not
+// render them, so default open objects to closed to keep generated interfaces
+// stable; an explicit additionalProperties in the spec is left untouched.
+const closeOpenObjects = (node: any): any => {
+  if (Array.isArray(node)) {
+    node.forEach(closeOpenObjects);
+    return node;
+  }
+  if (!node || typeof node !== 'object') {
+    return node;
+  }
+  if ((node.type === 'object' || node.properties) && node.additionalProperties === undefined && node.patternProperties === undefined) {
+    node.additionalProperties = false;
+  }
+  Object.keys(node).forEach((key) => {
+    if (!['enum', 'const', 'default', 'example', 'examples'].includes(key)) {
+      closeOpenObjects(node[key]);
+    }
+  });
+  return node;
 };
 
 const generateTypeScriptInterfaceText: TypegenFunction = async (
@@ -33,13 +56,14 @@ const generateTypeScriptInterfaceText: TypegenFunction = async (
     );
   }
 
-  const schemaInput = new JSONSchemaInput(new JSONSchemaStore());
+  const schemaInput = new JSONSchemaInput(undefined);
   await schemaInput.addSource({
     name: '___Nodegen',
     schema: JSON.stringify({
       type: 'object',
+      additionalProperties: false,
       properties: {
-        [name]: schema ? JSON.parse(schema) : schema,
+        [name]: schema ? closeOpenObjects(JSON.parse(schema)) : schema,
       },
     }),
   });

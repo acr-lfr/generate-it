@@ -80,11 +80,11 @@ class OpenAPIInjectInterfaceNaming {
       throw new Error('No paths found to iterate over');
     }
     for (const path in this.apiObject.paths) {
-      if (!this.apiObject.paths.hasOwnProperty(path)) {
+      if (!Object.prototype.hasOwnProperty.call(this.apiObject.paths, path)) {
         continue;
       }
       for (const method in this.apiObject.paths[path]) {
-        if (!this.apiObject.paths[path].hasOwnProperty(method)) {
+        if (!Object.prototype.hasOwnProperty.call(this.apiObject.paths[path], method)) {
           continue;
         }
         if (fromInject) {
@@ -102,7 +102,7 @@ class OpenAPIInjectInterfaceNaming {
       throw new Error('No paths found to iterate over');
     }
     for (const channel in this.apiObject.channels) {
-      if (!this.apiObject.channels.hasOwnProperty(channel)) {
+      if (!Object.prototype.hasOwnProperty.call(this.apiObject.channels, channel)) {
         continue;
       }
       if (fromInject) {
@@ -268,7 +268,7 @@ class OpenAPIInjectInterfaceNaming {
    */
   public async mergeSwaggerInjectedParameters (action: string, path: string, method: string) {
     for (const requestType in this.apiObject[action][path][method]['x-request-definitions']) {
-      if (!this.apiObject[action][path][method]['x-request-definitions'].hasOwnProperty(requestType)) {
+      if (!Object.prototype.hasOwnProperty.call(this.apiObject[action][path][method]['x-request-definitions'], requestType)) {
         continue;
       }
       const requestObject: any = {};
@@ -378,7 +378,7 @@ class OpenAPIInjectInterfaceNaming {
     }
   }
 
-  public injectFromOA2Response (path: string, method: string): { [key: string]: any } | {} {
+  public injectFromOA2Response (path: string, method: string): { [key: string]: any } {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
 
@@ -405,7 +405,7 @@ class OpenAPIInjectInterfaceNaming {
     return response;
   }
 
-  public injectFromOA3Response (path: string, method: string): { '200': any } | {} {
+  public injectFromOA3Response (path: string, method: string): { [key: string]: any } {
     const response: any = {};
     const pathResponses = this.apiObject.paths[path][method].responses || false;
     if (!pathResponses) {

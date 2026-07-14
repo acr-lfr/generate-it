@@ -1,4 +1,3 @@
-import { ConfigExtendedBase } from '@/interfaces';
 import generateTypeScriptInterfaceText from '@/lib/generate/generateTypeScriptInterfaceText';
 import { mockConfig } from '@/__mocks__/mockConfig';
 

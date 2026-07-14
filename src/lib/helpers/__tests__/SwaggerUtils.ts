@@ -96,41 +96,41 @@ const params = [
 
 test('Returns joi with 2 required params', () => {
   expect(SwaggerUtils.createJoiValidation('post', {parameters: [params[0]]}, {} as NodegenRc)).toBe(
-    `'body': Joi.object({'password':Joi.string().required(),'newPassword':Joi.string().required(),'newPasswordConfirm':Joi.string().allow('').allow(null),}),`
+    '\'body\': Joi.object({\'password\':Joi.string().required(),\'newPassword\':Joi.string().required(),\'newPasswordConfirm\':Joi.string().allow(\'\').allow(null),}),'
   );
 });
 
 test('openapi3 query request param', () => {
-  expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[1]]}, {} as NodegenRc)).toBe(`'query': Joi.object({'limit':Joi.number().integer(),}),`);
+  expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[1]]}, {} as NodegenRc)).toBe('\'query\': Joi.object({\'limit\':Joi.number().integer(),}),');
 });
 
 test('openapi2 enums', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[3]]}, {} as NodegenRc)).toBe(
-    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`
+    '\'query\': Joi.object({\'sort\':Joi.string().allow(\'\').valid(\'asc\', \'desc\'),}),'
   );
 });
 
 test('openapi3 enums', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[2]]}, {} as NodegenRc)).toBe(
-    `'query': Joi.object({'sort':Joi.string().allow('').valid('asc', 'desc'),}),`
+    '\'query\': Joi.object({\'sort\':Joi.string().allow(\'\').valid(\'asc\', \'desc\'),}),'
   );
 });
 
 test('openapi3 query request array param: allow single value', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[4]]}, {} as NodegenRc)).toBe(
-    `'query': Joi.object({'select':Joi.array().items(Joi.string().allow('')).single(),}),`
+    '\'query\': Joi.object({\'select\':Joi.array().items(Joi.string().allow(\'\')).single(),}),'
   );
 });
 
 test('openapi3 request body: allow empty array', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[5]]}, {} as NodegenRc)).toBe(
-    `'body': Joi.object({'selected':Joi.array().items(Joi.string().allow('').allow(null)).required(),}),`
+    '\'body\': Joi.object({\'selected\':Joi.array().items(Joi.string().allow(\'\').allow(null)).required(),}),'
   );
 });
 
 test('openapi3 request body empty object as any', () => {
   expect(SwaggerUtils.createJoiValidation('put', {parameters: [params[7]]}, {} as NodegenRc)).toBe(
-    `'body': Joi.any(),`
+    '\'body\': Joi.any(),'
   );
 });
 
@@ -169,13 +169,13 @@ test('add unknown true for headers', () => {
       ],
     }, {} as NodegenRc)
   ).toBe(
-    `'headers': Joi.object({'sort':Joi.string().valid('asc', 'desc').required(),'access':Joi.string().regex(/^Bearer .+$/).required(),}).unknown(true),'query': Joi.object({'limit':Joi.number().integer(),}),`
+    '\'headers\': Joi.object({\'sort\':Joi.string().valid(\'asc\', \'desc\').required(),\'access\':Joi.string().regex(/^Bearer .+$/).required(),}).unknown(true),\'query\': Joi.object({\'limit\':Joi.number().integer(),}),'
   );
 });
 
 test('query item key is properly created inside the query object', () => {
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [params[6]]}, {} as NodegenRc)).toBe(
-    `'query': Joi.object({'objectInsideQuery': Joi.object({'prop1':Joi.string().allow(''),}),}),`
+    '\'query\': Joi.object({\'objectInsideQuery\': Joi.object({\'prop1\':Joi.string().allow(\'\'),}),}),'
   );
 });
 
@@ -289,7 +289,8 @@ test('respects x-nullable and nullable for required body parameters', () => {
   };
 
   expect(SwaggerUtils.createJoiValidation('get', {parameters: [param]}, {} as NodegenRc)).toBe(
-    `'body': Joi.object({'email':Joi.string().required(),'phoneNumber':Joi.string().allow('').allow(null).required(),'comment':Joi.string().allow('').allow(null).required(),'info':Joi.string().min(10).allow(null).required(),'code':Joi.number().allow(null).required(),}),`
+    // eslint-disable-next-line max-len
+    '\'body\': Joi.object({\'email\':Joi.string().required(),\'phoneNumber\':Joi.string().allow(\'\').allow(null).required(),\'comment\':Joi.string().allow(\'\').allow(null).required(),\'info\':Joi.string().min(10).allow(null).required(),\'code\':Joi.number().allow(null).required(),}),'
   );
 });
 
@@ -338,7 +339,8 @@ test('post object with nested objects that are required should be required in th
 
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj, {} as NodegenRc);
 
-  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().min(1).required(),'isPremium':Joi.boolean().required(),}).allow(null),'invitations':Joi.array().items(Joi.object({'id':Joi.number().allow(null),'name':Joi.string().allow('').allow(null),'email':Joi.string().allow('').allow(null),'roleId':Joi.number().required(),'invitationLink':Joi.string().allow('').allow(null),'action':Joi.string().allow('').valid('create', 'update', 'delete').allow(null),}).allow(null)),'invitationsLanguage':Joi.string().allow('').allow(null),}),`;
+  // eslint-disable-next-line max-len
+  const expectedouput = '\'body\': Joi.object({\'team\':Joi.object({\'name\':Joi.string().min(1).required(),\'isPremium\':Joi.boolean().required(),}).allow(null),\'invitations\':Joi.array().items(Joi.object({\'id\':Joi.number().allow(null),\'name\':Joi.string().allow(\'\').allow(null),\'email\':Joi.string().allow(\'\').allow(null),\'roleId\':Joi.number().required(),\'invitationLink\':Joi.string().allow(\'\').allow(null),\'action\':Joi.string().allow(\'\').valid(\'create\', \'update\', \'delete\').allow(null),}).allow(null)),\'invitationsLanguage\':Joi.string().allow(\'\').allow(null),}),';
 
   expect(joiString).toBe(expectedouput);
 });
@@ -372,7 +374,7 @@ it('When the string attribute contains x-dont-trim then trim(true) should not be
 
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj, {} as NodegenRc);
 
-  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().min(1).required(),}).allow(null),}),`;
+  const expectedouput = '\'body\': Joi.object({\'team\':Joi.object({\'name\':Joi.string().min(1).required(),}).allow(null),}),';
 
   expect(joiString).toBe(expectedouput);
 });
@@ -400,19 +402,19 @@ it('Default trim from nodegenrc always opt-out and off, and testing no nodegenrc
   expect(
     SwaggerUtils.createJoiValidation('post', pathObj)
   ).toBe(
-    `'body': Joi.object({'name':Joi.string().required(),}),`
+    '\'body\': Joi.object({\'name\':Joi.string().required(),}),'
   );
 
   expect(
     SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'off'}}} as NodegenRc)
   ).toBe(
-    `'body': Joi.object({'name':Joi.string().required(),}),`
+    '\'body\': Joi.object({\'name\':Joi.string().required(),}),'
   );
 
   expect(
     SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'opt-out'}}} as NodegenRc)
   ).toBe(
-    `'body': Joi.object({'name':Joi.string().trim(true).required(),}),`
+    '\'body\': Joi.object({\'name\':Joi.string().trim(true).required(),}),'
   );
 
   // add the don't trim to test the opt-out
@@ -421,7 +423,7 @@ it('Default trim from nodegenrc always opt-out and off, and testing no nodegenrc
   expect(
     SwaggerUtils.createJoiValidation('post', pathObj, {joi: {strings: {autoTrim: 'opt-out'}}} as NodegenRc)
   ).toBe(
-    `'body': Joi.object({'name':Joi.string().required(),}),`
+    '\'body\': Joi.object({\'name\':Joi.string().required(),}),'
   );
 });
 
@@ -442,7 +444,6 @@ it('Adding the Joi methods to the string', () => {
                 name: {
                   type: 'string',
                   minLength: 1,
-                  // tslint:disable-next-line
                   'x-joi-lowercase': null,
                   'x-joi-email': {
                     allowFullyQualified: true
@@ -458,7 +459,7 @@ it('Adding the Joi methods to the string', () => {
 
   const joiString = SwaggerUtils.createJoiValidation('post', pathObj, {} as NodegenRc);
 
-  const expectedouput = `'body': Joi.object({'team':Joi.object({'name':Joi.string().lowercase().email({"allowFullyQualified":true}).min(1).required(),}).allow(null),}),`;
+  const expectedouput = '\'body\': Joi.object({\'team\':Joi.object({\'name\':Joi.string().lowercase().email({"allowFullyQualified":true}).min(1).required(),}).allow(null),}),';
 
   expect(joiString).toBe(expectedouput);
 });

@@ -41,9 +41,9 @@ class OpenAPIBundler {
 
     content = await this.bundleObject(content);
 
-    // @ts-ignore
+    // @ts-expect-error basePath is not part of the typed spec shape
     if (!content.basePath) {
-      // @ts-ignore
+      // @ts-expect-error basePath is not part of the typed spec shape
       content.basePath = getBaseUrl(content);
     }
 
@@ -259,7 +259,7 @@ class OpenAPIBundler {
     apiObject.groupNamesWithFirstUrlSegment = {};
     for (const fullPath in objects) {
       const pathObject = objects[fullPath];
-      let endpointName = '';
+      let endpointName: string;
       if (fullPath === '/' || fullPath === '') {
         endpointName = 'root';
       } else {

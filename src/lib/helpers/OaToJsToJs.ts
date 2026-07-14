@@ -28,7 +28,7 @@ class OaToJsToJs {
   }
 
   shouldWrapAttribute (key: string): boolean {
-    return !Boolean(key.match(/^[A-Za-z0-9_]*$/));
+    return !key.match(/^[A-Za-z0-9_]*$/);
   }
 
   public objectWalkWrite (input: any, builtString?: string) {
@@ -36,7 +36,7 @@ class OaToJsToJs {
     for (const key in input) {
       const objectKey = this.shouldWrapAttribute(key) ? `['${key}']` : key;
       if (typeof input[key] === 'function') {
-        builtString += objectKey + ': ' + this.getType(input[key]) + `, `;
+        builtString += objectKey + ': ' + this.getType(input[key]) + ', ';
       } else if (Array.isArray(input[key])) {
         builtString += objectKey + ': [' + this.arrayWalkWrite(input[key]) + '],';
       } else if (typeof input[key] === 'object') {

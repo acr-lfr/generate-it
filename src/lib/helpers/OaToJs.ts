@@ -1,5 +1,5 @@
 class OaToJs {
-  public oaToJsType (input: any, from?: string): any {
+  public oaToJsType (input: any, _from?: string): any {
     if (!input.type && input.properties) {
       input.type = 'object';
     }

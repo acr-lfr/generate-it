@@ -97,7 +97,7 @@ class GenerateOperation {
     const targetFile = path.resolve(config.targetDir, subDir, newFilename);
     fs.ensureDirSync(path.resolve(config.targetDir, subDir));
     const tplVars = this.templateVariables(operationName, operations, config, additionalTplContent, verbose, fileType);
-    let renderedContent = '';
+    let renderedContent: string;
     try {
       renderedContent = TemplateRenderer.load(
         data.toString(),
@@ -106,7 +106,7 @@ class GenerateOperation {
       );
     } catch (e) {
       console.log(targetFile);
-      throw new Error(e);
+      throw e;
     }
 
     if (FileTypeCheck.isStubFile(config.file_name) && fs.existsSync(targetFile)) {

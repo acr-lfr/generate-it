@@ -45,7 +45,7 @@ versionCheck(
     console.log(`${LINEBREAK}Starting the generation...${LINEBREAK}`);
     generateIt(config).then(() => {
       console.log(`${LINEBREAK}Done! ☺`.green.bold);
-      console.log(`${LINEBREAK}Your API files have been output here: `.yellow + cli.program.output.magenta + `.`.green.bold);
+      console.log(`${LINEBREAK}Your API files have been output here: `.yellow + cli.program.output.magenta + '.'.green.bold);
     }).catch(async (err: any) => {
       console.error('Something went wrong:'.red);
       console.trace(err);
@@ -57,7 +57,7 @@ versionCheck(
     return call();
   }
 
-  const question = `Continuing will replace the entire http layer:`.green + `
+  const question = 'Continuing will replace the entire http layer:'.green + `
 - ___interface|mock|op files are classed as the http layer and will be regenerated based on the provide api file, meaning local changes to these files will be lost.
 - Differences in the ___stub files, new|removed|changed methods (typically the domain layer) will be output to the console.
 - See the manual for further information: https://acrontum.github.io/generate-it/

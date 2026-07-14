@@ -1,11 +1,9 @@
 import * as _ from 'lodash';
 
-export default function () {
+export default function (...args: string[]) {
   let returnString = '';
-  for (const arg in arguments) {
-    if (arguments.hasOwnProperty(arg)) {
-      returnString += _.trim(arguments[arg], '/');
-    }
+  for (const arg of args) {
+    returnString += _.trim(arg, '/');
   }
   return returnString;
 }
