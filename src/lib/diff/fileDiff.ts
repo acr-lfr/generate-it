@@ -1,6 +1,5 @@
 import { FileDiff } from '@/interfaces/FileDiff';
-
-const TextFileDiff = require('text-file-diff');
+import TextFileDiff from 'text-file-diff';
 
 /**
  * Compares the diff between 2 file chunks

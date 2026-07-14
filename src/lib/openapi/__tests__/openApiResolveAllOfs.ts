@@ -8,7 +8,7 @@ import $RefParser from '@apidevtools/json-schema-ref-parser';
 it('Complex example input: should return all the required fields and the rest should also be properly - deeply nested allOf.', async () => {
   const contentPath = path.join(process.cwd(), 'src/lib/openapi/__tests__/openApiResolveAllOfs_complex_input.yml');
   const content = fs.readFileSync(contentPath).toString();
-  const contentAsJson = YAML.safeLoad(content);
+  const contentAsJson = YAML.load(content);
   const dereferencedJsonContent = await $RefParser.dereference(contentAsJson, {dereference: {circular: 'ignore'}});
   const resolved = openApiResolveAllOfs(dereferencedJsonContent);
 
@@ -167,7 +167,7 @@ it('Complex example input: should return all the required fields and the rest sh
 it('Simple example input: should return all the required fields and the rest should also be properly - shallow nesting of allOf.', async () => {
   const contentPath = path.join(process.cwd(), 'src/lib/openapi/__tests__/openApiResolveAllOfs_simple_input.yml');
   const content = fs.readFileSync(contentPath).toString();
-  const contentAsJson = YAML.safeLoad(content);
+  const contentAsJson = YAML.load(content);
   const dereferencedJsonContent = await $RefParser.dereference(contentAsJson, {dereference: {circular: 'ignore'}});
   const resolved = openApiResolveAllOfs(dereferencedJsonContent);
 

@@ -12,6 +12,6 @@ it('should return ', async () => {
   const b = path.join(process.cwd(), 'src/lib/__tests__/txtFile2.txt');
   const diff = await fileDiff(a, b);
 
-  expect(diff.minus).toEqual(3);
-  expect(diff.plus).toEqual(3);
+  expect(diff.minus).toEqual(2);
+  expect(diff.plus).toEqual(2);
 });

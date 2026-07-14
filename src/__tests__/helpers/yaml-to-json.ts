@@ -1,6 +1,6 @@
 import { join, basename } from 'path';
 import { promises as fs } from 'fs';
-import { safeLoad } from 'js-yaml';
+import { load } from 'js-yaml';
 
 type JSON = { [key: string]: any };
 
@@ -17,7 +17,7 @@ export const yamlToJson = async (yamlFilePath: string): Promise<JSON> => {
     throw new Error(`Could not find YAML file '${yamlFilePath}'`);
   }
 
-  return safeLoad(await fs.readFile(yamlFilePath, 'utf8')) as JSON;
+  return load(await fs.readFile(yamlFilePath, 'utf8')) as JSON;
 };
 
 /**

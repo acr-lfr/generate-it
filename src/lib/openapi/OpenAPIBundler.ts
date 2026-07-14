@@ -71,7 +71,7 @@ class OpenAPIBundler {
     try {
       return JSON.parse(content);
     } catch (e) {
-      return YAML.safeLoad(content);
+      return YAML.load(content);
     }
   }
 

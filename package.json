@@ -20,7 +20,7 @@
     "start": "node cli.js",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "npm run build && jest --runInBand",
-    "test:unit:single": "jest --collect-coverage false"
+    "test:unit:single": "jest --runInBand --collectCoverage=false"
   },
   "homepage": "https://acr-lfr.github.io/generate-it",
   "repository": {
@@ -36,44 +36,49 @@
     "generate-it"
   ],
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^11.7.2",
+    "@apidevtools/json-schema-ref-parser": "^14.2.1",
     "@colors/colors": "1.6.0",
     "@root/walk": "^1.1.0",
-    "commander": "^11.1.0",
-    "compare-versions": "^3.6.0",
+    "commander": "^14.0.3",
+    "compare-versions": "^6.1.1",
     "deepmerge": "^4.2.2",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^11.3.6",
     "generate-it-mockers": "^1.1.1",
     "inquirer": "^8.2.6",
-    "js-yaml": "^3.14.1",
+    "js-yaml": "^4.3.0",
     "lodash": "^4.17.21",
     "npm-tool-version-check": "^1.2.0",
     "nunjucks": "^3.2.4",
     "prettier": "^2.4.1",
     "quicktype-core": "^24.0.2",
-    "text-file-diff": "1.1.2",
-    "typescript": "^5.7.3"
+    "text-file-diff": "^1.4.8",
+    "typescript": "~5.9.3"
+  },
+  "overrides": {
+    "generate-it-mockers": {
+      "uuid": "^11.1.1"
+    }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/fs-extra": "^8.1.2",
-    "@types/inquirer": "^8.2.10",
-    "@types/jest": "^27.0.1",
-    "@types/js-yaml": "^3.12.10",
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^8.2.13",
+    "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/json-schema": "^7.0.15",
-    "@types/lodash": "^4.14.202",
-    "@types/node": "^20.17.19",
+    "@types/lodash": "^4.17.24",
+    "@types/node": "^20.19.43",
     "@types/nunjucks": "^3.2.3",
+    "@types/picomatch": "^4.0.3",
     "@types/prettier": "^2.7.3",
     "@types/swagger-schema-official": "^2.0.25",
     "@types/yamljs": "^0.2.34",
     "eslint": "^10.7.0",
-    "fdir": "^4.1.0",
-    "folder-hash": "^4.0.4",
+    "fdir": "^6.5.0",
     "hasha": "^5.2.2",
-    "jest": "^29.3.1",
-    "ts-jest": "^29.0.5",
-    "tsc-alias": "^1.8.10",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
+    "tsc-alias": "^1.9.1",
     "typescript-eslint": "^8.64.0"
   }
 }
